@@ -1,0 +1,118 @@
+{
+	"types": {
+		"Element": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "#"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Positionable": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Car": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "#"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Start": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "#"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Finish": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "#"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Cup": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "#"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Element"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Positionable"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Element": [],
+		"Positionable": [],
+		"Car": [],
+		"Start": [],
+		"Finish": [],
+		"Cup": []
+	},
+	"legalConnections": {},
+	"connectorTypes": {},
+	"types2parentTypes": {
+		"Element": [
+			"Positionable"
+		],
+		"Positionable": [],
+		"Car": [
+			"Element",
+			"Positionable"
+		],
+		"Start": [
+			"Element",
+			"Positionable"
+		],
+		"Finish": [
+			"Element",
+			"Positionable"
+		],
+		"Cup": [
+			"Element",
+			"Positionable"
+		]
+	}
+}

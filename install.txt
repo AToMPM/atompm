@@ -1,0 +1,14 @@
+﻿Installation guide for AToMPM server
+-------------------------------------
+
+1. Installing Dependencies
+1.1. Download and install Python version 2.7 from http://python.org/download/
+1.2. Download and install python-igraph version 0.6.5 from https://pypi.python.org/pypi/python-igraph/0.6.5
+1.3. Download and install node.js version 0.10.31 from https://nodejs.org/en/blog/release/v0.10.31/
+
+2. Running AToMPM 
+2.1. Execute 'node httpwsd.js'
+2.2. Execute 'python mt\main.py'
+2.3. With Google Chrome navigate to 'http://localhost:8124/atompm'
+
+A batch-file called "run.bat" in the main AToMPM folder bundles these commands (Windows only).

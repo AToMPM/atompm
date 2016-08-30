@@ -1,0 +1,1470 @@
+{
+	"types": {
+		"Step": [
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Rule": [
+			{
+				"name": "filename",
+				"type": "string",
+				"default": "/path/to/rule.model"
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Transformation": [
+			{
+				"name": "filename",
+				"type": "string",
+				"default": "/path/to/transformation.model"
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Exhaust": [
+			{
+				"name": "filenames",
+				"type": "list<string>",
+				"default": [
+					"/username/path/to/step.model",
+					"/username/path/to/other/step.model",
+					"/and/so/on/and/so/forth.model"
+				]
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"ExhaustRandom": [
+			{
+				"name": "filenames",
+				"type": "list<string>",
+				"default": [
+					"/username/path/to/step.model",
+					"/username/path/to/other/step.model",
+					"/and/so/on/and/so/forth.model"
+				]
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"OnSuccess": [],
+		"OnNotApplicable": [],
+		"OnFailure": [],
+		"RuntimeConfiguration": [
+			{
+				"name": "options",
+				"type": "map<string,string>",
+				"default": {
+					"looseSubtypingMM": ""
+				}
+			}
+		],
+		"Breakpoint": [
+			{
+				"name": "enabled",
+				"type": "boolean",
+				"default": true
+			},
+			{
+				"name": "ignoreCount",
+				"type": "int",
+				"default": 0
+			},
+			{
+				"name": "condition",
+				"type": "code",
+				"default": "true"
+			}
+		],
+		"Breaks": [],
+		"OpenModel": [
+			{
+				"name": "action",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "pathToModel",
+				"type": "string",
+				"default": "/path/to/source.model"
+			},
+			{
+				"name": "pathToFormalism",
+				"type": "string",
+				"default": "/path/to/formalism.defaultIcons.metamodel"
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"WriteModel": [
+			{
+				"name": "action",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "pathToModel",
+				"type": "string",
+				"default": "/path/to/target.model"
+			},
+			{
+				"name": "pathToFormalism",
+				"type": "string",
+				"default": "/path/to/formalism.defaultIcons.metamodel"
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"PauseTransformation": [
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"ResumeTransformation": [
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Step"
+		},
+		{
+			"name": "1-start",
+			"event": "",
+			"targetType": "*",
+			"code": "var mm        = \"/Formalisms/__Transformations__/Transformation/Transformation/\",\n    fulltypes = [mm+\"Rule\",mm+\"Transformation\",mm+\"Exhaust\",mm+\"ExhaustRandom\"],\n    steps     = getAllNodes(fulltypes);\n\nsteps.filter(function(s) {return getAttr(\"isStart\",s);}).length == 1;"
+		},
+		{
+			"name": "max1-runtimeConfig",
+			"event": "",
+			"targetType": "*",
+			"code": "getAllNodes([\"/Formalisms/__Transformations__/Transformation/Transformation/RuntimeConfiguration\"]).length <= 1;\n"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Step": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Rule": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Transformation": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Exhaust": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"ExhaustRandom": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"OnSuccess": [
+			{
+				"dir": "in",
+				"type": "Step",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Step",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Transformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Transformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Exhaust",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Exhaust",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ExhaustRandom",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExhaustRandom",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "WriteModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "WriteModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "PauseTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "PauseTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ResumeTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ResumeTransformation",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"OnNotApplicable": [
+			{
+				"dir": "in",
+				"type": "Step",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Step",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Transformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Transformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Exhaust",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Exhaust",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ExhaustRandom",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExhaustRandom",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "WriteModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "WriteModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "PauseTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "PauseTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ResumeTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ResumeTransformation",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"OnFailure": [
+			{
+				"dir": "in",
+				"type": "Step",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Step",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Transformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Transformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Exhaust",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Exhaust",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ExhaustRandom",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExhaustRandom",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "WriteModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "WriteModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "PauseTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "PauseTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ResumeTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ResumeTransformation",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"RuntimeConfiguration": [],
+		"Breakpoint": [
+			{
+				"dir": "out",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Breaks": [
+			{
+				"dir": "out",
+				"type": "Step",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Breakpoint",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Transformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Exhaust",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExhaustRandom",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "WriteModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "PauseTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ResumeTransformation",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"OpenModel": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"WriteModel": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"PauseTransformation": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"ResumeTransformation": [
+			{
+				"dir": "out",
+				"type": "OnNotApplicable",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnFailure",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "OnSuccess",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "OnSuccess",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnNotApplicable",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "OnFailure",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Breaks",
+				"min": "0",
+				"max": "Infinity"
+			}
+		]
+	},
+	"legalConnections": {
+		"Step": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		},
+		"Rule": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		},
+		"Transformation": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		},
+		"Exhaust": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		},
+		"ExhaustRandom": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		},
+		"Breakpoint": {
+			"Step": [
+				"Breaks"
+			],
+			"Rule": [
+				"Breaks"
+			],
+			"Transformation": [
+				"Breaks"
+			],
+			"Exhaust": [
+				"Breaks"
+			],
+			"ExhaustRandom": [
+				"Breaks"
+			],
+			"OpenModel": [
+				"Breaks"
+			],
+			"WriteModel": [
+				"Breaks"
+			],
+			"PauseTransformation": [
+				"Breaks"
+			],
+			"ResumeTransformation": [
+				"Breaks"
+			]
+		},
+		"OpenModel": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		},
+		"WriteModel": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		},
+		"PauseTransformation": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		},
+		"ResumeTransformation": {
+			"Step": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Rule": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Transformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"Exhaust": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ExhaustRandom": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"OpenModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"WriteModel": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"PauseTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			],
+			"ResumeTransformation": [
+				"OnNotApplicable",
+				"OnFailure",
+				"OnSuccess"
+			]
+		}
+	},
+	"connectorTypes": {
+		"OnSuccess": "visual",
+		"OnNotApplicable": "visual",
+		"OnFailure": "visual",
+		"Breaks": "visual"
+	},
+	"types2parentTypes": {
+		"Step": [],
+		"Rule": [
+			"Step"
+		],
+		"Transformation": [
+			"Step"
+		],
+		"Exhaust": [
+			"Step"
+		],
+		"ExhaustRandom": [
+			"Step"
+		],
+		"OnSuccess": [],
+		"OnNotApplicable": [],
+		"OnFailure": [],
+		"1-start": [],
+		"RuntimeConfiguration": [],
+		"max1-runtimeConfig": [],
+		"Breakpoint": [],
+		"Breaks": [],
+		"OpenModel": [
+			"Step"
+		],
+		"WriteModel": [
+			"Step"
+		],
+		"PauseTransformation": [
+			"Step"
+		],
+		"ResumeTransformation": [
+			"Step"
+		]
+	}
+}

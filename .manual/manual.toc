@@ -1,0 +1,73 @@
+\contentsline {section}{\numberline {1}Client Overview}{4}{section.1}
+\contentsline {subsection}{\numberline {1.1}Launching the AToMPM Client}{4}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}The Interface Components}{4}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}The \textit {MainMenu} Toolbar}{5}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}The \textit {Utilities} Toolbar}{5}{subsection.1.4}
+\contentsline {subsection}{\numberline {1.5}The Canvas}{6}{subsection.1.5}
+\contentsline {subsection}{\numberline {1.6}Collaboration}{8}{subsection.1.6}
+\contentsline {subsection}{\numberline {1.7}Tweaking Default Settings}{8}{subsection.1.7}
+\contentsline {section}{\numberline {2}Modelling}{10}{section.2}
+\contentsline {subsection}{\numberline {2.1}Creating Button Toolbar Models}{10}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Client API}{10}{subsection.2.2}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_compileToASMM(fname)}}{10}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_compileToCSMM(fname)}}{11}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_compileToPatternMM(fname)}}{11}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_copy()}}{11}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_exportSVG(fname)}}{11}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_getUserPreferences(callback[,subset])}}{11}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_httpReq(method,url,params,onresponse[,sync])}}{11}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_insertModel(fname)}}{11}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_loadModel(fname)}}{12}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_loadToolbar(fname)}}{12}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_openDialog(type,args,callback)}}{12}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_paste()}}{14}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_redo()}}{14}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_saveModel([fname,backup])}}{14}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_setInvisibleMetamodels(mms)}}{14}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_setUserPreferences(prefs[,callback])}}{14}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_setTypeToCreate(fulltype)}}{14}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_spawnClient(fname,callbackURL)}}{14}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_spawnHeadlessClient(context,onready,onchlog)}}{14}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_undo()}}{15}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_unloadToolbar(tb)}}{15}{section*.4}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_validate()}}{15}{section*.4}
+\contentsline {subsection}{\numberline {2.3}Remote API}{15}{subsection.2.3}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_highlight(args)}}{15}{section*.5}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_loadModelInNewWindow(args)}}{15}{section*.5}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_tag(args)}}{16}{section*.5}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function \_updateAttr(args)}}{16}{section*.5}
+\contentsline {section}{\numberline {3}Specifying and Compiling Formalism Syntax Models}{17}{section.3}
+\contentsline {subsection}{\numberline {3.1}Defining Abstract Syntax}{17}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Types}{17}{subsubsection.3.1.1}
+\contentsline {subsection}{\numberline {3.2}Defining Concrete Syntax}{17}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Meta-Modelling API}{19}{subsection.3.3}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function getAttr(\_attr[,\_id])}}{19}{section*.7}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function getAllNodes([\_fulltypes])}}{19}{section*.7}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function getNeighbors(\_dir[,\_type,\_id])}}{19}{section*.7}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function hasAttr(\_attr[,\_id])}}{19}{section*.7}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function print(str)}}{19}{section*.7}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function setAttr(\_attr,\_val[,\_id])}}{20}{section*.7}
+\contentsline {subsection}{\numberline {3.4}The \textit {CompileMenu} Toolbar}{20}{subsection.3.4}
+\contentsline {section}{\numberline {4}Specifying and Executing Model Transformations}{21}{section.4}
+\contentsline {subsection}{\numberline {4.1}Specifying Transformation Rule Models}{21}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Specifying Transformation Models}{21}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Transformation Rule API}{22}{subsection.4.3}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function getAttr(\_attr[,\_id])}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function getAllNodes([\_fulltypes])}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function getNeighbors(\_dir[,\_type,\_id])}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function hasAttr(\_attr[,\_id])}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function print(str)}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function setAttr(\_attr,\_val[,\_id])}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function httpReq(method,host,url,data)}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function isConnectionType(\_id)}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function session\_get(\_key)}}{22}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function session\_put(\_key,\_val)}}{23}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function sys\_call(\_args)}}{23}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function sys\_mkdir(\_path)}}{23}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function sys\_readf(\_path)}}{23}{section*.8}
+\contentsline {subsubsection}{\hskip 1em\relax \texttt {function sys\_writef(\_path,\_content[,\_append])}}{23}{section*.8}
+\contentsline {subsection}{\numberline {4.4}The \textit {TransformationController} Toolbar}{23}{subsection.4.4}
+\contentsline {section}{\numberline {5}Extending AToMPM \textit {(To be completed) }}{24}{section.5}
+\contentsline {section}{\numberline {A}Setting up the AToMPM back-end}{25}{appendix.A}
+\contentsline {subsection}{\numberline {A.1}Installation}{25}{subsection.A.1}
+\contentsline {subsection}{\numberline {A.2}Launch}{25}{subsection.A.2}

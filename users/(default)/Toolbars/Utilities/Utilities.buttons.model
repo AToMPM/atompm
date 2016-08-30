@@ -1,0 +1,798 @@
+{
+	"csm": {
+		"nodes": {
+			"0": {
+				"typename": {
+					"type": "string",
+					"value": "ButtonIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						150,
+						150
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"1": {
+								"width": {
+									"type": "double",
+									"value": "120"
+								},
+								"height": {
+									"type": "double",
+									"value": "50"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "25"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#af0000",
+										"stroke-dasharray": "",
+										"fill": "#000000",
+										"fill-opacity": 0.05,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"2": {
+								"textContent": {
+									"type": "string",
+									"value": "exportSVG"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({\"textContent\":getAttr(\"name\")})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({\"name\":getAttr(\"textContent\")})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										10,
+										13
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"3": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										17.74899850809561,
+										12.998998508095553
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "1",
+								"dest": 3
+							},
+							{
+								"src": 3,
+								"dest": "2"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Utilities__/Buttons/Buttons/Button/0.instance"
+				},
+				"$type": "/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons/ButtonIcon"
+			},
+			"2": {
+				"typename": {
+					"type": "string",
+					"value": "ButtonIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						326,
+						177
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"1": {
+								"width": {
+									"type": "double",
+									"value": "120"
+								},
+								"height": {
+									"type": "double",
+									"value": "50"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "25"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#af0000",
+										"stroke-dasharray": "",
+										"fill": "#000000",
+										"fill-opacity": 0.05,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"2": {
+								"textContent": {
+									"type": "string",
+									"value": "cloudmgmt"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({\"textContent\":getAttr(\"name\")})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({\"name\":getAttr(\"textContent\")})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										10,
+										13
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"3": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										17.74899850809561,
+										12.998998508095553
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "1",
+								"dest": 3
+							},
+							{
+								"src": 3,
+								"dest": "2"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Utilities__/Buttons/Buttons/Button/2.instance"
+				},
+				"$type": "/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons/ButtonIcon"
+			},
+			"3": {
+				"typename": {
+					"type": "string",
+					"value": "ButtonIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						676,
+						226
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"1": {
+								"width": {
+									"type": "double",
+									"value": "120"
+								},
+								"height": {
+									"type": "double",
+									"value": "50"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "25"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#af0000",
+										"stroke-dasharray": "",
+										"fill": "#000000",
+										"fill-opacity": 0.05,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"2": {
+								"textContent": {
+									"type": "string",
+									"value": "editprefs"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({\"textContent\":getAttr(\"name\")})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({\"name\":getAttr(\"textContent\")})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										10,
+										13
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"3": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										17.74899850809561,
+										12.998998508095553
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "1",
+								"dest": 3
+							},
+							{
+								"src": 3,
+								"dest": "2"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Utilities__/Buttons/Buttons/Button/3.instance"
+				},
+				"$type": "/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons/ButtonIcon"
+			},
+			"4": {
+				"typename": {
+					"type": "string",
+					"value": "ButtonIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						501,
+						202
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"1": {
+								"width": {
+									"type": "double",
+									"value": "120"
+								},
+								"height": {
+									"type": "double",
+									"value": "50"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "25"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#af0000",
+										"stroke-dasharray": "",
+										"fill": "#000000",
+										"fill-opacity": 0.05,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"2": {
+								"textContent": {
+									"type": "string",
+									"value": "download"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({\"textContent\":getAttr(\"name\")})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({\"name\":getAttr(\"textContent\")})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										10,
+										13
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"3": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										17.74899850809561,
+										12.998998508095553
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "1",
+								"dest": 3
+							},
+							{
+								"src": 3,
+								"dest": "2"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Utilities__/Buttons/Buttons/Button/4.instance"
+				},
+				"$type": "/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons/ButtonIcon"
+			}
+		},
+		"edges": [],
+		"metamodels": [
+			"/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons"
+		]
+	},
+	"asm": {
+		"nodes": {
+			"0": {
+				"name": {
+					"type": "string",
+					"value": "exportSVG"
+				},
+				"tooltip": {
+					"type": "string",
+					"value": "export the current model as an SVG image"
+				},
+				"code": {
+					"type": "code",
+					"value": "_exportSVG();"
+				},
+				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
+			},
+			"2": {
+				"name": {
+					"type": "string",
+					"value": "cloudmgmt"
+				},
+				"tooltip": {
+					"type": "string",
+					"value": "manage your cloud data"
+				},
+				"code": {
+					"type": "code",
+					"value": "WindowManagement.openDialog(_CLOUD_DATA_MANAGER);"
+				},
+				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
+			},
+			"3": {
+				"name": {
+					"type": "string",
+					"value": "editprefs"
+				},
+				"tooltip": {
+					"type": "string",
+					"value": "customize your personal settings"
+				},
+				"code": {
+					"type": "code",
+					"value": "_getUserPreferences(\n    function(prefs) {\n        WindowManagement.openDialog(\n            _DICTIONARY_EDITOR,\n            {'data':prefs,\n             'title':'customize your personal settings'},\n            _setUserPreferences); });"
+				},
+				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
+			},
+			"4": {
+				"name": {
+					"type": "string",
+					"value": "download"
+				},
+				"tooltip": {
+					"type": "string",
+					"value": "download all of your cloud data"
+				},
+				"code": {
+					"type": "code",
+					"value": "window.location.assign(_context.username+'/.file');"
+				},
+				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
+			}
+		},
+		"edges": [],
+		"metamodels": [
+			"/Formalisms/__Utilities__/Buttons/Buttons"
+		]
+	}
+}

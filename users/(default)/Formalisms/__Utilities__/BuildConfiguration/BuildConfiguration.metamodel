@@ -1,0 +1,76 @@
+{
+	"types": {
+		"AConfiguration": [
+			{
+				"name": "enabled",
+				"type": "boolean",
+				"default": true
+			}
+		],
+		"HTTPDebugger": [
+			{
+				"name": "serverAddr",
+				"type": "string",
+				"default": "http://raven10.kicks-ass.net:8124"
+			},
+			{
+				"name": "enabled",
+				"type": "boolean",
+				"default": true
+			}
+		],
+		"Custom": [
+			{
+				"name": "options",
+				"type": "map<string,string>",
+				"default": {}
+			},
+			{
+				"name": "enabled",
+				"type": "boolean",
+				"default": true
+			}
+		],
+		"HTTPPerfMonitor": [
+			{
+				"name": "serverAddr",
+				"type": "string",
+				"default": "http://raven10.kicks-ass.net:8124"
+			},
+			{
+				"name": "enabled",
+				"type": "boolean",
+				"default": true
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "AConfiguration"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"AConfiguration": [],
+		"HTTPDebugger": [],
+		"Custom": [],
+		"HTTPPerfMonitor": []
+	},
+	"legalConnections": {},
+	"connectorTypes": {},
+	"types2parentTypes": {
+		"AConfiguration": [],
+		"HTTPDebugger": [
+			"AConfiguration"
+		],
+		"Custom": [
+			"AConfiguration"
+		],
+		"HTTPPerfMonitor": [
+			"AConfiguration"
+		]
+	}
+}

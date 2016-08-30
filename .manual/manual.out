@@ -1,0 +1,73 @@
+\BOOKMARK [1][-]{section.1}{Client Overview}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Launching the AToMPM Client}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{The Interface Components}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{The MainMenu Toolbar}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{The Utilities Toolbar}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{The Canvas}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.6}{Collaboration}{section.1}% 7
+\BOOKMARK [2][-]{subsection.1.7}{Tweaking Default Settings}{section.1}% 8
+\BOOKMARK [1][-]{section.2}{Modelling}{}% 9
+\BOOKMARK [2][-]{subsection.2.1}{Creating Button Toolbar Models}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.2}{Client API}{section.2}% 11
+\BOOKMARK [3][-]{section*.4}{function \137compileToASMM\(fname\)}{subsection.2.2}% 12
+\BOOKMARK [3][-]{section*.4}{function \137compileToCSMM\(fname\)}{subsection.2.2}% 13
+\BOOKMARK [3][-]{section*.4}{function \137compileToPatternMM\(fname\)}{subsection.2.2}% 14
+\BOOKMARK [3][-]{section*.4}{function \137copy\(\)}{subsection.2.2}% 15
+\BOOKMARK [3][-]{section*.4}{function \137exportSVG\(fname\)}{subsection.2.2}% 16
+\BOOKMARK [3][-]{section*.4}{function \137getUserPreferences\(callback[,subset]\)}{subsection.2.2}% 17
+\BOOKMARK [3][-]{section*.4}{function \137httpReq\(method,url,params,onresponse[,sync]\)}{subsection.2.2}% 18
+\BOOKMARK [3][-]{section*.4}{function \137insertModel\(fname\)}{subsection.2.2}% 19
+\BOOKMARK [3][-]{section*.4}{function \137loadModel\(fname\)}{subsection.2.2}% 20
+\BOOKMARK [3][-]{section*.4}{function \137loadToolbar\(fname\)}{subsection.2.2}% 21
+\BOOKMARK [3][-]{section*.4}{function \137openDialog\(type,args,callback\)}{subsection.2.2}% 22
+\BOOKMARK [3][-]{section*.4}{function \137paste\(\)}{subsection.2.2}% 23
+\BOOKMARK [3][-]{section*.4}{function \137redo\(\)}{subsection.2.2}% 24
+\BOOKMARK [3][-]{section*.4}{function \137saveModel\([fname,backup]\)}{subsection.2.2}% 25
+\BOOKMARK [3][-]{section*.4}{function \137setInvisibleMetamodels\(mms\)}{subsection.2.2}% 26
+\BOOKMARK [3][-]{section*.4}{function \137setUserPreferences\(prefs[,callback]\)}{subsection.2.2}% 27
+\BOOKMARK [3][-]{section*.4}{function \137setTypeToCreate\(fulltype\)}{subsection.2.2}% 28
+\BOOKMARK [3][-]{section*.4}{function \137spawnClient\(fname,callbackURL\)}{subsection.2.2}% 29
+\BOOKMARK [3][-]{section*.4}{function \137spawnHeadlessClient\(context,onready,onchlog\)}{subsection.2.2}% 30
+\BOOKMARK [3][-]{section*.4}{function \137undo\(\)}{subsection.2.2}% 31
+\BOOKMARK [3][-]{section*.4}{function \137unloadToolbar\(tb\)}{subsection.2.2}% 32
+\BOOKMARK [3][-]{section*.4}{function \137validate\(\)}{subsection.2.2}% 33
+\BOOKMARK [2][-]{subsection.2.3}{Remote API}{section.2}% 34
+\BOOKMARK [3][-]{section*.5}{function \137highlight\(args\)}{subsection.2.3}% 35
+\BOOKMARK [3][-]{section*.5}{function \137loadModelInNewWindow\(args\)}{subsection.2.3}% 36
+\BOOKMARK [3][-]{section*.5}{function \137tag\(args\)}{subsection.2.3}% 37
+\BOOKMARK [3][-]{section*.5}{function \137updateAttr\(args\)}{subsection.2.3}% 38
+\BOOKMARK [1][-]{section.3}{Specifying and Compiling Formalism Syntax Models}{}% 39
+\BOOKMARK [2][-]{subsection.3.1}{Defining Abstract Syntax}{section.3}% 40
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Types}{subsection.3.1}% 41
+\BOOKMARK [2][-]{subsection.3.2}{Defining Concrete Syntax}{section.3}% 42
+\BOOKMARK [2][-]{subsection.3.3}{Meta-Modelling API}{section.3}% 43
+\BOOKMARK [3][-]{section*.7}{function getAttr\(\137attr[,\137id]\)}{subsection.3.3}% 44
+\BOOKMARK [3][-]{section*.7}{function getAllNodes\([\137fulltypes]\)}{subsection.3.3}% 45
+\BOOKMARK [3][-]{section*.7}{function getNeighbors\(\137dir[,\137type,\137id]\)}{subsection.3.3}% 46
+\BOOKMARK [3][-]{section*.7}{function hasAttr\(\137attr[,\137id]\)}{subsection.3.3}% 47
+\BOOKMARK [3][-]{section*.7}{function print\(str\)}{subsection.3.3}% 48
+\BOOKMARK [3][-]{section*.7}{function setAttr\(\137attr,\137val[,\137id]\)}{subsection.3.3}% 49
+\BOOKMARK [2][-]{subsection.3.4}{The CompileMenu Toolbar}{section.3}% 50
+\BOOKMARK [1][-]{section.4}{Specifying and Executing Model Transformations}{}% 51
+\BOOKMARK [2][-]{subsection.4.1}{Specifying Transformation Rule Models}{section.4}% 52
+\BOOKMARK [2][-]{subsection.4.2}{Specifying Transformation Models}{section.4}% 53
+\BOOKMARK [2][-]{subsection.4.3}{Transformation Rule API}{section.4}% 54
+\BOOKMARK [3][-]{section*.8}{function getAttr\(\137attr[,\137id]\)}{subsection.4.3}% 55
+\BOOKMARK [3][-]{section*.8}{function getAllNodes\([\137fulltypes]\)}{subsection.4.3}% 56
+\BOOKMARK [3][-]{section*.8}{function getNeighbors\(\137dir[,\137type,\137id]\)}{subsection.4.3}% 57
+\BOOKMARK [3][-]{section*.8}{function hasAttr\(\137attr[,\137id]\)}{subsection.4.3}% 58
+\BOOKMARK [3][-]{section*.8}{function print\(str\)}{subsection.4.3}% 59
+\BOOKMARK [3][-]{section*.8}{function setAttr\(\137attr,\137val[,\137id]\)}{subsection.4.3}% 60
+\BOOKMARK [3][-]{section*.8}{function httpReq\(method,host,url,data\)}{subsection.4.3}% 61
+\BOOKMARK [3][-]{section*.8}{function isConnectionType\(\137id\)}{subsection.4.3}% 62
+\BOOKMARK [3][-]{section*.8}{function session\137get\(\137key\)}{subsection.4.3}% 63
+\BOOKMARK [3][-]{section*.8}{function session\137put\(\137key,\137val\)}{subsection.4.3}% 64
+\BOOKMARK [3][-]{section*.8}{function sys\137call\(\137args\)}{subsection.4.3}% 65
+\BOOKMARK [3][-]{section*.8}{function sys\137mkdir\(\137path\)}{subsection.4.3}% 66
+\BOOKMARK [3][-]{section*.8}{function sys\137readf\(\137path\)}{subsection.4.3}% 67
+\BOOKMARK [3][-]{section*.8}{function sys\137writef\(\137path,\137content[,\137append]\)}{subsection.4.3}% 68
+\BOOKMARK [2][-]{subsection.4.4}{The TransformationController Toolbar}{section.4}% 69
+\BOOKMARK [1][-]{section.5}{Extending AToMPM \(To be completed\) }{}% 70
+\BOOKMARK [1][-]{appendix.A}{Setting up the AToMPM back-end}{}% 71
+\BOOKMARK [2][-]{subsection.A.1}{Installation}{appendix.A}% 72
+\BOOKMARK [2][-]{subsection.A.2}{Launch}{appendix.A}% 73

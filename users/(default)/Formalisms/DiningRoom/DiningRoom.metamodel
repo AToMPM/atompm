@@ -1,0 +1,93 @@
+{
+	"types": {
+		"Table": [
+			{
+				"name": "x",
+				"type": "int",
+				"default": "0"
+			},
+			{
+				"name": "y",
+				"type": "int",
+				"default": "0"
+			}
+		],
+		"Chair": [
+			{
+				"name": "order",
+				"type": "int",
+				"default": "1"
+			}
+		],
+		"around": [
+			{
+				"name": "",
+				"type": "",
+				"default": ""
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "GC_UniqueTable",
+			"event": "",
+			"targetType": "*",
+			"code": "(getAllNodes(['/Formalisms/DiningRoom/DiningRoom/Table']).length <= 1)"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Table": [
+			{
+				"dir": "out",
+				"type": "around",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Chair": [
+			{
+				"dir": "in",
+				"type": "around",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"around": [
+			{
+				"dir": "in",
+				"type": "around",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Table",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Chair",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Table": {
+			"Chair": [
+				"around"
+			]
+		}
+	},
+	"connectorTypes": {
+		"around": "visual"
+	},
+	"types2parentTypes": {
+		"Table": [],
+		"Chair": [],
+		"around": [],
+		"GC_UniqueTable": []
+	}
+}

@@ -1,0 +1,63 @@
+{
+	"types": {
+		"$*": [],
+		"AttributedGenericLink": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "GL_"
+			},
+			{
+				"name": "data",
+				"type": "map<string,string>",
+				"default": {}
+			}
+		]
+	},
+	"constraints": [],
+	"actions": [],
+	"cardinalities": {
+		"$*": [
+			{
+				"dir": "out",
+				"type": "AttributedGenericLink",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "AttributedGenericLink",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"AttributedGenericLink": [
+			{
+				"dir": "in",
+				"type": "$*",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "$*",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"$*": {
+			"$*": [
+				"AttributedGenericLink"
+			]
+		}
+	},
+	"connectorTypes": {
+		"AttributedGenericLink": "visual"
+	},
+	"types2parentTypes": {
+		"$*": [],
+		"AttributedGenericLink": []
+	}
+}

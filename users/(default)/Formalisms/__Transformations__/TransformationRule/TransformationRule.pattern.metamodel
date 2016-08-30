@@ -1,0 +1,257 @@
+{
+	"types": {
+		"__pPattern": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pLHS": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "Condition",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pRHS": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "Action",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pNAC": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "name",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "Condition",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__p$*": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pPatternContents": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pRHSImport": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "filename",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\nfalse",
+			"targetType": "Pattern"
+		},
+		{
+			"name": "1lhs-1rhs",
+			"event": "",
+			"targetType": "*",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\nvar mm = \"/Formalisms/__Transformations__/TransformationRule/TransformationRule/\";\n\ngetAllNodes([mm+\"LHS\"]).length == 1 && (getAllNodes([mm+\"RHSImport\"]).length + getAllNodes([mm+\"RHS\"]).length == 1);"
+		}
+	],
+	"actions": [
+		{
+			"name": "convertToPrePostType",
+			"event": "post-create",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\n/*newline*/var mm  = '/Formalisms/__Transformations__/TransformationRule/TransformationRule/',/*newline*/    pt    = getAttr('$type',getNeighbors('<')[0]),/*newline*/    nid   = getNeighbors('>')[0],/*newline*/    ntype = getAttr('$type',nid);/*newline*/if( ! ntype.match('\\.pattern/__p') )/*newline*/    throw 'patterns can only contain instance types of pattern metamodels';/*newline*//*newline*/var isPreType = (getAttr('__pMatchSubtypes',nid) != undefined);/*newline*/if( getNeighbors('<','PatternContents',nid).length > 1 )/*newline*/    /*for HOTs: do not alter nodes that are already within another Pattern*/;/*newline*/else if( (pt == mm+'LHS' || pt == mm+'NAC') && !isPreType )/*newline*/    setAttr('__pMatchSubtypes',false,nid);/*newline*/else if( pt == mm+'RHS' && isPreType )/*newline*/    setAttr('__pMatchSubtypes',undefined,nid);",
+			"targetType": "__pPatternContents"
+		},
+		{
+			"name": "distinctPLabels",
+			"event": "post-create",
+			"code": "if( getAttr(\"__pLabel\") == \"\" )\n{\n\tvar pLabels = getAllNodes().\n\t\t\t\t\t\t\tfilter( function(n) {return hasAttr(\"__pLabel\",n);} ).\n\t\t\t\t\t\t\t\tmap( function(n) {return getAttr(\"__pLabel\",n);} ),\n\t\t i\t\t\t= \"0\";\n\n\twhile( _utils.contains(pLabels,i) )\n\t\ti = String(parseInt(i)+1);\n\tsetAttr(\"__pLabel\",i);\n}",
+			"targetType": "*"
+		}
+	],
+	"cardinalities": {
+		"__pPattern": [
+			{
+				"dir": "out",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pLHS": [
+			{
+				"dir": "out",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pRHS": [
+			{
+				"dir": "out",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pNAC": [
+			{
+				"dir": "out",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__p$*": [
+			{
+				"dir": "in",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pPatternContents": [
+			{
+				"dir": "in",
+				"type": "__pPattern",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__p$*",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "__pLHS",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "__pRHS",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "__pNAC",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pRHSImport": []
+	},
+	"legalConnections": {
+		"__pPattern": {
+			"__p$*": [
+				"__pPatternContents"
+			]
+		},
+		"__pLHS": {
+			"__p$*": [
+				"__pPatternContents"
+			]
+		},
+		"__pRHS": {
+			"__p$*": [
+				"__pPatternContents"
+			]
+		},
+		"__pNAC": {
+			"__p$*": [
+				"__pPatternContents"
+			]
+		}
+	},
+	"connectorTypes": {
+		"__pPatternContents": "containment"
+	},
+	"types2parentTypes": {
+		"__pPattern": [],
+		"__pLHS": [
+			"__pPattern"
+		],
+		"__pRHS": [
+			"__pPattern"
+		],
+		"__pNAC": [
+			"__pPattern"
+		],
+		"__p$*": [],
+		"__p1lhs-1rhs": [],
+		"__pPatternContents": [],
+		"__pRHSImport": []
+	}
+}

@@ -1,0 +1,82 @@
+{
+	"types": {
+		"AttributedGenericLinkLink": [
+			{
+				"name": "link-style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#a000ff",
+					"stroke-dasharray": ". ",
+					"stroke-opacity": 1,
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "classic-wide-long"
+				}
+			},
+			{
+				"name": "typename",
+				"type": "string",
+				"default": "AttributedGenericLinkLink"
+			},
+			{
+				"name": "position",
+				"type": "list<double>",
+				"default": [
+					224,
+					150
+				]
+			},
+			{
+				"name": "orientation",
+				"type": "double",
+				"default": 0
+			},
+			{
+				"name": "scale",
+				"type": "list<double>",
+				"default": [
+					1,
+					1
+				]
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "$contents",
+				"type": "map<string,*>",
+				"default": {
+					"nodes": {},
+					"edges": []
+				}
+			},
+			{
+				"name": "$asuri",
+				"type": "string",
+				"default": "-1"
+			},
+			{
+				"name": "$segments",
+				"type": "map<string,list<string>>",
+				"default": {}
+			}
+		]
+	},
+	"constraints": [],
+	"actions": [],
+	"cardinalities": {
+		"AttributedGenericLinkLink": []
+	},
+	"legalConnections": {},
+	"connectorTypes": {},
+	"types2parentTypes": {
+		"AttributedGenericLinkLink": []
+	}
+}

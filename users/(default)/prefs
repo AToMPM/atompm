@@ -1,0 +1,28 @@
+{
+	"autosave-delay": {
+		"type": "int",
+		"value": 300
+	},
+	"autosave-mode": {
+		"type": "ENUM(overwrite,backup)",
+		"value": "backup"
+	},
+	"confirm-exit": {
+		"type": "boolean",
+		"value": true
+	},
+	"default-mt-dcl": {
+		"type": "ENUM(JAVASCRIPT,PYTHON)",
+		"value": "PYTHON"
+	},
+	"autoloaded-toolbars": {
+		"type": "list<string>",
+		"value": [
+            "/Toolbars/TransformationController/TransformationController.buttons.model"
+        ]
+	},
+	"autoloaded-model": {
+		"type": "string",
+		"value": ""
+	}
+}

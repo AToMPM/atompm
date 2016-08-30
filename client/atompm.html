@@ -1,0 +1,174 @@
+﻿<!--****************************************************************************
+AToMPM - A Tool for Multi-Paradigm Modelling
+
+Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
+
+This file is part of AToMPM.
+
+AToMPM is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later 
+version.
+
+AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along
+with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
+*****************************************************************************-->
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="client/styles.css"/>
+		<script text="text/javascript" src="client/globalVariables.js"></script>
+		<script text="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script text="text/javascript" src="client/3rd_party_libs/sha1.js"></script>		
+		<script text="text/javascript" src="client/3rd_party_libs/raphael/raphael.js"></script>		
+		<script text="text/javascript" src="client/3rd_party_libs/raphael/plugins/point.js"></script>				
+		<script text="text/javascript" src="client/3rd_party_libs/raphael/plugins/group.js"></script>		
+		<script text="text/javascript" src="client/3rd_party_libs/raphael/plugins/raphael.primitives.js"></script>
+		<script text="text/javascript" src="client/3rd_party_libs/jquery-1.8.2.min.js"></script>	
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script text="text/javascript" src="client/constants.js"></script>		
+		<script text="text/javascript" src="types.js"></script>		
+		<script text="text/javascript" src="utils.js"></script>	
+		<script text="text/javascript" src="client/behaviourmanager.js"></script>
+		<script text="text/javascript" src="client/behavioursc_inputbar.js"></script>
+		<script text="text/javascript" src="client/behavioursc_canvas.js"></script>
+		<script text="text/javascript" src="client/behavioursc_dialog.js"></script>
+		<script text="text/javascript" src="client/http_utils.js"></script>
+		<script text="text/javascript" src="client/window_event.js"></script>
+		<script text="text/javascript" src="client/user_management.js"></script>
+		<script text="text/javascript" src="client/init.js"></script>
+		<script text="text/javascript" src="client/input_bar_utils.js"></script>
+		<script text="text/javascript" src="client/gui_utils.js"></script>
+		<script text="text/javascript" src="client/data_utils.js"></script>
+		<script text="text/javascript" src="client/edit_utils.js"></script>
+		<script text="text/javascript" src="client/compile_utils.js"></script>
+		<script text="text/javascript" src="client/svg_utils.js"></script>
+		<script text="text/javascript" src="client/mmm_utils.js"></script>
+		<script text="text/javascript" src="client/selection_utils.js"></script>
+		<script text="text/javascript" src="client/geometry_utils.js"></script>
+		<script text="text/javascript" src="client/connection_utils.js"></script>
+		<script text="text/javascript" src="client/window_management.js"></script>
+		<script text="text/javascript" src="client/query_response.js"></script>
+		<script text="text/javascript" src="client/collaboration.js"></script>
+		<script text="text/javascript" src="client/client.js"></script>
+		<script text="text/javascript" src="styleinfo.js"></script>
+		<script>
+			$(document).ready(function(){
+				/**
+				 * Initiate the default Window Event actions
+				 */
+				//WindowEventHelper.initDefault();
+			});
+		</script>
+	</head>
+	<body class="default_style">
+		<div id="rootDiv" class="rootDiv">
+			<div id="commandHistory" class="commandHistory">
+			</div>
+			<div id="inputDiv" class="inputDiv">
+				<input placeholder="type 'help' to get information about querying" name="mainInput" type="text" class="mainInput" id="mainInput" onkeyup="InputBarUtils.processKey( event )"/>
+			</div>
+			<div id="contentDiv" class="contentDiv">
+				<div id="div_container" class="container">
+					<div id="div_canvas" class="canvas"></div>
+				</div>
+				<div class="header" align="right">
+					<a id="a_logout" class="enabled_link unselectable" onclick="UserManagement.logout(); return false;"><b>logout</b></a>
+				</div>
+				<div id="div_dock" class="dock"></div>
+			</div>
+		</div>
+
+		<div class="footer" align="right">
+			<a class="enabled_link unselectable" id="showChat" href=
+			"javascript:Collaboration.toggleChat();">Show Chat</a><br>
+
+			<div id="chat">
+			  <div id="menu">
+				<p class="welcome">Welcome,</p>
+
+				<div class="welcome" id="chatName"></div>
+
+				<p class="logout"><a id="hideChat" href=
+				"javascript:Collaboration.toggleChat();">Hide Chat</a></p>
+
+				<div style="clear:both"></div>
+			  </div>
+
+			  <div id="chatbox"></div>
+
+			  <form name="message" action="javascript:Collaboration.sendText();" style=
+			  "padding-right:30px">
+				<input name="usermsg" type="text" id="usermsg" size="63">
+				<input name="submitmsg" type="submit" id="submitmsg" value=
+				"Send">
+			  </form>
+			</div>
+			<a id="a_screenshare" class="disabled_link unselectable" target="_blank">send <b>screenshare</b> invitation</a></br> 
+			<a id="a_modelshare" class="disabled_link unselectable" target="_blank">send <b>modelshare</b> invitation</a>
+		</div>
+
+		<div id="div_login" class="dark_bg" style="display:none;width:100%;height=100%">
+			<div class="dark_bg"></div>
+			<div class="login" style="text-align:center">
+				<h3>Log in to use AToMPM</h3>
+					<form onsubmit="return false;">
+						<table class="default_style">
+							<tr><td>username</td><td><input id="input_username" class="default_style" type="text"/></td></tr>
+							<tr><td>password</td><td><input id="input_password" class="default_style" type="password"/></td></tr>
+						</table></br>
+						<div id="div_login_error" class="error"></div>
+						<a href="#" class="enabled_link" 
+							onclick="
+								UserManagement.validateCredentials($('#input_username').val(), $('#input_password').val()); 
+								return false;"><h3>Log in</h3></a><br/>
+					   (don't have an account? <a href="#" class="enabled_link" 
+						 	onclick="
+								$('#form_signup').css('display', 'inline');
+								return false;">create one now</a>)
+					</form><br/>
+
+					<form id="form_signup" onsubmit="return false;" style="display:none">
+						<table class="default_style">
+							<tr><td>choose username</td><td><input id="new_username" class="default_style" type="text"/></td></tr>
+							<tr><td>choose password</td><td><input id="new_password" class="default_style" type="password"/></td></tr>
+							<tr><td>re-type password</td><td><input id="new_password2" class="default_style" type="password"/></td></tr>
+						</table></br>
+						<div id="div_signup_error" class="error"></div>
+						<a href="#" class="enabled_link" 
+							onclick="
+								$('#div_signup_error').html( '' );
+								if( $('#new_password').val() != $('#new_password2').val() )
+									$('#div_signup_error').html( 'passwords don\'t match' );
+								else if( $('#new_password').val() == '' )
+									$('#div_signup_error').html( 'you must specify a password' );									
+								else if( ! $('#new_username').val().match(/^[0-9a-zA-Z]*$/) )
+									$('#div_signup_error').html( 'usernames must be alphanumeric' );							
+								else
+									UserManagement.signup($('#new_username').val(), $('#new_password').val()); 
+                                $('#pleaseWaitNote').show();
+                                var dots = window.setInterval( function() {
+                                    var wait = document.getElementById('waitNoteDots');
+                                    if ( wait.innerHTML.length > 10 ) 
+                                        wait.innerHTML = '';
+                                    else 
+                                        wait.innerHTML += '.';
+                                    }, 500);
+								return false;"><h3>Create account</h3></a>
+                         <span id="pleaseWaitNote" style="display:none">User is being created, please wait<span id="waitNoteDots">.</span></span>
+					</form>						
+			</div>		
+		</div>
+		
+
+		<div id="div_dim_bg" class="dim_bg" style="display:none"></div>
+		<div id="div_dialog" class="dialog" style="display:none;text-align:center"></div>		
+		<div id="div_geom_ctrls" class="geometry_ctrls" style="display:none"></div>
+	</body>
+</html>
+

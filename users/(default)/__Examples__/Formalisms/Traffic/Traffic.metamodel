@@ -1,0 +1,276 @@
+{
+	"types": {
+		"Generator": [
+			{
+				"name": "producedCars",
+				"type": "int",
+				"default": 0
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"RoadSegment": [
+			{
+				"name": "currentCars",
+				"type": "int",
+				"default": 0
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"Sink": [
+			{
+				"name": "consumedCars",
+				"type": "int",
+				"default": 0
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"Car": [
+			{
+				"name": "color",
+				"type": "string",
+				"default": "#ff0000"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"RS2G": [],
+		"S2RS": [],
+		"RS2RS": [],
+		"CarOnRoadSegment": [],
+		"Positionable": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Positionable"
+		}
+	],
+	"actions": [
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if(! getAttr('$type', neighborLink).match(/CarOnRoadSegment/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0]+(getAttr('$type',neighbor).match(/Generator/) ? 80 : 300),npos[1]]);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        var car = getNeighbors('>','*',neighborLink)[0],/*newline*/            rspos = getAttr('position'),/*newline*/            rspop = getNeighbors('>','/Formalisms/Traffic/Traffic/CarOnRoadSegment').length;/*newline*/            setAttr('position', [rspos[0]+rspop*20,rspos[1]],car);/*newline*/    }/*newline*/}",
+			"targetType": "Generator"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if(! getAttr('$type', neighborLink).match(/CarOnRoadSegment/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0]+(getAttr('$type',neighbor).match(/Generator/) ? 80 : 300),npos[1]]);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        var car = getNeighbors('>','*',neighborLink)[0],/*newline*/            rspos = getAttr('position'),/*newline*/            rspop = getNeighbors('>','/Formalisms/Traffic/Traffic/CarOnRoadSegment').length;/*newline*/            setAttr('position', [rspos[0]+rspop*20,rspos[1]],car);/*newline*/    }/*newline*/}",
+			"targetType": "RoadSegment"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if(! getAttr('$type', neighborLink).match(/CarOnRoadSegment/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0]+(getAttr('$type',neighbor).match(/Generator/) ? 80 : 300),npos[1]]);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        var car = getNeighbors('>','*',neighborLink)[0],/*newline*/            rspos = getAttr('position'),/*newline*/            rspop = getNeighbors('>','/Formalisms/Traffic/Traffic/CarOnRoadSegment').length;/*newline*/            setAttr('position', [rspos[0]+rspop*20,rspos[1]],car);/*newline*/    }/*newline*/}",
+			"targetType": "Sink"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if(! getAttr('$type', neighborLink).match(/CarOnRoadSegment/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0]+(getAttr('$type',neighbor).match(/Generator/) ? 80 : 300),npos[1]]);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        var car = getNeighbors('>','*',neighborLink)[0],/*newline*/            rspos = getAttr('position'),/*newline*/            rspop = getNeighbors('>','/Formalisms/Traffic/Traffic/CarOnRoadSegment').length;/*newline*/            setAttr('position', [rspos[0]+rspop*20,rspos[1]],car);/*newline*/    }/*newline*/}",
+			"targetType": "Car"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if(! getAttr('$type', neighborLink).match(/CarOnRoadSegment/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0]+(getAttr('$type',neighbor).match(/Generator/) ? 80 : 300),npos[1]]);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        var car = getNeighbors('>','*',neighborLink)[0],/*newline*/            rspos = getAttr('position'),/*newline*/            rspop = getNeighbors('>','/Formalisms/Traffic/Traffic/CarOnRoadSegment').length;/*newline*/            setAttr('position', [rspos[0]+rspop*20,rspos[1]],car);/*newline*/    }/*newline*/}",
+			"targetType": "Positionable"
+		}
+	],
+	"cardinalities": {
+		"Generator": [
+			{
+				"dir": "in",
+				"type": "RS2G",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"RoadSegment": [
+			{
+				"dir": "out",
+				"type": "RS2G",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RS2RS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "RS2RS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "S2RS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CarOnRoadSegment",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Sink": [
+			{
+				"dir": "out",
+				"type": "S2RS",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"Car": [
+			{
+				"dir": "in",
+				"type": "CarOnRoadSegment",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"RS2G": [
+			{
+				"dir": "in",
+				"type": "RoadSegment",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Generator",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"S2RS": [
+			{
+				"dir": "in",
+				"type": "Sink",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RoadSegment",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"RS2RS": [
+			{
+				"dir": "in",
+				"type": "RoadSegment",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RoadSegment",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"CarOnRoadSegment": [
+			{
+				"dir": "in",
+				"type": "RoadSegment",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Car",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"Positionable": []
+	},
+	"legalConnections": {
+		"RoadSegment": {
+			"Generator": [
+				"RS2G"
+			],
+			"RoadSegment": [
+				"RS2RS"
+			],
+			"Car": [
+				"CarOnRoadSegment"
+			]
+		},
+		"Sink": {
+			"RoadSegment": [
+				"S2RS"
+			]
+		}
+	},
+	"connectorTypes": {
+		"RS2G": "visual",
+		"S2RS": "visual",
+		"RS2RS": "visual",
+		"CarOnRoadSegment": "containment"
+	},
+	"types2parentTypes": {
+		"Generator": [
+			"Positionable"
+		],
+		"RoadSegment": [
+			"Positionable"
+		],
+		"Sink": [
+			"Positionable"
+		],
+		"Car": [
+			"Positionable"
+		],
+		"RS2G": [],
+		"S2RS": [],
+		"RS2RS": [],
+		"CarOnRoadSegment": [],
+		"Positionable": []
+	}
+}

@@ -1,0 +1,1081 @@
+{
+	"csm": {
+		"nodes": {
+			"0": {
+				"typename": {
+					"type": "string",
+					"value": "GeneratorIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						131,
+						199
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"parser": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"12": {
+								"textContent": {
+									"type": "string",
+									"value": "0 >>"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('producedCars')+ ' >>'})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										3,
+										79
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"22": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0l80,40,l-80,40z"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#aa00ff",
+										"fill": "#aa00ff",
+										"fill-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+								},
+								"parser": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/Generator/0.instance"
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/GeneratorIcon"
+			},
+			"1": {
+				"typename": {
+					"type": "string",
+					"value": "RoadSegmentIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						211,
+						199
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"parser": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"36": {
+								"width": {
+									"type": "double",
+									"value": 300
+								},
+								"height": {
+									"type": "double",
+									"value": 100
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": 0
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#bbbbbb",
+										"fill-opacity": 1,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+								},
+								"parser": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"37": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0l300,0"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ffff00",
+										"stroke-dasharray": "- ",
+										"fill": "#ffff00",
+										"fill-opacity": 0.75,
+										"stroke-width": 4,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+								},
+								"parser": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										3,
+										52
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/RoadSegment/1.instance"
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon"
+			},
+			"2": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#00ff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 0.2,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "RS2GLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						"223.5,50%",
+						"233.5,50%"
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+				},
+				"parser": {
+					"type": "code",
+					"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/RS2G/2.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon/1.instance--/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2GLink/2.instance": "M291,235L223.5,233.5",
+						"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2GLink/2.instance--/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/GeneratorIcon/0.instance": "M223.35044455321125,233.4966765456269L156.00088801097394,232.00001973357718"
+					}
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2GLink"
+			},
+			"3": {
+				"typename": {
+					"type": "string",
+					"value": "RoadSegmentIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						511,
+						199
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"parser": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"36": {
+								"width": {
+									"type": "double",
+									"value": 300
+								},
+								"height": {
+									"type": "double",
+									"value": 100
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": 0
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#bbbbbb",
+										"fill-opacity": 1,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+								},
+								"parser": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"37": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0l300,0"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ffff00",
+										"stroke-dasharray": "- ",
+										"fill": "#ffff00",
+										"fill-opacity": 0.75,
+										"stroke-width": 4,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+								},
+								"parser": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										3,
+										52
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/RoadSegment/3.instance"
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon"
+			},
+			"4": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#00ff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 0.2,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "RS2RSLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						"529.5,50%",
+						"224.5,50%"
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+				},
+				"parser": {
+					"type": "code",
+					"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/RS2RS/4.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon/3.instance--/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2RSLink/4.instance": "M576,227L529.5,224.5",
+						"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2RSLink/4.instance--/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon/1.instance": "M529.4251613190415,224.49597641500222L483.00032234940454,222.00001733061313"
+					}
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2RSLink"
+			},
+			"5": {
+				"typename": {
+					"type": "string",
+					"value": "RoadSegmentIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						811,
+						199
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"parser": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"36": {
+								"width": {
+									"type": "double",
+									"value": 300
+								},
+								"height": {
+									"type": "double",
+									"value": 100
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": 0
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#bbbbbb",
+										"fill-opacity": 1,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+								},
+								"parser": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"37": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0l300,0"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ffff00",
+										"stroke-dasharray": "- ",
+										"fill": "#ffff00",
+										"fill-opacity": 0.75,
+										"stroke-width": 4,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+								},
+								"parser": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										3,
+										52
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/RoadSegment/5.instance"
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon"
+			},
+			"6": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#00ff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 0.2,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "RS2RSLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						"823.5,50%",
+						"217.5,50%"
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+				},
+				"parser": {
+					"type": "code",
+					"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/RS2RS/6.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon/5.instance--/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2RSLink/6.instance": "M876,216L823.5,217.5",
+						"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2RSLink/6.instance--/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon/3.instance": "M823.4251428796892,217.502138774866L771.0002855328797,218.9999918419177"
+					}
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RS2RSLink"
+			},
+			"7": {
+				"typename": {
+					"type": "string",
+					"value": "SinkIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1111,
+						199
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"parser": {
+					"type": "code",
+					"value": "({'position':getAttr('position')})"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"17": {
+								"textContent": {
+									"type": "string",
+									"value": ">> 0"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent': '>> '+getAttr('consumedCars')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										40,
+										84
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"24": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0l80,0l-40,80,z"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ffff00",
+										"fill": "#ffff00",
+										"fill-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+								},
+								"parser": {
+									"type": "code",
+									"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										3,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/Sink/7.instance"
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/SinkIcon"
+			},
+			"8": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#00ff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 0.2,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "S2RSLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						"1116,50%",
+						"215.5,50%"
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+				},
+				"parser": {
+					"type": "code",
+					"value": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/__Examples__/Formalisms/Traffic/Traffic/S2RS/8.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/SinkIcon/7.instance--/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/S2RSLink/8.instance": "M1170,213L1116,215.5",
+						"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/S2RSLink/8.instance--/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/RoadSegmentIcon/5.instance": "M1115.9251389102035,215.50346579119432L1062.00027760631,217.99998714785602"
+					}
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic.defaultIcons/S2RSLink"
+			}
+		},
+		"edges": [],
+		"metamodels": [
+			"/__Examples__/Formalisms/Traffic/Traffic.defaultIcons"
+		]
+	},
+	"asm": {
+		"nodes": {
+			"0": {
+				"producedCars": {
+					"type": "int",
+					"value": 0
+				},
+				"position": {
+					"type": "list<int>",
+					"value": [
+						131,
+						199
+					]
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/Generator"
+			},
+			"1": {
+				"currentCars": {
+					"type": "int",
+					"value": 0
+				},
+				"position": {
+					"type": "list<int>",
+					"value": [
+						211,
+						199
+					]
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/RoadSegment"
+			},
+			"2": {
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/RS2G"
+			},
+			"3": {
+				"currentCars": {
+					"type": "int",
+					"value": 0
+				},
+				"position": {
+					"type": "list<int>",
+					"value": [
+						511,
+						199
+					]
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/RoadSegment"
+			},
+			"4": {
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/RS2RS"
+			},
+			"5": {
+				"currentCars": {
+					"type": "int",
+					"value": 0
+				},
+				"position": {
+					"type": "list<int>",
+					"value": [
+						811,
+						199
+					]
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/RoadSegment"
+			},
+			"6": {
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/RS2RS"
+			},
+			"7": {
+				"consumedCars": {
+					"type": "int",
+					"value": 0
+				},
+				"position": {
+					"type": "list<int>",
+					"value": [
+						1111,
+						199
+					]
+				},
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/Sink"
+			},
+			"8": {
+				"$type": "/__Examples__/Formalisms/Traffic/Traffic/S2RS"
+			}
+		},
+		"edges": [
+			{
+				"src": "1",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "0"
+			},
+			{
+				"src": "3",
+				"dest": "4"
+			},
+			{
+				"src": "4",
+				"dest": "1"
+			},
+			{
+				"src": "5",
+				"dest": "6"
+			},
+			{
+				"src": "6",
+				"dest": "3"
+			},
+			{
+				"src": "7",
+				"dest": "8"
+			},
+			{
+				"src": "8",
+				"dest": "5"
+			}
+		],
+		"metamodels": [
+			"/__Examples__/Formalisms/Traffic/Traffic"
+		]
+	}
+}

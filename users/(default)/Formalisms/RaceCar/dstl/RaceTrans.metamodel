@@ -1,0 +1,412 @@
+{
+	"types": {
+		"Step": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"next": [],
+		"StartEngines": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"CarsGoToStart": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Positionable": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"StepOnGas": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"IsRaceFinished": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"AwardCeremony": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"notFinished": []
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Step"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Positionable"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Step": [
+			{
+				"dir": "out",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"next": [
+			{
+				"dir": "in",
+				"type": "Step",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Step",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "StartEngines",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "StartEngines",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CarsGoToStart",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CarsGoToStart",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "StepOnGas",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "StepOnGas",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "IsRaceFinished",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "IsRaceFinished",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "AwardCeremony",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AwardCeremony",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"StartEngines": [
+			{
+				"dir": "out",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"CarsGoToStart": [
+			{
+				"dir": "out",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Positionable": [],
+		"StepOnGas": [
+			{
+				"dir": "in",
+				"type": "notFinished",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"IsRaceFinished": [
+			{
+				"dir": "out",
+				"type": "notFinished",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"AwardCeremony": [
+			{
+				"dir": "out",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"notFinished": [
+			{
+				"dir": "in",
+				"type": "IsRaceFinished",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "StepOnGas",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Step": {
+			"Step": [
+				"next"
+			],
+			"StartEngines": [
+				"next"
+			],
+			"CarsGoToStart": [
+				"next"
+			],
+			"StepOnGas": [
+				"next"
+			],
+			"IsRaceFinished": [
+				"next"
+			],
+			"AwardCeremony": [
+				"next"
+			]
+		},
+		"StartEngines": {
+			"Step": [
+				"next"
+			],
+			"StartEngines": [
+				"next"
+			],
+			"CarsGoToStart": [
+				"next"
+			],
+			"StepOnGas": [
+				"next"
+			],
+			"IsRaceFinished": [
+				"next"
+			],
+			"AwardCeremony": [
+				"next"
+			]
+		},
+		"CarsGoToStart": {
+			"Step": [
+				"next"
+			],
+			"StartEngines": [
+				"next"
+			],
+			"CarsGoToStart": [
+				"next"
+			],
+			"StepOnGas": [
+				"next"
+			],
+			"IsRaceFinished": [
+				"next"
+			],
+			"AwardCeremony": [
+				"next"
+			]
+		},
+		"StepOnGas": {
+			"Step": [
+				"next"
+			],
+			"StartEngines": [
+				"next"
+			],
+			"CarsGoToStart": [
+				"next"
+			],
+			"StepOnGas": [
+				"next"
+			],
+			"IsRaceFinished": [
+				"next"
+			],
+			"AwardCeremony": [
+				"next"
+			]
+		},
+		"IsRaceFinished": {
+			"StepOnGas": [
+				"notFinished",
+				"next"
+			],
+			"Step": [
+				"next"
+			],
+			"StartEngines": [
+				"next"
+			],
+			"CarsGoToStart": [
+				"next"
+			],
+			"IsRaceFinished": [
+				"next"
+			],
+			"AwardCeremony": [
+				"next"
+			]
+		},
+		"AwardCeremony": {
+			"Step": [
+				"next"
+			],
+			"StartEngines": [
+				"next"
+			],
+			"CarsGoToStart": [
+				"next"
+			],
+			"StepOnGas": [
+				"next"
+			],
+			"IsRaceFinished": [
+				"next"
+			],
+			"AwardCeremony": [
+				"next"
+			]
+		}
+	},
+	"connectorTypes": {
+		"next": "visual",
+		"notFinished": "visual"
+	},
+	"types2parentTypes": {
+		"Step": [
+			"Positionable"
+		],
+		"next": [],
+		"StartEngines": [
+			"Step",
+			"Positionable"
+		],
+		"CarsGoToStart": [
+			"Step",
+			"Positionable"
+		],
+		"Positionable": [],
+		"StepOnGas": [
+			"Step",
+			"Positionable"
+		],
+		"IsRaceFinished": [
+			"Step",
+			"Positionable"
+		],
+		"AwardCeremony": [
+			"Step",
+			"Positionable"
+		],
+		"notFinished": []
+	}
+}

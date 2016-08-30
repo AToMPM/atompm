@@ -1,0 +1,626 @@
+{
+	"types": {
+		"__pGridNode": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__pleft": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pbottom": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__ptop": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pright": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pPacman": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "name",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__pPositionable": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__pGhost": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "type",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__pScoreboard": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "score",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__pFood": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "points",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__pPoG": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pGoG": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pFoG": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\nfalse",
+			"targetType": "Positionable"
+		}
+	],
+	"actions": [
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\n/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if( getAttr('$type', neighborLink).match(/left/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] - 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/right/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] + 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/top/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] - 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/bottom/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] + 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/(P|G)oG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 26, gpos[1] + 26], neighbor);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/FoG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 70, gpos[1] + 43], neighbor);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        print('Invalid grid node link');/*newline*/    }/*newline*/}",
+			"targetType": "__pGridNode"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\n/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if( getAttr('$type', neighborLink).match(/left/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] - 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/right/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] + 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/top/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] - 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/bottom/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] + 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/(P|G)oG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 26, gpos[1] + 26], neighbor);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/FoG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 70, gpos[1] + 43], neighbor);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        print('Invalid grid node link');/*newline*/    }/*newline*/}",
+			"targetType": "__pPacman"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\n/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if( getAttr('$type', neighborLink).match(/left/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] - 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/right/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] + 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/top/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] - 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/bottom/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] + 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/(P|G)oG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 26, gpos[1] + 26], neighbor);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/FoG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 70, gpos[1] + 43], neighbor);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        print('Invalid grid node link');/*newline*/    }/*newline*/}",
+			"targetType": "__pPositionable"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\n/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if( getAttr('$type', neighborLink).match(/left/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] - 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/right/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] + 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/top/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] - 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/bottom/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] + 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/(P|G)oG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 26, gpos[1] + 26], neighbor);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/FoG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 70, gpos[1] + 43], neighbor);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        print('Invalid grid node link');/*newline*/    }/*newline*/}",
+			"targetType": "__pGhost"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\n/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if( getAttr('$type', neighborLink).match(/left/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] - 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/right/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] + 100, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/top/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] - 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/bottom/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0], npos[1] + 100]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/(P|G)oG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 26, gpos[1] + 26], neighbor);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/FoG/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 70, gpos[1] + 43], neighbor);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        print('Invalid grid node link');/*newline*/    }/*newline*/}",
+			"targetType": "__pFood"
+		},
+		{
+			"name": "distinctPLabels",
+			"event": "post-create",
+			"code": "if( getAttr(\"__pLabel\") == \"\" )\n{\n\tvar pLabels = getAllNodes().\n\t\t\t\t\t\t\tfilter( function(n) {return hasAttr(\"__pLabel\",n);} ).\n\t\t\t\t\t\t\t\tmap( function(n) {return getAttr(\"__pLabel\",n);} ),\n\t\t i\t\t\t= \"0\";\n\n\twhile( _utils.contains(pLabels,i) )\n\t\ti = String(parseInt(i)+1);\n\tsetAttr(\"__pLabel\",i);\n}",
+			"targetType": "*"
+		}
+	],
+	"cardinalities": {
+		"__pGridNode": [
+			{
+				"dir": "out",
+				"type": "__pleft",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pleft",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "__pbottom",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pbottom",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "__ptop",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__ptop",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "__pright",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pright",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "__pPoG",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "__pGoG",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "__pFoG",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pleft": [
+			{
+				"dir": "in",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pbottom": [
+			{
+				"dir": "in",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__ptop": [
+			{
+				"dir": "in",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pright": [
+			{
+				"dir": "in",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pPacman": [
+			{
+				"dir": "in",
+				"type": "__pPoG",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pPositionable": [],
+		"__pGhost": [
+			{
+				"dir": "in",
+				"type": "__pGoG",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pScoreboard": [],
+		"__pFood": [
+			{
+				"dir": "in",
+				"type": "__pFoG",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pPoG": [
+			{
+				"dir": "in",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pPacman",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pGoG": [
+			{
+				"dir": "in",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pGhost",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pFoG": [
+			{
+				"dir": "in",
+				"type": "__pGridNode",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pFood",
+				"min": 0,
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"__pGridNode": {
+			"__pGridNode": [
+				"__pleft",
+				"__pbottom",
+				"__ptop",
+				"__pright"
+			],
+			"__pPacman": [
+				"__pPoG"
+			],
+			"__pGhost": [
+				"__pGoG"
+			],
+			"__pFood": [
+				"__pFoG"
+			]
+		}
+	},
+	"connectorTypes": {
+		"__pleft": "visual",
+		"__pbottom": "visual",
+		"__ptop": "visual",
+		"__pright": "visual",
+		"__pPoG": "containment",
+		"__pGoG": "containment",
+		"__pFoG": "containment"
+	},
+	"types2parentTypes": {
+		"__pGridNode": [
+			"__pPositionable"
+		],
+		"__pleft": [],
+		"__pbottom": [],
+		"__ptop": [],
+		"__pright": [],
+		"__pPacman": [
+			"__pPositionable"
+		],
+		"__pPositionable": [],
+		"__pGhost": [
+			"__pPositionable"
+		],
+		"__pScoreboard": [],
+		"__pFood": [
+			"__pPositionable"
+		],
+		"__pPoG": [],
+		"__pGoG": [],
+		"__pFoG": []
+	}
+}

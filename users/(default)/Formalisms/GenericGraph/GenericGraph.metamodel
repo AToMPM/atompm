@@ -1,0 +1,52 @@
+{
+	"types": {
+		"$*": [],
+		"GenericLink": []
+	},
+	"constraints": [],
+	"actions": [],
+	"cardinalities": {
+		"$*": [
+			{
+				"dir": "out",
+				"type": "GenericLink",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "GenericLink",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"GenericLink": [
+			{
+				"dir": "in",
+				"type": "$*",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "$*",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"$*": {
+			"$*": [
+				"GenericLink"
+			]
+		}
+	},
+	"connectorTypes": {
+		"GenericLink": "visual"
+	},
+	"types2parentTypes": {
+		"$*": [],
+		"GenericLink": []
+	}
+}

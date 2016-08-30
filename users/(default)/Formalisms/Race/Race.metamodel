@@ -1,0 +1,153 @@
+{
+	"types": {
+		"Car": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "Car1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"UnitTrack": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"Positionable": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"next": [],
+		"onTrack": []
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Positionable"
+		}
+	],
+	"actions": [
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if( getAttr('$type', neighborLink).match(/next/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] - 75, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/onTrack/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 10, gpos[1] + 35], neighbor);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        print('Invalid link');/*newline*/    }/*newline*/}",
+			"targetType": "Car"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if( getAttr('$type', neighborLink).match(/next/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] - 75, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/onTrack/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 10, gpos[1] + 35], neighbor);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        print('Invalid link');/*newline*/    }/*newline*/}",
+			"targetType": "UnitTrack"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('>'),/*newline*/    neighborLink = neighborLinks[neighborLinks.length-1];/*newline*/if( neighborLink )/*newline*/{/*newline*/    if( getAttr('$type', neighborLink).match(/next/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            npos = getAttr('position',neighbor);/*newline*/        setAttr('position', [npos[0] - 75, npos[1]]);/*newline*/    }/*newline*/    else if( getAttr('$type', neighborLink).match(/onTrack/) )/*newline*/    {/*newline*/        var neighbor = getNeighbors('>','*',neighborLink)[0],/*newline*/            gpos = getAttr('position');/*newline*/        setAttr('position', [gpos[0] + 10, gpos[1] + 35], neighbor);/*newline*/    }/*newline*/    else/*newline*/    {/*newline*/        print('Invalid link');/*newline*/    }/*newline*/}",
+			"targetType": "Positionable"
+		}
+	],
+	"cardinalities": {
+		"Car": [
+			{
+				"dir": "in",
+				"type": "onTrack",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"UnitTrack": [
+			{
+				"dir": "out",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "next",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "onTrack",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Positionable": [],
+		"next": [
+			{
+				"dir": "in",
+				"type": "UnitTrack",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "UnitTrack",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"onTrack": [
+			{
+				"dir": "in",
+				"type": "UnitTrack",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Car",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"UnitTrack": {
+			"UnitTrack": [
+				"next"
+			],
+			"Car": [
+				"onTrack"
+			]
+		}
+	},
+	"connectorTypes": {
+		"next": "visual",
+		"onTrack": "containment"
+	},
+	"types2parentTypes": {
+		"Car": [
+			"Positionable"
+		],
+		"UnitTrack": [
+			"Positionable"
+		],
+		"Positionable": [],
+		"next": [],
+		"onTrack": []
+	}
+}

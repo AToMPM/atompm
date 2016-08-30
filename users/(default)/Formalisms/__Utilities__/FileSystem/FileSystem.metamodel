@@ -1,0 +1,124 @@
+{
+	"types": {
+		"Folder": [
+			{
+				"name": "path",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"File": [
+			{
+				"name": "content",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "path",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"FSEntity": [
+			{
+				"name": "path",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Contains": []
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "FSEntity"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Folder": [
+			{
+				"dir": "out",
+				"type": "Contains",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contains",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"File": [
+			{
+				"dir": "in",
+				"type": "Contains",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"FSEntity": [
+			{
+				"dir": "in",
+				"type": "Contains",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Contains": [
+			{
+				"dir": "in",
+				"type": "Folder",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FSEntity",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Folder",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "File",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Folder": {
+			"FSEntity": [
+				"Contains"
+			],
+			"Folder": [
+				"Contains"
+			],
+			"File": [
+				"Contains"
+			]
+		}
+	},
+	"connectorTypes": {
+		"Contains": "containment"
+	},
+	"types2parentTypes": {
+		"Folder": [
+			"FSEntity"
+		],
+		"File": [
+			"FSEntity"
+		],
+		"FSEntity": [],
+		"Contains": []
+	}
+}

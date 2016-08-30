@@ -1,0 +1,172 @@
+{
+	"types": {
+		"__pFolder": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "path",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pFile": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "content",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "path",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pFSEntity": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "path",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pContains": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\nfalse",
+			"targetType": "FSEntity"
+		}
+	],
+	"actions": [
+		{
+			"name": "distinctPLabels",
+			"event": "post-create",
+			"code": "if( getAttr(\"__pLabel\") == \"\" )\n{\n\tvar pLabels = getAllNodes().\n\t\t\t\t\t\t\tfilter( function(n) {return hasAttr(\"__pLabel\",n);} ).\n\t\t\t\t\t\t\t\tmap( function(n) {return getAttr(\"__pLabel\",n);} ),\n\t\t i\t\t\t= \"0\";\n\n\twhile( _utils.contains(pLabels,i) )\n\t\ti = String(parseInt(i)+1);\n\tsetAttr(\"__pLabel\",i);\n}",
+			"targetType": "*"
+		}
+	],
+	"cardinalities": {
+		"__pFolder": [
+			{
+				"dir": "out",
+				"type": "__pContains",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pContains",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pFile": [
+			{
+				"dir": "in",
+				"type": "__pContains",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pFSEntity": [
+			{
+				"dir": "in",
+				"type": "__pContains",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pContains": [
+			{
+				"dir": "in",
+				"type": "__pFolder",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pFSEntity",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pFolder",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pFile",
+				"min": 0,
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"__pFolder": {
+			"__pFSEntity": [
+				"__pContains"
+			],
+			"__pFolder": [
+				"__pContains"
+			],
+			"__pFile": [
+				"__pContains"
+			]
+		}
+	},
+	"connectorTypes": {
+		"__pContains": "containment"
+	},
+	"types2parentTypes": {
+		"__pFolder": [
+			"__pFSEntity"
+		],
+		"__pFile": [
+			"__pFSEntity"
+		],
+		"__pFSEntity": [],
+		"__pContains": []
+	}
+}
