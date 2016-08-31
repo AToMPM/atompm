@@ -962,7 +962,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 		4. return mm stringified (ensures no references to objects in this.model
 			are returned) */
 	'compileToIconDefinitionMetamodel' : 
-		function(csm)
+		function(csm, asmm)
 		{
 			var CS = '/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax';
 			try
@@ -1166,7 +1166,30 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 						mm.cardinalities[type] = [];
 						mm.types2parentTypes[type] = [];
 					});
-
+                
+                /* check whether all non-abstract types have an icon, and no abstract types have an icon */
+                var types = [],
+                    abstractTypes = [];
+                    
+                for (var idx in asmm["constraints"]) {
+                    var curr_constraint = asmm["constraints"][idx];
+                    if (curr_constraint["name"] == "noAbstractInstances") {
+                        abstractTypes.push(curr_constraint["targetType"]);
+                    }
+                }
+                
+                for (var curr_type in asmm["types"]) {
+                    if ((curr_type + 'Link' in mm["types"]) || (curr_type + 'Icon' in mm["types"])) {
+                        if (abstractTypes.indexOf(curr_type) >= 0) {
+                            return {'$err':'abstract type '+curr_type+' cannot have a visual representation'};
+                        }
+                    } else {
+                        if (abstractTypes.indexOf(curr_type) < 0) {
+                            return {'$err':'concrete type '+curr_type+' needs to have a visual representation'};
+                        }
+                    }
+                }
+                    
 				/* 4 */
 				return _utils.jsons(mm,null,"\t");
 			}

@@ -368,7 +368,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 		{
 			if( uri.match(/(.*)\..*Icons\.metamodel/) && 
 				 (res = _mmmk.
-						compileToIconDefinitionMetamodel(reqData['csm']))['$err'] )
+						compileToIconDefinitionMetamodel(reqData['csm'], reqData['asmm']))['$err'] )
 				__postInternalErrorMsg(resp,res['$err']);
 			else if( ! uri.match(/(.*)\..*Icons\.metamodel/) &&
 						(res = _mmmk.compileToMetamodel())['$err'] )

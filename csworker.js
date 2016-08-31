@@ -1362,15 +1362,17 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			var asuri   = matches[2]+(matches[3] || '')+'/'+matches[5]+'.type',
 				 csmm		= matches[1]+(matches[3] || ''),
 				 cstype	= matches[4],
-				 parser	= 
-					 _utils.jsonp(_mmmk.readMetamodels(csmm))['types'][cstype].
+                 types = _utils.jsonp(_mmmk.readMetamodels(csmm))['types'];
+            if (cstype in types) {
+				 var parser	= 
+					 types[cstype].
 					 	filter( 
 							function(attr) 
 							{
 								return attr['name']=='parser';
 							})[0]['default'],
-				 self		= this,
-				 actions = 
+				 self = this,
+				 actions  = 
 					[__successContinuable(),
 					 function()
 					 {
@@ -1417,13 +1419,18 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 									 asreqData);
 					 }];
 
-			_do.chain(actions)(
-					function(res) 	
-					{
-						__postMessage({'statusCode':202, 'respIndex':resp});
-					},
-					function(err) 	{__postInternalErrorMsg(resp,err);}
-			);
+                 _do.chain(actions)(
+                        function(res) 	
+                        {
+                            __postMessage({'statusCode':202, 'respIndex':resp});
+                        },
+                        function(err) 	{__postInternalErrorMsg(resp,err);}
+                 );
+            } else {
+                return __postBadReqErrorMsg(
+								resp,
+								'no concrete syntax definition found for '+cstype);
+            }
 		},
 
 
@@ -1798,16 +1805,31 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			}
 			else
 			{
-				var genIconDef = uri.match(/(.*)\..*Icons\.metamodel/);
-					 actions 	= [
-							__wHttpReq(
-								'PUT',
-								uri+'?wid='+this.__aswid,
-								(genIconDef ? {'csm':_mmmk.read()} : undefined))];
+				var  genIconDef = uri.match(/(.*)\..*Icons\.metamodel/),
+                     matches   	 = uri.match(/\/GET(((.*\/).*)\..*Icons.metamodel)/),
+					 asmmPath  	 = './users'+matches[2]+'.metamodel',
+                     asmm       = undefined;
+                     aswid      = this.__aswid;
+					 var actions 	= [
+                            _fs.readFile(asmmPath,'utf8'),
+                            function(data) {
+                               asmm = _utils.jsonp(data);
+                               return __successContinuable();
+                            }];
 				_do.chain(actions)(
 						function() 
 						{
-							__postMessage({'statusCode':200, 'respIndex':resp});
+                            var requestActions = 
+                                [__wHttpReq(
+                                    'PUT',
+                                    uri+'?wid='+aswid,
+                                    (genIconDef ? {'csm':_mmmk.read(), 'asmm': asmm} : undefined))];
+                            _do.chain(requestActions)(
+                                function() {
+                                    __postMessage({'statusCode':200, 'respIndex':resp});
+                                },
+                                function(err) 	{__postInternalErrorMsg(resp,err);}
+                            );
 						},
 						function(err) 	{__postInternalErrorMsg(resp,err);}
 				);
