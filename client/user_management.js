@@ -55,7 +55,7 @@ UserManagement = function(){
 			window.location = window.location.href;
 		}
 	
-		if( __prefs['confirm-exit']['value'] && ! __isSaved() )
+		if( __prefs && __prefs['confirm-exit']['value'] && ! __isSaved() )
 			WindowManagement.openDialog(_CUSTOM, {'widgets':[], 'title':__EXITWARNING}, innerLogout);
 		else
 			innerLogout();
@@ -101,7 +101,7 @@ UserManagement = function(){
 			function(statusCode,resp)
 			{
 				if( ! utils.isHttpSuccessCode(statusCode) )
-					$('#div_login_error').html('login failed :: '+resp);
+					$('#div_login_error').html('login failed, user ' + username + ' not found or network error');
 				else if( resp != Sha1.hash(password) )
 					$('#div_login_error').html('incorrect password');
 				else			

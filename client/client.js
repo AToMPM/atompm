@@ -220,7 +220,7 @@ function _getUserPreferences(callback,subset)
 			console.debug(statusCode);
 			console.debug(resp);
 			if( ! utils.isHttpSuccessCode(statusCode) )
-				WindowManagement.openDialog(_ERROR, 'failed to retrieve user preferences :: '+resp);
+                UserManagement.logout();
 			else
 				callback(utils.jsonp(resp));
 		});

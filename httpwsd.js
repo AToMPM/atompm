@@ -102,6 +102,16 @@ var httpserver = _http.createServer(
 						else
 							__respond(resp,200,'',data,{'Content-Type': 'text/html'});
 					});
+                    
+			else if( req.method == 'GET' && url.pathname == '/favicon.png' )
+				_fs.readFile('./favicon.png', 'binary',
+					function(err, data)
+					{
+						if(err) 
+							__respond(resp,500,String(err));
+						else
+							__respond(resp,200,'',data,{'Content-Type': 'image/png'});
+					});
 
 
 
@@ -652,4 +662,3 @@ wsserver.sockets.on('connection',
 						}
 			});
 		});
-
