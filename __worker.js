@@ -485,27 +485,6 @@ function __batchCheckpoint(id,start)
 }
 
 
-
-/*********************************** LOGIC ************************************/
-process.on('uncaughtException', 
-	function(error)
-	{					
-		/* there is no nice way of getting the response index associated with this
-		 	error... so we just dump it to the console (the worker will be killed 
-			due to timeouts)... in a release version, all errors should be properly
-		  	caught and this function should never be triggered */
-		if( error.message == 'Socket is not writable' )
-			_util.debug('ignoring failed re-send error');
-		else
-		{
-			_util.log(' ----------- FATAL WORKER ERROR ----------- ');
-			_util.log(error);
-			_util.log(' __________________________________________ ');
-			process.exit(1);
-		}
-	});
-
-
 process.on('message', 
 	function(msg)
 	{
