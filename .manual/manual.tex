@@ -17,13 +17,13 @@
 
 
 %REF:: http://en.wikibooks.org/wiki/LaTeX/Customizing_LaTeX
-\newcommand{\versiondate}{2012/08/02}
-\newcommand{\version}{v0.19}
+\newcommand{\versiondate}{2016/08/31}
+\newcommand{\version}{v0.20}
 \newcommand{\TBC}{\textit{(To be completed) }}
 
 
 \title{\textbf{AToMPM User's Manual\footnote{This file has version number \version. Last revision is dated \versiondate.}}}
-\author{Rapha\"{e}l Mannadiar\\ (\texttt{raphael.mannadiar@mail.mcgill.ca})}
+\author{Rapha\"{e}l Mannadiar\\ (\texttt{raphael.mannadiar@mail.mcgill.ca}) \\ Simon Van Mierlo\\ (\texttt{simon.vanmierlo@uantwerpen.be})}
 \date{\versiondate}
 
 
@@ -680,6 +680,13 @@ For functions with \texttt{\_id} parameters, if the \texttt{\_id} parameter is o
 \begin{center}	{\large \texttt{function getAttr(\_attr[,\_id])}} \end{center}
 
 Return the value of the given attribute from the given entity, specified via its abstract syntax identifier. If no such attribute exists, the current constraint, action, mapper, or parser is immediately interrupted and an error is presented to the user.\\
+\vspace*{1em}
+
+
+\addcontentsline{toc}{subsubsection}{\quad \texttt{function getAttrNames(\_id)}}
+\begin{center}	{\large \texttt{function getAttrNames(\_id)}} \end{center}
+
+Return all attribute names of the given entity, specified via its abstract syntax identifier.\\
 \vspace*{1em}
 
 

@@ -5,14 +5,14 @@
 			{
 				"name": "Condition",
 				"type": "code",
-				"default": "true"
+				"default": "result = True"
 			}
 		],
 		"RHS": [
 			{
 				"name": "Action",
 				"type": "code",
-				"default": ""
+				"default": "pass"
 			}
 		],
 		"NAC": [
@@ -24,7 +24,7 @@
 			{
 				"name": "Condition",
 				"type": "code",
-				"default": "false"
+				"default": "result = True"
 			}
 		],
 		"$*": [],
@@ -52,6 +52,24 @@
 		}
 	],
 	"actions": [
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "var default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = True', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "LHS"
+		},
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "var default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = getAttr()', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "RHS"
+		},
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "var default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = True', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "NAC"
+		},
 		{
 			"name": "convertToPrePostType",
 			"event": "post-create",

@@ -681,6 +681,14 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 				else
 					return self.model.nodes[_id][_attr]['value'];
 			}
+			function getAttrNames(_id)
+			{
+				if( _id == undefined )
+					_id = id;
+				if( self.model.nodes[_id] == undefined )
+					throw 'invalid getAttrNames() id :: '+_id;
+				return Object.getOwnPropertyNames(self.model.nodes[_id]);
+			}
 			function hasAttr(_attr,_id)
 			{
 				if( _id == undefined )
