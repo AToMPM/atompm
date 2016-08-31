@@ -790,13 +790,9 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			else if( type == 'accessor' )	
 				return res;
 
-			/* completed action or passed constraint */
-			else if( res == undefined || res == true )
-				;
-
 			/* failed constraint */
-			else
-				return {'$err':type+' ('+desc+') failed on :: '+res};
+			else if( res == false )
+				return {'$err':type+' ('+desc+') failed'};
 		},
 
 
