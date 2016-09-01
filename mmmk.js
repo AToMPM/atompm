@@ -959,7 +959,8 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 		3. construct mm.types based on information from step 2... the resulting 
 			mm.types wil look very much like ConcreteSyntax.types, with a few added
 			'special' attributes (e.g., $asuri, $contents, etc.) 
-		4. return mm stringified (ensures no references to objects in this.model
+        4. check whether all non-abstract types have an icon, and no abstract types have an icon    
+		5. return mm stringified (ensures no references to objects in this.model
 			are returned) */
 	'compileToIconDefinitionMetamodel' : 
 		function(csm, asmm)
@@ -1132,9 +1133,9 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 
 
 						/* 3 */
-						var node   			  = model.nodes[iid];
-					  		 type   			  = node['typename']['value'];
-							 isConnectorType = 'link-style' in node;
+						var node   			= model.nodes[iid];
+					  		type   	        = node['typename']['value'];
+							isConnectorType = 'link-style' in node;
 						mm.types[type] = [];
 
 						self.metamodels[CS].
@@ -1167,7 +1168,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 						mm.types2parentTypes[type] = [];
 					});
                 
-                /* check whether all non-abstract types have an icon, and no abstract types have an icon */
+                /* 4 */
                 var types = [],
                     abstractTypes = [];
                     
@@ -1189,8 +1190,14 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                         }
                     }
                 }
+                
+                for (var curr_type in mm["types"]) {                    
+                    if (!(curr_type.slice(0, -4) in asmm["types"])) {
+                        return {'$err':'type '+curr_type.slice(0, -4)+' not found in the abstract syntax metamodel, visual representation ' + curr_type + ' invalid'};
+                    }
+                }
                     
-				/* 4 */
+				/* 5 */
 				return _utils.jsons(mm,null,"\t");
 			}
 			catch(err)
