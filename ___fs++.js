@@ -24,7 +24,8 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
   	provide higher-level functions that those provided by nodejs' fs module */
 
 var _cp = require('child_process'),
-	 _os = require('os');
+	 _os = require('os'),
+     _fs = require('fs');
 
 
 /* NOTE:: because microsoft has apparently diversified into hiring comedians,
@@ -117,17 +118,7 @@ exports.mkdirs =
 		switch(_os.type())
 		{
 			case 'Windows_NT' :
-				_cp.exec('mkdir "'+dir.replace(/\//g,'\\')+'"',
-					function(err,stdout,stderr)
-					{
-                        /* 	TODO :: This is language specific. If a user is using a version of Windows which is in another language, the save will fail.
-							This function should only be executed if the folder does not exist. */
-						if( String(err).match(
-			/Error: Command failed: A subdirectory or file .* already exists./) )
-							callback(undefined,stdout,stderr);
-						else
-							callback(err,stdout,stderr);
-					});
+                _fs.mkdir(dir.replace(/\//g,'\\'), 484, function(err) {if (err) {if (err.code == 'EEXIST') callback(undefined); else callback(err);} else callback(undefined)});
 				break;
 				
 			case 'Linux'  :
