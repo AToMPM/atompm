@@ -515,8 +515,8 @@ GUIUtils = function(){
 				
 				return true;
 			}
-			/*rolled back behaviour by popular demand (Eugene) - Vasco 4-2-17 */
-			else if( event.keyCode == KEY_ENTER /* ENTER */ && currentKeys[ KEY_SHIFT ] == 1)
+            // https://media.giphy.com/media/12XMGIWtrHBl5e/giphy.gif
+			else if( event.keyCode == KEY_ENTER )
 			{
                 if (rows > 1) {
                     // only for multi-line input fields
@@ -532,7 +532,7 @@ GUIUtils = function(){
 			}
 		});
         input.keyup( function (event) {
-			if( event.keyCode == KEY_ENTER /* ENTER */ && currentKeys[ KEY_SHIFT ] == 1)
+			if( event.keyCode == KEY_ENTER )
 			{
 				event.stopPropagation();
                 event.preventDefault();
