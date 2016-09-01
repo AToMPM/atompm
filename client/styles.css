@@ -4,6 +4,9 @@ div, span {
 input, textarea {
 	cursor:/*url('media/cursor_text.png'),*/text;
 }
+textarea.string_input {
+    resize: none;
+}
 select, option, button {
 	cursor:/*url('media/cursor_pointer.png'),*/pointer;
 }

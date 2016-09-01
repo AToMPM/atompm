@@ -385,7 +385,7 @@ GUIUtils = function(){
 			return GUIUtils.getInputField(__specialTypes[type],value);
 	
 		else
-			var input 	 = GUIUtils.getTextInput(value,undefined,1),
+			var input 	 = GUIUtils.getTextInput(value,"code_style string_input",1),
 				 getinput = (type == 'string' ?
 						 function(_){return _.val();} :
 						 function(_){return utils.jsonp(_.val());});
@@ -453,6 +453,7 @@ GUIUtils = function(){
 	this.getTextInput = function(code,className,rows){
 		var input = $('<textarea>');
 		input.attr("cols", 80);
+        rows = rows || 7;
 		input.attr("rows", (rows || 7));
 		input.val(code);
 		input.attr("class", className || 'code_style');
@@ -474,24 +475,28 @@ GUIUtils = function(){
 				
 				return true;
 			}
-			else if( event.keyCode == KEY_ENTER /* ENTER */ && currentKeys[ KEY_SHIFT ] == 1) // HUSEYIN-ENTER
+			else if( event.keyCode == KEY_ENTER )
 			{
-				var cursorPos = event.target.selectionStart;
-				input.val( 
-						input.val().substring(0,cursorPos)+'\r\n'+
-					  	input.val().substring(cursorPos));
-				input.get(0).setSelectionRange(cursorPos+1,cursorPos+1);
+                if (rows > 1) {
+                    // only for multi-line input fields
+                    var cursorPos = event.target.selectionStart;
+                    input.val( 
+                            input.val().substring(0,cursorPos)+'\r\n'+
+                            input.val().substring(cursorPos));
+                    input.get(0).setSelectionRange(cursorPos+1,cursorPos+1);
+                }
 				event.stopPropagation();
-				event.preventDefault();
-				return false;
-			}
-			else if( event.keyCode == KEY_ENTER ) // HUSEYIN-ENTER
-			{
-				event.stopPropagation();
-				event.preventDefault();
-				return false;
+                event.preventDefault();
+				return true;
 			}
 		});
+        input.keyup( function (event) {
+			if( event.keyCode == KEY_ENTER )
+			{
+				event.stopPropagation();
+                event.preventDefault();
+            }
+        });
 		return input;
 	};
 	

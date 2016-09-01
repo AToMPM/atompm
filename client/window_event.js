@@ -110,7 +110,7 @@ WindowEventHelper = function(){
 	 * Ignore the right click by default
 	 */
 	this.onMouseDown = function(){
-		if (event.which == MOUSE_RIGHT) {
+		if (event.button == MOUSE_RIGHT) {
 			return false;
 		}
 		
