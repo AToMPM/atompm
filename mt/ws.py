@@ -64,14 +64,14 @@ class WebSocket :
 		2. open a websocket connection 
 		REF:: https://github.com/LearnBoost/socket.io-spec '''
 	def connect(self) :
-		conn  = httplib.HTTPConnection('localhost:8124')
+		conn  = httplib.HTTPConnection('127.0.0.1:8124')
 		conn.request('POST','/socket.io/1/')
 		resp  = conn.getresponse() 
 
 		if resp.status == 200 :
 			hskey = resp.read().split(':')[0]
 			self._ws = websocket.WebSocket(
-						'ws://localhost:8124/socket.io/1/websocket/'+hskey,
+						'ws://127.0.0.1:8124/socket.io/1/websocket/'+hskey,
 						onopen	 = self._onopen,
 						onmessage = self._onmessage)
 		else :

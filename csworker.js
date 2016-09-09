@@ -608,7 +608,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			var self = this;
 			return function(callback,errback)
 			{
-				var socket = _siocl.connect('localhost',{port:8124});	
+				var socket = _siocl.connect('127.0.0.1',{port:8124});	
 				socket.on('connect', 
 					function()	
 					{

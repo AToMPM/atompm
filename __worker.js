@@ -156,7 +156,7 @@ function __successContinuable(arg)
 
 
 /******************************* HTTP REQUESTS ********************************/
-/* make an HTTP request to localhost:port */
+/* make an HTTP request to 127.0.0.1:port */
 function __httpReq(method,url,data,port)
 {
 	if( port == undefined )

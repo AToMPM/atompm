@@ -114,12 +114,12 @@ class mtworkerThread(threading.Thread) :
 	'''
 		send a request to this worker's asworker 
 		
-		TBI:: the use of 'localhost' implies that the atompm server is running on
+		TBI:: the use of '127.0.0.1' implies that the atompm server is running on
 	  			the same machine as the transformation engine... '''
 	def _aswHttpReq(self,method,uri,data) :
 		return utils.httpReq( 
 								method, 
-								'localhost:8124', 
+								'127.0.0.1:8124', 
 								uri+'?wid='+self._aswid, 
 								data)
 

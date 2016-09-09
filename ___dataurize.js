@@ -25,7 +25,7 @@ exports.dataurize =
 	{
 		var request = 
 			require('http').request(
-				{'host':url.hostname || 'localhost', 
+				{'host':url.hostname || '127.0.0.1', 
 				 'port':url.port 		|| 80, 
 				 'path':url.path 		|| '/'},
 				function(resp)

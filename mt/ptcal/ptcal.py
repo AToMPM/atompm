@@ -27,6 +27,9 @@ from compiler import ModelAndRuleCompiler
 from pytcore.core.himesis import HConstants as HC
 from pytcore.rules.ndarule import NDARule
 from pytcore.tcore.messages import Packet
+from accurate_time import time as clock
+from accurate_time import set_start_time
+set_start_time()
 
 import cProfile, pstats, StringIO
 
@@ -47,8 +50,6 @@ from synchgraph import *
 from itertools import *
 #from petrinet import *
 from _abcoll import Iterable
-from time import *
-import timeit
 from pprint import isreadable
 from math import *
 
@@ -723,6 +724,7 @@ class PyTCoreAbstractionLayer :
                 seconds '''
     def play(self) :
 	
+        self.start_time = clock()
         if self._execmode == 'STOPPED':
             self._randomGen = Random(0)
         if self._execmode != 'PLAY' :
@@ -1013,18 +1015,7 @@ class PyTCoreAbstractionLayer :
             if mtc.nextInput == "packetIn":
                 startTime=clock()
                 
-                #pr = cProfile.Profile()
-                #pr.enable()
-                
                 self.packet = ar.packet_in(self.packet)
-                
-                
-                #pr.disable()
-                #s = StringIO.StringIO()
-                #sortby = 'cumulative'
-                #ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-                #ps.print_stats()
-                #print s.getvalue()
                 
                 mtc.setLastStepExecTime(clock()-startTime)
                 
@@ -1076,7 +1067,7 @@ class PyTCoreAbstractionLayer :
                         return
                     self._handleChangelogs()
                 
-                self._aswPrintReq(TC.TRANSFORMATION_DONE+nr['trafoResult']+" in "+str(self._mtContexts[-1].totalExecutionTime)+" seconds")
+                self._aswPrintReq(TC.TRANSFORMATION_DONE+nr['trafoResult']+" in "+str(self._mtContexts[-1].totalExecutionTime/1000.0)+" seconds, in total "+str((clock()-self.start_time)/1000.0))
                 self.stop()
                 return
             else:

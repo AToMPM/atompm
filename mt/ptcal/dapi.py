@@ -46,7 +46,7 @@ class DesignerAPI :
 		
 	def _aswPrintReq(self,msg):
 		utils.httpReq(	'PUT', 
-						'localhost:8124', 
+						'127.0.0.1:8124', 
 						'/GET/console?wid='+self._aswid, 
 						{'text':msg})
 	
@@ -257,19 +257,19 @@ class DesignerAPI :
 
 
 	def _pauseTransformation(self):
-		self._httpReq("PUT", 'localhost:8125', '/execmode?wid='+self._mtwid, {'mode':'pause'})
+		self._httpReq("PUT", '127.0.0.1:8125', '/execmode?wid='+self._mtwid, {'mode':'pause'})
 		
 	def _stopTransformation(self):
-		self._httpReq("PUT", 'localhost:8125', '/execmode?wid='+self._mtwid, {'mode':'stop'})
+		self._httpReq("PUT", '127.0.0.1:8125', '/execmode?wid='+self._mtwid, {'mode':'stop'})
 		
 	def _resumeTransformation(self):
-		self._httpReq("PUT", 'localhost:8125', '/execmode?wid='+self._mtwid, {'mode':'play'})
+		self._httpReq("PUT", '127.0.0.1:8125', '/execmode?wid='+self._mtwid, {'mode':'play'})
 
 	def _httpReq(self,method,host,uri,data) :
 		if host == None :
 			return utils.httpReq(
 						method,
-						'localhost:8124',
+						'127.0.0.1:8124',
 						uri+'?wid='+self._aswid,
 						data)
 		else : 

@@ -34,7 +34,7 @@ class TConstants :
 	''' hergin :: motif-integration :: end '''
 
 	#inter-rule delay in PLAY mode
-	INTER_RULE_DELAY 		= 0.1
+	INTER_RULE_DELAY 		= 0.05
 	
 	#the delay between verifications that all changelogs pertaining to the last executed rule have been handled
 	WAIT_ON_CHLOG_DELAY	= 0.02

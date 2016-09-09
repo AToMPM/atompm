@@ -159,7 +159,7 @@ class HTTPServerThread(threading.Thread) :
 
 
 	def run(self):
-		self.httpd = MultiThreadedHTTPServer(('', 8125), HTTPRequestHandler)
+		self.httpd = MultiThreadedHTTPServer(('127.0.0.1', 8125), HTTPRequestHandler)
 		self.httpd.serve_forever()
 		self.httpd.socket.close()
 	
