@@ -99,7 +99,7 @@ DataUtils = function(){
 	/**
 	 * Deletes the file from the cloud storage by URI
 	 * 
-	 * @param fileuri - the file to upload
+	 * @param fileuri - the file/folder to delete
 	 * @param callback - the callback function after the operation
 	 * has completed
 	 */
@@ -108,6 +108,53 @@ DataUtils = function(){
 			'DELETE',
 			fileuri,
 			undefined,
+			callback);
+	};
+	
+	/**
+	 * Create a folder
+	 * 
+	 * @param fileuri - the folder to create
+	 * @param callback - the callback function after the operation
+	 * has completed
+	 */
+	this.createFolder = function(folderuri,callback){
+		HttpUtils.httpReq(
+			'POST',
+			folderuri,
+			undefined,
+			callback);
+	};
+	
+	/**
+	 * Rename a file/folder in the cloud
+	 * 
+	 * @param fileuri - the file/folder to rename
+     * @param newname - the new name of the file/folder
+	 * @param callback - the callback function after the operation
+	 * has completed
+	 */
+	this.renameInCloud = function(folderuri,newname,callback){
+		HttpUtils.httpReq(
+			'PUT',
+			folderuri,
+			newname,
+			callback);
+	};
+	
+	/**
+	 * Move a file/folder in the cloud
+	 * 
+	 * @param fileuri - the file/folder to rename
+     * @param newlocation - the new location of the file/folder (needs to start with a '/')
+	 * @param callback - the callback function after the operation
+	 * has completed
+	 */
+	this.moveInCloud = function(folderuri,newlocation,callback){
+		HttpUtils.httpReq(
+			'PUT',
+			folderuri,
+			newlocation,
 			callback);
 	};
 	

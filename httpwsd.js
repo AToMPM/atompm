@@ -344,13 +344,13 @@ var httpserver = _http.createServer(
 
 
 
-			/** manage cloud data **/
-			/*	[permanently] delete specified file/folder */	
-			else if( req.method == 'DELETE' && url.pathname.match(/\.file$/) )
+			/*	delete specified file/folder */	
+			else if( req.method == 'DELETE' && url.pathname.match(/\.(file|folder)$/) )
 			{
-				var matches  = url.pathname.match(/^\/(.*?)\/(.*)\.file$/),
+				var matches  = url.pathname.match(/^\/(.*?)\/(.*\/)?(.*)\.(file|folder)$/),
 					 username = matches[1],
- 					 fname 	 = matches[2],
+                     folder = matches[2] || '',
+ 					 fname 	 = matches[3],
 					 userdir	 = './users/'+username+'/',
 					 ondelete = 
 						 function(err, stdout, stderr)
@@ -361,21 +361,96 @@ var httpserver = _http.createServer(
 								 __respond(resp,200);
 						 },
 					 deletef  = 
-						 function()
+						 function(response)
 						 {
-							 if( fname.match(/^_Trash_\//) )
-								 _fspp.rmdirs(userdir+fname,ondelete);
-							 else
-								 _fspp.mv(userdir+fname,userdir+'_Trash_/',ondelete);
+                             _fspp.mv(userdir+folder+fname,userdir+'_Trash_/'+folder,ondelete);
 						 };
-				_fs.exists(userdir+'_Trash_/',
+				_fs.exists(userdir+'_Trash_/'+folder,
 					function(exists)
 					{
 						if( ! exists )
-							_fs.mkdir(userdir+'_Trash_/',deletef);
-						else
-							deletef();
+							_fspp.mkdirs(userdir+'_Trash_/'+folder,deletef);
+                        else {
+                            deletef();
+                        }
 					});
+			}
+
+
+
+			/*	create folder */	
+			else if( req.method == 'POST' && url.pathname.match(/\.folder$/) )
+			{
+				var matches  = url.pathname.match(/^\/(.*?)\/(.*)\.folder$/),
+					 username = matches[1],
+                     folder = matches[2],
+					 userdir	 = './users/'+username+'/',
+					 oncreate = 
+						 function(err, stdout, stderr)
+						 {
+							 if( err )
+								 __respond(resp,500,String(err));
+							 else
+								 __respond(resp,200);
+						 };
+				_fs.exists(userdir+folder,
+					function(exists)
+					{
+						if( ! exists )
+							_fspp.mkdirs(userdir+folder,oncreate);
+                        else {
+                            oncreate("folder " + folder + " already exists");
+                        }
+					});
+			}
+
+
+
+			/*	rename file/folder (or move) */	
+			else if( req.method == 'PUT' && url.pathname.match(/\.(folder|file)$/) )
+			{                
+                req.setEncoding('utf8');
+				var data = '';
+				req.addListener("data", function(chunk) {data += chunk;});
+				req.addListener("end", 
+                    function() {
+                        data = _utils.jsonp(data);
+                        if (data.match(/^\//)) {
+                            // move
+                            var matches  = url.pathname.match(/^\/(.*?)\/(.*\/)?(.*)\.(file|folder)$/),
+                                username = matches[1],
+                                folder = matches[2] || '',
+                                fname 	 = matches[3],
+                                userdir	 = './users/'+username,
+                                onmove = 
+                                     function(err, stdout, stderr)
+                                     {
+                                         if( err )
+                                             __respond(resp,500,String(err));
+                                         else
+                                             __respond(resp,200);
+                                     };
+                            _fspp.mv(userdir+"/"+folder+fname,userdir+data,onmove)
+                        } else {
+                            //rename
+                            var matches  = url.pathname.match(/^\/(.*?)\/(.*\/)?(.*)\.(file|folder)$/),
+                                username = matches[1],
+                                folder = matches[2] || '',
+                                fname 	 = matches[3],
+                                userdir	 = './users/'+username+'/',
+                                onrename = 
+                                     function(err, stdout, stderr)
+                                     {
+                                         if( err )
+                                             __respond(resp,500,String(err));
+                                         else
+                                             __respond(resp,200);
+                                     };
+                            _fs.rename(userdir+folder+fname,userdir+folder+data,onrename)
+                        }
+                    }
+                )
+				
 			}
 				
 			/* extract user-uploaded archive to specified folder 

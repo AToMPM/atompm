@@ -69,7 +69,7 @@ exports.findfiles =
 		switch(_os.type())
 		{
 			case 'Windows_NT' :
-				_cp.exec('dir /s /b /a:-d "'+dir+'"',
+				_cp.exec('dir /s /b "'+dir+'"',
 					function(err, stdout, stderr)
 					{
 						if( err )
@@ -81,9 +81,15 @@ exports.findfiles =
 								 paths  = stdout.split('\r\n').map(
 									function(path)
 									{
-										return dir+path.substring(
+										var newpath = dir+path.substring(
 														path.indexOf(windir)+windir.length).
 													  replace(/\\/g,'/');
+                                        try {
+                                            if (_fs.lstatSync(path).isDirectory()) {
+                                                newpath = newpath + '/';
+                                            }
+                                        } catch (e) {}                                        
+                                        return newpath;
 									});
 							paths.pop();
 							callback(err,paths.join('\n'),stderr);
@@ -93,13 +99,20 @@ exports.findfiles =
 				
 			case 'Linux'  :
 			case 'Darwin' :
-				_cp.exec('find "'+dir+'" -type f',
+				_cp.exec('find "'+dir,
 					function(err, stdout, stderr)
 					{
 						if( err )
 							callback(err,stdout,stderr);
-						else
-							callback(err,stdout.slice(0,-1),stderr);
+						else {
+                            var paths = stdout.slice(0,-1),
+                                newpaths = paths.split('\n').map(function(path) {
+                                    if (_fs.lstatSync(path).isDirectory()) {
+                                        return path + "/";
+                                    } else return path;
+                                })
+							callback(err,newpaths,stderr);
+                        }
 					});
 				break;
 
@@ -115,20 +128,15 @@ exports.findfiles =
 exports.mkdirs =
 	function(dir,callback)
 	{
-		switch(_os.type())
-		{
-			case 'Windows_NT' :
-                _fs.mkdir(dir.replace(/\//g,'\\'), 484, function(err) {if (err) {if (err.code == 'EEXIST') callback(undefined); else callback(err);} else callback(undefined)});
-				break;
-				
-			case 'Linux'  :
-			case 'Darwin' :
-				_cp.exec('mkdir -p "'+dir+'"',callback);
-				break;
-
-			default:
-				throw 'unsupported OS :: '+_os.type();
-		}
+        var split_dir = dir.split('/'),
+            curr_dir = '';
+        for (var i in split_dir) {
+            curr_dir += split_dir[i] + '/';
+            if (!_fs.existsSync(curr_dir)) {
+                _fs.mkdir(curr_dir, 484, function(err) {if (err) {if (err.code != 'EEXIST') callback(err);}});
+            }
+        }
+        callback();
 	};
 
 
@@ -136,20 +144,8 @@ exports.mkdirs =
 exports.mv =
 	function(src,dest,callback)
 	{
-		switch(_os.type())
-		{
-			case 'Windows_NT' :
-				_cp.exec('move /y "'+src+'" "'+dest+'"',callback);
-				break;
-				
-			case 'Linux'  :
-			case 'Darwin' :
-				_cp.exec('mv "'+src+'" "'+dest+'"',callback);
-				break;
-
-			default:
-				throw 'unsupported OS :: '+_os.type();
-		}
+        var split_string = src.split('/');
+        _fs.rename(src, dest + split_string[split_string.length-1],callback);
 	};
 
 

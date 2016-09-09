@@ -14,6 +14,9 @@ button {
 	font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
   	font-size:11px;
 }
+span.feedback {
+    color: red;
+}
 
 html {
 	width: 100%;
@@ -159,8 +162,8 @@ html {
 .dialog {
 	position:absolute;
 	padding:0px 20px 20px;
-	max-height:50%;
-	max-width:50%;
+	max-height:100%;
+	max-width:100%;
 	z-index: 30;			  
 	background-color: whitesmoke;
 	border:2px solid crimson;

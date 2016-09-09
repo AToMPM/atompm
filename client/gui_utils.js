@@ -143,8 +143,13 @@ GUIUtils = function(){
 							 else
 								 return;
 						 }
-						 else if( (matches=fname.match('^'+_folder+'(.*)')) )
-							 files.push(matches[1]);
+						 else if( (matches=fname.match('^'+_folder+'(.*)')) ) {
+                             if (matches[1].length > 0) {
+                                 files.push(matches[1]);
+                             } else {
+                                 return;
+                             }
+                         }
 						 else
 							 return;
 							 
@@ -246,7 +251,10 @@ GUIUtils = function(){
 		return {'filebrowser':	 fileb,
 				  'filepane':	 	 function() {return $('#div_fileb-contents');},
 				  'getcurrfolder': function() {return currfolder;},	
-				  'getselection':	 function()	{return input.val();}};
+				  'getselection':	 function()	{return input.val();},
+                  'refresh': function(fnames, the_folder) {
+                      setCurrentFileBrowserFolder(the_folder || currfolder, fnames);
+                  }};
 	};
 	
 	// TODO: replace the bundled function with an actual object generation. The

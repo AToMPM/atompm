@@ -414,6 +414,7 @@ WindowManagement = function(){
 				undefined,
 				function(statusCode,resp)
 				{
+                    args['extensions'].push('/');
 					var fnames = __localizeFilenames(
 							__filterFilenamesByExtension(
 								resp.split('\n'),
@@ -421,81 +422,214 @@ WindowManagement = function(){
 							).sort(),
 							maxFnameLength = 
 								utils.max(fnames,function(_) {return _.length;}),
-							 viewlinks = $('<div>'),
-							 a_listview = $('<a>'),
 							 a_filebview = $('<a>'),
-							 select = 
-								 GUIUtils.getSelector(fnames,args['multipleChoice'],undefined,20),
+                             folder_buttons = $('<div>'),
+                             new_folder_b = $('<button>'),
+                             rename_folder_b = $('<button>'),
+                             delete_folder_b = $('<button>'),
+                             move_folder_b = $('<button>'),
+                             file_buttons = $('<div>'),
+                             rename_file_b = $('<button>'),
+                             delete_file_b = $('<button>'),
+                             move_file_b = $('<button>'),                
+                             feedbackarea = $('<div>'),
+                             feedback = GUIUtils.getTextSpan('',"feedback"),
 							 fileb = 
-								 GUIUtils.getFileBrowser(fnames,false,args['manualInput'],__getRecentDir(args['startDir'])),
-							 input = 
-								 GUIUtils.getStringInput('',undefined,maxFnameLength+'ex');
-	
-//					a_listview.attr("href", "#");
-//					a_filebview.attr("href", '#');
-//					a_listview.attr("class", 'enabled_link');
-//					a_filebview.attr("class", 'enabled_link');
-					
-					var clickFunction = function(ev) {
-						var toListView = 
-							(ev != undefined && ev.target == a_listview.get(0) ) ||
-							this == a_listview;
-						if( toListView )
-						{
-							a_listview.css("fontWeight", 'bold');
-							a_filebview.css("fontWeight", 'normal');
-							select.css("display", 'inline');
-							input.css("display", 'inline');
-							fileb['filebrowser'].css("display", 'none');
-						}
-						else
-						{
-							a_listview.css("fontWeight", 'normal');
-							a_filebview.css("fontWeight", 'bold');
-							select.css("display", 'none');
-							input.css("display", 'none');
-							fileb['filebrowser'].css("display", 'inline-block');
-						}
-						return false;
-					};
-					
-					a_listview.html('list view')
-					.attr("href", "#")
-					.attr("class", 'enabled_link')
-					.click( clickFunction );
+								 GUIUtils.getFileBrowser(fnames,false,args['manualInput'],__getRecentDir(args['startDir']));
 				
 					a_filebview.html('file browser view')
 					.attr("href", '#')
-					.attr("class", 'enabled_link')
-					.click( clickFunction );
-					
-//					a_listview.click( clickFunction );
-//					a_filebview.click( clickFunction );
-					
-					viewlinks.append(a_listview);
-					viewlinks.append(GUIUtils.getTextSpan('  |  '));
-					viewlinks.append(a_filebview);
-					
-					a_filebview.click();
-					
-					select.get().onchange = 
-						function(event)
-						{
-							input.val( HttpUtils.getSelectorSelection(select) );
-						};
-									
-					if( ! args['manualInput'] )
-						input.attr("disabled", "true");
+					.attr("class", 'enabled_link');
+                    
+                    new_folder_b.html('new folder')
+                    .click(function(ev) {
+                        var folder_name = prompt("please fill in a name for the folder");
+                        if (folder_name != null) {
+                            folder_name = folder_name.replace(/^\s+|\s+$/g, ''); // trim
+                            if (!folder_name.match(/^[a-zA-Z0-9_\s]+$/i)) {
+                                feedback.html("invalid folder name: " + folder_name);
+                            } else {
+                                console.log("/" + window.localStorage.getItem('user') + fileb['getcurrfolder']() + folder_name + '.folder');
+                                DataUtils.createFolder("/" + window.localStorage.getItem('user') + fileb['getcurrfolder']() + folder_name + '.folder', function(statusCode, resp) {
+                                    if( ! utils.isHttpSuccessCode(statusCode) ) {
+                                        feedback.html(resp)
+                                    } else {
+                                        feedback.html('created ' + folder_name);
+                                        fnames.push(fileb['getcurrfolder']() + folder_name + "/")
+                                        fileb['refresh'](fnames);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    folder_buttons.append(new_folder_b);
+                    
+                    rename_folder_b.html('rename folder')
+                    .click(function(ev) {
+                        var value = fileb['getcurrfolder']();
+                        var folder_name = prompt("please fill in a new name for folder " + value);
+                        if (folder_name != null) {
+                            folder_name = folder_name.replace(/^\s+|\s+$/g, ''); // trim
+                            if (!folder_name.match(/^[a-zA-Z0-9_\s]+$/i)) {
+                                feedback.html("invalid folder name: " + folder_name);
+                            } else {
+                                DataUtils.renameInCloud("/" + window.localStorage.getItem('user') + value.slice(0, -1) + ".folder", folder_name, function(statusCode,resp)
+                                    {
+                                        if( ! utils.isHttpSuccessCode(statusCode) ) {
+                                            feedback.html(resp);
+                                        } else {
+                                            var matches = value.match(/^\/(.*\/)?(.*)\/$/),
+                                                newvalue = "/" + (matches[1] || "") + folder_name + "/";
+                                            for (var idx in fnames) {
+                                                fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2"); 
+                                            }
+                                            fileb['refresh'](fnames, newvalue);
+                                            feedback.html('renamed ' + value + ' to ' + newvalue);
+                                        }
+                                    });
+                            }
+                        }
+                    });
+                    folder_buttons.append(rename_folder_b);
+                    
+                    delete_folder_b.html('delete folder')
+                    .click(function(ev) {
+                        var value = fileb['getcurrfolder']();
+                        if (confirm("are you sure you want to delete " + value + "?")) {
+                            DataUtils.deleteFromCloud("/" + window.localStorage.getItem('user') + value.slice(0, -1) + ".folder", function(statusCode,resp)
+                                {
+                                    if( ! utils.isHttpSuccessCode(statusCode) ) {
+                                        feedback.html(resp);
+                                    } else {
+                                        var todelete = [];
+                                        for (var idx in fnames) {
+                                            if (fnames[idx].match(new RegExp("^("+value+").*"))) {
+                                                todelete.push(fnames[idx]);
+                                            }
+                                        }
+                                        for (var idx in todelete) {
+                                            fnames.splice(fnames.indexOf(todelete[idx]), 1);
+                                        }
+                                        fileb['refresh'](fnames);
+                                        feedback.html('deleted ' + value);
+                                    }
+                                });
+                        }
+                    });
+                    folder_buttons.append(delete_folder_b);
+                    
+                    move_folder_b.html('move folder')
+                    .click(function(ev) {
+                        var value = fileb['getcurrfolder']();
+                        var folder_loc = prompt("please fill in a new parent folder for folder " + value);
+                        if (folder_loc != null) {
+                            folder_loc = folder_loc.replace(/^\s+|\s+$/g, ''); // trim
+                            if (!folder_loc.match(/^\/([a-zA-Z0-9_\s]+\/)*$/i)) {
+                                feedback.html("invalid parent location: " + folder_loc);
+                            } else {
+                                DataUtils.moveInCloud("/" + window.localStorage.getItem('user') + value.slice(0, -1) + ".folder", folder_loc, function(statusCode,resp)
+                                    {
+                                        if( ! utils.isHttpSuccessCode(statusCode) ) {
+                                            feedback.html(resp);
+                                        } else {
+                                            var matches = value.match(/^\/(.*\/)?(.*)\/$/),
+                                                newvalue = folder_loc + matches[2] + "/";
+                                            for (var idx in fnames) {
+                                                fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2"); 
+                                            }
+                                            fileb['refresh'](fnames, newvalue);
+                                            feedback.html('moved ' + value + ' to ' + folder_loc);
+                                        }
+                                    });
+                            }
+                        }
+                    });
+                    folder_buttons.append(move_folder_b);
+                    
+                    rename_file_b.html('rename file')
+                    .click(function(ev) {
+                        var value = fileb['getselection']();
+                        var file_name = prompt("please fill in a new name for file " + value);
+                        if (file_name != null) {
+                            file_name = file_name.replace(/^\s+|\s+$/g, ''); // trim
+                            if (!file_name.match(/^[a-zA-Z0-9_\s\.]+$/i)) {
+                                feedback.html("invalid folder name: " + file_name);
+                            } else {
+                                DataUtils.renameInCloud("/" + window.localStorage.getItem('user') + value.slice(0, -1) + ".file", file_name, function(statusCode,resp)
+                                    {
+                                        if( ! utils.isHttpSuccessCode(statusCode) ) {
+                                            feedback.html(resp);
+                                        } else {
+                                            var matches = value.match(/^\/(.*\/)?(.*)\/$/),
+                                                newvalue = "/" + (matches[1] || "") + file_name;
+                                            var idx = fnames.indexOf(value);
+                                            if (idx >= 0) {
+                                                fnames[idx] = newvalue;
+                                            }
+                                            fileb['refresh'](fnames);
+                                            feedback.html('renamed ' + value + ' to ' + newvalue);
+                                        }
+                                    });
+                            }
+                        }
+                    });
+                    file_buttons.append(rename_file_b);
+                    
+                    delete_file_b.html('delete file')
+                    .click(function(ev) {
+                        var value = fileb['getselection']();
+                        if (confirm("are you sure you want to delete " + value + "?")) {
+                            DataUtils.deleteFromCloud("/" + window.localStorage.getItem('user') + value + ".file", function(statusCode,resp)
+                                {
+                                    if( ! utils.isHttpSuccessCode(statusCode) ) {
+                                        feedback.html(resp);
+                                    } else {
+                                        feedback.html('deleted ' + value);
+                                        var idx = fnames.indexOf(value);
+                                        if (idx >= 0) {
+                                            fnames.splice(idx, 1);
+                                        }
+                                        fileb['refresh'](fnames);
+                                    }
+                                });
+                        }
+                    });
+                    file_buttons.append(delete_file_b);                    
+                    
+                    move_file_b.html('move file')
+                    .click(function(ev) {
+                        var value = fileb['getselection']();
+                        var folder_loc = prompt("please fill in a new parent folder for file " + value);
+                        if (folder_loc != null) {
+                            folder_loc = folder_loc.replace(/^\s+|\s+$/g, ''); // trim
+                            if (!folder_loc.match(/^\/([a-zA-Z0-9_\s]+\/)*$/i)) {
+                                feedback.html("invalid parent location: " + folder_loc);
+                            } else {
+                                DataUtils.moveInCloud("/" + window.localStorage.getItem('user') + value + ".file", folder_loc, function(statusCode,resp)
+                                    {
+                                        if( ! utils.isHttpSuccessCode(statusCode) ) {
+                                            feedback.html(resp);
+                                        } else {
+                                            var matches = value.match(/^\/(.*\/)?(.*)$/),
+                                                newvalue = folder_loc + matches[2];
+                                            feedback.html('moved ' + value + ' to ' + folder_loc);
+                                            var idx = fnames.indexOf(value);
+                                            if (idx >= 0) {
+                                                fnames[idx] = newvalue;
+                                            }
+                                            fileb['refresh'](fnames);
+                                        }
+                                    });
+                            }
+                        }
+                    });
+                    file_buttons.append(move_file_b);
 	
 					GUIUtils.setupAndShowDialog(
-						[fileb['filebrowser'],select,input,viewlinks],
+						[fileb['filebrowser'],folder_buttons,file_buttons,feedback],
 						function() 
 						{
-							var value = 
-								(fileb['filebrowser'].css("display") == 'none' ?
-									(input.val() == HttpUtils.getSelectorSelection(select) ? 
-										 	HttpUtils.getSelectorSelection(select) : [input.val()]) :
-							  			[fileb['getselection']()]);
+							var value = [fileb['getselection']()];
 							if (value.length > 0 && value[0] != "" && args['startDir']) {
 								__setRecentDir(args['startDir'],value[0].substring(0, value[0].lastIndexOf('/') + 1));
 							}
