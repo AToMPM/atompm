@@ -2,26 +2,21 @@
 # Author: Yentl Van Tendeloo
 
 set -e
+working_dir=`pwd`
 
-if [ ! -d "$HOME/AToMPM/" ]; then
-    cd ~
-    mkdir AToMPM
-    cd AToMPM
+if [ ! -d "dependencies" ]; then
+    mkdir dependencies
 
-    # Download AToMPM from git
-    curl -L -O https://msdl.uantwerpen.be/git/simon/AToMPM/archive/master.tar.gz
-    tar -xvzf master.tar.gz
-    # And install socket.IO
-    cd atompm
+    # Install socket.IO first
     curl -L -O https://msdl.uantwerpen.be/AToMPM/socketIO.tgz
     tar -xvzf socketIO.tgz
-    cd ..
 
+    cd dependencies
     # First fetch Node.JS
     curl -L -O http://msdl.uantwerpen.be/AToMPM/node-v0.10.46.tar.gz
     tar -xvzf node*
     cd node*
-    ./configure --prefix=$HOME/AToMPM/node.js
+    ./configure --prefix=$working_dir/dependencies/node.js
     make -j5
     make install
     cd ..
@@ -31,18 +26,18 @@ if [ ! -d "$HOME/AToMPM/" ]; then
     curl -L -O http://msdl.uantwerpen.be/AToMPM/zlib-1.2.8.tar.gz
     tar -xvzf zlib-1.2.8.tar.gz
     cd zlib-1.2.8
-    ./configure --prefix=$HOME/AToMPM/localPython
+    ./configure --prefix=$working_dir/dependencies/localPython
     make
     make install
     cd ..
     curl -L -O http://msdl.uantwerpen.be/AToMPM/Python-2.7.8.tgz
     tar -xvzf Python-2.7.8.tgz
     cd Python-2.7.8
-    ./configure --prefix=$HOME/AToMPM/localPython
+    ./configure --prefix=$working_dir/dependencies/localPython
     sed -i "s/^#zlib/zlib/g" Modules/Setup
-    make -j2
+    make -j5
     make install
-    export PATH=$HOME/AToMPM/localPython/bin:$PATH
+    export PATH=$working_dir/dependencies/localPython/bin:$PATH
     cd ..
 
     # Remove previous builds
@@ -55,7 +50,7 @@ if [ ! -d "$HOME/AToMPM/" ]; then
     tar -xvzf igraph-0.6.5.tar.gz
     cd igraph-0.6.5
     ./configure
-    make -j2
+    make -j5
 
     # Install python-igraph binding
     curl -L -O http://msdl.uantwerpen.be/AToMPM/python-igraph-0.6.5.tar.gz
@@ -75,15 +70,12 @@ if [ ! -d "$HOME/AToMPM/" ]; then
 
     echo "INSTALLATION SUCCESSFUL"
     echo "Continuing to start up AToMPM!"
-else
-    cd ~/AToMPM
+    cd ..
 fi
 
 # Set PATHs correctly
-export PATH=$HOME/AToMPM/localPython/bin:$HOME/AToMPM/node.js/bin:$PATH
-export LD_LIBRARY_PATH="$HOME/AToMPM/python-igraph/igraph-0.6.5/src/.libs/:$HOME/AToMPM/localPython/lib"
-
-cd atompm
+export PATH=$working_dir/dependencies/localPython/bin:$working_dir/dependencies/node.js/bin:$PATH
+export LD_LIBRARY_PATH="$working_dir/dependencies/python-igraph/igraph-0.6.5/src/.libs/:$working_dir/dependencies/localPython/lib"
 
 node httpwsd.js &
 sleep 3
