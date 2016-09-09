@@ -97,24 +97,24 @@ GeometryUtils = function(){
 		transformationPreviewOverlay.node.setAttribute('_y',y);
 		transformationPreviewOverlay.node.onmouseup = 
 			function(event)
-			{
-				transformationPreviewOverlay.toBack();
-				var beneathTPO = document.elementFromPoint(event.x,event.y),
-					 _event;
-	
-				if( transformationPreviewOverlay.node != beneathTPO &&
+			{	
+				if( event.button == 0 )                    
+                    transformationPreviewOverlay.toBack();
+                    var beneathTPO = document.elementFromPoint(event.clientX,event.clientY),
+                         _event;
+                    if ( transformationPreviewOverlay.node != beneathTPO &&
 					 beneathTPO != __selection['rect'].node )
-				{
-					_event = document.createEvent('MouseEvents');
-					_event.initMouseEvent(
-							event.type, event.canBubble, event.cancelable, event.view,
-							event.detail, event.screenX, event.screenY, event.clientX,
-						  	event.clientY, event.ctrlKey, event.altKey, event.shiftKey,
-							event.metaKey, event.button, event.relatedTarget );
-					beneathTPO.parentNode.dispatchEvent(_event);
-				}
-				else if( event.button == 0 )
-					BehaviorManager.handleUserEvent(__EVENT_LEFT_RELEASE_CANVAS,event);
+                    {
+                        _event = document.createEvent('MouseEvents');
+                        _event.initMouseEvent(
+                                event.type, event.canBubble, event.cancelable, event.view,
+                                event.detail, event.screenX, event.screenY, event.clientX,
+                                event.clientY, event.ctrlKey, event.altKey, event.shiftKey,
+                                event.metaKey, event.button, event.relatedTarget );
+                        beneathTPO.parentNode.dispatchEvent(_event);
+                    } else {
+                        BehaviorManager.handleUserEvent(__EVENT_LEFT_RELEASE_CANVAS,event);
+                    }
 			};
 	};
 	
