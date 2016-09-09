@@ -109,7 +109,7 @@ WindowEventHelper = function(){
 	 * Process the mouse down event
 	 * Ignore the right click by default
 	 */
-	this.onMouseDown = function(){
+	this.onMouseDown = function(event){
 		if (event.button == MOUSE_RIGHT) {
 			return false;
 		}
@@ -125,7 +125,7 @@ WindowEventHelper = function(){
 	/**
 	 * Process the mouse up event
 	 */
-	this.onMouseUp = function(){
+	this.onMouseUp = function(event){
 		// block clicks on the background when the dialog is displayed
 		if( $(event.target).attr("id") == 'div_dim_bg') 
 			;
@@ -144,7 +144,7 @@ WindowEventHelper = function(){
 	 * Process the mouse move event. Only process the event
 	 * if the canvas is the target of the movement
 	 */
-	this.onMouseMove = function(){
+	this.onMouseMove = function(event){
 		if( BehaviorManager.isStatechartLoaded() ){
 			if( __isCanvasElement( $(event.target)) )
 				processEvent( null, null, __EVENT_MOUSE_MOVE, event);
