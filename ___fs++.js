@@ -99,7 +99,7 @@ exports.findfiles =
 				
 			case 'Linux'  :
 			case 'Darwin' :
-				_cp.exec('find "'+dir,
+				_cp.exec('find "'+dir+'"',
 					function(err, stdout, stderr)
 					{
 						if( err )
@@ -111,7 +111,7 @@ exports.findfiles =
                                         return path + "/";
                                     } else return path;
                                 })
-							callback(err,newpaths,stderr);
+							callback(err,newpaths.join('\n'),stderr);
                         }
 					});
 				break;
