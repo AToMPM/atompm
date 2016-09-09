@@ -326,9 +326,9 @@ GeometryUtils = function(){
 		}
 			
 		geometryControlsOverlay.css("top", 
-			bbox.y + bbox.height + 2 - document.body.scrollTop + "px"),
+			bbox.y + bbox.height - $("#div_container").scrollTop() + "px"),
 		geometryControlsOverlay.css("left", 
-			bbox.x + bbox.width/2 - __GEOM_CTRLS_WIDTH/2.0 -  document.body.scrollLeft + "px");
+			bbox.x + bbox.width/2 - __GEOM_CTRLS_WIDTH/2.0 - $("#div_container").scrollLeft() + "px");
 		geometryControlsOverlay.css("display", "inline");
 	
 		GeometryUtils.initSelectionTransformationPreviewOverlay();
