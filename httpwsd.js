@@ -452,6 +452,55 @@ var httpserver = _http.createServer(
                 )
 				
 			}
+            
+            else if (req.method == 'POST' && url.pathname.match(/\.formalism$/)) {
+                // create new formalism
+                var matches = url.pathname.match(/^(.*)\/(.*)\.formalism$/),
+                    username = matches[1],
+                    formalism = matches[2],
+                    userdir	 = './users/'+username+"/",
+                    oncreatefolder = 
+                         function(err, stdout, stderr)
+                         {
+                             if( err )
+                                 __respond(resp,500,String(err));
+                             else {
+                                 _fs.createReadStream(userdir+"Formalisms/__Templates__/MetamodelTemplate.model").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/"+formalism+".model"));
+                                 _fs.createReadStream(userdir+"Formalisms/__Templates__/ConcreteSyntaxTemplate.model").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/"+formalism+".defaultIcons.model"));
+                                 _fs.createReadStream(userdir+"Formalisms/__Templates__/T_TransformationTemplate.model").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/OperationalSemantics/T_OperationalSemantics.model"));
+                                 _fs.createReadStream(userdir+"Formalisms/__Templates__/T_TransformationTemplate.model").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/TranslationalSemantics/T_TranslationalSemantics.model"));
+                                 __respond(resp,200);
+                             }
+                         };
+                _fs.mkdir(userdir+"Formalisms/"+formalism,function(err, stdout, stderr) {            
+                     if( err )
+                         __respond(resp,500,String(err));
+                     else {
+                         _fs.mkdirSync(userdir+"Formalisms/"+formalism+"/OperationalSemantics");
+                         _fs.mkdir(userdir+"Formalisms/"+formalism+"/TranslationalSemantics", oncreatefolder);
+                     }
+                });
+            }
+            
+            else if (req.method == 'POST' && url.pathname.match(/\.transformation$/)) {
+                // create new transformation
+                var matches = url.pathname.match(/^\/(.*?)\/(.*)\.transformation$/),
+                    username = matches[1],
+                    userdir	 = './users/'+username+"/";
+                    
+                _fs.createReadStream(userdir+"Formalisms/__Templates__/T_TransformationTemplate.model").pipe(_fs.createWriteStream('./users/'+url.pathname.slice(0, -(".transformation".length))));
+                __respond(resp,200);
+            }
+            
+            else if (req.method == 'POST' && url.pathname.match(/\.rule$/)) {
+                // create new rule
+                var matches = url.pathname.match(/^\/(.*?)\/(.*)\.rule$/),
+                    username = matches[1],
+                    userdir	 = './users/'+username+"/";
+                    
+                _fs.createReadStream(userdir+"Formalisms/__Templates__/R_RuleTemplate.model").pipe(_fs.createWriteStream('./users/'+url.pathname.slice(0, -(".rule".length))));
+                __respond(resp,200);
+            }
 				
 			/* extract user-uploaded archive to specified folder 
 				1. read in all data

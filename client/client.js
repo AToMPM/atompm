@@ -390,6 +390,75 @@ function _setUserPreferences(prefs,callback)
 }
 
 /**
+ * Creates a new formalism under /Formalisms/ with the specified name.
+ * 
+ * @param formalism_name the name of the new formalism
+ */
+function _newFormalism(formalism_name) {
+    HttpUtils.httpReq(
+		'POST',
+		window.localStorage.getItem('user') + "/" + formalism_name + '.formalism',
+		undefined,
+		function(statusCode,resp)
+		{
+			if( ! utils.isHttpSuccessCode(statusCode) ) {
+				WindowManagement.openDialog(_ERROR, 'failed to create new formalism :: '+resp);
+            } else {
+                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".model")
+                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".defaultIcons.model")
+            }
+		});
+}
+
+/**
+ * Creates a new transformation on the specified location.
+ * 
+ * @param transformation_loc the location of the new transformation
+ */
+function _newTransformation(transformation_loc) {
+    if (transformation_loc.match(/.*\/T_.*\.model$/)) {
+        HttpUtils.httpReq(
+            'POST',
+            window.localStorage.getItem('user') + transformation_loc + '.transformation',
+            undefined,
+            function(statusCode,resp)
+            {
+                if( ! utils.isHttpSuccessCode(statusCode) ) {
+                    WindowManagement.openDialog(_ERROR, 'failed to create new transformation :: '+resp);
+                } else {
+                    WindowManagement.spawnClient(transformation_loc)
+                }
+            });
+    } else {
+        WindowManagement.openDialog(_ERROR, 'failed to create new transformation :: '+transformation_loc+" is not a valid transformation name");
+    }
+}
+
+/**
+ * Creates a new rule on the specified location.
+ * 
+ * @param rule_loc the location of the new rule
+ */
+function _newRule(rule_loc) {
+    if (rule_loc.match(/.*\/R_.*\.model$/)) {
+        HttpUtils.httpReq(
+            'POST',
+            window.localStorage.getItem('user') + rule_loc + '.rule',
+            undefined,
+            function(statusCode,resp)
+            {
+                if( ! utils.isHttpSuccessCode(statusCode) ) {
+                    WindowManagement.openDialog(_ERROR, 'failed to create new rule :: '+resp);
+                } else {
+                    WindowManagement.spawnClient(rule_loc)
+                }
+            });
+    } else {
+        WindowManagement.openDialog(_ERROR, 'failed to create new rule :: '+rule_loc+" is not a valid rule name");
+    }
+}
+
+/**
  * Sets the current type of entity to be created
  * @param fulltype the type to be created
  */
