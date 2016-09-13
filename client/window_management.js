@@ -422,7 +422,6 @@ WindowManagement = function(){
 							).sort(),
 							maxFnameLength = 
 								utils.max(fnames,function(_) {return _.length;}),
-							 a_filebview = $('<a>'),
                              folder_buttons = $('<div>'),
                              new_folder_b = $('<button>'),
                              rename_folder_b = $('<button>'),
@@ -436,10 +435,6 @@ WindowManagement = function(){
                              feedback = GUIUtils.getTextSpan('',"feedback"),
 							 fileb = 
 								 GUIUtils.getFileBrowser(fnames,false,args['manualInput'],__getRecentDir(args['startDir']));
-				
-					a_filebview.html('file browser view')
-					.attr("href", '#')
-					.attr("class", 'enabled_link');
                     
                     new_folder_b.html('new folder')
                     .click(function(ev) {
@@ -501,14 +496,10 @@ WindowManagement = function(){
                                     if( ! utils.isHttpSuccessCode(statusCode) ) {
                                         feedback.html(resp);
                                     } else {
-                                        var todelete = [];
+                                        var matches = value.match(/^\/(.*\/)?(.*)\/$/),
+                                            newvalue = "/_Trash_" + value;
                                         for (var idx in fnames) {
-                                            if (fnames[idx].match(new RegExp("^("+value+").*"))) {
-                                                todelete.push(fnames[idx]);
-                                            }
-                                        }
-                                        for (var idx in todelete) {
-                                            fnames.splice(fnames.indexOf(todelete[idx]), 1);
+                                            fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2");
                                         }
                                         fileb['refresh'](fnames);
                                         feedback.html('deleted ' + value);
