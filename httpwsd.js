@@ -347,33 +347,59 @@ var httpserver = _http.createServer(
 			/*	delete specified file/folder */	
 			else if( req.method == 'DELETE' && url.pathname.match(/\.(file|folder)$/) )
 			{
-				var matches  = url.pathname.match(/^\/(.*?)\/(.*\/)?(.*)\.(file|folder)$/),
-					 username = matches[1],
-                     folder = matches[2] || '',
- 					 fname 	 = matches[3],
-					 userdir	 = './users/'+username+'/',
-					 ondelete = 
-						 function(err, stdout, stderr)
-						 {
-							 if( err )
-								 __respond(resp,500,String(err));
-							 else
-								 __respond(resp,200);
-						 },
-					 deletef  = 
-						 function(response)
-						 {
-                             _fspp.mv(userdir+folder+fname,userdir+'_Trash_/'+folder,ondelete);
-						 };
-				_fs.exists(userdir+'_Trash_/'+folder,
-					function(exists)
-					{
-						if( ! exists )
-							_fspp.mkdirs(userdir+'_Trash_/'+folder,deletef);
-                        else {
-                            deletef();
-                        }
-					});
+                if (url.pathname.match('_Trash_')) {
+                    __respond(resp,500,"cannot remove trash!");
+                } else {
+                    var matches  = url.pathname.match(/^\/(.*?)\/(.*\/)?(.*)\.(file|folder)$/),
+                         username = matches[1],
+                         folder = matches[2] || '',
+                         fname 	 = matches[3],
+                         userdir	 = './users/'+username+'/',
+                         ondelete = 
+                             function(err, stdout, stderr)
+                             {
+                                 if( err )
+                                     __respond(resp,500,String(err));
+                                 else
+                                     __respond(resp,200);
+                             },
+                         deletef  = 
+                             function(response)
+                             {
+                                 var newname = userdir+'_Trash_/'+folder+fname;
+                                 if (_fs.existsSync(newname)) {
+                                     if (url.pathname.match(/\.folder$/)) {
+                                         // http://stackoverflow.com/questions/18052762/remove-directory-which-is-not-empty
+                                         var deleteFolderRecursive = function(path) {
+                                            if( _fs.existsSync(path) ) {
+                                                _fs.readdirSync(path).forEach(function(file,index){
+                                                    var curPath = path + "/" + file;
+                                                    if(_fs.lstatSync(curPath).isDirectory()) { // recurse
+                                                        deleteFolderRecursive(curPath);
+                                                    } else { // delete file
+                                                        _fs.unlinkSync(curPath);
+                                                    }
+                                                });
+                                                _fs.rmdirSync(path);
+                                            }
+                                         };
+                                         deleteFolderRecursive(newname);
+                                     } else {
+                                         _fs.unlink(newname);
+                                     }
+                                 }
+                                 _fspp.mv(userdir+folder+fname,userdir+'_Trash_/'+folder,ondelete);
+                             };
+                    _fs.exists(userdir+'_Trash_/'+folder,
+                        function(exists)
+                        {
+                            if( ! exists )
+                                _fspp.mkdirs(userdir+'_Trash_/'+folder,deletef);
+                            else {
+                                deletef();
+                            }
+                        });
+                }
 			}
 
 
@@ -432,7 +458,7 @@ var httpserver = _http.createServer(
                                      };
                             _fspp.mv(userdir+"/"+folder+fname,userdir+data,onmove)
                         } else {
-                            //rename
+                            // rename
                             var matches  = url.pathname.match(/^\/(.*?)\/(.*\/)?(.*)\.(file|folder)$/),
                                 username = matches[1],
                                 folder = matches[2] || '',
