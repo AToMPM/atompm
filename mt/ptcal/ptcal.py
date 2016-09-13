@@ -211,7 +211,7 @@ class PyTCoreAbstractionLayer :
                         self._M.vs.select(lambda v : eq(v['$atompmId'],c['id1']))[0]
                     node2 = \
                         self._M.vs.select(lambda v : eq(v['$atompmId'],c['id2']))[0]
-                    self._M.add_edges((node1.index, node2.index))
+                    self._M.add_edges([(node1.index, node2.index)])
                 
                 elif c['op'] == 'RMEDGE' : 
                     pass
@@ -913,7 +913,7 @@ class PyTCoreAbstractionLayer :
                 elif d['op'] == 'RMEDGE' :
                     node1 = self._M.vs[self._M.get_node(d['guid1'])]                
                     node2 = self._M.vs[self._M.get_node(d['guid2'])]                
-                    self._M.add_edges((node1.index, node2.index))
+                    self._M.add_edges([(node1.index, node2.index)])
 
                 elif d['op'] == 'MKEDGE' :
                     pass

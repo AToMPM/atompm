@@ -138,8 +138,8 @@ class ModelAndRuleCompiler :
 
         for e in m['edges'] :
             hg.add_edges(
-                    (atompmIds2himesisIndices[str(e['src'])],
-                      atompmIds2himesisIndices[str(e['dest'])]))        
+                    [(atompmIds2himesisIndices[str(e['src'])],
+                      atompmIds2himesisIndices[str(e['dest'])])])        
 
         return hg
 

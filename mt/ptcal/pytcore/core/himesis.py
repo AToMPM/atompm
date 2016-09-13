@@ -388,7 +388,7 @@ class HimesisPreConditionPatternNAC(HimesisPreConditionPattern):
             if len(src) == len(tgt) == 1:
                 src = src[0]
                 tgt = tgt[0]
-                G.add_edges((src.index, tgt.index))
+                G.add_edges([(src.index, tgt.index)])
             elif len(src) == 0 :
 #                raise Exception('Label does not exist :: '+str(src_label))
                 pass
@@ -529,7 +529,7 @@ class HimesisPostConditionPattern(HimesisPattern):
                        label == self.vs[e.target][Himesis.Constants.MT_LABEL]))):
                 src_label = self.vs[edge.source][Himesis.Constants.MT_LABEL]
                 tgt_label = self.vs[edge.target][Himesis.Constants.MT_LABEL]
-                graph.add_edges((labels[src_label], labels[tgt_label]))
+                graph.add_edges([(labels[src_label], labels[tgt_label])])
                 packet.deltas.append(
                         {'op':'MKEDGE',                        
                          'guid1':graph.vs[labels[src_label]][Himesis.Constants.GUID],
