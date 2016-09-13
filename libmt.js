@@ -27,6 +27,28 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 	'transform' : 
 		function(_model,T)
 		{
+            if (!Array.prototype.find) {
+              Array.prototype.find = function(predicate) {
+                if (this == null) {
+                  throw new TypeError('Array.prototype.find called on null or undefined');
+                }
+                if (typeof predicate !== 'function') {
+                  throw new TypeError('predicate must be a function');
+                }
+                var list = Object(this);
+                var length = list.length >>> 0;
+                var thisArg = arguments[1];
+                var value;
+
+                for (var i = 0; i < length; i++) {
+                  value = list[i];
+                  if (predicate.call(thisArg, value, i, list)) {
+                    return value;
+                  }
+                }
+                return undefined;
+              };
+            }
 			var model	  = _utils.jsonp(_model),
 	 			 new_model = _utils.jsonp(_model),
 				 SCD	  	  = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram',
@@ -38,6 +60,48 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 				 	2 flatten ancestor contents into their children + 'reroute' associations
 				 	3 make new_model conform to ER 
 				 	4 append type-to-parentType mapping (needed for MT subtype matching) */
+                function copyAttributes(parent_id, child_id) {
+                    new_model.nodes[child_id]['attributes']['value'] = 
+									new_model.nodes[child_id]['attributes']['value'].concat(
+                                        model.nodes[parent_id]['attributes']['value'].filter(
+                                            function(attr) {
+                                                return !new_model.nodes[child_id]['attributes']['value'].find(
+                                                    function(el) {return el['name'] == attr['name']}
+                                                )
+                                            }
+                                        )
+                                    );
+                    new_model.nodes[child_id]['constraints']['value'] = 
+									new_model.nodes[child_id]['constraints']['value'].concat(
+                                        model.nodes[parent_id]['constraints']['value'].filter(
+                                            function(constr) {
+                                                return !new_model.nodes[child_id]['constraints']['value'].find(
+                                                    function(el) {return el['name'] == constr['name']}
+                                                )
+                                            }
+                                        )
+                                    );
+                    new_model.nodes[child_id]['actions']['value'] = 
+									new_model.nodes[child_id]['actions']['value'].concat(
+                                        model.nodes[parent_id]['actions']['value'].filter(
+                                            function(act) {
+                                                return !new_model.nodes[child_id]['actions']['value'].find(
+                                                    function(el) {return el['name'] == act['name']}
+                                                )
+                                            }
+                                        )
+                                    );
+                    new_model.nodes[child_id]['cardinalities']['value'] = 
+									new_model.nodes[child_id]['cardinalities']['value'].concat(
+                                        model.nodes[parent_id]['cardinalities']['value'].filter(
+                                            function(card) {
+                                                return !new_model.nodes[child_id]['cardinalities']['value'].find(
+                                                    function(el) {return el['dir'] == card['dir'] && el['type'] == card['type']}
+                                                )
+                                            }
+                                        )
+                                    );
+                }
 
 				function findAncestors(ids)
 				{
@@ -50,8 +114,9 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 									inheritances.push(edge['dest']);
 							});
 
-					if( inheritances.length == 0 )
-						return ids;
+					if( inheritances.length == 0 ) {
+                        return ids;
+                    }
 
 					var parents = [];
 					model.edges.forEach(
@@ -69,7 +134,15 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 				for( var id in model.nodes )
 				{
 					/* 1 */
-					ids2ancestors[id] = findAncestors([id]).splice(1);
+                    var ids = findAncestors([id]);
+                    ids.reverse(); // oldest first
+                    var idx = 1;
+                    while (idx < ids.length) {
+                        copyAttributes(ids[idx-1], ids[idx]);
+                        idx++;
+                    }
+					ids2ancestors[id] = ids;
+                    ids2ancestors[id].splice(-1);
 
 					/* 2 */
 					/* a) apply attributes, constraints, actions and cardinalities inheritance to id 
@@ -78,41 +151,32 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 					ids2ancestors[id].forEach(
 							function(a)
 							{
-								new_model.nodes[id]['attributes']['value'] = 
-									new_model.nodes[id]['attributes']['value'].concat( model.nodes[a]['attributes']['value'] );
-								new_model.nodes[id]['constraints']['value'] = 
-									new_model.nodes[id]['constraints']['value'].concat( model.nodes[a]['constraints']['value'] );
-								new_model.nodes[id]['actions']['value'] = 
-									new_model.nodes[id]['actions']['value'].concat( model.nodes[a]['actions']['value'] );
-								new_model.nodes[id]['cardinalities']['value'] = 
-									new_model.nodes[id]['cardinalities']['value'].concat( model.nodes[a]['cardinalities']['value'] );
-
-								var ancestorType = model.nodes[a]['name']['value'],
-  									idType 		  = model.nodes[id]['name']['value'];
-								model.edges.forEach(
-									function(edge)	
-									{
-										if( edge['src'] == a || edge['dest'] == a )
-										{
-											var ancestorIsSrc = (edge['src'] == a),
-												 assoc = (ancestorIsSrc ? edge['dest'] : edge['src']);
-											if( model.nodes[assoc]['$type'] != SCD+'/Association' )
-												return;
-												
-											for( var i in model.nodes[assoc]['cardinalities']['value'] )
-											{
-												var card = model.nodes[assoc]['cardinalities']['value'][i];
-												if( card['type'] == ancestorType && card['dir'] == (ancestorIsSrc ? 'out' : 'in') )
-												{
-													var new_card = _utils.clone(card);
-													new_card['type'] = idType;
-													new_model.nodes[assoc]['cardinalities']['value'].push(new_card);
-												}
-											}
-											new_model.edges.push(
-													(ancestorIsSrc ? {'src':id,'dest':assoc} : {'src':assoc,'dest':id}) );
-										}
-									});
+                                var ancestorType = model.nodes[a]['name']['value'],
+                                    idType 		  = model.nodes[id]['name']['value'];
+                                model.edges.forEach(
+                                    function(edge)	
+                                    {            
+                                        if( edge['src'] == a || edge['dest'] == a )
+                                        {
+                                            var ancestorIsSrc = (edge['src'] == a),
+                                                 assoc = (ancestorIsSrc ? edge['dest'] : edge['src']);
+                                            if( model.nodes[assoc]['$type'] != SCD+'/Association' )
+                                                return;
+                                                
+                                            for( var i in model.nodes[assoc]['cardinalities']['value'] )
+                                            {
+                                                var card = model.nodes[assoc]['cardinalities']['value'][i];
+                                                if( card['type'] == ancestorType && card['dir'] == (ancestorIsSrc ? 'out' : 'in') )
+                                                {
+                                                    var new_card = _utils.clone(card);
+                                                    new_card['type'] = idType;
+                                                    new_model.nodes[assoc]['cardinalities']['value'].push(new_card);
+                                                }
+                                            }
+                                            new_model.edges.push(
+                                                    (ancestorIsSrc ? {'src':id,'dest':assoc} : {'src':assoc,'dest':id}) );
+                                        }
+                                    });
 							});
 				}
 
