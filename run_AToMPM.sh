@@ -13,7 +13,7 @@ if [ ! -d "dependencies" ]; then
 
     cd dependencies
     # First fetch Node.JS
-    curl -L -O http://msdl.uantwerpen.be/AToMPM/node-v0.10.46.tar.gz
+    curl -L -O http://msdl.uantwerpen.be/AToMPM/node-v4.5.0.tar.gz
     tar -xvzf node*
     cd node*
     ./configure --prefix=$working_dir/dependencies/node.js
@@ -24,15 +24,15 @@ if [ ! -d "dependencies" ]; then
     # Install Python with development headers
     # Install zlib seperately
     curl -L -O http://msdl.uantwerpen.be/AToMPM/zlib-1.2.8.tar.gz
-    tar -xvzf zlib-1.2.8.tar.gz
-    cd zlib-1.2.8
+    tar -xvzf zlib-*
+    cd zlib-*
     ./configure --prefix=$working_dir/dependencies/localPython
     make
     make install
     cd ..
-    curl -L -O http://msdl.uantwerpen.be/AToMPM/Python-2.7.8.tgz
-    tar -xvzf Python-2.7.8.tgz
-    cd Python-2.7.8
+    curl -L -O http://msdl.uantwerpen.be/AToMPM/Python-2.7.12.tar.xz
+    tar -xvf Python-*
+    cd Python-2.7.12
     ./configure --prefix=$working_dir/dependencies/localPython
     sed -i "s/^#zlib/zlib/g" Modules/Setup
     make -j5
@@ -46,16 +46,16 @@ if [ ! -d "dependencies" ]; then
     cd python-igraph
 
     # Install igraph C core
-    curl -L -O http://msdl.uantwerpen.be/AToMPM/igraph-0.6.5.tar.gz
-    tar -xvzf igraph-0.6.5.tar.gz
-    cd igraph-0.6.5
+    curl -L -O http://msdl.uantwerpen.be/AToMPM/igraph-0.7.1.tar.gz
+    tar -xvzf igraph-*
+    cd igraph-*
     ./configure
     make -j5
 
     # Install python-igraph binding
-    curl -L -O http://msdl.uantwerpen.be/AToMPM/python-igraph-0.6.5.tar.gz
-    tar -xvzf python-igraph-0.6.5.tar.gz
-    cd python-igraph-0.6.5
+    curl -L -O http://msdl.uantwerpen.be/AToMPM/python-igraph-0.7.1.post6.tar.gz
+    tar -xvzf python-igraph-*
+    cd python-igraph-*
     rm setup.cfg
     echo "[build_ext]" > setup.cfg
     echo "include_dirs = ../../../localPython/include/python2.7:../../build/include:../include:../../include:/usr/local/include:/usr/include" >> setup.cfg
@@ -71,11 +71,13 @@ if [ ! -d "dependencies" ]; then
     echo "INSTALLATION SUCCESSFUL"
     echo "Continuing to start up AToMPM!"
     cd ..
+    cd ..
+    cd ..
 fi
 
 # Set PATHs correctly
 export PATH=$working_dir/dependencies/localPython/bin:$working_dir/dependencies/node.js/bin:$PATH
-export LD_LIBRARY_PATH="$working_dir/dependencies/python-igraph/igraph-0.6.5/src/.libs/:$working_dir/dependencies/localPython/lib"
+export LD_LIBRARY_PATH="$working_dir/dependencies/python-igraph/igraph-0.7.1/src/.libs/:$working_dir/dependencies/localPython/lib"
 
 node httpwsd.js &
 sleep 3
