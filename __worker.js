@@ -317,7 +317,7 @@ function __postInternalErrorMsg(respIndex,reason)
 /* wrapper for all messages */
 function __postMessage(msg) 
 {
-	_util.debug("w#"+__wid+" << ("+msg.respIndex+") "+msg.statusCode+" "+
+	console.error("w#"+__wid+" << ("+msg.respIndex+") "+msg.statusCode+" "+
 			(msg.reason || 
 			 (typeof msg.data == 'object' ? 
 				  _utils.jsons(msg.data) : 
@@ -488,7 +488,7 @@ function __batchCheckpoint(id,start)
 process.on('message', 
 	function(msg)
 	{
-		_util.debug(">> "+JSON.stringify(msg));
+		console.error(">> "+JSON.stringify(msg));
 
 		/* parse msg */
 		var uri 		  = msg['uri'],
@@ -503,7 +503,7 @@ process.on('message',
 		if( _wlib == undefined )
 		{
 			/** enable/disable debugging messages **/			
-			_util.debug = function() {};
+			console.error = function() {};
 
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];

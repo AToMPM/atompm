@@ -227,7 +227,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 	'__applyASWChanges' :
 		function(changelog,aswSequenceNumber,hitchhiker)
 		{
-			_util.debug('w#'+__wid+' ++ ('+aswSequenceNumber+') '+
+			console.error('w#'+__wid+' ++ ('+aswSequenceNumber+') '+
 							_utils.jsons(changelog));
 
 
@@ -539,7 +539,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 				{
 					var cschangelog = _utils.flatten(cschangelogs);
 
-					_util.debug('w#'+__wid+' -- ('+aswSequenceNumber+') '+
+					console.error('w#'+__wid+' -- ('+aswSequenceNumber+') '+
 						_utils.jsons(cschangelog));
 
 					__postMessage(
@@ -840,7 +840,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 						 failuref = 
 	 						 function(err) 
 	 						 {
-	 							 _util.debug('"POST *.mappings" failed on :: '+err+
+	 							 console.error('"POST *.mappings" failed on :: '+err+
 										 		'\n(will try again soon)');
 	 							 setTimeout(
 		 								 _do.chain(actions),
@@ -1278,58 +1278,62 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 						  reqData['m'] = 'new';
 						  return __successContinuable(mData);
 					  }];
-			else
-				 actions = 
-	 				 [_fs.readFile('./users/'+reqData['m'],'utf8'),
-				 	  function(_mData)
-					  {
-						  mData = eval('('+_mData+')');
-						  return __successContinuable(mData);
-					  }];
-			actions.push(
-					function(m)
-					{
-						 var asmData = _utils.jsons(m['asm']),
-							  csmData = _utils.jsons(m['csm']);
-						 return __wHttpReq(
-	 								  'PUT',
-		 							  uri+'?wid='+self.__aswid,
-		 							  {'m':asmData,
-									   'name':reqData['m']+(new Date().getTime()),
-										'insert':reqData['insert'],
-									   'hitchhiker':{'csm':csmData}});						
-					});
-
-			_do.chain(actions)(
-					function() 
-					{
-						__postMessage({'statusCode':202,'respIndex':resp});					
-					},
-					function(err) 	
-					{
-						var MISSING_MM_ERROR = 'metamodel not loaded :: ';
-						if( (matches = err.match('^500:'+MISSING_MM_ERROR+
-																	'(.*?)(\\.pattern){0,1}$')) )
-						{
-							var asmm = matches[1],
-								 pmm	= (matches[2] != undefined),
-								 csmm;
-						  	mData['csm'].metamodels.some(
-								function(mm)
-								{
-									if( (pmm && mm.match(
-											'^'+asmm+'\\.[a-zA-Z0-9]*Icons\\.pattern$')) ||
-										 (!pmm && mm.match(
-											'^'+asmm+'\\.[a-zA-Z0-9]*Icons$')) )
-										csmm = mm;
-									return csmm;
-								});
-							__postInternalErrorMsg(resp,MISSING_MM_ERROR+csmm);
-						}
-						else
-							__postInternalErrorMsg(resp,err);
-					}
-			);
+			else {
+                try {
+                    _fs.accessSync('./users/'+reqData['m']);
+                } catch (e) {
+                    return __postBadReqErrorMsg(resp, 'cannot read ' + reqData['m']);
+                }
+                actions = [   _fs.readFile('./users/'+reqData['m'],'utf8'),
+                              function(_mData)
+                              {
+                                  mData = eval('('+_mData+')');
+                                  return __successContinuable(mData);
+                              }];
+                actions.push(
+                    function(m)
+                    {
+                         var asmData = _utils.jsons(m['asm']),
+                              csmData = _utils.jsons(m['csm']);
+                         return __wHttpReq(
+                                      'PUT',
+                                      uri+'?wid='+self.__aswid,
+                                      {'m':asmData,
+                                       'name':reqData['m']+(new Date().getTime()),
+                                        'insert':reqData['insert'],
+                                       'hitchhiker':{'csm':csmData}});						
+                    });
+                _do.chain(actions)(
+                    function() 
+                    {
+                        __postMessage({'statusCode':202,'respIndex':resp});					
+                    },
+                    function(err) 	
+                    {
+                        var MISSING_MM_ERROR = 'metamodel not loaded :: ';
+                        if( (matches = err.match('^500:'+MISSING_MM_ERROR+
+                                                                    '(.*?)(\\.pattern){0,1}$')) )
+                        {
+                            var asmm = matches[1],
+                                 pmm	= (matches[2] != undefined),
+                                 csmm;
+                            mData['csm'].metamodels.some(
+                                function(mm)
+                                {
+                                    if( (pmm && mm.match(
+                                            '^'+asmm+'\\.[a-zA-Z0-9]*Icons\\.pattern$')) ||
+                                         (!pmm && mm.match(
+                                            '^'+asmm+'\\.[a-zA-Z0-9]*Icons$')) )
+                                        csmm = mm;
+                                    return csmm;
+                                });
+                            __postInternalErrorMsg(resp,MISSING_MM_ERROR+csmm);
+                        }
+                        else
+                            __postInternalErrorMsg(resp,err);
+                    }
+                );
+            }
 		},
 	
 
