@@ -1805,34 +1805,32 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			}
 			else
 			{
-				var  genIconDef = uri.match(/(.*)\..*Icons\.metamodel/),
-                     matches   	 = uri.match(/\/GET(((.*\/).*)\..*Icons.metamodel)/),
-					 asmmPath  	 = './users'+matches[2]+'.metamodel',
+				var  matches   	 = uri.match(/\/GET(((.*\/).*)\..*Icons.metamodel)/),
+					 asmmPath  	 = (matches ? ('./users'+matches[2]+'.metamodel') : undefined),
                      asmm       = undefined;
                      aswid      = this.__aswid;
-					 var actions 	= [
+                     actions    = [];
+                 if (asmmPath) {
+                     actions = [
                             _fs.readFile(asmmPath,'utf8'),
                             function(data) {
                                asmm = _utils.jsonp(data);
                                return __successContinuable();
-                            }];
-				_do.chain(actions)(
-						function() 
-						{
-                            var requestActions = 
-                                [__wHttpReq(
-                                    'PUT',
-                                    uri+'?wid='+aswid,
-                                    (genIconDef ? {'csm':_mmmk.read(), 'asmm': asmm} : undefined))];
-                            _do.chain(requestActions)(
-                                function() {
-                                    __postMessage({'statusCode':200, 'respIndex':resp});
-                                },
-                                function(err) 	{__postInternalErrorMsg(resp,err);}
-                            );
-						},
-						function(err) 	{__postInternalErrorMsg(resp,err);}
-				);
+                            },
+                            function(result) {
+                                return __wHttpReq('PUT',
+                                           uri+'?wid='+aswid,
+                                           ({'csm':_mmmk.read(), 'asmm': asmm}))
+                            }]
+                 } else {
+                     actions = [__wHttpReq('PUT',
+                                           uri+'?wid='+aswid,
+                                           undefined)];
+                 }
+                 _do.chain(actions)(
+                    function() { __postMessage({'statusCode':200,'respIndex':resp}); },
+                    function(err) {__postInternalErrorMsg(resp,err);}
+                 );
 			}
 		},
 
