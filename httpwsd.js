@@ -369,21 +369,7 @@ var httpserver = _http.createServer(
                                  var newname = userdir+'_Trash_/'+folder+fname;
                                  if (_fs.existsSync(newname)) {
                                      if (url.pathname.match(/\.folder$/)) {
-                                         // http://stackoverflow.com/questions/18052762/remove-directory-which-is-not-empty
-                                         var deleteFolderRecursive = function(path) {
-                                            if( _fs.existsSync(path) ) {
-                                                _fs.readdirSync(path).forEach(function(file,index){
-                                                    var curPath = path + "/" + file;
-                                                    if(_fs.lstatSync(curPath).isDirectory()) { // recurse
-                                                        deleteFolderRecursive(curPath);
-                                                    } else { // delete file
-                                                        _fs.unlinkSync(curPath);
-                                                    }
-                                                });
-                                                _fs.rmdirSync(path);
-                                            }
-                                         };
-                                         deleteFolderRecursive(newname);
+                                         _fspp.deleteFolderRecursive(newname);
                                      } else {
                                          _fs.unlink(newname);
                                      }
@@ -456,6 +442,13 @@ var httpserver = _http.createServer(
                                          else
                                              __respond(resp,200);
                                      };
+                                if (_fs.existsSync(userdir+data+fname)) {
+                                    if (url.pathname.match(/\.folder$/)) {
+                                         _fspp.deleteFolderRecursive(userdir+data+fname);
+                                     } else {
+                                         _fs.unlink(newname);
+                                     }
+                                }
                             _fspp.mv(userdir+"/"+folder+fname,userdir+data,onmove)
                         } else {
                             // rename

@@ -171,7 +171,20 @@ exports.rmdirs =
 
 
 
-
+// http://stackoverflow.com/questions/18052762/remove-directory-which-is-not-empty
+exports.deleteFolderRecursive = function(path) {
+   if( _fs.existsSync(path) ) {
+       _fs.readdirSync(path).forEach(function(file,index){
+           var curPath = path + "/" + file;
+           if(_fs.lstatSync(curPath).isDirectory()) { // recurse
+               deleteFolderRecursive(curPath);
+           } else { // delete file
+               _fs.unlinkSync(curPath);
+           }
+       });
+       _fs.rmdirSync(path);
+   }
+};
 	
 	
 

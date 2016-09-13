@@ -90,7 +90,7 @@ GUIUtils = function(){
 					 {
 						 selection.attr("class", 'fileb_icon');
 						 selection = undefined;
-						 input.value = '';
+						 input.val('');
 					 }
 				 },
 			 navbuttononclick	=
@@ -252,6 +252,7 @@ GUIUtils = function(){
 				  'filepane':	 	 function() {return $('#div_fileb-contents');},
 				  'getcurrfolder': function() {return currfolder;},	
 				  'getselection':	 function()	{return input.val();},
+                  'clearselection': function() {clearSelection()},
                   'refresh': function(fnames, the_folder) {
                       setCurrentFileBrowserFolder(the_folder || currfolder, fnames);
                   }};

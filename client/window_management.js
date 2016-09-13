@@ -479,6 +479,7 @@ WindowManagement = function(){
                                                 fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2"); 
                                             }
                                             fileb['refresh'](fnames, newvalue);
+                                            fileb['clearselection']();
                                             feedback.html('renamed ' + value + ' to ' + newvalue);
                                         }
                                     });
@@ -502,6 +503,7 @@ WindowManagement = function(){
                                             fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2");
                                         }
                                         fileb['refresh'](fnames);
+                                        fileb['clearselection']();
                                         feedback.html('deleted ' + value);
                                     }
                                 });
@@ -529,6 +531,7 @@ WindowManagement = function(){
                                                 fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2"); 
                                             }
                                             fileb['refresh'](fnames, newvalue);
+                                            fileb['clearselection']();
                                             feedback.html('moved ' + value + ' to ' + folder_loc);
                                         }
                                     });
@@ -558,6 +561,7 @@ WindowManagement = function(){
                                                 fnames[idx] = newvalue;
                                             }
                                             fileb['refresh'](fnames);
+                                            fileb['clearselection']();
                                             feedback.html('renamed ' + value + ' to ' + newvalue);
                                         }
                                     });
@@ -581,6 +585,7 @@ WindowManagement = function(){
                                             fnames.splice(idx, 1);
                                         }
                                         fileb['refresh'](fnames);
+                                        fileb['clearselection']();
                                     }
                                 });
                         }
@@ -609,6 +614,7 @@ WindowManagement = function(){
                                                 fnames[idx] = newvalue;
                                             }
                                             fileb['refresh'](fnames);
+                                            fileb['clearselection']();
                                         }
                                     });
                             }
