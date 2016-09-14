@@ -1236,7 +1236,7 @@
 							"99": {
 								"textContent": {
 									"type": "string",
-									"value": "+ query : string"
+									"value": "+ query : file<R_.*\\.model>"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -1587,7 +1587,7 @@
 							"99": {
 								"textContent": {
 									"type": "string",
-									"value": "+ rule : string"
+									"value": "+ rule : file<R_.*\\.model>"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -7330,7 +7330,7 @@
 							"99": {
 								"textContent": {
 									"type": "string",
-									"value": "+ ref : string"
+									"value": "+ ref : file<T_.*\\.model>"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -12382,7 +12382,7 @@
 							"99": {
 								"textContent": {
 									"type": "string",
-									"value": "+ innerQuery : string"
+									"value": "+ innerQuery : file<R_.*\\.model>"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -12851,7 +12851,7 @@
 							"99": {
 								"textContent": {
 									"type": "string",
-									"value": "+ secondInnerQuery : string"
+									"value": "+ secondInnerQuery : file<R_.*\\.model>"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -13141,7 +13141,8 @@
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons"
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons",
+			"/Formalisms/__Transformations__/Transformation/MoTif.defaultIcons"
 		]
 	},
 	"asm": {
@@ -13274,7 +13275,7 @@
 					"value": [
 						{
 							"name": "query",
-							"type": "string",
+							"type": "file<R_.*\\.model>",
 							"default": ""
 						}
 					]
@@ -13307,7 +13308,7 @@
 					"value": [
 						{
 							"name": "rule",
-							"type": "string",
+							"type": "file<R_.*\\.model>",
 							"default": ""
 						}
 					]
@@ -13781,7 +13782,7 @@
 					"value": [
 						{
 							"name": "ref",
-							"type": "string",
+							"type": "file<T_.*\\.model>",
 							"default": ""
 						}
 					]
@@ -14157,7 +14158,7 @@
 					"value": [
 						{
 							"name": "innerQuery",
-							"type": "string",
+							"type": "file<R_.*\\.model>",
 							"default": ""
 						}
 					]
@@ -14193,7 +14194,7 @@
 					"value": [
 						{
 							"name": "secondInnerQuery",
-							"type": "string",
+							"type": "file<R_.*\\.model>",
 							"default": ""
 						}
 					]
@@ -14463,7 +14464,8 @@
 			}
 		],
 		"metamodels": [
-			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram"
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram",
+			"/Formalisms/__Transformations__/Transformation/MoTif"
 		]
 	}
 }

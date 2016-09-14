@@ -54,7 +54,7 @@
 		"QRule": [
 			{
 				"name": "query",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -76,7 +76,7 @@
 		"ARule": [
 			{
 				"name": "rule",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -103,7 +103,7 @@
 			},
 			{
 				"name": "rule",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -130,7 +130,7 @@
 			},
 			{
 				"name": "rule",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -152,7 +152,7 @@
 		"Sequence": [
 			{
 				"name": "ref",
-				"type": "string",
+				"type": "file<T_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -174,7 +174,7 @@
 		"CRule": [
 			{
 				"name": "ref",
-				"type": "string",
+				"type": "file<T_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -327,7 +327,7 @@
 		"ExplicitOrderCompositeRuleBlock": [
 			{
 				"name": "ref",
-				"type": "string",
+				"type": "file<T_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -424,12 +424,12 @@
 		"CQRule2": [
 			{
 				"name": "innerQuery",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
 				"name": "query",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -451,17 +451,17 @@
 		"CQRule3": [
 			{
 				"name": "secondInnerQuery",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
 				"name": "innerQuery",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
 				"name": "query",
-				"type": "string",
+				"type": "file<R_.*\\.model>",
 				"default": ""
 			},
 			{
@@ -2053,12 +2053,6 @@
 				"max": "1"
 			},
 			{
-				"dir": "in",
-				"type": "Sequence",
-				"min": "0",
-				"max": "1"
-			},
-			{
 				"dir": "out",
 				"type": "Sequence",
 				"min": "0",
@@ -2066,12 +2060,18 @@
 			},
 			{
 				"dir": "in",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
 				"type": "CRule",
 				"min": "0",
 				"max": "1"
 			},
 			{
-				"dir": "out",
+				"dir": "in",
 				"type": "CRule",
 				"min": "0",
 				"max": "1"
@@ -2419,13 +2419,13 @@
 				"max": "1"
 			},
 			{
-				"dir": "in",
+				"dir": "out",
 				"type": "LQSRule",
 				"min": "0",
 				"max": "1"
 			},
 			{
-				"dir": "out",
+				"dir": "in",
 				"type": "LQSRule",
 				"min": "0",
 				"max": "1"
@@ -2443,12 +2443,6 @@
 				"max": "1"
 			},
 			{
-				"dir": "in",
-				"type": "LFRule",
-				"min": "0",
-				"max": "1"
-			},
-			{
 				"dir": "out",
 				"type": "LFRule",
 				"min": "0",
@@ -2456,12 +2450,18 @@
 			},
 			{
 				"dir": "in",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
 				"type": "LSRule",
 				"min": "0",
 				"max": "1"
 			},
 			{
-				"dir": "out",
+				"dir": "in",
 				"type": "LSRule",
 				"min": "0",
 				"max": "1"
@@ -2547,13 +2547,13 @@
 				"max": "1"
 			},
 			{
-				"dir": "in",
+				"dir": "out",
 				"type": "BSRule",
 				"min": "0",
 				"max": "1"
 			},
 			{
-				"dir": "out",
+				"dir": "in",
 				"type": "BSRule",
 				"min": "0",
 				"max": "1"
@@ -5105,88 +5105,88 @@
 	},
 	"types2parentTypes": {
 		"RuleBlock": [
-			"TrafoElement",
-			"Positionable"
+			"Positionable",
+			"TrafoElement"
 		],
 		"AtomicRuleBlock": [
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock"
 		],
 		"CompositeRuleBlock": [
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock"
 		],
 		"QRule": [
-			"AtomicRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"AtomicRuleBlock"
 		],
 		"ARule": [
-			"AtomicRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"AtomicRuleBlock"
 		],
 		"FRule": [
-			"ARule",
-			"AtomicRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"AtomicRuleBlock",
+			"ARule"
 		],
 		"SRule": [
-			"ARule",
-			"AtomicRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"AtomicRuleBlock",
+			"ARule"
 		],
 		"Sequence": [
-			"ExplicitOrderCompositeRuleBlock",
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ExplicitOrderCompositeRuleBlock"
 		],
 		"CRule": [
-			"ExplicitOrderCompositeRuleBlock",
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ExplicitOrderCompositeRuleBlock"
 		],
 		"BRule": [
-			"ImplicitOrderCompositeRuleBlock",
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock"
 		],
 		"BSRule": [
-			"BRule",
-			"ImplicitOrderCompositeRuleBlock",
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock",
+			"BRule"
 		],
 		"LRule": [
-			"ImplicitOrderCompositeRuleBlock",
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock"
 		],
 		"LQSRule": [
-			"LRule",
-			"ImplicitOrderCompositeRuleBlock",
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock",
+			"LRule"
 		],
 		"TrafoElement": [
 			"Positionable"
@@ -5195,24 +5195,24 @@
 			"Positionable"
 		],
 		"EndSuccess": [
-			"TrafoElement",
-			"Positionable"
+			"Positionable",
+			"TrafoElement"
 		],
 		"ImplicitOrderCompositeRuleBlock": [
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock"
 		],
 		"ExplicitOrderCompositeRuleBlock": [
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock"
 		],
 		"EndFail": [
-			"TrafoElement",
-			"Positionable"
+			"Positionable",
+			"TrafoElement"
 		],
 		"success": [],
 		"fail": [],
@@ -5222,36 +5222,36 @@
 		"loop": [],
 		"branch": [],
 		"LFRule": [
-			"LRule",
-			"ImplicitOrderCompositeRuleBlock",
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock",
+			"LRule"
 		],
 		"LSRule": [
-			"LRule",
-			"ImplicitOrderCompositeRuleBlock",
-			"CompositeRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock",
+			"LRule"
 		],
 		"Positionable": [],
 		"CQRule2": [
-			"QRule",
-			"AtomicRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"AtomicRuleBlock",
+			"QRule"
 		],
 		"CQRule3": [
-			"CQRule2",
-			"QRule",
-			"AtomicRuleBlock",
-			"RuleBlock",
+			"Positionable",
 			"TrafoElement",
-			"Positionable"
+			"RuleBlock",
+			"AtomicRuleBlock",
+			"QRule",
+			"CQRule2"
 		]
 	}
 }
