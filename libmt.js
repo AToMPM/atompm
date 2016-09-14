@@ -63,7 +63,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                 function copyAttributes(parent_id, child_id) {
                     new_model.nodes[child_id]['attributes']['value'] = 
 									new_model.nodes[child_id]['attributes']['value'].concat(
-                                        model.nodes[parent_id]['attributes']['value'].filter(
+                                        new_model.nodes[parent_id]['attributes']['value'].filter(
                                             function(attr) {
                                                 return !new_model.nodes[child_id]['attributes']['value'].find(
                                                     function(el) {return el['name'] == attr['name']}
@@ -73,7 +73,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                                     );
                     new_model.nodes[child_id]['constraints']['value'] = 
 									new_model.nodes[child_id]['constraints']['value'].concat(
-                                        model.nodes[parent_id]['constraints']['value'].filter(
+                                        new_model.nodes[parent_id]['constraints']['value'].filter(
                                             function(constr) {
                                                 return !new_model.nodes[child_id]['constraints']['value'].find(
                                                     function(el) {return el['name'] == constr['name']}
@@ -83,7 +83,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                                     );
                     new_model.nodes[child_id]['actions']['value'] = 
 									new_model.nodes[child_id]['actions']['value'].concat(
-                                        model.nodes[parent_id]['actions']['value'].filter(
+                                        new_model.nodes[parent_id]['actions']['value'].filter(
                                             function(act) {
                                                 return !new_model.nodes[child_id]['actions']['value'].find(
                                                     function(el) {return el['name'] == act['name']}
@@ -93,7 +93,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                                     );
                     new_model.nodes[child_id]['cardinalities']['value'] = 
 									new_model.nodes[child_id]['cardinalities']['value'].concat(
-                                        model.nodes[parent_id]['cardinalities']['value'].filter(
+                                        new_model.nodes[parent_id]['cardinalities']['value'].filter(
                                             function(card) {
                                                 return !new_model.nodes[child_id]['cardinalities']['value'].find(
                                                     function(el) {return el['dir'] == card['dir'] && el['type'] == card['type']}
