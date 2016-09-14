@@ -345,7 +345,8 @@ GUIUtils = function(){
 				 };
 	
 			var de 	 = defaultEntry( explodeType(type) ),
-				 isMap = type.match(/^map/);
+				 isMap = type.match(/^map/),
+                 matches = undefined;
 			input.focus( 
 					(isMap ?
 						function()	
@@ -392,6 +393,11 @@ GUIUtils = function(){
 	
 		else if( type.match(/^\$/) )
 			return GUIUtils.getInputField(__specialTypes[type],value);
+	
+		else if (matches = type.match("^file<(.*)>")) {
+			var input 	 = GUIUtils.getFileInput(value,matches[1],"code_style string_input",1),
+				 getinput = function(_){return _.val();}
+        }
 	
 		else
 			var input 	 = GUIUtils.getTextInput(value,"code_style string_input",1),
@@ -450,6 +456,31 @@ GUIUtils = function(){
 		input.css("width", width || '400px');
 		return input;
 	};
+    
+    this.getFileInput = function(code,pattern,className,rows){
+        var string_input = this.getTextInput(code, className, rows);
+        var extra_el = $('<button>');
+        extra_el.attr("width", 16);
+        extra_el.attr("height", 16);
+        extra_el.html("...");
+        extra_el.click(function(event) {
+            var options = {'extensions':[pattern],
+                           'multipleChoice':false,
+                           'manualInput':false,
+                           'title':'choose a rule model',
+                           'startDir':'model'},
+                callback =
+                    function(fnames)
+                    {
+                        string_input.val(fnames[0]);
+                    };
+            WindowManagement.openDialog(_FILE_BROWSER,options,callback);
+            event.stopPropagation();
+            event.preventDefault();
+        });
+        string_input.extra_el = extra_el;
+        return string_input;
+    }
 	
 	/**
 	 * Constructs a <textarea> element. In this element, Alt + Right Arrow
@@ -573,12 +604,16 @@ GUIUtils = function(){
 	 * button is clicked
 	 */
 	this.setupAndShowDialog = function(elements,getinput,type,title,callback){
-		BehaviorManager.handleUserEvent(__EVENT_CANCELED_DIALOG);
+		// BehaviorManager.handleUserEvent(__EVENT_CANCELED_DIALOG);
 
 		var dialog 	  = $('#div_dialog'),
+             the_id = __dialog_stack.length;
+             dialog = dialog.clone().attr("id", 'div_dialog_'+the_id);
 			 dim_bg 	  = $('#div_dim_bg'),
 			 div_title = $('<div>');
 
+        __dialog_stack.push(dialog);
+        dialog.appendTo(document.body);
 		div_title.attr("class", 'dialog_title');
 		div_title.append(GUIUtils.getTextSpan(title || ''));
 		dialog.append(div_title);
@@ -594,8 +629,7 @@ GUIUtils = function(){
 
 		if( type != __NO_BUTTONS )
 		{
-			//var ok = $('<button>');
-			var ok = $('<button id="okbutton">'); // HUSEYIN-ENTER
+			var ok = $('<button class="okbutton">'); // HUSEYIN-ENTER
 			ok.click( function(ev) {
 				if( getinput == undefined )
 				{

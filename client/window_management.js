@@ -51,6 +51,8 @@ function __closeDialog(){
 //DEPRECATED FUNCTIONS
 ///////////////////////////////////////////////////////////////////////////////
 
+var __dialog_stack = [];
+
 WindowManagement = function(){
 	/**
 	 * Hides the login screen
@@ -713,6 +715,7 @@ WindowManagement = function(){
 	
 				tr.append( $('<td>').append( GUIUtils.getTextSpan(attr)) );
 				tr.append( $('<td>').append(ii.input) );
+				if (ii.input.extra_el) tr.append( $('<td>').append(ii.input.extra_el) );
 				attrs2ii[attr] = ii;
 				
 				table.append( tr );
@@ -910,7 +913,7 @@ WindowManagement = function(){
 	 */
 	this.showDialog = function()
 	{
-		var dialog = $('#div_dialog'),
+		var dialog = __dialog_stack[__dialog_stack.length-1],
 			 dim_bg = $('#div_dim_bg');
 		dim_bg.css("display", 'inline');
 		dialog.css("display", 'block');
@@ -925,19 +928,6 @@ WindowManagement = function(){
 	};
 	
 	/**
-	 * Closes the modal dialog if it is currently opened
-	 */
-	this.closeDialog = function()
-	{
-		var dialog = $('#div_dialog');
-		dialog.css("display", 'none');
-		$('#div_dim_bg').css("display", 'none');
-		HttpUtils.removeChildren(dialog);
-		__setCanvasScrolling(true);
-	  	BehaviorManager.setActiveBehaviourStatechart(__SC_CANVAS);	
-	};
-	
-	/**
 	 * Closes the modal dialog if it is currently opened (with arg js event)
 	 * Huseyin Ergin
 	 * HUSEYIN-ENTER
@@ -945,14 +935,16 @@ WindowManagement = function(){
 	this.closeDialog = function(ev)
 	{
 		if(ev!=null && ev.keyCode==13) {
-			$('#okbutton').click();
+			$('#div_dialog_' + (__dialog_stack.length-1).toString() + " .okbutton").click();
 		}
-		var dialog = $('#div_dialog');
-		dialog.css("display", 'none');
-		$('#div_dim_bg').css("display", 'none');
-		HttpUtils.removeChildren(dialog);
-		__setCanvasScrolling(true);
-	  	BehaviorManager.setActiveBehaviourStatechart(__SC_CANVAS);		
+        __dialog_stack.pop()
+		var dialog = $('#div_dialog_'+__dialog_stack.length);
+        dialog.remove();
+		if (!__dialog_stack.length) {
+            __setCanvasScrolling(true);            
+            $('#div_dim_bg').css("display", 'none');
+            BehaviorManager.setActiveBehaviourStatechart(__SC_CANVAS);
+        }
 	};
 	
 	return this;

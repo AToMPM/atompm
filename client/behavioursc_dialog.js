@@ -32,10 +32,9 @@ __dialogBehaviourStatechart = {
 		1:
 			function(event)	
 			{
-				WindowManagement.closeDialog(event); // HUSEYIN-ENTER
-				//WindowManagement.closeDialog();
-			}	
-		},
+				WindowManagement.closeDialog(event);
+			}
+        },
 
 	'__exitActions':{},
 	
@@ -70,9 +69,16 @@ __dialogBehaviourStatechart = {
 			{
 				if( name == __EVENT_KEYUP_ESC ||
 					 name == __EVENT_CANCELED_DIALOG ||
-					 name == __EVENT_KEYUP_ENTER || // HUSEYIN-ENTER
+					 name == __EVENT_KEYUP_ENTER ||
 					 name == __EVENT_OKAYED_DIALOG )
-					this.__T(this.__STATE_CLOSED,event);
+                    // let's not look at this ever again
+                    if (__dialog_stack.length == 1)
+                        this.__T(this.__STATE_CLOSED,event);
+                    else
+                        WindowManagement.closeDialog();
+                    
+				else if( name == __EVENT_SHOW_DIALOG )
+					this.__T(this.__STATE_OPEN,event);
 		
 				else
 					return;

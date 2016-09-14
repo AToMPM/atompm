@@ -172,7 +172,7 @@ WindowEventHelper = function(){
 		} else if( event.keyCode == KEY_TAB ){
 			processEvent( KEY_TAB, 1, null, event);
 			// Only process the tab event here if the popup dialog is displayed
-			if( $('#div_dialog').css("display") == "block" ){
+			if( __dialog_stack.length ){
 				tabThroughPopupInputs();
 			}
 			
