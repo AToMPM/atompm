@@ -189,6 +189,42 @@ function __createEdge(segments,style,edgeId,linkuri)
 						 linkuri);
 	__icons[ids[0]]['edgesOut'].push(edgeId);
 	__icons[ids[1]]['edgesIn'].push(edgeId);
+    
+    // sort and draw
+    for (var id in __icons) {
+        __icons[id]['ordernr'] = undefined;
+    }
+    function getOrderNr(id) {
+        var icon = __icons[id];
+        if (icon['ordernr']) return;
+        if (__isConnectionType(id)) {
+            // I like my edges as I like my women: always on top
+            icon['ordernr'] = 9999;
+        } else if (icon['edgesIn'].length > 0) {
+            for (var edgeId in icon['edgesIn']) {
+                var associationid = __edges[icon['edgesIn'][edgeId]]['start']
+                if (__isContainmentConnectionType(associationid)) {
+                    getOrderNr(__edges[__icons[associationid]['edgesIn'][0]]['start']);
+                    icon['ordernr'] = __icons[__edges[__icons[associationid]['edgesIn'][0]]['start']]['ordernr'] + 1
+                }
+            }
+            if (!icon['ordernr']) icon['ordernr'] = 0;
+        } else {
+            icon['ordernr'] = 0;
+        }
+    }
+    for (var id in __icons) {
+        getOrderNr(id);
+    }
+    
+    Object.keys(__icons).concat().sort(function(a, b) {return __icons[a]['ordernr'] - __icons[b]['ordernr']}).forEach(function(el) {
+        __icons[el]['icon'].toFront();
+    });
+    Object.keys(__edges).forEach(function(el) {
+        // I like my edges as I like my women: always on top
+        __edges[el]['icon'].toFront();
+    });
+    
 	return edge;
 }
 
