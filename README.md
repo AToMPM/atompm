@@ -17,7 +17,7 @@ To run AToMPM on Windows, execute the `run.bat` script inside of the main AToMPM
 
 Download and unzip the AToMPM sources from https://msdl.uantwerpen.be/git/simon/AToMPM/archive/master.zip.
 
-To run AToMPM, execute the `run_AToMPM.sh` script inside of the main AToMPM folder.
+To run AToMPM, execute the `run_AToMPM.sh` script inside of the main AToMPM folder. The first time you run this script, all dependencies are automatically downloaded and installed in the `dependencies/` folder. If, for any reason, the download process is interrupted or you experience problems with AToMPM, remove the `dependencies/` folder and run the script again.
 
 ### Mac
 
@@ -32,3 +32,7 @@ To run AToMPM on Mac, follow these steps:
 * Execute `node httpwsd.js` in the main AToMPM folder
 * Execute `python mt\main.py` in the main AToMPM folder
 * Open a browser (preferably Chrome) and navigate to http://localhost:8124/atompm
+
+## Documentation
+
+Documentation can be found here: https://msdl.uantwerpen.be/documentation/AToMPM/index.html
