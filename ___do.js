@@ -52,7 +52,7 @@ exports.parallel = function parallel(actions) {
 // input of the second and the final output to the callback
 exports.chain = function chain(actions) {
   if (!(Object.prototype.toString.call(actions) === '[object Array]')) {
-    actions = Array.prototype.slice.call(actions);
+    actions = Array.prototype.slice.call(arguments);
   }
   return function(callback, errback) {
     var pos = 0;
