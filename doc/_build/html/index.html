@@ -1,0 +1,179 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AToMPM Documentation &mdash; AToMPM 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/mystyle.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="AToMPM 0.6 documentation" href="#" />
+    <link rel="next" title="Installation" href="installation.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">AToMPM 0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="atompm-documentation">
+<h1>AToMPM Documentation<a class="headerlink" href="#atompm-documentation" title="Permalink to this headline">¶</a></h1>
+<p>AToMPM (&#8220;A Tool for Multi-Paradigm Modelling&#8221;) is a (meta)modelling workbench, which allows language developers to create visual domain-specific languages, and domain experts to use these languages. A language is defined by its <em>abstract syntax</em> in a metamodel, its <em>concrete syntax(es)</em>, which define(s) how each abstract syntax element is visualized, and its <em>semantics definition(s)</em>, either operational (a simulator) or translational (by mapping onto a known semantic domain). AToMPM supports model transformations to model semantics.</p>
+<p>This documentation serves to introduce AToMPM to the two main user groups: language developers and language users.</p>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html"> Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#mac">Mac</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html"> Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#first-usage">First Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#the-atompm-user-interface">The AToMPM User Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#toolbars">Toolbars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#canvas">Canvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html#console">Console</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="new_language.html"> Creating a Modelling Language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="new_language.html#initializing">Initializing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="new_language.html#defining-abstract-syntax">Defining Abstract Syntax</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#associations">Associations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#cardinalities">Cardinalities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#inheritance">Inheritance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#constraints">Constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#actions">Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#triggers">Triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#action-library">Action Library</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="new_language.html#defining-concrete-syntax">Defining Concrete Syntax</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="new_language.html#mappers-and-parsers">Mappers and Parsers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="new_language.html#compiling">Compiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_language.html"> Using a Modelling Language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_language.html#loading-a-formalism-toolbar">Loading a Formalism Toolbar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_language.html#opening-a-model">Opening a Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_language.html#saving-a-model">Saving a Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_language.html#validating-a-model">Validating a Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modelling_transformation.html"> Modelling a Model Transformation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modelling_transformation.html#compiling-a-language-to-a-pattern-language">Compiling a Language to a Pattern Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelling_transformation.html#initializing-schedules-rules">Initializing Schedules/Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelling_transformation.html#the-rule-language">The Rule Language</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modelling_transformation.html#lhs-and-nac">LHS and NAC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modelling_transformation.html#rhs">RHS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modelling_transformation.html#the-motif-scheduling-language">The MoTif Scheduling Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelling_transformation.html#action-library">Action Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modelling_transformation.html#trafficlight-example">TrafficLight Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="executing_transformation.html"> Executing a Model Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html"> Troubleshooting</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AToMPM Documentation</a><ul>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">Installation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">AToMPM 0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Raphael Mannadiar, Simon Van Mierlo, Huseyin Ergin, Conner Hansen, Eugene Syriani, Jonathan Corley.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>
