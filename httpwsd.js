@@ -486,6 +486,8 @@ var httpserver = _http.createServer(
                              else {
                                  _fs.createReadStream(userdir+"Formalisms/__Templates__/MetamodelTemplate.model").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/"+formalism+".model"));
                                  _fs.createReadStream(userdir+"Formalisms/__Templates__/ConcreteSyntaxTemplate.model").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/"+formalism+".defaultIcons.model"));
+                                 _fs.createReadStream(userdir+"Formalisms/__Templates__/MetamodelTemplate.metamodel").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/"+formalism+".metamodel"));
+                                 _fs.createReadStream(userdir+"Formalisms/__Templates__/ConcreteSyntaxTemplate.defaultIcons.metamodel").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/"+formalism+".defaultIcons.metamodel"));
                                  _fs.createReadStream(userdir+"Formalisms/__Templates__/T_TransformationTemplate.model").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/OperationalSemantics/T_OperationalSemantics.model"));
                                  _fs.createReadStream(userdir+"Formalisms/__Templates__/T_TransformationTemplate.model").pipe(_fs.createWriteStream(userdir+"Formalisms/"+formalism+"/TranslationalSemantics/T_TranslationalSemantics.model"));
                                  __respond(resp,200);
