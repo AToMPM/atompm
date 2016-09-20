@@ -728,12 +728,12 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 				{
 					var edge = self.model.edges[i];
 					if( edge['src'] == _id && 
-						 (_dir == '>' || _dir == '*') &&
+						 (_dir == '>' || _dir == '*' || _dir == "out") &&
 						 (_type == '*' || self.model.nodes[edge['dest']]['$type'] == _type) &&
 						 ! _utils.contains(ids,edge['dest']) )
 						ids.push(edge['dest']);
 					else if( edge['dest'] == _id && 
-								(_dir == '<' || _dir == '*') &&
+								(_dir == '<' || _dir == '*' || _dir == "in") &&
 	  							(_type == '*' || self.model.nodes[edge['src']]['$type'] == _type) &&
 								! _utils.contains(ids,edge['src']) )
 						ids.push(edge['src']);

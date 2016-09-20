@@ -214,11 +214,11 @@ class DesignerAPI :
 			idx   = self._pl2gi[pLabel]
 			for e in self._graph.get_edgelist() :
 				if e[0] == idx and \
-					(dir == '>' or dir == '*') and \
+					(dir == '>' or dir == '*' or dir == "out") and \
 					(type == '*' or self._graph.vs[e[1]][HC.FULLTYPE] == type) :
 					pLabels.add(gi2pl[e[1]])
 				elif e[1] == idx and \
-					  (dir == '<' or dir == '*') and \
+					  (dir == '<' or dir == '*' or dir == "in") and \
 					  (type == '*' or self._graph.vs[e[0]][HC.FULLTYPE] == type) :
 					pLabels.add(gi2pl[e[0]])
 		return list(pLabels)
