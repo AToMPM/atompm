@@ -235,7 +235,7 @@ var httpserver = _http.createServer(
 			else if( req.method == 'POST' && url.pathname == '/user' )
 			{
 				var userdir = './users/'+url['query']['username'];
-				_path.exists(userdir,
+				_fs.exists(userdir,
 					function(exists)
 					{
 						if( exists )
