@@ -1,0 +1,176 @@
+{
+	"types": {
+		"State": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Open": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Closed": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Transition": [
+			{
+				"name": "condition",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "event",
+				"type": "string",
+				"default": ""
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "State"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"State": [
+			{
+				"dir": "out",
+				"type": "Transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Transition",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Open": [
+			{
+				"dir": "out",
+				"type": "Transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Transition",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Closed": [
+			{
+				"dir": "out",
+				"type": "Transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Transition",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Transition": [
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Open",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Open",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Closed",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Closed",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"State": {
+			"State": [
+				"Transition"
+			],
+			"Open": [
+				"Transition"
+			],
+			"Closed": [
+				"Transition"
+			]
+		},
+		"Open": {
+			"State": [
+				"Transition"
+			],
+			"Open": [
+				"Transition"
+			],
+			"Closed": [
+				"Transition"
+			]
+		},
+		"Closed": {
+			"State": [
+				"Transition"
+			],
+			"Open": [
+				"Transition"
+			],
+			"Closed": [
+				"Transition"
+			]
+		}
+	},
+	"connectorTypes": {
+		"Transition": "visual"
+	},
+	"types2parentTypes": {
+		"State": [],
+		"Open": [
+			"State"
+		],
+		"Closed": [
+			"State"
+		],
+		"Transition": []
+	}
+}

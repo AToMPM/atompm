@@ -1,0 +1,67 @@
+    <class name="Translator" default="true">
+        <relationships>
+            <association name="model" class="Train" />
+        </relationships>
+		<constructor>
+			<parameter name="root"/>
+			<body>
+				self.root = root
+			</body>
+		</constructor>
+        <scxml initial="init">
+			<state id="init">
+				<onentry>
+					<raise scope="cd" event="create_instance">
+						<parameter expr="'model'"/>
+						<parameter expr="'Train'"/>
+						<parameter expr="self.root"/>
+					</raise>
+				</onentry>
+				<transition event="instance_created" target="../broadcast_input">
+					<parameter name="instancename"/>
+					<raise scope="cd" event="start_instance">
+						<parameter expr="instancename"/>
+					</raise>
+				</transition>
+			</state>
+			
+            <state id="broadcast_input">
+                <transition port="tkinter_input" event="accel" target=".">
+                    <parameter name="acceleration"/>
+                    <raise scope="broad" event="accel">
+                        <parameter expr="acceleration"/>
+                    </raise>
+                </transition>
+                <transition port="tkinter_input" event="open" target=".">
+                    <raise scope="broad" event="open"/>
+                </transition>
+                <transition port="tkinter_input" event="close" target=".">
+                    <raise scope="broad" event="close"/>
+                </transition>
+                <transition port="tkinter_input" event="pause" target=".">
+                    <raise scope="broad" event="pause"/>
+                </transition>
+                <transition port="tkinter_input" event="continue" target=".">
+                    <raise scope="broad" event="continue"/>
+                </transition>
+                <transition port="tkinter_input" event="awake" target=".">
+                    <raise scope="broad" event="awake"/>
+                </transition>
+                <transition port="tkinter_input" event="red_light" target=".">
+                    <raise scope="broad" event="red_light"/>
+                </transition>
+                <transition port="tkinter_input" event="yellow_light" target=".">
+                    <raise scope="broad" event="yellow_light"/>
+                </transition>
+                <transition port="tkinter_input" event="green_light" target=".">
+                    <raise scope="broad" event="green_light"/>
+                </transition>
+                <transition port="tkinter_input" event="enter" target=".">
+                    <raise scope="broad" event="enter"/>
+                </transition>
+                <transition port="tkinter_input" event="leave" target=".">
+                    <raise scope="broad" event="leave"/>
+                </transition>
+            </state>
+        </scxml>
+    </class>

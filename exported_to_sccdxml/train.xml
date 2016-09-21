@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram author="Yentl Van Tendeloo" name="Train Driving interface - Tkinter version">
+    <description>
+        Tkinter Train driving interface.
+    </description>
+    <top>
+       import json
+       import httplib
+    </top>
+
+    <inport name="tkinter_input"/>
+    <outport name="tkinter_output"/>
+
+    <class src="classes/model.xml"/>
+    <class src="classes/translator.xml" default="true"/>
+</diagram>
