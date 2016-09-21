@@ -35,5 +35,5 @@ To install AToMPM on Mac, follow these steps:
 To run AToMPM on Mac, follow these steps:
 
 * Execute `node httpwsd.js` in the main AToMPM folder
-* Execute `python mt\main.py` in the main AToMPM folder
+* Execute `python mt\\main.py` in the main AToMPM folder
 * Open a browser (preferably Chrome) and navigate to http://localhost:8124/atompm

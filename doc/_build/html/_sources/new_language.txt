@@ -149,6 +149,7 @@ A class or association can have attributes. These attributes are represented by 
     * *int*: an integer
     * *float*: a floating-point number
     * *string*: a string
+    * *boolean*: a boolean
     * *code*: a block of code
     * *file<pattern>*: a string which specifies the locatation of a file (such as a model). Attribute values have to match the specified pattern.
     * *map<[keys...], [base-types...]>*: a dictionary with specified keys, and for each key, a value of the specified base-type.
@@ -229,7 +230,7 @@ The events that can trigger are:
 * **post-delete**, which triggers just after an instance is deleted
 * **post-edit**, which triggers just after an instance is edited
 
-.. note:: A constraint without a trigger specified triggers when the user presses the *verify* button on the *MainMenu* toolbar.
+.. note:: A constraint without a trigger is evaluated when the user presses the *verify* button on the *MainMenu* toolbar.
 
 .. _action-library:
 

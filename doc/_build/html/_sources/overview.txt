@@ -179,8 +179,6 @@ When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source
 
 .. |drawing_edge| image:: img/drawing_edge.png
     :class: inline-image
-    
-.. image:: img/drawing_edge.png
 
 .. rst-class:: table-with-borders
 
@@ -249,4 +247,4 @@ Console
 
 The developer console (press F12 in Chrome/Firefox) contains many useful debugging messages. Especially when :ref:`executing-a-model-transformation`, the console contains useful information on which rules were executed and whether they failed or succeeded.
     
-.. image:: img/console.png.
+.. image:: img/console.png
