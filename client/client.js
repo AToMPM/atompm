@@ -507,6 +507,28 @@ function _highlight(args/*asid[,followCrossFormalismLinks,timeout]*/)
 	}
 }
 
+function _highlightState(args/*asid[,followCrossFormalismLinks,timeout]*/)
+{
+    var uri		= __asid2csuri(args['asid']),
+        fcfl		= args['followCrossFormalismLinks'],
+        timeout	= args['timeout'];
+    __highlight(uri,fcfl,timeout);
+}
+
+/* unhighlight any highlighted nodes - sadaf */
+function _unhighlight()
+{
+    __unhighlight();
+}
+
+/* unhighlight any highlighted nodes - sadaf */
+function _unhighlightState(args/*asid*/)
+{
+    //var uri		= __asid2csuri(args['asid']);
+    //__icons[uri]['icon'].unhighlight();
+	__unhighlight(__asid2csuri(args['asid']));
+}
+
 
 /* interface to WindowManagement.spawnClient() 'USER' API function */
 function _loadModelInNewWindow(args/*fname[,callback-url]*/)

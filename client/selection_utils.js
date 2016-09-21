@@ -20,7 +20,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 
 var __selectionOverlay;
-var __highlighted;
+var __highlighted = [];
 var __selection;
 
 function __isSelected(it)
@@ -186,13 +186,13 @@ function __flash(uri,color,timeout)
 		'turnOff' :: a function that unhighlights 'uri' and nodes from step 2. if 
 						 any... the try/catch blocks ensure safety against deletion of
 						 highlighted icons */
-function __highlight(uri,followCrossFormalismLinks,timeout)
+function __highlight(uri,followCrossFormalismLinks,timeout,color)
 {
 	if( ! isHighlighted(uri) )
 	{
-		__unhighlight();
+		__unhighlight(uri);
 
-		__icons[uri]['icon'].highlight({'color':'DarkTurquoise','fill':true});
+		__icons[uri]['icon'].highlight({'color':color || 'DarkTurquoise','fill':true});
 
 		if( followCrossFormalismLinks != undefined )
 		{
@@ -209,7 +209,7 @@ function __highlight(uri,followCrossFormalismLinks,timeout)
 		if( timeout != undefined )
 			var tid = window.setTimeout(__unhighlight,timeout);
 
-		__highlighted = 
+		__highlighted.push( 
 			{'uri':uri,
 			 'turnOff':
 				 function() 
@@ -225,23 +225,28 @@ function __highlight(uri,followCrossFormalismLinks,timeout)
 							} );
 					 if( timeout != undefined )
 						 window.clearTimeout(tid);
-				 }};
+				 }});
 	}
 }
 
 
 function isHighlighted(uri)
 {
-	return __highlighted != undefined && uri == __highlighted['uri'];
+	return __highlighted.length > 0 && __highlighted.filter(function(hl) {return uri == hl['uri']}).length == 1;
 }
 
 
-function __unhighlight()
+function __unhighlight(uri)
 {
-	if( __highlighted )
+	if( __highlighted.length > 0 )
 	{
-		__highlighted.turnOff();
-		__highlighted = undefined;
+		__highlighted.filter(function(hl) {return !uri || uri == hl['uri']}).forEach(function(hl) {hl.turnOff()})
+		if (!uri) {
+			__highlighted = [];
+		} else {
+			__highlighted = __highlighted.filter(function(hl) {return uri != hl['uri']})
+		}
+		
 	}
 }
 
