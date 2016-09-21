@@ -1,0 +1,8 @@
+[%
+	var basePath : String := URI + DIR;
+	var filename : String := 'TrafficLight.py';
+	var filepath : String := URI + filename;
+	var t : Template := TemplateFactory.load(basePath + 'traffic_template.egl');  
+	t.process();
+	t.generate(filepath);
+%]
