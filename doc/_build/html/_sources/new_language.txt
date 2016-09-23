@@ -152,18 +152,20 @@ A class or association can have attributes. These attributes are represented by 
     * *boolean*: a boolean
     * *code*: a block of code
     * *file<pattern>*: a string which specifies the locatation of a file (such as a model). Attribute values have to match the specified pattern.
-    * *map<[keys...], [base-types...]>*: a dictionary with specified keys, and for each key, a value of the specified base-type.
+    * *map<[keys...],[base-types...]>*: a dictionary with specified keys, and for each key, a value of the specified base-type.
     * *list<base-type>*: a list of base-type values.
     * *ENUM(options...)*: a choice of several options.
     * *$ATTRIBUTE*: *map<[name,type,default],[string,string,string]>*
     * *$CARDINALITY*: *map<[dir,type,min,max],[string,string,string,string]>*
-    * *$EVENT*: *ENUM( pre-connect , pre-create , pre-disconnect , pre-delete , pre-edit , post-connect , post-create , post-disconnect , post-delete , post-edit )*
+    * *$EVENT*: *ENUM(pre-connect,pre-create,pre-disconnect,pre-delete,pre-edit,post-connect,post-create,post-disconnect,post-delete,post-edit)*
     * *$EVENT_HANDLER*: *map<[name,event,code],[string,$EVENT,code]>*	
     * *$ARG*: *map<[name,type],[string,string]>*	
     * *$METHOD*: *map<[name,args,returntype,body],[string,list<$ARG>,string,code]>*
 * **default** specifies the default value of the attribute.
 
 .. warning:: Default values need to evaluate to values that are of the specified type!
+
+.. warning:: When defining a map/ENUM, its keys/options are defined as a comma-separated list. Do NOT insert any whitespaces before or after the comma's, as these will be seen as part of the key/option name.
 
 Depending on the type, the editor presented to the user is different. For an int/float/string it is an input field, for code a text area, for a file the user is presented with a file browser, etc.
 
@@ -187,6 +189,8 @@ As a local constraint:
 
 .. image:: img/local_constraint.png
 
+.. warning:: Multi-line local constraints need to have each line end with "\\".
+
 One disadvantage of this constraint is that the minimum number of instances (also 1) is not checked. A global constraint solves this:
 
 .. image:: img/global_constraint.png
@@ -206,6 +210,8 @@ For example, let's model an action that sets the *clock* attribute of a *Time* i
 As a local action:
 
 .. image:: img/local_action.png
+
+.. warning:: Multi-line local actions need to have each line end with "\\".
 
 As a global action:
 
@@ -285,6 +291,8 @@ Action Library
 Defining Concrete Syntax
 ------------------------
 
+.. image:: img/cs_toolbar.png
+
 The concrete syntax definition of a language is a model in the */Formalisms/__LanguageSyntax__/ConcreteSyntax.defaultIcons.metamodel* language. It defines for each non-abstract class and association a visual icon.
 
 There are two "main" classes: **Icon** and **Link**. The first is a container for visual elements that make up the visualization of a class instance. The second is a definition of the visualization of an association instance (an arrow). For example, this is the definition of the concrete syntax of the *TrafficLights* language:
@@ -294,6 +302,34 @@ There are two "main" classes: **Icon** and **Link**. The first is a container fo
 .. warning:: Naming is very important. The *typename* attribute of an icon needs to be *<class-name>*Icon, where *<class-name>* is the name of the class, and the *typename* attribute of a link needs to be *<association-name>*Link, where *<association-name>* is the name of the association.
 
 .. note:: For Icons, place its contents as close as possible to the top-left corner. This ensures that the icon is instantiated as close as possible to the mouse position.
+
+*Icon* and *Link* contents are modelled as instances of eight classes:
+
+#. *Rectangle*
+    * *width* defines the width (in pixels).
+    * *height* defines the width (in pixels).
+    * *cornerRadius* defines the amount of rounding of the corners (as a percentage).
+#. *Text*
+    * *textContent* defines the text content of the text element.
+#. *Circle*
+    * *r* defines the readius of the instantiated rectangle (in pixels).
+#. *Ellips*
+    * *rx* defines the radius on the x-axis (in pixels).
+    * *ry* defines the radius on the y-axis (in pixels).
+#. *Polygon*
+    * *r* defines the radius (in pixels).
+    * *sides* defines the amount of sides.
+#. *Star*
+    * *r* defines the radius (in pixels).
+    * *rays* defines the amount of rays.
+#. *Path*
+    * *segments* defines the segments of the path -- this allows for arbitrary shapes using the `SVG Paths <https://www.w3.org/TR/SVG/paths.html>`_ syntax.
+#. *Image*
+    * *src* specifies where the image can be found. This is a path relative to your user folder. It is recommended to put your images in your formalism folder (for example */Formalisms/<FormalismName>/images/).
+    * *width* defines the width of the image (in pixels).
+    * *height* defines the width of the image (in pixels).
+    
+.. warning:: Scaling your elements with the geometry controls does not affect the size of the instantiated elements! You need to change the *width*/*height*/*r*/*rx*/*ry* attributes (depending on the element).
 
 Mappers and Parsers
 ^^^^^^^^^^^^^^^^^^^

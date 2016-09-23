@@ -114,18 +114,19 @@ When in the **DEFAULT** state,
 +---------------------------------+-----------------------------------------------------------------------------+
 | Select an entity                | Left-click any entity. This will also select the entity's contents, if      |
 |                                 | any. To select a container without selecting its contents, SHIFT-Left-click |
-|                                 | it.                                                                         |
+|                                 | it. Enters the **SOMETHING SELECTED** state.                                |
 +---------------------------------+-----------------------------------------------------------------------------+
 | Select one or more entity       | Left-press anywhere on Canvas, drag selection box around desired            |
-|                                 | entity or entities and release.                                             |
+|                                 | entity or entities and release. Enters the **SOMETHING SELECTED** state.    |
 +---------------------------------+-----------------------------------------------------------------------------+
-| Connect entities                | Right-press an entity, drag to-be edge to target entity and release.        |
+| Connect entities                | Right-press an entity (enters the **DRAWING EDGE** state), drag to-be edge  |
+|                                 | to target entity and release.                                               |
 +---------------------------------+-----------------------------------------------------------------------------+
 | Edit icon text                  | SHIFT-Middle-click any text from any icon on the Canvas (this               |
 |                                 | will display a very simple text editor).                                    |
 +---------------------------------+-----------------------------------------------------------------------------+
 | Edit entity                     | Middle-click or SHIFT-Left-click any entity on the Canvas (this will        | 
-|                                 | display the abstract attribute editor).                                     |
+|                                 | display the attribute editor).                                              |
 +---------------------------------+-----------------------------------------------------------------------------+
 
 When in the **SOMETHING SELECTED** state (*i.e.*, when one or more entity is selected), |something_selected|
@@ -138,21 +139,21 @@ When in the **SOMETHING SELECTED** state (*i.e.*, when one or more entity is sel
 +--------------------------------------+-----------------------------------------------------------------------------+
 | Action                               | Shortcut(s)                                                                 |
 +======================================+=============================================================================+
-| Unselect selection                   | Right-/Left-/Middle-click anywhere on the Canvas, or click ESC.             |
+| Unselect selection                   | Right-/Left-/Middle-click anywhere on the Canvas, or click ESC. Enters the  |
+|                                      | **DEFAULT** state.                                                          |
 +--------------------------------------+-----------------------------------------------------------------------------+
 | Move selection                       | Left-press selection, drag preview overlay to desired position and          |
-|                                      | release.                                                                    |
+|                                      | release. Enters the **DEFAULT** state.                                      |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Delete selection                     | Press DELETE.                                                               |
+| Delete selection                     | Press DELETE. Enters the **DEFAULT** state.                                 |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Edit first entity in selection       | Click INSERT, or click COMMAND (this will display the abstract attribute    |
-|                                      | editor).                                                                    |
+| Edit first entity in selection       | Click INSERT, or click COMMAND (this will display the attribute editor.     |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Enter geometry editing mode          | Click CTRL (this will display geometry controls).                           |
+| Change the geometry of the selection | Click CTRL. Enters the **GEOMETRY EDITING** state.                          |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Enter edge editing mode              | Click SHIFT (this will display editable edge control points).               |
+| Edit the selected edge               | Click SHIFT. Enters the **EDGE EDITING** state.                             |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Snap selection to nearest grid point | Click TAB.                                                                  |
+| Snap selection to nearest grid point | Click TAB. Enters the **DEFAULT** state.                                    |
 +--------------------------------------+-----------------------------------------------------------------------------+
 
 When in the **DRAGGING SELECTION** state (*i.e.*, when left-dragging one or more selected entity), |dragging_selection|
@@ -165,14 +166,14 @@ When in the **DRAGGING SELECTION** state (*i.e.*, when left-dragging one or more
 +--------------------------------------+-----------------------------------------------------------------------------+
 | Action                               | Shortcut(s)                                                                 |
 +======================================+=============================================================================+
-| Insert selection into container      | Left-release on top of the target entity.                                   |
+| Insert selection into container      | Left-release on top of the target entity. Enters the **DEFAULT** state.     |
 +--------------------------------------+-----------------------------------------------------------------------------+
 | Remove selection from container      | Left-release outside of current container. Containment relationships can    |
-|                                      | also be deleted manually if visible.                                        |
+|                                      | also be deleted manually if visible. Enters the **DEFAULT** state.          |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Confirm motion                       | Left-release on the Canvas.                                                 |
+| Confirm motion                       | Left-release on the Canvas. Enters the **DEFAULT** state.                   |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Cancel motion                        | Click ESC.                                                                  |
+| Cancel motion                        | Click ESC. Enters the **DEFAULT** state.                                    |
 +--------------------------------------+-----------------------------------------------------------------------------+
 
 When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source to target entities), |drawing_edge|
@@ -191,7 +192,7 @@ When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source
 +---------------------------------------+-----------------------------------------------------------------------------+
 | Delete last control point             | Middle-click anywhere, or click ALT.                                        |
 +---------------------------------------+-----------------------------------------------------------------------------+
-| Cancel current edge                   | Left-release anywhere on the Canvas.                                        |
+| Cancel current edge                   | Left-release anywhere on the Canvas. Enters the **DEFAULT** state.          |
 +---------------------------------------+-----------------------------------------------------------------------------+
 
 When in the **EDGE EDITING** state, |edge_editing|
@@ -213,6 +214,9 @@ When in the **EDGE EDITING** state, |edge_editing|
 +---------------------------------------+-----------------------------------------------------------------------------+
 | Delete control point                  | Middle-click any control point (extremities and the central control         |
 |                                       | point cannot be removed).                                                   |
++---------------------------------------+-----------------------------------------------------------------------------+
+| Finish editing                        | Right-/Left-/Middle-click anywhere on the Canvas, or click ESC. Enters the  |
+|                                       | **DEFAULT** state.                                                          |
 +---------------------------------------+-----------------------------------------------------------------------------+
 
 When in the **GEOMETRY EDITING** state, |geometry_editing|
@@ -237,9 +241,10 @@ When in the **GEOMETRY EDITING** state, |geometry_editing|
 | Rotate                                | Mouse-wheel up/down on rotation icon until preview overlay reaches desired  |
 |                                       | shape.                                                                      |
 +---------------------------------------+-----------------------------------------------------------------------------+
-| Cancel changes                        | Right-/Left-/Middle-click anywhere on the Canvas, or click ESC.             |
+| Cancel changes                        | Right-/Left-/Middle-click anywhere on the Canvas, or click ESC. Enters the  |
+|                                       | **DEFAULT** state.                                                          |
 +---------------------------------------+-----------------------------------------------------------------------------+
-| Confirm changes                       | Left-click confirmation icon.                                               |
+| Confirm changes                       | Left-click confirmation icon. Enters the **DEFAULT** state.                 |
 +---------------------------------------+-----------------------------------------------------------------------------+
 
 Console

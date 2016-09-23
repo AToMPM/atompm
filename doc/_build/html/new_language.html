@@ -178,12 +178,12 @@
 <li><em>boolean</em>: a boolean</li>
 <li><em>code</em>: a block of code</li>
 <li><em>file&lt;pattern&gt;</em>: a string which specifies the locatation of a file (such as a model). Attribute values have to match the specified pattern.</li>
-<li><em>map&lt;[keys...], [base-types...]&gt;</em>: a dictionary with specified keys, and for each key, a value of the specified base-type.</li>
+<li><em>map&lt;[keys...],[base-types...]&gt;</em>: a dictionary with specified keys, and for each key, a value of the specified base-type.</li>
 <li><em>list&lt;base-type&gt;</em>: a list of base-type values.</li>
 <li><em>ENUM(options...)</em>: a choice of several options.</li>
 <li><em>$ATTRIBUTE</em>: <em>map&lt;[name,type,default],[string,string,string]&gt;</em></li>
 <li><em>$CARDINALITY</em>: <em>map&lt;[dir,type,min,max],[string,string,string,string]&gt;</em></li>
-<li><em>$EVENT</em>: <em>ENUM( pre-connect , pre-create , pre-disconnect , pre-delete , pre-edit , post-connect , post-create , post-disconnect , post-delete , post-edit )</em></li>
+<li><em>$EVENT</em>: <em>ENUM(pre-connect,pre-create,pre-disconnect,pre-delete,pre-edit,post-connect,post-create,post-disconnect,post-delete,post-edit)</em></li>
 <li><em>$EVENT_HANDLER</em>: <em>map&lt;[name,event,code],[string,$EVENT,code]&gt;</em></li>
 <li><em>$ARG</em>: <em>map&lt;[name,type],[string,string]&gt;</em></li>
 <li><em>$METHOD</em>: <em>map&lt;[name,args,returntype,body],[string,list&lt;$ARG&gt;,string,code]&gt;</em></li>
@@ -198,6 +198,10 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">Default values need to evaluate to values that are of the specified type!</p>
 </div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When defining a map/ENUM, its keys/options are defined as a comma-separated list. Do NOT insert any whitespaces before or after the comma&#8217;s, as these will be seen as part of the key/option name.</p>
+</div>
 <p>Depending on the type, the editor presented to the user is different. For an int/float/string it is an input field, for code a text area, for a file the user is presented with a file browser, etc.</p>
 </div>
 <div class="section" id="inheritance">
@@ -211,6 +215,10 @@
 <p>A constraint needs to evaluate to a boolean value. The constraint code is written in Javascript. This means <strong>the last statement executed by the constraint needs to evaluate to a boolean value</strong>. For example, let&#8217;s model the constraint that only one instance of the <em>Time</em> class can be instantiated.</p>
 <p>As a local constraint:</p>
 <img alt="_images/local_constraint.png" src="_images/local_constraint.png" />
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Multi-line local constraints need to have each line end with &#8220;\&#8221;.</p>
+</div>
 <p>One disadvantage of this constraint is that the minimum number of instances (also 1) is not checked. A global constraint solves this:</p>
 <img alt="_images/global_constraint.png" src="_images/global_constraint.png" />
 <p>This constraint checks, when the user presses the <em>validate</em> button on the <em>MainMenu</em> toolbar, whether exactly one instance of the <em>Time</em> class is instantiated. For more information on which functions are available, see <a class="reference internal" href="#action-library"><span class="std std-ref">Action Library</span></a>.</p>
@@ -222,6 +230,10 @@
 <p>For example, let&#8217;s model an action that sets the <em>clock</em> attribute of a <em>Time</em> instance to 0 whenever a <em>Time</em> instance is created. Note that this is not really necessary, as the default value already makes sure the attribute is correctly initialized.</p>
 <p>As a local action:</p>
 <img alt="_images/local_action.png" src="_images/local_action.png" />
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Multi-line local actions need to have each line end with &#8220;\&#8221;.</p>
+</div>
 <p>As a global action:</p>
 <img alt="_images/global_action.png" src="_images/global_action.png" />
 <p>One major disadvantage of the global action is that the clock will be set to 0 every time an instance is created, regardless of its type.</p>
@@ -347,6 +359,7 @@ do not trigger pre-editing constraints and post-editing actions).</td>
 </div>
 <div class="section" id="defining-concrete-syntax">
 <span id="id12"></span><h2>Defining Concrete Syntax<a class="headerlink" href="#defining-concrete-syntax" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/cs_toolbar.png" src="_images/cs_toolbar.png" />
 <p>The concrete syntax definition of a language is a model in the <em>/Formalisms/__LanguageSyntax__/ConcreteSyntax.defaultIcons.metamodel</em> language. It defines for each non-abstract class and association a visual icon.</p>
 <p>There are two &#8220;main&#8221; classes: <strong>Icon</strong> and <strong>Link</strong>. The first is a container for visual elements that make up the visualization of a class instance. The second is a definition of the visualization of an association instance (an arrow). For example, this is the definition of the concrete syntax of the <em>TrafficLights</em> language:</p>
 <img alt="_images/trafficlights_cs.png" src="_images/trafficlights_cs.png" />
@@ -357,6 +370,84 @@ do not trigger pre-editing constraints and post-editing actions).</td>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">For Icons, place its contents as close as possible to the top-left corner. This ensures that the icon is instantiated as close as possible to the mouse position.</p>
+</div>
+<p><em>Icon</em> and <em>Link</em> contents are modelled as instances of eight classes:</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt><em>Rectangle</em></dt>
+<dd><ul class="first last simple">
+<li><em>width</em> defines the width (in pixels).</li>
+<li><em>height</em> defines the width (in pixels).</li>
+<li><em>cornerRadius</em> defines the amount of rounding of the corners (as a percentage).</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Text</em></dt>
+<dd><ul class="first last simple">
+<li><em>textContent</em> defines the text content of the text element.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Circle</em></dt>
+<dd><ul class="first last simple">
+<li><em>r</em> defines the readius of the instantiated rectangle (in pixels).</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Ellips</em></dt>
+<dd><ul class="first last simple">
+<li><em>rx</em> defines the radius on the x-axis (in pixels).</li>
+<li><em>ry</em> defines the radius on the y-axis (in pixels).</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Polygon</em></dt>
+<dd><ul class="first last simple">
+<li><em>r</em> defines the radius (in pixels).</li>
+<li><em>sides</em> defines the amount of sides.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Star</em></dt>
+<dd><ul class="first last simple">
+<li><em>r</em> defines the radius (in pixels).</li>
+<li><em>rays</em> defines the amount of rays.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Path</em></dt>
+<dd><ul class="first last simple">
+<li><em>segments</em> defines the segments of the path &#8211; this allows for arbitrary shapes using the <a class="reference external" href="https://www.w3.org/TR/SVG/paths.html">SVG Paths</a> syntax.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Image</em></dt>
+<dd><ul class="first last simple">
+<li><em>src</em> specifies where the image can be found. This is a path relative to your user folder. It is recommended to put your images in your formalism folder (for example <a href="#id13"><span class="problematic" id="id14">*</span></a>/Formalisms/&lt;FormalismName&gt;/images/).</li>
+<li><em>width</em> defines the width of the image (in pixels).</li>
+<li><em>height</em> defines the width of the image (in pixels).</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Scaling your elements with the geometry controls does not affect the size of the instantiated elements! You need to change the <em>width</em>/<em>height</em>/<em>r</em>/<em>rx</em>/<em>ry</em> attributes (depending on the element).</p>
 </div>
 <div class="section" id="mappers-and-parsers">
 <h3>Mappers and Parsers<a class="headerlink" href="#mappers-and-parsers" title="Permalink to this headline">¶</a></h3>

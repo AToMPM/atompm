@@ -152,14 +152,15 @@
 <tr class="row-even"><td>Select an entity</td>
 <td>Left-click any entity. This will also select the entity&#8217;s contents, if
 any. To select a container without selecting its contents, SHIFT-Left-click
-it.</td>
+it. Enters the <strong>SOMETHING SELECTED</strong> state.</td>
 </tr>
 <tr class="row-odd"><td>Select one or more entity</td>
 <td>Left-press anywhere on Canvas, drag selection box around desired
-entity or entities and release.</td>
+entity or entities and release. Enters the <strong>SOMETHING SELECTED</strong> state.</td>
 </tr>
 <tr class="row-even"><td>Connect entities</td>
-<td>Right-press an entity, drag to-be edge to target entity and release.</td>
+<td>Right-press an entity (enters the <strong>DRAWING EDGE</strong> state), drag to-be edge
+to target entity and release.</td>
 </tr>
 <tr class="row-odd"><td>Edit icon text</td>
 <td>SHIFT-Middle-click any text from any icon on the Canvas (this
@@ -167,7 +168,7 @@ will display a very simple text editor).</td>
 </tr>
 <tr class="row-even"><td>Edit entity</td>
 <td>Middle-click or SHIFT-Left-click any entity on the Canvas (this will
-display the abstract attribute editor).</td>
+display the attribute editor).</td>
 </tr>
 </tbody>
 </table>
@@ -184,27 +185,27 @@ display the abstract attribute editor).</td>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Unselect selection</td>
-<td>Right-/Left-/Middle-click anywhere on the Canvas, or click ESC.</td>
+<td>Right-/Left-/Middle-click anywhere on the Canvas, or click ESC. Enters the
+<strong>DEFAULT</strong> state.</td>
 </tr>
 <tr class="row-odd"><td>Move selection</td>
 <td>Left-press selection, drag preview overlay to desired position and
-release.</td>
+release. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 <tr class="row-even"><td>Delete selection</td>
-<td>Press DELETE.</td>
+<td>Press DELETE. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 <tr class="row-odd"><td>Edit first entity in selection</td>
-<td>Click INSERT, or click COMMAND (this will display the abstract attribute
-editor).</td>
+<td>Click INSERT, or click COMMAND (this will display the attribute editor.</td>
 </tr>
-<tr class="row-even"><td>Enter geometry editing mode</td>
-<td>Click CTRL (this will display geometry controls).</td>
+<tr class="row-even"><td>Change the geometry of the selection</td>
+<td>Click CTRL. Enters the <strong>GEOMETRY EDITING</strong> state.</td>
 </tr>
-<tr class="row-odd"><td>Enter edge editing mode</td>
-<td>Click SHIFT (this will display editable edge control points).</td>
+<tr class="row-odd"><td>Edit the selected edge</td>
+<td>Click SHIFT. Enters the <strong>EDGE EDITING</strong> state.</td>
 </tr>
 <tr class="row-even"><td>Snap selection to nearest grid point</td>
-<td>Click TAB.</td>
+<td>Click TAB. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 </tbody>
 </table>
@@ -221,17 +222,17 @@ editor).</td>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Insert selection into container</td>
-<td>Left-release on top of the target entity.</td>
+<td>Left-release on top of the target entity. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 <tr class="row-odd"><td>Remove selection from container</td>
 <td>Left-release outside of current container. Containment relationships can
-also be deleted manually if visible.</td>
+also be deleted manually if visible. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 <tr class="row-even"><td>Confirm motion</td>
-<td>Left-release on the Canvas.</td>
+<td>Left-release on the Canvas. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 <tr class="row-odd"><td>Cancel motion</td>
-<td>Click ESC.</td>
+<td>Click ESC. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 </tbody>
 </table>
@@ -257,7 +258,7 @@ also be deleted manually if visible.</td>
 <td>Middle-click anywhere, or click ALT.</td>
 </tr>
 <tr class="row-odd"><td>Cancel current edge</td>
-<td>Left-release anywhere on the Canvas.</td>
+<td>Left-release anywhere on the Canvas. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 </tbody>
 </table>
@@ -286,6 +287,10 @@ point to previous control point</td>
 <tr class="row-odd"><td>Delete control point</td>
 <td>Middle-click any control point (extremities and the central control
 point cannot be removed).</td>
+</tr>
+<tr class="row-even"><td>Finish editing</td>
+<td>Right-/Left-/Middle-click anywhere on the Canvas, or click ESC. Enters the
+<strong>DEFAULT</strong> state.</td>
 </tr>
 </tbody>
 </table>
@@ -318,10 +323,11 @@ desired shape.</td>
 shape.</td>
 </tr>
 <tr class="row-even"><td>Cancel changes</td>
-<td>Right-/Left-/Middle-click anywhere on the Canvas, or click ESC.</td>
+<td>Right-/Left-/Middle-click anywhere on the Canvas, or click ESC. Enters the
+<strong>DEFAULT</strong> state.</td>
 </tr>
 <tr class="row-odd"><td>Confirm changes</td>
-<td>Left-click confirmation icon.</td>
+<td>Left-click confirmation icon. Enters the <strong>DEFAULT</strong> state.</td>
 </tr>
 </tbody>
 </table>
