@@ -549,14 +549,14 @@ WindowManagement = function(){
                         if (file_name != null) {
                             file_name = file_name.replace(/^\s+|\s+$/g, ''); // trim
                             if (!file_name.match(/^[a-zA-Z0-9_\s\.]+$/i)) {
-                                feedback.html("invalid folder name: " + file_name);
+                                feedback.html("invalid file name: " + file_name);
                             } else {
-                                DataUtils.renameInCloud("/" + window.localStorage.getItem('user') + value.slice(0, -1) + ".file", file_name, function(statusCode,resp)
+                                DataUtils.renameInCloud("/" + window.localStorage.getItem('user') + value + ".file", file_name, function(statusCode,resp)
                                     {
                                         if( ! utils.isHttpSuccessCode(statusCode) ) {
                                             feedback.html(resp);
                                         } else {
-                                            var matches = value.match(/^\/(.*\/)?(.*)\/$/),
+                                            var matches = value.match(/^\/(.*\/)?(.*)$/),
                                                 newvalue = "/" + (matches[1] || "") + file_name;
                                             var idx = fnames.indexOf(value);
                                             if (idx >= 0) {
