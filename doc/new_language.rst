@@ -274,6 +274,7 @@ Action Library
 |                                 |                                     | notion of full types is best explained by example: the full type of a         |
 |                                 |                                     | SimpleClassDiagram.Class entity is                                            |
 |                                 |                                     | "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/Class". |
+|                                 |                                     | To match any type, use "*".                                                   |
 +---------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | print(msg)                      | * *msg*: string                     | Print the given string to the console that launched the AToMPM back-end.      |
 +---------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
