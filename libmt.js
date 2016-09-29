@@ -303,7 +303,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 					[{'name':'__pLabel',			  'type':'string',	'default':''},
 					 {'name':'__pPivotIn',			  'type':'string',	'default':''}, /* hergin motif-integration */
 					 {'name':'__pPivotOut',			  'type':'string',	'default':''}, /* hergin motif-integration */
-					 {'name':'__pMatchSubtypes', 'type':'boolean',	'default':false}];
+					 {'name':'__pMatchSubtypes', 'type':'boolean',	'default':true}];
 				for( var i in asmm.types[t] )
 					patternTypes['__p'+t].push(
 						{'name':asmm.types[t][i]['name'],
