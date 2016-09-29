@@ -988,6 +988,8 @@ class PyTCoreAbstractionLayer :
         NOTE: this function assumes that feedback for the last step has already
                 been received '''
     def step(self) :
+        if not hasattr(self, 'start_time'):         
+            self.start_time = clock()
         if self._execmode == 'PLAY' :
             pass
         else : 
