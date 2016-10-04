@@ -8841,7 +8841,7 @@
 							"77": {
 								"textContent": {
 									"type": "string",
-									"value": "1..*"
+									"value": "*"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -9125,7 +9125,7 @@
 							"77": {
 								"textContent": {
 									"type": "string",
-									"value": "1..*"
+									"value": "*"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -13141,8 +13141,7 @@
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons",
-			"/Formalisms/__Transformations__/Transformation/MoTif.defaultIcons"
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons"
 		]
 	},
 	"asm": {
@@ -13181,20 +13180,20 @@
 						{
 							"dir": "in",
 							"type": "initial",
-							"min": "",
-							"max": "1"
+							"min": 0,
+							"max": 1
 						},
 						{
 							"dir": "in",
 							"type": "branch",
-							"min": "",
-							"max": "1"
+							"min": 0,
+							"max": 1
 						},
 						{
 							"dir": "in",
 							"type": "loop",
-							"min": "",
-							"max": "1"
+							"min": 0,
+							"max": 1
 						}
 					]
 				},
@@ -13342,7 +13341,7 @@
 						{
 							"name": "maxIterations",
 							"type": "int",
-							"default": "1000"
+							"default": 1000
 						}
 					]
 				},
@@ -13375,7 +13374,7 @@
 						{
 							"name": "maxIterations",
 							"type": "int",
-							"default": "1000"
+							"default": 1000
 						}
 					]
 				},
@@ -13474,8 +13473,8 @@
 						{
 							"dir": "out",
 							"type": "branch",
-							"min": "2",
-							"max": "Infinity"
+							"min": 2,
+							"max": "*"
 						}
 					]
 				},
@@ -13496,7 +13495,7 @@
 						{
 							"name": "maxIterations",
 							"type": "int",
-							"default": "1000"
+							"default": 1000
 						}
 					]
 				},
@@ -13529,12 +13528,12 @@
 						{
 							"name": "maxIterations",
 							"type": "int",
-							"default": "1000"
+							"default": 1000
 						},
 						{
 							"name": "nested",
 							"type": "int",
-							"default": "1"
+							"default": 1
 						}
 					]
 				},
@@ -13552,14 +13551,14 @@
 						{
 							"dir": "out",
 							"type": "loop",
-							"min": "1",
-							"max": "1"
+							"min": 1,
+							"max": 1
 						},
 						{
 							"dir": "out",
 							"type": "base",
-							"min": "1",
-							"max": "1"
+							"min": 1,
+							"max": 1
 						}
 					]
 				},
@@ -13619,32 +13618,32 @@
 						{
 							"dir": "in",
 							"type": "success",
-							"min": "1",
-							"max": "Infinity"
+							"min": 0,
+							"max": "*"
 						},
 						{
 							"dir": "out",
 							"type": "success",
-							"min": "",
-							"max": "1"
+							"min": 0,
+							"max": 1
 						},
 						{
 							"dir": "in",
 							"type": "fail",
-							"min": "1",
-							"max": "Infinity"
+							"min": 0,
+							"max": "*"
 						},
 						{
 							"dir": "out",
 							"type": "fail",
-							"min": "",
-							"max": "1"
+							"min": 0,
+							"max": 1
 						},
 						{
 							"dir": "in",
 							"type": "sub-rule",
-							"min": "",
-							"max": "1"
+							"min": 0,
+							"max": 1
 						}
 					]
 				},
@@ -13801,8 +13800,8 @@
 						{
 							"dir": "out",
 							"type": "sub-rule",
-							"min": "",
-							"max": "Infinity"
+							"min": 0,
+							"max": "*"
 						}
 					]
 				},
@@ -14120,7 +14119,10 @@
 						{
 							"name": "position",
 							"type": "list<int>",
-							"default": "[0,0]"
+							"default": [
+								0,
+								0
+							]
 						}
 					]
 				},
@@ -14464,8 +14466,7 @@
 			}
 		],
 		"metamodels": [
-			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram",
-			"/Formalisms/__Transformations__/Transformation/MoTif"
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram"
 		]
 	}
 }

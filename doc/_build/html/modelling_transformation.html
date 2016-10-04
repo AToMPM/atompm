@@ -133,6 +133,7 @@
 <div class="section" id="the-motif-scheduling-language">
 <h2>The MoTif Scheduling Language<a class="headerlink" href="#the-motif-scheduling-language" title="Permalink to this headline">¶</a></h2>
 <p>Rules are scheduled using a scheduling language. We use <em>MoTif</em>, which exposes a number of primitives, or <em>steps</em>. A schedule consists of a number of steps starting at the <em>Start</em> pseudostep and ending in either a <em>EndSuccess</em> or <em>EndFail</em> pseudostep. Each step is connected to two other steps with a <em>success</em> or a <em>fail</em> link. Depending on the type of step, the referenced rule(s) are executed in a particular way. The steps exposed by MoTif are:</p>
+<img alt="_images/MoTif_toolbar.png" src="_images/MoTif_toolbar.png" />
 <ol class="arabic simple">
 <li><strong>ARule</strong>: Atomic rule. Executes the rule for one match found. If no matches are found, it fails.</li>
 <li><strong>QRule</strong>: A query. Succeeds if the LHS matches and the NACs do not match. The RHS of the rule is ignored.</li>
@@ -145,6 +146,7 @@
 <li><strong>EndFail</strong>: The end of the schedule (indicating failure). Can occur more than once, but the schedule ends when one of them is reached.</li>
 <li><strong>Sequence</strong>: Executes the referenced transformation until it fails.</li>
 <li><strong>BRule</strong>: Allows for other steps to be nested. Executes (non-deterministically) one of the succeeding child steps.</li>
+<li><strong>CRule</strong>: Nested transformation. The referenced transformation schedule is executed once.</li>
 <li><strong>BSRule</strong>: Executes (non-deterministically) one of the succeeding child steps until none of them succeeds.</li>
 <li>Unused.</li>
 <li>Unused.</li>

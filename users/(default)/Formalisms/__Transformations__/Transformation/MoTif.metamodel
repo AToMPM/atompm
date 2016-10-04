@@ -14,7 +14,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"AtomicRuleBlock": [
@@ -31,7 +34,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"CompositeRuleBlock": [
@@ -48,7 +54,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"QRule": [
@@ -70,7 +79,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"ARule": [
@@ -92,14 +104,17 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"FRule": [
 			{
 				"name": "maxIterations",
 				"type": "int",
-				"default": "1000"
+				"default": 1000
 			},
 			{
 				"name": "rule",
@@ -119,14 +134,17 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"SRule": [
 			{
 				"name": "maxIterations",
 				"type": "int",
-				"default": "1000"
+				"default": 1000
 			},
 			{
 				"name": "rule",
@@ -146,7 +164,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"Sequence": [
@@ -168,7 +189,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"CRule": [
@@ -190,7 +214,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"BRule": [
@@ -207,14 +234,17 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"BSRule": [
 			{
 				"name": "maxIterations",
 				"type": "int",
-				"default": "1000"
+				"default": 1000
 			},
 			{
 				"name": "name",
@@ -229,19 +259,22 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"LRule": [
 			{
 				"name": "maxIterations",
 				"type": "int",
-				"default": "1000"
+				"default": 1000
 			},
 			{
 				"name": "nested",
 				"type": "int",
-				"default": "1"
+				"default": 1
 			},
 			{
 				"name": "name",
@@ -256,19 +289,22 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"LQSRule": [
 			{
 				"name": "maxIterations",
 				"type": "int",
-				"default": "1000"
+				"default": 1000
 			},
 			{
 				"name": "nested",
 				"type": "int",
-				"default": "1"
+				"default": 1
 			},
 			{
 				"name": "name",
@@ -283,28 +319,40 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"TrafoElement": [
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"Start": [
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"EndSuccess": [
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"ImplicitOrderCompositeRuleBlock": [
@@ -321,7 +369,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"ExplicitOrderCompositeRuleBlock": [
@@ -343,14 +394,20 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"EndFail": [
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"success": [],
@@ -364,12 +421,12 @@
 			{
 				"name": "maxIterations",
 				"type": "int",
-				"default": "1000"
+				"default": 1000
 			},
 			{
 				"name": "nested",
 				"type": "int",
-				"default": "1"
+				"default": 1
 			},
 			{
 				"name": "name",
@@ -384,19 +441,22 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"LSRule": [
 			{
 				"name": "maxIterations",
 				"type": "int",
-				"default": "1000"
+				"default": 1000
 			},
 			{
 				"name": "nested",
 				"type": "int",
-				"default": "1"
+				"default": 1
 			},
 			{
 				"name": "name",
@@ -411,14 +471,20 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"Positionable": [
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"CQRule2": [
@@ -445,7 +511,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		],
 		"CQRule3": [
@@ -477,7 +546,10 @@
 			{
 				"name": "position",
 				"type": "list<int>",
-				"default": "[0,0]"
+				"default": [
+					0,
+					0
+				]
 			}
 		]
 	},
@@ -531,50 +603,50 @@
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"AtomicRuleBlock": [
@@ -587,100 +659,100 @@
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"CompositeRuleBlock": [
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"QRule": [
@@ -693,50 +765,50 @@
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"ARule": [
@@ -749,50 +821,50 @@
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"FRule": [
@@ -805,50 +877,50 @@
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"SRule": [
@@ -861,430 +933,430 @@
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"Sequence": [
 			{
 				"dir": "out",
 				"type": "sub-rule",
-				"min": "",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"CRule": [
 			{
 				"dir": "out",
 				"type": "sub-rule",
-				"min": "",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"BRule": [
 			{
 				"dir": "out",
 				"type": "branch",
-				"min": "2",
-				"max": "Infinity"
+				"min": 2,
+				"max": "*"
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"BSRule": [
 			{
 				"dir": "out",
 				"type": "branch",
-				"min": "2",
-				"max": "Infinity"
+				"min": 2,
+				"max": "*"
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"LRule": [
 			{
 				"dir": "out",
 				"type": "loop",
-				"min": "1",
-				"max": "1"
+				"min": 1,
+				"max": 1
 			},
 			{
 				"dir": "out",
 				"type": "base",
-				"min": "1",
-				"max": "1"
+				"min": 1,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"LQSRule": [
 			{
 				"dir": "out",
 				"type": "loop",
-				"min": "1",
-				"max": "1"
+				"min": 1,
+				"max": 1
 			},
 			{
 				"dir": "out",
 				"type": "base",
-				"min": "1",
-				"max": "1"
+				"min": 1,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"TrafoElement": [
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"Start": [
@@ -1299,170 +1371,170 @@
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"ImplicitOrderCompositeRuleBlock": [
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"ExplicitOrderCompositeRuleBlock": [
 			{
 				"dir": "out",
 				"type": "sub-rule",
-				"min": "",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"EndFail": [
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"success": [
@@ -2611,124 +2683,124 @@
 			{
 				"dir": "out",
 				"type": "loop",
-				"min": "1",
-				"max": "1"
+				"min": 1,
+				"max": 1
 			},
 			{
 				"dir": "out",
 				"type": "base",
-				"min": "1",
-				"max": "1"
+				"min": 1,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"LSRule": [
 			{
 				"dir": "out",
 				"type": "loop",
-				"min": "1",
-				"max": "1"
+				"min": 1,
+				"max": 1
 			},
 			{
 				"dir": "out",
 				"type": "base",
-				"min": "1",
-				"max": "1"
+				"min": 1,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"Positionable": [],
@@ -2742,50 +2814,50 @@
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		],
 		"CQRule3": [
@@ -2798,50 +2870,50 @@
 			{
 				"dir": "in",
 				"type": "initial",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "branch",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "loop",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "success",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "success",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "fail",
-				"min": "1",
-				"max": "Infinity"
+				"min": 0,
+				"max": "*"
 			},
 			{
 				"dir": "out",
 				"type": "fail",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			},
 			{
 				"dir": "in",
 				"type": "sub-rule",
-				"min": "",
-				"max": "1"
+				"min": 0,
+				"max": 1
 			}
 		]
 	},
