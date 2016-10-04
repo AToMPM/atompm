@@ -97,7 +97,7 @@ The MoTif Scheduling Language
 
 Rules are scheduled using a scheduling language. We use *MoTif*, which exposes a number of primitives, or *steps*. A schedule consists of a number of steps starting at the *Start* pseudostep and ending in either a *EndSuccess* or *EndFail* pseudostep. Each step is connected to two other steps with a *success* or a *fail* link. Depending on the type of step, the referenced rule(s) are executed in a particular way. The steps exposed by MoTif are:
 
-.. image: img/MoTif_toolbar.png
+.. image:: img/MoTif_toolbar.png
 
 #. **ARule**: Atomic rule. Executes the rule for one match found. If no matches are found, it fails.
 #. **QRule**: A query. Succeeds if the LHS matches and the NACs do not match. The RHS of the rule is ignored.
@@ -110,6 +110,7 @@ Rules are scheduled using a scheduling language. We use *MoTif*, which exposes a
 #. **EndFail**: The end of the schedule (indicating failure). Can occur more than once, but the schedule ends when one of them is reached.
 #. **Sequence**: Executes the referenced transformation until it fails.
 #. **BRule**: Allows for other steps to be nested. Executes (non-deterministically) one of the succeeding child steps.
+#. **CRule**: Nested transformation. The referenced transformation schedule is executed once.
 #. **BSRule**: Executes (non-deterministically) one of the succeeding child steps until none of them succeeds.
 #. Unused.
 #. Unused.
