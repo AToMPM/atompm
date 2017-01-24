@@ -273,8 +273,12 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 						 		utils.contains(['r','rays'],attr) )
 						__editStar(vobj,attr,step['new_val']);
 
-					try 			{var newVal = utils.jsonp(step['new_val']);}
-					catch(err)	{var newVal = step['new_val'];}
+                    if( vobj.type == 'text' )
+						var newVal = step['new_val'];
+                    else {
+                        try 			{var newVal = utils.jsonp(step['new_val']);}
+                        catch(err)	{var newVal = step['new_val'];}
+                    }
 					if( attr == 'style' )
 						vobj.attr( newVal );
 					else if( attr == 'src' )
