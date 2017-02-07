@@ -192,7 +192,7 @@ class DesignerAPI :
 		for pLabel in self._pl2gi :
 			n = self._graph.vs[self._pl2gi[pLabel]]
 			if fulltypes == None or n[HC.FULLTYPE] in fulltypes :
-				pLabels.append(pLabel)
+				pLabels.append(n)
 		return pLabels
 
 

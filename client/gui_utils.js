@@ -515,7 +515,8 @@ GUIUtils = function(){
 				
 				return true;
 			}
-			else if( event.keyCode == KEY_ENTER )
+			/*rolled back behaviour by popular demand (Eugene) - Vasco 4-2-17 */
+			else if( event.keyCode == KEY_ENTER /* ENTER */ && currentKeys[ KEY_SHIFT ] == 1)
 			{
                 if (rows > 1) {
                     // only for multi-line input fields
@@ -531,7 +532,7 @@ GUIUtils = function(){
 			}
 		});
         input.keyup( function (event) {
-			if( event.keyCode == KEY_ENTER )
+			if( event.keyCode == KEY_ENTER /* ENTER */ && currentKeys[ KEY_SHIFT ] == 1)
 			{
 				event.stopPropagation();
                 event.preventDefault();

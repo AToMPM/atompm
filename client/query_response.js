@@ -147,6 +147,16 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 				{
 					var newVal = step['new_val'],
 						 icon	  = __icons[step['id']]['icon'];
+						 
+					/* bugfix where newVal would get a string instead of the array of values 
+					should search for reason why it has string in the first place - Vasco - 02-02-2017*/
+					if( typeof newVal == 'string'){
+						newVal = newVal.replace('[','');
+						newVal = newVal.replace(']','');
+						newVal = newVal.split(',');
+					}
+					/* endbugfix*/
+					
 					if( step['attr'] == 'position' )
 					{
 						var bbox = icon.getBBox();
@@ -273,12 +283,8 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 						 		utils.contains(['r','rays'],attr) )
 						__editStar(vobj,attr,step['new_val']);
 
-                    if( vobj.type == 'text' )
-						var newVal = step['new_val'];
-                    else {
-                        try 			{var newVal = utils.jsonp(step['new_val']);}
-                        catch(err)	{var newVal = step['new_val'];}
-                    }
+					try 			{var newVal = utils.jsonp(step['new_val']);}
+					catch(err)	{var newVal = step['new_val'];}
 					if( attr == 'style' )
 						vobj.attr( newVal );
 					else if( attr == 'src' )

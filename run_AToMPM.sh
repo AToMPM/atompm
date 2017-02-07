@@ -14,8 +14,8 @@ if [ ! -d "dependencies" ]; then
     cd dependencies
     # First fetch Node.JS
     curl -L -O http://msdl.uantwerpen.be/AToMPM/node-v4.5.0.tar.gz
-    tar -xvzf node-v4.5.0.tar.gz
-    cd node-v4.5.0
+    tar -xvzf node*
+    cd node*
     ./configure --prefix=$working_dir/dependencies/node.js
     make -j5
     make install

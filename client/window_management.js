@@ -815,6 +815,47 @@ WindowManagement = function(){
 	
 		onspawn();
 	};
+
+	/* NOTE:: Automating activities 
+	    spawn a new instance of atompm... if a model is specified (as 'fname'), it is
+		loaded into the new instance, if a toolbar is especified (as 'tbname'), it's loaded
+		into the new instance, if a message is especified a popup message will show in
+		the instance*/	
+	this.spawnClientOption = function (fname,tbname,option,trafo,msg)
+	{
+		var c 		= window.open(window.location.href, '_blank'),
+		onspawn = 
+			 function()
+			 {
+				if( (fname|| tbname)	 &&
+					  (c.__wid == undefined 	 || 
+					   c.__aswid == undefined 	 || 
+					   c._loadModel == undefined	 ||
+					   c._loadToolbar == undefined) )
+			 		 return window.setTimeout(onspawn,250);				 
+				 c.__user = __user;
+				 c.__name = fname;
+				 c.__option = option;
+				 c.__trafo = trafo;
+				 c.__msg = msg;
+				if (trafo == undefined){
+					trafo = option
+				}
+				if( tbname ){
+						toolbars = tbname.split(",");
+						for ( var n in toolbars){
+							c._loadToolbar(toolbars[n]);
+						}						
+				}				
+				if( fname ){
+						c.__saveas = fname;
+						if( option.length > 2 ){
+							c._loadModel(fname);
+						}
+				}	
+			  };
+		onspawn();
+	};
 	
 	/* initialize a headless client, i.e. a client with a proper backend but whose
 	socket-message handling code is user-defined

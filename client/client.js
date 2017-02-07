@@ -69,6 +69,10 @@ var __user = undefined,
 	 __edges = {},
 	 __canvas,
 	 __saveas;
+	 __option = '',
+	 __trafo = '',
+	 __msg = '',
+	 __name = '';
 /******************************** GLOBAL VARS *********************************/
 
 AtomPMClient = function(){
@@ -276,6 +280,8 @@ function _loadModel(fname)
 		else
 			__saveas = fname;
 		DataUtils.loadm(fname);
+		if (__msg != '')
+			WindowManagement.openDialog(_CUSTOM,{'widgets':[{'id':'1','type':'text','label':'text message','default':''}],"title":__msg});
 	}
 }
 
@@ -289,6 +295,8 @@ function _loadToolbar(fname)
 		DataUtils.loadbm(fname);
 	else if( __isIconMetamodel(fname) )
 		DataUtils.loadmm(fname);
+	if (__msg != '')
+		WindowManagement.openDialog(_CUSTOM,{'widgets':[{'id':'1','type':'text','label':'text message','default':''}],"title":__msg});
 }
 
 /* save model
@@ -536,6 +544,182 @@ function _loadModelInNewWindow(args/*fname[,callback-url]*/)
 	WindowManagement.spawnClient(args['fname'],args['callback-url']);
 }
 
+/**
+ * Function to load a model in a new window, it's part of Workflows components
+ * @param args json that contains the parameter list
+ */
+function _loadModelInWindow(args/*fname[]*/)
+{
+	var aid = args['atompmId'];
+	var jsontext = args['fname'];
+	var res = jsontext.replace('{', '{"');
+	var res = res.replace('}', '"}');
+	var res = res.replace(/:/g, '":"');
+	var res = res.replace(/,/g, '","');
+	var res = res.replace(/;/g, ',');
+	loc = JSON.parse(res);
+	var path = parseInt(aid)+2;
+	var msg = parseInt(aid)+1;
+	vas = '';
+	if (loc[path] == undefined){
+		vas = 'VAS';
+		path = parseInt(aid);}
+	as = loc[aid].indexOf("MM");
+	cs = loc[aid].indexOf("Icons");
+	tr = loc[aid].indexOf("R_");
+	tf = loc[path].indexOf("T_");
+	option = '';
+	if( as > 0 )
+		option = 'AS';
+	else if(cs > 0 )
+		option = 'CS';
+	else if(tr > 0 )
+		option = 'TR';
+	else if(tf > 0 )
+		option = 'TF';
+	else if (vas == 'VAS')
+		option = 'VAS';;
+	WindowManagement.spawnClientOption(loc[aid],'',loc[path],option,loc[msg]);
+}
+
+/**
+ * Function to open a popup dialog for run-time parameters, it's part of Workflows components 
+ * @param args list of parameters of the workflow
+ */
+
+function _openNewDialog(args)
+{
+	var jsontext = JSON.stringify(args['args']),
+	jsontext=JSON.parse(jsontext),
+	ext = args['labels'],
+	pid = args['paramId'],
+	res = ext.replace('{', '{"'),
+	res = res.replace('}', '"}'),
+	res = res.replace(/:/g, '":"'),
+	res = res.replace(/,/g, '","'),
+	msg =  args['msg'];
+	if( ext == '{}' )
+		WindowManagement.openDialog(_ERROR, 'No parameters to load');
+	else {
+		ext = JSON.parse(res);		
+		data = '';
+		i = 0;
+		callback = 
+			function(inputs) 
+		 	{
+				for( var x in inputs ){
+					if (data){ 
+						data += ',';
+					}
+					lab = jsontext.widgets[i].label;
+					n = lab.lastIndexOf("(");
+					lab = lab.substring(n);
+					i = i + 1;
+					t = [];	
+					switch(lab) {
+						case '(OpenModel)Location@2':
+							data += x+':'+inputs[x]+'.'+ext[x];
+						break;
+						case '(SaveModel)Location@2':
+							if (ext[x] == 'Icons.model' || ext[x] == 'Icons.metamodel'|| ext[x] == 'Icons.pattern.metamodel')						
+								data += x+':'+inputs[x]+ext[x];
+							else
+								data += x+':'+inputs[x]+'.'+ext[x];								
+						break;
+						case '(LoadToolbar)Location@2':
+							toolbars = inputs[x].split(";");
+							extensions = ext[x].split(";");
+							for ( var n in toolbars){
+								if (extensions[n] == 'Icons.model' || extensions[n] == 'Icons.metamodel'|| extensions[n] == 'Icons.pattern.metamodel')
+									t[n] = toolbars[n]+extensions[n];
+								else
+									t[n] = toolbars[n]+'.'+extensions[n];
+							}
+							txt = t.join(";");
+							data += x+':'+txt;
+						break;
+						case '(GeneratePMM)Location@2':
+							data += x+':'+inputs[x]+'.'+ext[x];
+						break;	
+						case '(OpenTransformation)Location@2':
+							data += x+':'+inputs[x]+'.'+ext[x];
+						break;			
+					} 
+					_updateAttr({"asid":x,"attr":"Location@2","val":inputs[x]});
+				}
+				data += ','+msg;				
+				data = '{'+data;
+				data += '}'
+				_updateAttr({"asid":pid,"attr":"parameterList","val":data});
+				play = function()
+               {
+					_httpReq(
+                       'PUT',
+                       '/__mt/execmode?wid='+__wid,
+                       {'mode':'play'});
+               };
+				_httpReq(
+					'PUT',
+					'/__mt/current.transform?wid='+__wid,
+					{'transfs':['/Formalisms/Workflows/simulate/T_WorkflowsAddDependParam.model'],
+					'username':__user},
+					play);
+			 };
+		WindowManagement.openDialog(
+				_CUSTOM,
+				args['args'],
+				 callback);
+	}
+}
+
+/**
+ * Function to load a toolbar in a new window, it's part of Workflows components 
+ * @param args json that contains the parameter list
+ */
+function _loadToolbarInWindow(args/*fname[]*/)	
+{
+	var aid = args['atompmId'];
+	var jsontext = args['fname'];
+	var res = jsontext.replace('{', '{"');
+	var res = res.replace('}', '"}');
+	var res = res.replace(/:/g, '":"');
+	var res = res.replace(/,/g, '","');
+	var res = res.replace(/;/g, ',');
+	loc = JSON.parse(res);
+	var path = parseInt(aid)+2;
+	var msg = parseInt(aid)+1;
+	as = loc[aid].indexOf("SimpleClassDiagram");
+	cs = loc[aid].indexOf("ConcreteSyntax");
+	tr = loc[aid].indexOf("Rule");
+	tf = loc[aid].indexOf("MoTif");
+	option = '';
+	if( as > 0 )
+		option = 'AS';
+	else if(cs > 0 )
+		option = 'CS';
+	else if(tr > 0 )
+		option = 'TR';
+	else if(tf > 0 )
+		option = 'TF';;	
+	WindowManagement.spawnClientOption(loc[path],loc[aid],option,'',loc[msg]);
+}
+
+/**
+ * Function to compile a Pattern metamodel, it's part of Workflows components 
+ * @param args json that contains the parameter list
+ */
+function _compilePMMInWindow(args/*fname[]*/)	
+{
+	var aid = args['atompmId'];
+	var jsontext = args['fname'];
+	var res = jsontext.replace('{', '{"');
+	var res = res.replace('}', '"}');
+	var res = res.replace(/:/g, '":"');
+	var res = res.replace(/,/g, '","');
+	loc = JSON.parse(res);
+	console.log(loc[aid]);	
+	CompileUtils.compileToPatternMM(loc[aid]);
+}
 
 /* tag the specified node with some text, possibly appending it to an existing 
 	tag...  the 'timeout' parameter, if specified, indicates how long the tag 
