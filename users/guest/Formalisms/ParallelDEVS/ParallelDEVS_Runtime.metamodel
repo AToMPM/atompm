@@ -1,0 +1,832 @@
+{
+	"types": {
+		"State": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "initial",
+				"type": "bool",
+				"default": false
+			},
+			{
+				"name": "current",
+				"type": "bool",
+				"default": false
+			},
+			{
+				"name": "time_advance",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "output",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"EventInstance": [
+			{
+				"name": "event_type",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "attribute_values",
+				"type": "list<map<[name,val],[string,string]>>",
+				"default": []
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"Port": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"InputPort": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"CoupledDEVS": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "attribute_values",
+				"type": "list<map<[name,val],[string,string]>>",
+				"default": []
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "scale",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"SimulationInstance": [
+			{
+				"name": "simulation_time",
+				"type": "float",
+				"default": 0
+			}
+		],
+		"StateInstance": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "attribute_values",
+				"type": "list<map<[name,val],[string,string]>>",
+				"default": []
+			}
+		],
+		"AtomicDEVS": [
+			{
+				"name": "time_next",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "attribute_values",
+				"type": "list<map<[name,val],[string,string]>>",
+				"default": []
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "scale",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"BaseDEVS": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "attribute_values",
+				"type": "list<map<[name,val],[string,string]>>",
+				"default": []
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "scale",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"OutputPort": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"ports": [],
+		"ExternalTransition": [
+			{
+				"name": "condition",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "action",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"ConfluentTransition": [
+			{
+				"name": "condition",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "action",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"state": [],
+		"channel": [
+			{
+				"name": "transfer_function",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"states": [],
+		"InternalTransition": [
+			{
+				"name": "condition",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "action",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"submodels": [],
+		"injectLocation": [
+			{
+				"name": "time",
+				"type": "float",
+				"default": -1
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Port"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "BaseDEVS"
+		}
+	],
+	"actions": [
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('*'),/*newline*/    neighborLink = undefined,/*newline*/    to_change = true;/*newline*/if (neighborLinks.length > 0) {/*newline*/    for (var i in neighborLinks) {/*newline*/        if (getAttr('$type', neighborLinks[i]).match(/ports/)) {/*newline*/            neighborLink = neighborLinks[i];/*newline*/        } else if (getAttr('$type', neighborLinks[i]).match(/channel/)) {/*newline*/            to_change = false;/*newline*/        }/*newline*/    }/*newline*/}/*newline*/if ( neighborLink ) {/*newline*/    var neighbor = getNeighbors('<', '*', neighborLink)[0],/*newline*/        npos = getAttr('position', neighbor),/*newline*/        nscale = getAttr('scale', neighbor),/*newline*/        mypos = getAttr('position'),/*newline*/        newpos = mypos;/*newline*/    if (!to_change) {/*newline*/        newpos = mypos;/*newline*/    } else if (mypos[1] > npos[1] + (250 * nscale[1])) {/*newline*/        newpos[1] = npos[1] + (250 * nscale[1]);/*newline*/        if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/            newpos[0] = npos[0] + (250 * nscale[0]) - 50;/*newline*/        } else if (mypos[0] < npos[0]) {/*newline*/            newpos[0] = npos[0] + 50;/*newline*/        }/*newline*/    } else if (mypos[1] < npos[1]) {/*newline*/        newpos[1] = npos[1];/*newline*/        if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/            newpos[0] = npos[0] + (250 * nscale[0]) - 50;/*newline*/        } else if (mypos[0] < npos[0]) {/*newline*/            newpos[0] = npos[0] + 50;/*newline*/        }/*newline*/    } else if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/        newpos[0] = npos[0] + (250 * nscale[0]);/*newline*/    } else if (mypos[0] < npos[0]) {/*newline*/        newpos[0] = npos[0];/*newline*/    }/*newline*/    if (to_change) {/*newline*/        newpos = [newpos[0] - nscale[0] * (2 + nscale[0]), newpos[1] + nscale[1] * (19 + nscale[1])];/*newline*/    }/*newline*/    setAttr('position', newpos);/*newline*/}",
+			"targetType": "Port"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('*'),/*newline*/    neighborLink = undefined,/*newline*/    to_change = true;/*newline*/if (neighborLinks.length > 0) {/*newline*/    for (var i in neighborLinks) {/*newline*/        if (getAttr('$type', neighborLinks[i]).match(/ports/)) {/*newline*/            neighborLink = neighborLinks[i];/*newline*/        } else if (getAttr('$type', neighborLinks[i]).match(/channel/)) {/*newline*/            to_change = false;/*newline*/        }/*newline*/    }/*newline*/}/*newline*/if ( neighborLink ) {/*newline*/    var neighbor = getNeighbors('<', '*', neighborLink)[0],/*newline*/        npos = getAttr('position', neighbor),/*newline*/        nscale = getAttr('scale', neighbor),/*newline*/        mypos = getAttr('position'),/*newline*/        newpos = mypos;/*newline*/    if (!to_change) {/*newline*/        newpos = mypos;/*newline*/    } else if (mypos[1] > npos[1] + (250 * nscale[1])) {/*newline*/        newpos[1] = npos[1] + (250 * nscale[1]);/*newline*/        if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/            newpos[0] = npos[0] + (250 * nscale[0]) - 50;/*newline*/        } else if (mypos[0] < npos[0]) {/*newline*/            newpos[0] = npos[0] + 50;/*newline*/        }/*newline*/    } else if (mypos[1] < npos[1]) {/*newline*/        newpos[1] = npos[1];/*newline*/        if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/            newpos[0] = npos[0] + (250 * nscale[0]) - 50;/*newline*/        } else if (mypos[0] < npos[0]) {/*newline*/            newpos[0] = npos[0] + 50;/*newline*/        }/*newline*/    } else if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/        newpos[0] = npos[0] + (250 * nscale[0]);/*newline*/    } else if (mypos[0] < npos[0]) {/*newline*/        newpos[0] = npos[0];/*newline*/    }/*newline*/    if (to_change) {/*newline*/        newpos = [newpos[0] - nscale[0] * (2 + nscale[0]), newpos[1] + nscale[1] * (19 + nscale[1])];/*newline*/    }/*newline*/    setAttr('position', newpos);/*newline*/}",
+			"targetType": "InputPort"
+		},
+		{
+			"name": "snapToTarget",
+			"event": "post-connect",
+			"code": "/*newline*/var neighborLinks = getNeighbors('*'),/*newline*/    neighborLink = undefined,/*newline*/    to_change = true;/*newline*/if (neighborLinks.length > 0) {/*newline*/    for (var i in neighborLinks) {/*newline*/        if (getAttr('$type', neighborLinks[i]).match(/ports/)) {/*newline*/            neighborLink = neighborLinks[i];/*newline*/        } else if (getAttr('$type', neighborLinks[i]).match(/channel/)) {/*newline*/            to_change = false;/*newline*/        }/*newline*/    }/*newline*/}/*newline*/if ( neighborLink ) {/*newline*/    var neighbor = getNeighbors('<', '*', neighborLink)[0],/*newline*/        npos = getAttr('position', neighbor),/*newline*/        nscale = getAttr('scale', neighbor),/*newline*/        mypos = getAttr('position'),/*newline*/        newpos = mypos;/*newline*/    if (!to_change) {/*newline*/        newpos = mypos;/*newline*/    } else if (mypos[1] > npos[1] + (250 * nscale[1])) {/*newline*/        newpos[1] = npos[1] + (250 * nscale[1]);/*newline*/        if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/            newpos[0] = npos[0] + (250 * nscale[0]) - 50;/*newline*/        } else if (mypos[0] < npos[0]) {/*newline*/            newpos[0] = npos[0] + 50;/*newline*/        }/*newline*/    } else if (mypos[1] < npos[1]) {/*newline*/        newpos[1] = npos[1];/*newline*/        if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/            newpos[0] = npos[0] + (250 * nscale[0]) - 50;/*newline*/        } else if (mypos[0] < npos[0]) {/*newline*/            newpos[0] = npos[0] + 50;/*newline*/        }/*newline*/    } else if (mypos[0] > npos[0] + (250 * nscale[0])) {/*newline*/        newpos[0] = npos[0] + (250 * nscale[0]);/*newline*/    } else if (mypos[0] < npos[0]) {/*newline*/        newpos[0] = npos[0];/*newline*/    }/*newline*/    if (to_change) {/*newline*/        newpos = [newpos[0] - nscale[0] * (2 + nscale[0]), newpos[1] + nscale[1] * (19 + nscale[1])];/*newline*/    }/*newline*/    setAttr('position', newpos);/*newline*/}",
+			"targetType": "OutputPort"
+		}
+	],
+	"cardinalities": {
+		"State": [
+			{
+				"dir": "in",
+				"type": "states",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExternalTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "ExternalTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "ConfluentTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "ConfluentTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "InternalTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "InternalTransition",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"EventInstance": [
+			{
+				"dir": "out",
+				"type": "injectLocation",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"Port": [
+			{
+				"dir": "in",
+				"type": "ports",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "channel",
+				"min": "0",
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "channel",
+				"min": "0",
+				"max": "*"
+			},
+			{
+				"dir": "in",
+				"type": "injectLocation",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"InputPort": [
+			{
+				"dir": "in",
+				"type": "ports",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "channel",
+				"min": "0",
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "channel",
+				"min": "0",
+				"max": "*"
+			},
+			{
+				"dir": "in",
+				"type": "injectLocation",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"CoupledDEVS": [
+			{
+				"dir": "in",
+				"type": "submodels",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "submodels",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "ports",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"SimulationInstance": [],
+		"StateInstance": [
+			{
+				"dir": "in",
+				"type": "state",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"AtomicDEVS": [
+			{
+				"dir": "out",
+				"type": "state",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "submodels",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "states",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "ports",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"BaseDEVS": [
+			{
+				"dir": "in",
+				"type": "submodels",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ports",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"OutputPort": [
+			{
+				"dir": "in",
+				"type": "ports",
+				"min": "1",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "channel",
+				"min": "0",
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "channel",
+				"min": "0",
+				"max": "*"
+			},
+			{
+				"dir": "in",
+				"type": "injectLocation",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"ports": [
+			{
+				"dir": "in",
+				"type": "BaseDEVS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Port",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "InputPort",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CoupledDEVS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "AtomicDEVS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OutputPort",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"ExternalTransition": [
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"ConfluentTransition": [
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"state": [
+			{
+				"dir": "in",
+				"type": "AtomicDEVS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "StateInstance",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"channel": [
+			{
+				"dir": "in",
+				"type": "Port",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Port",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "InputPort",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "InputPort",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "OutputPort",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OutputPort",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"states": [
+			{
+				"dir": "in",
+				"type": "AtomicDEVS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"InternalTransition": [
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"submodels": [
+			{
+				"dir": "in",
+				"type": "CoupledDEVS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BaseDEVS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CoupledDEVS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AtomicDEVS",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"injectLocation": [
+			{
+				"dir": "in",
+				"type": "EventInstance",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Port",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "InputPort",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OutputPort",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"State": {
+			"State": [
+				"ExternalTransition",
+				"ConfluentTransition",
+				"InternalTransition"
+			]
+		},
+		"EventInstance": {
+			"Port": [
+				"injectLocation"
+			],
+			"InputPort": [
+				"injectLocation"
+			],
+			"OutputPort": [
+				"injectLocation"
+			]
+		},
+		"Port": {
+			"Port": [
+				"channel"
+			],
+			"InputPort": [
+				"channel"
+			],
+			"OutputPort": [
+				"channel"
+			]
+		},
+		"InputPort": {
+			"Port": [
+				"channel"
+			],
+			"InputPort": [
+				"channel"
+			],
+			"OutputPort": [
+				"channel"
+			]
+		},
+		"CoupledDEVS": {
+			"BaseDEVS": [
+				"submodels"
+			],
+			"CoupledDEVS": [
+				"submodels"
+			],
+			"AtomicDEVS": [
+				"submodels"
+			],
+			"Port": [
+				"ports"
+			],
+			"InputPort": [
+				"ports"
+			],
+			"OutputPort": [
+				"ports"
+			]
+		},
+		"AtomicDEVS": {
+			"StateInstance": [
+				"state"
+			],
+			"State": [
+				"states"
+			],
+			"Port": [
+				"ports"
+			],
+			"InputPort": [
+				"ports"
+			],
+			"OutputPort": [
+				"ports"
+			]
+		},
+		"BaseDEVS": {
+			"Port": [
+				"ports"
+			],
+			"InputPort": [
+				"ports"
+			],
+			"OutputPort": [
+				"ports"
+			]
+		},
+		"OutputPort": {
+			"Port": [
+				"channel"
+			],
+			"InputPort": [
+				"channel"
+			],
+			"OutputPort": [
+				"channel"
+			]
+		}
+	},
+	"connectorTypes": {
+		"ports": "visual",
+		"ExternalTransition": "visual",
+		"ConfluentTransition": "visual",
+		"state": "visual",
+		"channel": "visual",
+		"states": "containment",
+		"InternalTransition": "visual",
+		"submodels": "containment",
+		"injectLocation": "visual"
+	},
+	"types2parentTypes": {
+		"State": [],
+		"EventInstance": [],
+		"Port": [],
+		"InputPort": [
+			"Port"
+		],
+		"CoupledDEVS": [
+			"BaseDEVS"
+		],
+		"SimulationInstance": [],
+		"StateInstance": [],
+		"AtomicDEVS": [
+			"BaseDEVS"
+		],
+		"BaseDEVS": [],
+		"OutputPort": [
+			"Port"
+		],
+		"ports": [],
+		"ExternalTransition": [],
+		"ConfluentTransition": [],
+		"state": [],
+		"channel": [],
+		"states": [],
+		"InternalTransition": [],
+		"submodels": [],
+		"injectLocation": []
+	}
+}

@@ -1,0 +1,196 @@
+{
+	"types": {
+		"Pattern": [],
+		"LHS": [
+			{
+				"name": "Condition",
+				"type": "code",
+				"default": "result = True"
+			}
+		],
+		"RHS": [
+			{
+				"name": "Action",
+				"type": "code",
+				"default": "pass"
+			}
+		],
+		"NAC": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "NAC_"
+			},
+			{
+				"name": "Condition",
+				"type": "code",
+				"default": "result = True"
+			}
+		],
+		"$*": [],
+		"PatternContents": [],
+		"RHSImport": [
+			{
+				"name": "filename",
+				"type": "string",
+				"default": "/path/to/model/to/import"
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Pattern"
+		},
+		{
+			"name": "1lhs-1rhs",
+			"event": "",
+			"targetType": "*",
+			"code": "var mm = \"/Formalisms/__Transformations__/TransformationRule/TransformationRule/\";\n\ngetAllNodes([mm+\"LHS\"]).length == 1 && (getAllNodes([mm+\"RHSImport\"]).length + getAllNodes([mm+\"RHS\"]).length == 1);"
+		}
+	],
+	"actions": [
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "var default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = True', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "LHS"
+		},
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "var default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = getAttr()', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "RHS"
+		},
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "var default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = True', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "NAC"
+		},
+		{
+			"name": "convertToPrePostType",
+			"event": "post-create",
+			"code": "/*newline*/var mm  = '/Formalisms/__Transformations__/TransformationRule/TransformationRule/',/*newline*/    pt    = getAttr('$type',getNeighbors('<')[0]),/*newline*/    nid   = getNeighbors('>')[0],/*newline*/    toPre = (pt == mm+'LHS' || pt == mm+'NAC');/*newline*//*newline*/if( ! getAttr('$type',nid).match('\\.pattern/__p') )/*newline*/    throw 'patterns can only contain instance types of pattern metamodels';/*newline*//*newline*/function toPrePostType(id)/*newline*/{/*newline*/    var isPreType = (getAttr('__pMatchSubtypes',id) != undefined);/*newline*/    if( getNeighbors('<','PatternContents',id).length > 1 )/*newline*/        /*for HOTs: do not alter nodes that are already within another Pattern*/;/*newline*/    else if( toPre && !isPreType )/*newline*/        setAttr('__pMatchSubtypes',true,id);/*newline*/    else if( pt == mm+'RHS' && isPreType )/*newline*/        setAttr('__pMatchSubtypes',undefined,id);/*newline*/}/*newline*//*newline*//* TBI :: here we basically convert nid and all of its neighbors to pre-/post-types... this should always be what we want but it would still be cleaner to only convert nid and its *contents* *//*newline*/var done = [],/*newline*/    todo = [nid];/*newline*/while( todo.length > 0 )/*newline*/{/*newline*/    var id = todo.shift();/*newline*/    toPrePostType(id);/*newline*/    done.push(id);/*newline*/    todo = todo.concat(/*newline*/                getNeighbors('>','*',id).filter(/*newline*/                    function(_nid)/*newline*/                    {/*newline*/                        return todo.indexOf(_nid) < 0 && done.indexOf(_nid) < 0;/*newline*/                    }));/*newline*/}/*newline*/undefined;",
+			"targetType": "PatternContents"
+		}
+	],
+	"cardinalities": {
+		"Pattern": [
+			{
+				"dir": "out",
+				"type": "PatternContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"LHS": [
+			{
+				"dir": "out",
+				"type": "PatternContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"RHS": [
+			{
+				"dir": "out",
+				"type": "PatternContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"NAC": [
+			{
+				"dir": "out",
+				"type": "PatternContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"$*": [
+			{
+				"dir": "in",
+				"type": "PatternContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"PatternContents": [
+			{
+				"dir": "in",
+				"type": "Pattern",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "$*",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LHS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "RHS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "NAC",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"RHSImport": []
+	},
+	"legalConnections": {
+		"Pattern": {
+			"$*": [
+				"PatternContents"
+			]
+		},
+		"LHS": {
+			"$*": [
+				"PatternContents"
+			]
+		},
+		"RHS": {
+			"$*": [
+				"PatternContents"
+			]
+		},
+		"NAC": {
+			"$*": [
+				"PatternContents"
+			]
+		}
+	},
+	"connectorTypes": {
+		"PatternContents": "containment"
+	},
+	"types2parentTypes": {
+		"Pattern": [],
+		"LHS": [
+			"Pattern"
+		],
+		"RHS": [
+			"Pattern"
+		],
+		"NAC": [
+			"Pattern"
+		],
+		"$*": [],
+		"1lhs-1rhs": [],
+		"PatternContents": [],
+		"RHSImport": []
+	}
+}

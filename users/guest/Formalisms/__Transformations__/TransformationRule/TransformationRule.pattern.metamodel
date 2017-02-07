@@ -1,0 +1,345 @@
+{
+	"types": {
+		"__pPattern": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": true
+			}
+		],
+		"__pLHS": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": true
+			},
+			{
+				"name": "Condition",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__pRHS": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": true
+			},
+			{
+				"name": "Action",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__pNAC": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": true
+			},
+			{
+				"name": "name",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			},
+			{
+				"name": "Condition",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		],
+		"__p$*": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": true
+			}
+		],
+		"__pPatternContents": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": true
+			}
+		],
+		"__pRHSImport": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotIn",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pPivotOut",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": true
+			},
+			{
+				"name": "filename",
+				"type": "code",
+				"default": "\"[PYTHON]\"\n\"Example:\t result = True\"\n\"Example:\t result = getAttr()\"\n\n\"[JAVASCRIPT]\"\n\"Example:\t true\"\n\"Example:\t getAttr()\""
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\nfalse",
+			"targetType": "Pattern"
+		},
+		{
+			"name": "1lhs-1rhs",
+			"event": "",
+			"targetType": "*",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\nvar mm = \"/Formalisms/__Transformations__/TransformationRule/TransformationRule/\";\n\ngetAllNodes([mm+\"LHS\"]).length == 1 && (getAllNodes([mm+\"RHSImport\"]).length + getAllNodes([mm+\"RHS\"]).length == 1);"
+		}
+	],
+	"actions": [
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\nvar default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = True', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "__pLHS"
+		},
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\nvar default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = getAttr()', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "__pRHS"
+		},
+		{
+			"name": "setDefault",
+			"event": "post-connect",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\nvar default_text = '\"[PYTHON]\"\\n\"Example:\\t result = True\"\\n\"Example:\\t result = getAttr()\"\\n\\n\"[JAVASCRIPT]\"\\n\"Example:\\t true\"\\n\"Example:\\t getAttr()\"'; /*newline*/var neighbor_links = getNeighbors('>'); /*newline*/var queue = new Array(); /*newline*/for (var key in neighbor_links) { /*newline*/    Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/} /*newline*/while (queue.length > 0) { /*newline*/    var curr_item = queue.shift(); /*newline*/    var attr_names = getAttrNames(curr_item); /*newline*/    for (var key in attr_names) { /*newline*/        var attr_name = attr_names[key]; /*newline*/        if (!((attr_name.lastIndexOf('__p', 0) === 0 && !attr_name.lastIndexOf('__p__p', 0) === 0) || attr_name.lastIndexOf('$', 0) === 0)) { /*newline*/            var attr_value = getAttr(attr_name, curr_item); /*newline*/            if (attr_value == default_text) { /*newline*/                setAttr(attr_name, 'result = True', curr_item); /*newline*/            } /*newline*/        } /*newline*/    } /*newline*/    var neighbor_links = getNeighbors('>', curr_item); /*newline*/    for (var key in neighbor_links) { /*newline*/        Array.prototype.push.apply(queue, getNeighbors('>', '*', neighbor_links[key])); /*newline*/    } /*newline*/}",
+			"targetType": "__pNAC"
+		},
+		{
+			"name": "convertToPrePostType",
+			"event": "post-create",
+			"code": "/* comment next line to enable this action */\nthrow \"IgnoredConstraint\"\n/*newline*/var mm  = '/Formalisms/__Transformations__/TransformationRule/TransformationRule/',/*newline*/    pt    = getAttr('$type',getNeighbors('<')[0]),/*newline*/    nid   = getNeighbors('>')[0],/*newline*/    toPre = (pt == mm+'LHS' || pt == mm+'NAC');/*newline*//*newline*/if( ! getAttr('$type',nid).match('\\.pattern/__p') )/*newline*/    throw 'patterns can only contain instance types of pattern metamodels';/*newline*//*newline*/function toPrePostType(id)/*newline*/{/*newline*/    var isPreType = (getAttr('__pMatchSubtypes',id) != undefined);/*newline*/    if( getNeighbors('<','PatternContents',id).length > 1 )/*newline*/        /*for HOTs: do not alter nodes that are already within another Pattern*/;/*newline*/    else if( toPre && !isPreType )/*newline*/        setAttr('__pMatchSubtypes',true,id);/*newline*/    else if( pt == mm+'RHS' && isPreType )/*newline*/        setAttr('__pMatchSubtypes',undefined,id);/*newline*/}/*newline*//*newline*//* TBI :: here we basically convert nid and all of its neighbors to pre-/post-types... this should always be what we want but it would still be cleaner to only convert nid and its *contents* *//*newline*/var done = [],/*newline*/    todo = [nid];/*newline*/while( todo.length > 0 )/*newline*/{/*newline*/    var id = todo.shift();/*newline*/    toPrePostType(id);/*newline*/    done.push(id);/*newline*/    todo = todo.concat(/*newline*/                getNeighbors('>','*',id).filter(/*newline*/                    function(_nid)/*newline*/                    {/*newline*/                        return todo.indexOf(_nid) < 0 && done.indexOf(_nid) < 0;/*newline*/                    }));/*newline*/}/*newline*/undefined;",
+			"targetType": "__pPatternContents"
+		},
+		{
+			"name": "distinctPLabels",
+			"event": "post-create",
+			"code": "if( getAttr(\"__pLabel\") == \"\" )\n{\n\tvar pLabels = getAllNodes().\n\t\t\t\t\t\t\tfilter( function(n) {return hasAttr(\"__pLabel\",n);} ).\n\t\t\t\t\t\t\t\tmap( function(n) {return getAttr(\"__pLabel\",n);} ),\n\t\t i\t\t\t= \"0\";\n\n\twhile( _utils.contains(pLabels,i) )\n\t\ti = String(parseInt(i)+1);\n\tsetAttr(\"__pLabel\",i);\n}",
+			"targetType": "*"
+		}
+	],
+	"cardinalities": {
+		"__pPattern": [
+			{
+				"dir": "out",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pLHS": [
+			{
+				"dir": "out",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pRHS": [
+			{
+				"dir": "out",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pNAC": [
+			{
+				"dir": "out",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__p$*": [
+			{
+				"dir": "in",
+				"type": "__pPatternContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pPatternContents": [
+			{
+				"dir": "in",
+				"type": "__pPattern",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__p$*",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "__pLHS",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "__pRHS",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "__pNAC",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pRHSImport": []
+	},
+	"legalConnections": {
+		"__pPattern": {
+			"__p$*": [
+				"__pPatternContents"
+			]
+		},
+		"__pLHS": {
+			"__p$*": [
+				"__pPatternContents"
+			]
+		},
+		"__pRHS": {
+			"__p$*": [
+				"__pPatternContents"
+			]
+		},
+		"__pNAC": {
+			"__p$*": [
+				"__pPatternContents"
+			]
+		}
+	},
+	"connectorTypes": {
+		"__pPatternContents": "containment"
+	},
+	"types2parentTypes": {
+		"__pPattern": [],
+		"__pLHS": [
+			"__pPattern"
+		],
+		"__pRHS": [
+			"__pPattern"
+		],
+		"__pNAC": [
+			"__pPattern"
+		],
+		"__p$*": [],
+		"__p1lhs-1rhs": [],
+		"__pPatternContents": [],
+		"__pRHSImport": []
+	}
+}

@@ -1,0 +1,6705 @@
+{
+	"csm": {
+		"nodes": {
+			"0": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						429,
+						469
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#7CFC00",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "IDLE"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/0.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"1": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						763,
+						231
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#20B2AA",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "CANVAS_SELECTING"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/1.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"2": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						756,
+						568
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#20B2AA",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "SOMETHING_SELECTED"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/2.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"3": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1074,
+						656
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#20B2AA",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "DRAGGING_SELECTION"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/3.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"4": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						118,
+						289
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#20B2AA",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "DRAWING_EDGE"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/4.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"5": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1041,
+						401
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#20B2AA",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "EDITING_CONNECTION_PATHS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/5.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"6": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1041,
+						105
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#20B2AA",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "DRAGGING_CONNECTION_PATH_CTRL_POINT"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/6.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"8": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						23.368758017492695,
+						295.6356967930029
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "MOUSE_MOVE"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/8.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/8.instance": "M140,320L48,321",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/8.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance": "M48,321L136.99999999999997,310"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"9": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						38.85974999999999,
+						255.20574999999997
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_TAB"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/9.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/9.instance": "M143.99999999999997,299L64,280",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/9.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance": "M64,280L148.99999999999997,295"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"10": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						181.94211433496122,
+						206.4625326834779
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_CTRL  ||\nLEFT_RELEASE_ICON  ||\nLEFT_RELEASE_CANVAS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/10.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/10.instance": "M161.99999999999997,294L206.99999999999997,231",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/10.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance": "M206.99999999999997,231L169.99999999999997,300"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"11": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						217.94841522491348,
+						260.5162230816202
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_ALT  ||\nMIDDLE_RELEASE_ICON  ||\nMIDDLE_RELEASE_CANVAS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/11.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/11.instance": "M172.99999999999997,301L242.99999999999997,286",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/11.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance": "M242.99999999999997,286L175.00045408631772,309.999924318947"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"12": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						327.855072,
+						339.111328
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "RIGHT_PRESS_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/12.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/12.instance": "M458,476L353.355072,364.611328",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/12.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance": "M353.31777778566504,364.6012760437925L173.00043723094902,316.0001178474042"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"13": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						240.31690894762522,
+						408.701659839106
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "RIGHT_RELEASE_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/13.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/13.instance": "M158.99999999999997,328L265,434",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/13.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M265,434L451,477"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"14": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						158.9187254134579,
+						434.23609384809834
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_ESC  ||\nRIGHT_RELEASE_CANVAS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/14.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/4.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/14.instance": "M150,328L183,459",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/14.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M183,459L447,484"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"17": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						519.3801566688567,
+						247.09046996566707
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_RELEASE_ICON  ||\nLEFT_RELEASE_CANVAS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/17.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/1.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/17.instance": "M781,250L544,272",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/17.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M544,272L480.00056293830073,472.99957503677297"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"20": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						615.7235808,
+						423.800061136
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_RELEASE_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/20.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/20.instance": "M487.00000000000006,487L641,449",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/20.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M641,449L783.999243790071,573.9993919136652"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"21": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						602.406074079386,
+						455.4137192286874
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_DEL"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/21.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/21.instance": "M777,578L627,480",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/21.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M627,480L486.0007179891714,491.00006449004536"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"22": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						475.35600002133333,
+						520.9565000064445
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_ESC  ||\nLEFT_PRESS_CANVAS  ||\nLEFT_PRESS_ICON  ||\nCODED_CANVAS_EDIT  ||\nMIDDLE_RELEASE_CANVAS  ||\nMIDDLE_RELEASE_ICON  ||\nSHIFT_MIDDLE_RELEASE_ICON  ||\nRIGHT_RELEASE_CANVAS  ||\nRIGHT_RELEASE_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/22.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/22.instance": "M774,588L500,546",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/22.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M500,546L482,500"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"23": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						699.4940546967896,
+						212.5
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "MOUSE_MOVE"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/23.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/1.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/23.instance": "M782,246L724,238",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/23.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/1.instance": "M724,238L787,239"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"24": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						797.5,
+						397
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_RELEASE_ICON  ||\nLEFT_RELEASE_CANVAS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/24.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/1.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/24.instance": "M800,272L823,422",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/24.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M823,422L797,568"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"26": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						958,
+						531.5
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_PRESS_SELECTION"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/26.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/26.instance": "M813,584L983,557",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/26.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/3.instance": "M983,557L1091.999192672446,672.0002955639859"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"27": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						951.8593137455233,
+						569.5529411689321
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_ESC"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/27.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/3.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/27.instance": "M1094,682L977,595",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/27.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M977,595L813,590"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"28": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1162.5,
+						649.1036055514974
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "MOUSE_MOVE"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/28.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/3.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/28.instance": "M1131,674L1188,674",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/28.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/3.instance": "M1188,674L1126,686"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"30": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1160.3218953962605,
+						396.0774979188345
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_TAB"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/30.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/30.instance": "M1098,428L1185,421",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/30.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance": "M1185,421L1095,434"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"31": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1158.7687340635587,
+						320.75918286354886
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "RIGHT_RELEASE_CTRL_POINT"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/31.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/31.instance": "M1088,407L1184,346",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/31.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance": "M1184,346L1094,412"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"32": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1163.4876432818073,
+						361.50156234367944
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "MIDDLE_RELEASE_CTRL_POINT"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/32.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/32.instance": "M1097,418L1188,387",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/32.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance": "M1188,387L1097,426"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"34": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						917.1259708342066,
+						492.0822815275453
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_SHIFT"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/34.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/34.instance": "M807,574L942,517",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/34.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance": "M942,517L1065,435"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"35": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						566.0051708151484,
+						299.63454030462725
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_PRESS_CANVAS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/35.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/35.instance": "M484,481L591,325",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/35.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/1.instance": "M591,325L785.9993320985964,260.00031589931245"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"36": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						697.6502255890855,
+						103.66837836429346
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_ESC  ||\nLEFT_RELEASE_CANVAS  ||\nLEFT_RELEASE_ICON  ||\nCODED_CANVAS_EDIT"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/36.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/36.instance": "M1064,411L931,153L723,129",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/36.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M723,129L510,176L467.99996457053714,469.9992016561045"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"38": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1074.5,
+						276
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_PRESS_CTRL_POINT"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/38.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/38.instance": "M1078,402L1100,301",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/38.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/6.instance": "M1100,301L1079.9999965319967,139.00045604244676"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"41": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						925.9291794907407,
+						615.8342171296296
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_RELEASE_CANVAS  ||\nLEFT_RELEASE_SELECTION"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/41.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/3.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/41.instance": "M1096,688L951,641",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/41.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M951,641L813,596"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"42": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						880.686620377647,
+						658.2756364123851
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_RELEASE_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/42.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/3.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/42.instance": "M1099,690L906,683",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/42.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M906,683L810,600"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"45": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						717.5534979423867,
+						637.0185185185185
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_CTRL"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/45.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/45.instance": "M782,605L743,662",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/45.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M743,662L778,599"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"46": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						731.7425320978027,
+						671.354709538154
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_ALT"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/46.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/46.instance": "M783,603L757,696",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/46.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M757,696L788.9998980401684,607.0003441144315"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"47": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						200.07088194291958,
+						496.41921481939823
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "SHIFT_MIDDLE_RELEASE_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/47.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/47.instance": "M447,489L225,521",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/47.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M225,521L448,495"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"48": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						219.82380239201967,
+						527.3862983966953
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "RIGHT_RELEASE_CANVAS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/48.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/48.instance": "M450,498L245,552",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/48.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M245,552L452.999175340706,504.0002895750192"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"50": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1001.9017594080067,
+						242.06231735139335
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_RELEASE_CTRL_POINT"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/50.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/6.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/50.instance": "M1072,140L1027,267",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/50.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance": "M1027,267L1071.9999435943978,403.99976027619056"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"51": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1142.0863855214018,
+						86.57010414891494
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "MOUSE_MOVE"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/51.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/6.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/51.instance": "M1096,116L1167,112",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/51.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/6.instance": "M1167,112L1096.0005079000287,127.99991391524937"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"52": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						752.6350454594536,
+						701.9845748839218
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "LEFT_PRESS_SELECTION"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/52.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/52.instance": "M800,606L778,727",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/52.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M778,727L793,606"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"54": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						268.353632,
+						556.5366720000001
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "SHIFT_WHEEL_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/54.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/54.instance": "M452,505L293,582",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/54.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M293,582L458.99930854818155,507.0002334200407"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"55": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						622.467389862716,
+						388.0472102871963
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "CODED_SELECTION"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/55.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/55.instance": "M485,484L647,413",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/55.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M647,413L786.9996403477189,570.9995524937266"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"56": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						801.9383097033527,
+						729.6846940393586
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "CODED_SELECTION"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/56.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/56.instance": "M807,602L826,754",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/56.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M826,754L801.0002047617328,604.0008438665351"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"57": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						880.2942539188202,
+						455.42900562405
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "CODED_SELECTION"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/57.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/5.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/57.instance": "M1058,424L905,480",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/57.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M905,480L805.0006671624093,570.9995039048752"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"58": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						577.9346514520139,
+						509.7299313727725
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "MIDDLE_RELEASE_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/58.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/58.instance": "M486,497L603,517",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/58.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M603,517L776,584"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"59": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						608.2412805175779,
+						669.7034877929686
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_INS  ||\nKEYUP_COMMAND"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/59.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/59.instance": "M774,594L633,677",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/59.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M633,677L776.9995610046387,597.0001755981447"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"60": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						607.1173785481037,
+						360.3054300156514
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "SHIFT_LEFT_RELEASE_ICON"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/60.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/60.instance": "M485,482L632,368",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/60.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M632,368L792,571"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"61": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						829.9220328832803,
+						683.6038116561505
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_TAB"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/61.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/61.instance": "M804,605L854,691",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/61.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/2.instance": "M854,691L811,598"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			}
+		},
+		"edges": [],
+		"metamodels": [
+			"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons"
+		]
+	},
+	"asm": {
+		"nodes": {
+			"0": {
+				"name": {
+					"type": "string",
+					"value": "IDLE"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": ""
+				},
+				"exitAction": {
+					"type": "code",
+					"value": ""
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": true
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"1": {
+				"name": {
+					"type": "string",
+					"value": "CANVAS_SELECTING"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": "__disableDock();\n__initCanvasSelectionOverlay(event.pageX,event.pageY);"
+				},
+				"exitAction": {
+					"type": "code",
+					"value": "__enableDock();"
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"2": {
+				"name": {
+					"type": "string",
+					"value": "SOMETHING_SELECTED"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": ""
+				},
+				"exitAction": {
+					"type": "code",
+					"value": ""
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"3": {
+				"name": {
+					"type": "string",
+					"value": "DRAGGING_SELECTION"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": "__disableDock();\n__initSelectionTransformationPreviewOverlay(event.pageX,event.pageY);"
+				},
+				"exitAction": {
+					"type": "code",
+					"value": "__enableDock();"
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"4": {
+				"name": {
+					"type": "string",
+					"value": "DRAWING_EDGE"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": "__disableDock();\n__initConnectionPath(event.pageX,event.pageY,event.target);"
+				},
+				"exitAction": {
+					"type": "code",
+					"value": "__enableDock();"
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"5": {
+				"name": {
+					"type": "string",
+					"value": "EDITING_CONNECTION_PATHS"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": ""
+				},
+				"exitAction": {
+					"type": "code",
+					"value": ""
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"6": {
+				"name": {
+					"type": "string",
+					"value": "DRAGGING_CONNECTION_PATH_CTRL_POINT"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": "__disableDock();"
+				},
+				"exitAction": {
+					"type": "code",
+					"value": "__enableDock();"
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"8": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"MOUSE_MOVE"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__updateConnectionSegment(event.pageX,event.pageY);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"9": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_TAB"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__snapConnectionSegment();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"10": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_CTRL",
+						"LEFT_RELEASE_ICON",
+						"LEFT_RELEASE_CANVAS"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__addConnectionSegment();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"11": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_ALT",
+						"MIDDLE_RELEASE_ICON",
+						"MIDDLE_RELEASE_CANVAS"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__deleteConnectionSegment();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"12": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"RIGHT_PRESS_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": ""
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"13": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"RIGHT_RELEASE_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "if( __connectionPath.getTotalLength() <= 5 )\n\tconsole.warn('to avoid accidental path creations, paths must measure at least 5px');\nelse\n\t__connect(event.target);\n"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"14": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_ESC",
+						"RIGHT_RELEASE_CANVAS"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__hideConnectionPath();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"17": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_RELEASE_ICON",
+						"LEFT_RELEASE_CANVAS"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "__isCanvasSelectionOverlayEmpty()"
+				},
+				"action": {
+					"type": "code",
+					"value": "__selectSelection();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"20": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_RELEASE_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__select( event.target );"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"21": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_DEL"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__delete();\n__select();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"22": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_ESC",
+						"LEFT_PRESS_CANVAS",
+						"LEFT_PRESS_ICON",
+						"CODED_CANVAS_EDIT",
+						"MIDDLE_RELEASE_CANVAS",
+						"MIDDLE_RELEASE_ICON",
+						"SHIFT_MIDDLE_RELEASE_ICON",
+						"RIGHT_RELEASE_CANVAS",
+						"RIGHT_RELEASE_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__select();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"23": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"MOUSE_MOVE"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__updateCanvasSelectionOverlay(event.pageX,event.pageY);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"24": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_RELEASE_ICON",
+						"LEFT_RELEASE_CANVAS"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "! __isCanvasSelectionOverlayEmpty()"
+				},
+				"action": {
+					"type": "code",
+					"value": "__selectSelection();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"26": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_PRESS_SELECTION"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "__areTransformationsAllowed()"
+				},
+				"action": {
+					"type": "code",
+					"value": ""
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"27": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_ESC"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__hideTransformationPreviewOverlay();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"28": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"MOUSE_MOVE"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__previewSelectionTranslation(event.pageX,event.pageY);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"30": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_TAB"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__snapControlPoint();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"31": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"RIGHT_RELEASE_CTRL_POINT"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__addControlPoint(event.pageX,event.pageY,event.target);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"32": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"MIDDLE_RELEASE_CTRL_POINT"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__deleteControlPoint(event.target);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"34": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_SHIFT"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "__selectionContainsType(__EDGETYPE)"
+				},
+				"action": {
+					"type": "code",
+					"value": "__showConnectionPathEditingOverlay();\n__select();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"35": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_PRESS_CANVAS"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": ""
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"36": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_ESC",
+						"LEFT_RELEASE_CANVAS",
+						"LEFT_RELEASE_ICON",
+						"CODED_CANVAS_EDIT"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__hideConnectionPathEditingOverlay();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"38": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_PRESS_CTRL_POINT"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__initControlPointTranslation(event.target);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"41": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_RELEASE_CANVAS",
+						"LEFT_RELEASE_SELECTION"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__transformSelection(__SELECTION_DRAG);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"42": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_RELEASE_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__getInsertConnectionType(\n    event.target,\n    undefined,\n    function(connectionType)\n    {\n        if( connectionType )\n            __transformSelection(\n                __SELECTION_DRAG,\n                {'dropTarget':event.target,\n                 'connectionType':connectionType});\n        else\n        {\n            console.warn('no containment relationship was created');\n            __transformSelection(__SELECTION_DRAG);\n        }\n    });"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"45": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_CTRL"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "if( ! __areTransformationsAllowed() )\n\tconsole.warn('the geometry controls can only be activated if all '+\n\t\t\t\t 'of the ends of selected edges are also selected, and'+\n\t\t\t\t 'if the geometry controls aren\\'t already active')\nelse\t\t\t\n\t__showGeometryControlsOverlay();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"46": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_ALT"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__hideGeometryControlsOverlay();\n__hideTransformationPreviewOverlay();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"47": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"SHIFT_MIDDLE_RELEASE_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "_openDialog(__SVG_TEXT_EDITOR, event.target);\n"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"48": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"RIGHT_RELEASE_CANVAS"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__create(event.pageX,event.pageY);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"50": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_RELEASE_CTRL_POINT"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__updateConnectionPath();"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"51": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"MOUSE_MOVE"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__previewControlPointTranslation(event.pageX,event.pageY);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"52": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"LEFT_PRESS_SELECTION"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "! __areTransformationsAllowed()"
+				},
+				"action": {
+					"type": "code",
+					"value": "console.warn('the selection dragging mode can only be activated if all of the ends of selected edges are also selected, and if the geometry controls are inactive')"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"54": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"SHIFT_WHEEL_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "if( event.wheelDelta > 0 )\n\t__iconToFront(event.target);\nelse\n\t__iconToBack(event.target);\n"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"55": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"CODED_SELECTION"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__select(event)"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"56": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"CODED_SELECTION"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__select(event)"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"57": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"CODED_SELECTION"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__hideConnectionPathEditingOverlay();\n__select(event);\n"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"58": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"MIDDLE_RELEASE_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__select( event.target );\n_openDialog(_ENTITY_EDITOR);"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"59": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_INS",
+						"KEYUP_COMMAND"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "_openDialog(_ENTITY_EDITOR);\n"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"60": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"SHIFT_LEFT_RELEASE_ICON"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "__select( event.target, true );"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"61": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_TAB"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": "if( ! __areTransformationsAllowed() )\n    console.warn('selection snapping is only enabled if all of '+\n                 'the ends of selected edges are also selected, '+\n                 'and if the geometry controls are inactive');\nelse\n    __snapSelectionToGrid();\n"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			}
+		},
+		"edges": [
+			{
+				"src": "4",
+				"dest": "8"
+			},
+			{
+				"src": "8",
+				"dest": "4"
+			},
+			{
+				"src": "4",
+				"dest": "9"
+			},
+			{
+				"src": "9",
+				"dest": "4"
+			},
+			{
+				"src": "4",
+				"dest": "10"
+			},
+			{
+				"src": "10",
+				"dest": "4"
+			},
+			{
+				"src": "4",
+				"dest": "11"
+			},
+			{
+				"src": "11",
+				"dest": "4"
+			},
+			{
+				"src": "0",
+				"dest": "12"
+			},
+			{
+				"src": "12",
+				"dest": "4"
+			},
+			{
+				"src": "4",
+				"dest": "13"
+			},
+			{
+				"src": "13",
+				"dest": "0"
+			},
+			{
+				"src": "4",
+				"dest": "14"
+			},
+			{
+				"src": "14",
+				"dest": "0"
+			},
+			{
+				"src": "1",
+				"dest": "17"
+			},
+			{
+				"src": "17",
+				"dest": "0"
+			},
+			{
+				"src": "0",
+				"dest": "20"
+			},
+			{
+				"src": "20",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "21"
+			},
+			{
+				"src": "21",
+				"dest": "0"
+			},
+			{
+				"src": "2",
+				"dest": "22"
+			},
+			{
+				"src": "22",
+				"dest": "0"
+			},
+			{
+				"src": "1",
+				"dest": "23"
+			},
+			{
+				"src": "23",
+				"dest": "1"
+			},
+			{
+				"src": "1",
+				"dest": "24"
+			},
+			{
+				"src": "24",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "26"
+			},
+			{
+				"src": "26",
+				"dest": "3"
+			},
+			{
+				"src": "3",
+				"dest": "27"
+			},
+			{
+				"src": "27",
+				"dest": "2"
+			},
+			{
+				"src": "3",
+				"dest": "28"
+			},
+			{
+				"src": "28",
+				"dest": "3"
+			},
+			{
+				"src": "5",
+				"dest": "30"
+			},
+			{
+				"src": "30",
+				"dest": "5"
+			},
+			{
+				"src": "5",
+				"dest": "31"
+			},
+			{
+				"src": "31",
+				"dest": "5"
+			},
+			{
+				"src": "5",
+				"dest": "32"
+			},
+			{
+				"src": "32",
+				"dest": "5"
+			},
+			{
+				"src": "2",
+				"dest": "34"
+			},
+			{
+				"src": "34",
+				"dest": "5"
+			},
+			{
+				"src": "0",
+				"dest": "35"
+			},
+			{
+				"src": "35",
+				"dest": "1"
+			},
+			{
+				"src": "5",
+				"dest": "36"
+			},
+			{
+				"src": "36",
+				"dest": "0"
+			},
+			{
+				"src": "5",
+				"dest": "38"
+			},
+			{
+				"src": "38",
+				"dest": "6"
+			},
+			{
+				"src": "3",
+				"dest": "41"
+			},
+			{
+				"src": "41",
+				"dest": "2"
+			},
+			{
+				"src": "3",
+				"dest": "42"
+			},
+			{
+				"src": "42",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "45"
+			},
+			{
+				"src": "45",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "46"
+			},
+			{
+				"src": "46",
+				"dest": "2"
+			},
+			{
+				"src": "0",
+				"dest": "47"
+			},
+			{
+				"src": "47",
+				"dest": "0"
+			},
+			{
+				"src": "0",
+				"dest": "48"
+			},
+			{
+				"src": "48",
+				"dest": "0"
+			},
+			{
+				"src": "6",
+				"dest": "50"
+			},
+			{
+				"src": "50",
+				"dest": "5"
+			},
+			{
+				"src": "6",
+				"dest": "51"
+			},
+			{
+				"src": "51",
+				"dest": "6"
+			},
+			{
+				"src": "2",
+				"dest": "52"
+			},
+			{
+				"src": "52",
+				"dest": "2"
+			},
+			{
+				"src": "0",
+				"dest": "54"
+			},
+			{
+				"src": "54",
+				"dest": "0"
+			},
+			{
+				"src": "0",
+				"dest": "55"
+			},
+			{
+				"src": "55",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "56"
+			},
+			{
+				"src": "56",
+				"dest": "2"
+			},
+			{
+				"src": "5",
+				"dest": "57"
+			},
+			{
+				"src": "57",
+				"dest": "2"
+			},
+			{
+				"src": "0",
+				"dest": "58"
+			},
+			{
+				"src": "58",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "59"
+			},
+			{
+				"src": "59",
+				"dest": "2"
+			},
+			{
+				"src": "0",
+				"dest": "60"
+			},
+			{
+				"src": "60",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "61"
+			},
+			{
+				"src": "61",
+				"dest": "2"
+			}
+		],
+		"metamodels": [
+			"/Formalisms/SimpleStateChart/SimpleStateChart"
+		]
+	}
+}

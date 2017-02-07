@@ -1,0 +1,766 @@
+{
+	"types": {
+		"OrthogonalComponent": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "OC_"
+			}
+		],
+		"State": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "S_"
+			},
+			{
+				"name": "entryAction",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "exitAction",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "isCurrent",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "option",
+				"type": "ENUM(ITF, OTF, RTO)",
+				"default": "ITF"
+			},
+			{
+				"name": "raiseEntry",
+				"type": "list<map<[event,scope,arguments],[string,string,list<string>]>>",
+				"default": []
+			},
+			{
+				"name": "raiseExit",
+				"type": "list<map<[event,scope,arguments],[string,string,list<string>]>>",
+				"default": []
+			}
+		],
+		"CompositeState": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "S_"
+			},
+			{
+				"name": "entryAction",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "exitAction",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "isCurrent",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "option",
+				"type": "ENUM(ITF, OTF, RTO)",
+				"default": "ITF"
+			},
+			{
+				"name": "raiseEntry",
+				"type": "list<map<[event,scope,arguments],[string,string,list<string>]>>",
+				"default": []
+			},
+			{
+				"name": "raiseExit",
+				"type": "list<map<[event,scope,arguments],[string,string,list<string>]>>",
+				"default": []
+			}
+		],
+		"BasicState": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "S_"
+			},
+			{
+				"name": "entryAction",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "exitAction",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "isStart",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "isCurrent",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "option",
+				"type": "ENUM(ITF, OTF, RTO)",
+				"default": "ITF"
+			},
+			{
+				"name": "raiseEntry",
+				"type": "list<map<[event,scope,arguments],[string,string,list<string>]>>",
+				"default": []
+			},
+			{
+				"name": "raiseExit",
+				"type": "list<map<[event,scope,arguments],[string,string,list<string>]>>",
+				"default": []
+			}
+		],
+		"contain": [],
+		"transition": [
+			{
+				"name": "event",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "guard",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "action",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "display",
+				"type": "string",
+				"default": "XXXX"
+			},
+			{
+				"name": "after",
+				"type": "code",
+				"default": ""
+			},
+			{
+				"name": "raise",
+				"type": "list<map<[event,scope,arguments],[string,string,list<string>]>>",
+				"default": []
+			},
+			{
+				"name": "parameters",
+				"type": "list<string>",
+				"default": []
+			},
+			{
+				"name": "port",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"containOC": [],
+		"HistoryState": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "H"
+			},
+			{
+				"name": "type",
+				"type": "ENUM(deep, shallow)",
+				"default": "shallow"
+			}
+		],
+		"includes": [],
+		"Class": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "Class_"
+			},
+			{
+				"name": "attributes",
+				"type": "list<$ATTRIBUTE>",
+				"default": []
+			},
+			{
+				"name": "cardinalities",
+				"type": "list<$CARDINALITY>",
+				"default": []
+			},
+			{
+				"name": "abstract",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "methods",
+				"type": "list<$METHOD>",
+				"default": []
+			},
+			{
+				"name": "external",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Association": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "Association_"
+			},
+			{
+				"name": "attributes",
+				"type": "list<$ATTRIBUTE>",
+				"default": []
+			},
+			{
+				"name": "constraints",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "actions",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "cardinalities",
+				"type": "list<$CARDINALITY>",
+				"default": []
+			},
+			{
+				"name": "linktype",
+				"type": "ENUM(visual,containment)",
+				"default": "visual"
+			}
+		],
+		"Inheritance": [],
+		"behaviour": [],
+		"ocContain": [],
+		"SimulationInstance": [
+			{
+				"name": "simulation_time",
+				"type": "float",
+				"default": 0
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "distinctNames",
+			"event": "",
+			"targetType": "*",
+			"code": "var \tmm \t\t= '/Formalisms/SCCD/SCCD/',\n\tstates \t\t= getAllNodes([mm+'BasicState',mm+'CompositeState',mm+'OrthogonalComponent']),\n\tfullStateNames  = {},\n\tknownStateNames = [];\n\nfunction fullStateName(s,fsn)\n{\n\tif( !(s in fullStateNames) )\n\t{\n\t\tvar containLinks = getNeighbors('<',mm+'contain',s).\n                                    concat(getNeighbors('<',mm+'ocContain',s)).\n                                    concat(getNeighbors('<',mm+'containOC',s));\n\t\tif( containLinks.length > 0 )\n\t\t{\n\t\t\tvar parent = getNeighbors(\"<\",'*',containLinks[0])[0];\n\t\t\tfullStateNames[s] = fullStateName(parent,getAttr('name',parent))+fsn;\n\t\t}\n\t\telse\n\t\t\tfullStateNames[s] = fsn;\n\t}\n\treturn fullStateNames[s];\n}\n\n\nstates.every(\n\tfunction(s)\n\t{\n\t\tvar fsn = fullStateName(s,getAttr('name',s));\n\t\tif( knownStateNames.indexOf(fsn) > -1 )\n\t\t\treturn false;\n\t\tknownStateNames.push(fsn);\n\t\treturn true;\n\t});\n"
+		},
+		{
+			"name": "singleContainer",
+			"event": "post-connect",
+			"code": "/*newline*/var mm = '/Formalisms/StateChart/StateChart/';/*newline*/getNeighbors('<',mm+'Contain').concat(getNeighbors('<',mm+'OCContain')).concat(getNeighbors('<',mm+'ContainOC')).length <= 1;",
+			"targetType": "State"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "State"
+		},
+		{
+			"name": "singleContainer",
+			"event": "post-connect",
+			"code": "/*newline*/var mm = '/Formalisms/StateChart/StateChart/';/*newline*/getNeighbors('<',mm+'Contain').concat(getNeighbors('<',mm+'OCContain')).concat(getNeighbors('<',mm+'ContainOC')).length <= 1;",
+			"targetType": "CompositeState"
+		},
+		{
+			"name": "singleContainer",
+			"event": "post-connect",
+			"code": "/*newline*/var mm = '/Formalisms/StateChart/StateChart/';/*newline*/getNeighbors('<',mm+'Contain').concat(getNeighbors('<',mm+'OCContain')).concat(getNeighbors('<',mm+'ContainOC')).length <= 1;",
+			"targetType": "BasicState"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"OrthogonalComponent": [
+			{
+				"dir": "in",
+				"type": "containOC",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "ocContain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"State": [
+			{
+				"dir": "in",
+				"type": "contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "behaviour",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"CompositeState": [
+			{
+				"dir": "out",
+				"type": "HistoryState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "containOC",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "includes",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "ocContain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "behaviour",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"BasicState": [
+			{
+				"dir": "in",
+				"type": "contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "behaviour",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"contain": [
+			{
+				"dir": "in",
+				"type": "CompositeState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BasicState",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"transition": [
+			{
+				"dir": "in",
+				"type": "OrthogonalComponent",
+				"min": "0",
+				"max": "0"
+			},
+			{
+				"dir": "out",
+				"type": "OrthogonalComponent",
+				"min": "0",
+				"max": "0"
+			},
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "HistoryState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CompositeState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "BasicState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BasicState",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"containOC": [
+			{
+				"dir": "in",
+				"type": "CompositeState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OrthogonalComponent",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"HistoryState": [
+			{
+				"dir": "in",
+				"type": "includes",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "transition",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"includes": [
+			{
+				"dir": "out",
+				"type": "HistoryState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CompositeState",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Class": [
+			{
+				"dir": "in",
+				"type": "PackageContents",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Association",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Association",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Inheritance",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Inheritance",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "behaviour",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Association": [
+			{
+				"dir": "in",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Inheritance": [
+			{
+				"dir": "in",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"behaviour": [
+			{
+				"dir": "in",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeState",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BasicState",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"ocContain": [
+			{
+				"dir": "in",
+				"type": "OrthogonalComponent",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeState",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"SimulationInstance": []
+	},
+	"legalConnections": {
+		"OrthogonalComponent": {
+			"CompositeState": [
+				"ocContain"
+			]
+		},
+		"State": {
+			"OrthogonalComponent": [
+				"transition"
+			],
+			"State": [
+				"transition"
+			],
+			"HistoryState": [
+				"transition"
+			],
+			"CompositeState": [
+				"transition"
+			],
+			"BasicState": [
+				"transition"
+			]
+		},
+		"CompositeState": {
+			"State": [
+				"contain",
+				"transition"
+			],
+			"CompositeState": [
+				"contain",
+				"transition"
+			],
+			"BasicState": [
+				"contain",
+				"transition"
+			],
+			"OrthogonalComponent": [
+				"containOC",
+				"transition"
+			],
+			"HistoryState": [
+				"includes",
+				"transition"
+			]
+		},
+		"BasicState": {
+			"OrthogonalComponent": [
+				"transition"
+			],
+			"State": [
+				"transition"
+			],
+			"HistoryState": [
+				"transition"
+			],
+			"CompositeState": [
+				"transition"
+			],
+			"BasicState": [
+				"transition"
+			]
+		},
+		"Class": {
+			"Class": [
+				"Association",
+				"Inheritance"
+			],
+			"State": [
+				"behaviour"
+			],
+			"CompositeState": [
+				"behaviour"
+			],
+			"BasicState": [
+				"behaviour"
+			]
+		}
+	},
+	"connectorTypes": {
+		"contain": "containment",
+		"transition": "visual",
+		"containOC": "containment",
+		"includes": "containment",
+		"Association": "visual",
+		"Inheritance": "visual",
+		"behaviour": "visual",
+		"ocContain": "containment"
+	},
+	"types2parentTypes": {
+		"distinctNames": [],
+		"OrthogonalComponent": [],
+		"State": [],
+		"CompositeState": [
+			"State"
+		],
+		"BasicState": [
+			"State"
+		],
+		"contain": [],
+		"transition": [],
+		"containOC": [],
+		"HistoryState": [],
+		"includes": [],
+		"Class": [],
+		"Association": [],
+		"Inheritance": [],
+		"behaviour": [],
+		"ocContain": [],
+		"SimulationInstance": []
+	}
+}

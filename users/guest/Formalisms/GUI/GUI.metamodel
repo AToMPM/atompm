@@ -1,0 +1,456 @@
+{
+	"types": {
+		"VisualElement": [
+			{
+				"name": "code",
+				"type": "code",
+				"default": "/* IF THIS ATTRIBUTE IS NOT *EMPTY*, IT'S VALUE WILL BE USED *//*newline*/class ExecuteCode/*newline*/{/*newline*/    /* Complete this for a coded List *//*newline*/    public java.util.ArrayList<String> executeCode()/*newline*/    {/*newline*/        return new java.util.ArrayList<String>();/*newline*/    }/*newline*//*newline*/    /* Complete this for a coded Input, Label or Button *//*newline*/    public String executeCode()/*newline*/    {/*newline*/        return \"\";/*newline*/    }/*newline*/}"
+			},
+			{
+				"name": "size",
+				"type": "ENUM(wrapContent,fitContainer)",
+				"default": "fitContainer"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "id",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Input": [
+			{
+				"name": "text",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "/* IF THIS ATTRIBUTE IS NOT *EMPTY*, IT'S VALUE WILL BE USED *//*newline*/class ExecuteCode/*newline*/{/*newline*/    /* Complete this for a coded List *//*newline*/    public java.util.ArrayList<String> executeCode()/*newline*/    {/*newline*/        return new java.util.ArrayList<String>();/*newline*/    }/*newline*//*newline*/    /* Complete this for a coded Input, Label or Button *//*newline*/    public String executeCode()/*newline*/    {/*newline*/        return \"\";/*newline*/    }/*newline*/}"
+			},
+			{
+				"name": "size",
+				"type": "ENUM(wrapContent,fitContainer)",
+				"default": "fitContainer"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "id",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"List": [
+			{
+				"name": "choices",
+				"type": "list<string>",
+				"default": []
+			},
+			{
+				"name": "clickable",
+				"type": "boolean",
+				"default": true
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "/* IF THIS ATTRIBUTE IS NOT *EMPTY*, IT'S VALUE WILL BE USED *//*newline*/class ExecuteCode/*newline*/{/*newline*/    /* Complete this for a coded List *//*newline*/    public java.util.ArrayList<String> executeCode()/*newline*/    {/*newline*/        return new java.util.ArrayList<String>();/*newline*/    }/*newline*//*newline*/    /* Complete this for a coded Input, Label or Button *//*newline*/    public String executeCode()/*newline*/    {/*newline*/        return \"\";/*newline*/    }/*newline*/}"
+			},
+			{
+				"name": "size",
+				"type": "ENUM(wrapContent,fitContainer)",
+				"default": "fitContainer"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "id",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Label": [
+			{
+				"name": "text",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "/* IF THIS ATTRIBUTE IS NOT *EMPTY*, IT'S VALUE WILL BE USED *//*newline*/class ExecuteCode/*newline*/{/*newline*/    /* Complete this for a coded List *//*newline*/    public java.util.ArrayList<String> executeCode()/*newline*/    {/*newline*/        return new java.util.ArrayList<String>();/*newline*/    }/*newline*//*newline*/    /* Complete this for a coded Input, Label or Button *//*newline*/    public String executeCode()/*newline*/    {/*newline*/        return \"\";/*newline*/    }/*newline*/}"
+			},
+			{
+				"name": "size",
+				"type": "ENUM(wrapContent,fitContainer)",
+				"default": "fitContainer"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "id",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Container": [
+			{
+				"name": "layout",
+				"type": "ENUM('linear','absolute','relative','table')",
+				"default": "linear"
+			},
+			{
+				"name": "orientation",
+				"type": "ENUM('vertical','horizontal')",
+				"default": "vertical"
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "/* IF THIS ATTRIBUTE IS NOT *EMPTY*, IT'S VALUE WILL BE USED *//*newline*/class ExecuteCode/*newline*/{/*newline*/    /* Complete this for a coded List *//*newline*/    public java.util.ArrayList<String> executeCode()/*newline*/    {/*newline*/        return new java.util.ArrayList<String>();/*newline*/    }/*newline*//*newline*/    /* Complete this for a coded Input, Label or Button *//*newline*/    public String executeCode()/*newline*/    {/*newline*/        return \"\";/*newline*/    }/*newline*/}"
+			},
+			{
+				"name": "size",
+				"type": "ENUM(wrapContent,fitContainer)",
+				"default": "fitContainer"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "id",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Button": [
+			{
+				"name": "text",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "/* IF THIS ATTRIBUTE IS NOT *EMPTY*, IT'S VALUE WILL BE USED *//*newline*/class ExecuteCode/*newline*/{/*newline*/    /* Complete this for a coded List *//*newline*/    public java.util.ArrayList<String> executeCode()/*newline*/    {/*newline*/        return new java.util.ArrayList<String>();/*newline*/    }/*newline*//*newline*/    /* Complete this for a coded Input, Label or Button *//*newline*/    public String executeCode()/*newline*/    {/*newline*/        return \"\";/*newline*/    }/*newline*/}"
+			},
+			{
+				"name": "size",
+				"type": "ENUM(wrapContent,fitContainer)",
+				"default": "fitContainer"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "id",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Contain": [],
+		"Canvas": [],
+		"CanvasContents": []
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "VisualElement"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"VisualElement": [
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "CanvasContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Input": [
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "CanvasContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"List": [
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "CanvasContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Label": [
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "CanvasContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Container": [
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "CanvasContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Button": [
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "CanvasContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Contain": [
+			{
+				"dir": "in",
+				"type": "Container",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VisualElement",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Input",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "List",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Label",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Container",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Button",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Canvas": [
+			{
+				"dir": "out",
+				"type": "CanvasContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"CanvasContents": [
+			{
+				"dir": "in",
+				"type": "Canvas",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VisualElement",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Input",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "List",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Label",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Container",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Button",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Container": {
+			"VisualElement": [
+				"Contain"
+			],
+			"Input": [
+				"Contain"
+			],
+			"List": [
+				"Contain"
+			],
+			"Label": [
+				"Contain"
+			],
+			"Container": [
+				"Contain"
+			],
+			"Button": [
+				"Contain"
+			]
+		},
+		"Canvas": {
+			"VisualElement": [
+				"CanvasContents"
+			],
+			"Input": [
+				"CanvasContents"
+			],
+			"List": [
+				"CanvasContents"
+			],
+			"Label": [
+				"CanvasContents"
+			],
+			"Container": [
+				"CanvasContents"
+			],
+			"Button": [
+				"CanvasContents"
+			]
+		}
+	},
+	"connectorTypes": {
+		"Contain": "containment",
+		"CanvasContents": "containment"
+	},
+	"types2parentTypes": {
+		"VisualElement": [],
+		"Input": [
+			"VisualElement"
+		],
+		"List": [
+			"VisualElement"
+		],
+		"Label": [
+			"VisualElement"
+		],
+		"Container": [
+			"VisualElement"
+		],
+		"Button": [
+			"VisualElement"
+		],
+		"Contain": [],
+		"Canvas": [],
+		"CanvasContents": []
+	}
+}

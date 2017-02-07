@@ -1,0 +1,321 @@
+{
+	"types": {
+		"$*": [],
+		"Annotation": [
+			{
+				"name": "text",
+				"type": "code",
+				"default": "Your Annotation Text"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			},
+			{
+				"name": "textStyle",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#000000",
+					"fill-opacity": 0,
+					"font-size": "17px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none",
+					"font-family": "Courier New"
+				}
+			}
+		],
+		"annotates": [],
+		"TextAnnotationBox": [
+			{
+				"name": "width",
+				"type": "double",
+				"default": 100
+			},
+			{
+				"name": "height",
+				"type": "double",
+				"default": 100
+			},
+			{
+				"name": "style",
+				"type": "map<string, string>",
+				"default": {
+					"stroke": "#04B404",
+					"stroke-dasharray": "",
+					"fill": "#F2F2F2",
+					"fill-opacity": 0.75,
+					"font-size": "20px",
+					"stroke-width": 2.5,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "text",
+				"type": "code",
+				"default": "Your Annotation Text"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			},
+			{
+				"name": "textStyle",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#000000",
+					"fill-opacity": 0,
+					"font-size": "17px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none",
+					"font-family": "Courier New"
+				}
+			}
+		],
+		"TextAnnotationRound": [
+			{
+				"name": "r",
+				"type": "double",
+				"default": 50
+			},
+			{
+				"name": "style",
+				"type": "map<int,int>",
+				"default": {
+					"stroke": "#04B404",
+					"stroke-dasharray": "",
+					"fill": "#F2F2F2",
+					"fill-opacity": 0.75,
+					"font-size": "20px",
+					"stroke-width": 2.5,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "text",
+				"type": "code",
+				"default": "Your Annotation Text"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			},
+			{
+				"name": "textStyle",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#000000",
+					"fill-opacity": 0,
+					"font-size": "17px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none",
+					"font-family": "Courier New"
+				}
+			}
+		],
+		"TextAnnotationRoundedBox": [
+			{
+				"name": "width",
+				"type": "double",
+				"default": 100
+			},
+			{
+				"name": "height",
+				"type": "int",
+				"default": 100
+			},
+			{
+				"name": "style",
+				"type": "map<int,int>",
+				"default": {
+					"stroke": "#04B404",
+					"stroke-dasharray": "",
+					"fill": "#F2F2F2",
+					"fill-opacity": 0.75,
+					"font-size": "20px",
+					"stroke-width": 2.5,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "text",
+				"type": "code",
+				"default": "Your Annotation Text"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			},
+			{
+				"name": "textStyle",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#000000",
+					"fill-opacity": 0,
+					"font-size": "17px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none",
+					"font-family": "Courier New"
+				}
+			}
+		]
+	},
+	"constraints": [],
+	"actions": [
+		{
+			"name": "resizeToText",
+			"event": "post-edit",
+			"code": "/*newline*/var text = getAttr('text').replace(/\\n/g, ' '), /*newline*/    strLen = text.length, /*newline*/    fontSize = getAttr('textStyle')['font-size'], /*newline*/    strPix = parseInt(fontSize.substring(0,fontSize.indexOf('p'))), /*newline*/    strWidth = strPix * strLen; /*newline*/if (strWidth > 0) { /*newline*/    var strLenSqrt = Math.ceil(Math.sqrt(strLen)), /*newline*/        i = strLenSqrt, /*newline*/        oldIdx = 0, /*newline*/        longestLine = strLenSqrt, /*newline*/        nrOfLines = 0; /*newline*/    while (i < strLen) { /*newline*/        var idx = text.indexOf(' ', i); /*newline*/        if (idx > -1) { /*newline*/            text = text.slice(0,idx) + '\\n' + text.slice(idx).replace(/^ /g, ''); /*newline*/            if (idx - oldIdx > longestLine) { /*newline*/                longestLine = idx - oldIdx /*newline*/            } /*newline*/            i = idx + strLenSqrt; /*newline*/            oldIdx = idx; /*newline*/            nrOfLines += 1; /*newline*/        } else { /*newline*/            i = strLen; /*newline*/        } /*newline*/    } /*newline*/    setAttr('text', text); /*newline*/    var width = longestLine * (strPix - 5) + 35; /*newline*/    setAttr('width', width); /*newline*/    setAttr('height', (nrOfLines * (strPix + 5)) + 40); /*newline*/}",
+			"targetType": "TextAnnotationBox"
+		},
+		{
+			"name": "",
+			"event": "ENUM( pre-connect , pre-create , pre-disconnect , pre-delete , pre-edit , post-connect , post-create , post-disconnect , post-delete , post-edit )",
+			"code": "",
+			"targetType": "TextAnnotationBox"
+		},
+		{
+			"name": "resizeToText",
+			"event": "post-edit",
+			"code": "/*newline*/var text = getAttr('text').replace(/\\n/g, ' '), /*newline*/    strLen = text.length, /*newline*/    fontSize = getAttr('textStyle')['font-size'], /*newline*/    strPix = parseInt(fontSize.substring(0,fontSize.indexOf('p'))), /*newline*/    strWidth = strPix * strLen; /*newline*/if (strWidth > 0) { /*newline*/    var strLenSqrt = Math.ceil(Math.sqrt(strLen)), /*newline*/        i = strLenSqrt; /*newline*/    while (i < strLen) { /*newline*/        var idx = text.indexOf(' ', i); /*newline*/        if (idx > -1) { /*newline*/            text = text.slice(0,idx) + '\\n' + text.slice(idx).replace(/^ /g, ''); /*newline*/            i = idx + strLenSqrt; /*newline*/        } else { /*newline*/            i = strLen; /*newline*/        } /*newline*/    } /*newline*/    setAttr('text', text); /*newline*/    var width = strLenSqrt * (strPix - 5) + 35; /*newline*/    setAttr('r', width / 2); /*newline*/}",
+			"targetType": "TextAnnotationRound"
+		},
+		{
+			"name": "resizeToText",
+			"event": "post-edit",
+			"code": "/*newline*/var text = getAttr('text').replace(/\\n/g, ' '), /*newline*/    strLen = text.length, /*newline*/    fontSize = getAttr('textStyle')['font-size'], /*newline*/    strPix = parseInt(fontSize.substring(0,fontSize.indexOf('p'))), /*newline*/    strWidth = strPix * strLen; /*newline*/if (strWidth > 0) { /*newline*/    var strLenSqrt = Math.ceil(Math.sqrt(strLen)), /*newline*/        i = strLenSqrt, /*newline*/        oldIdx = 0, /*newline*/        longestLine = strLenSqrt, /*newline*/        nrOfLines = 0; /*newline*/    while (i < strLen) { /*newline*/        var idx = text.indexOf(' ', i); /*newline*/        if (idx > -1) { /*newline*/            text = text.slice(0,idx) + '\\n' + text.slice(idx).replace(/^ /g, ''); /*newline*/            if (idx - oldIdx > longestLine) { /*newline*/                longestLine = idx - oldIdx /*newline*/            } /*newline*/            i = idx + strLenSqrt; /*newline*/            oldIdx = idx; /*newline*/            nrOfLines += 1; /*newline*/        } else { /*newline*/            i = strLen; /*newline*/        } /*newline*/    } /*newline*/    setAttr('text', text); /*newline*/    var width = longestLine * (strPix - 5) + 35; /*newline*/    setAttr('width', width); /*newline*/    setAttr('height', nrOfLines * (strPix + 5) + 40); /*newline*/}",
+			"targetType": "TextAnnotationRoundedBox"
+		}
+	],
+	"cardinalities": {
+		"$*": [
+			{
+				"dir": "in",
+				"type": "annotates",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Annotation": [
+			{
+				"dir": "out",
+				"type": "annotates",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"annotates": [
+			{
+				"dir": "in",
+				"type": "Annotation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "$*",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "TextAnnotationBox",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "TextAnnotationRound",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "TextAnnotationRoundedBox",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"TextAnnotationBox": [
+			{
+				"dir": "out",
+				"type": "annotates",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"TextAnnotationRound": [
+			{
+				"dir": "out",
+				"type": "annotates",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"TextAnnotationRoundedBox": [
+			{
+				"dir": "out",
+				"type": "annotates",
+				"min": "0",
+				"max": "Infinity"
+			}
+		]
+	},
+	"legalConnections": {
+		"Annotation": {
+			"$*": [
+				"annotates"
+			]
+		},
+		"TextAnnotationBox": {
+			"$*": [
+				"annotates"
+			]
+		},
+		"TextAnnotationRound": {
+			"$*": [
+				"annotates"
+			]
+		},
+		"TextAnnotationRoundedBox": {
+			"$*": [
+				"annotates"
+			]
+		}
+	},
+	"connectorTypes": {
+		"annotates": "visual"
+	},
+	"types2parentTypes": {
+		"$*": [],
+		"Annotation": [],
+		"annotates": [],
+		"TextAnnotationBox": [
+			"Annotation"
+		],
+		"TextAnnotationRound": [
+			"Annotation"
+		],
+		"TextAnnotationRoundedBox": [
+			"Annotation"
+		]
+	}
+}

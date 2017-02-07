@@ -1,0 +1,247 @@
+{
+	"types": {
+		"__pClass": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "name",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "attributes",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "constraints",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "actions",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "cardinalities",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "abstract",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pGlobalConstraint": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "name",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "event",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pGlobalAction": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "name",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "event",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pAssociation": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "name",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "attributes",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "constraints",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "actions",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "cardinalities",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "linktype",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pInheritance": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noInheritanceLoops",
+			"event": "post-create",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\n/*newline*/var mm      = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/',/*newline*/    nout    = getNeighbors('>',mm+'Class'),/*newline*/    visited = [];/*newline*/function dfs(to_visit)/*newline*/{/*newline*/    var curr = to_visit.pop();/*newline*/    if( curr == undefined )/*newline*/        return true;/*newline*/    else if( visited.indexOf(curr) > -1 )/*newline*/        return false;/*newline*/    else/*newline*/    {/*newline*/        visited.push(curr);/*newline*/        var ntype = (getAttr('$type',curr) == mm+'Class' ? /*newline*/                    mm+'Inheritance' : mm+'Class');/*newline*/        return dfs( to_visit.concat(getNeighbors('>',ntype,curr)) );/*newline*/    }/*newline*/}/*newline*/dfs(nout);",
+			"targetType": "Inheritance"
+		}
+	],
+	"actions": [
+		{
+			"name": "distinctPLabels",
+			"event": "post-create",
+			"code": "if( getAttr(\"__pLabel\") == \"\" )\n{\n\tvar pLabels = getAllNodes().\n\t\t\t\t\t\t\tfilter( function(n) {return hasAttr(\"__pLabel\",n);} ).\n\t\t\t\t\t\t\t\tmap( function(n) {return getAttr(\"__pLabel\",n);} ),\n\t\t i\t\t\t= \"0\";\n\n\twhile( _utils.contains(pLabels,i) )\n\t\ti = String(parseInt(i)+1);\n\tsetAttr(\"__pLabel\",i);\n}",
+			"targetType": "*"
+		}
+	],
+	"cardinalities": {
+		"__pClass": [
+			{
+				"dir": "out",
+				"type": "__pAssociation",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pAssociation",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "__pInheritance",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pInheritance",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pGlobalConstraint": [],
+		"__pGlobalAction": [],
+		"__pAssociation": [
+			{
+				"dir": "in",
+				"type": "__pClass",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pClass",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pInheritance": [
+			{
+				"dir": "in",
+				"type": "__pClass",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pClass",
+				"min": 0,
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"__pClass": {
+			"__pClass": [
+				"__pAssociation",
+				"__pInheritance"
+			]
+		}
+	},
+	"connectorTypes": {
+		"__pAssociation": "visual",
+		"__pInheritance": "visual"
+	},
+	"types2parentTypes": {
+		"__pClass": [],
+		"__pGlobalConstraint": [],
+		"__pGlobalAction": [],
+		"__pAssociation": [],
+		"__pInheritance": []
+	}
+}

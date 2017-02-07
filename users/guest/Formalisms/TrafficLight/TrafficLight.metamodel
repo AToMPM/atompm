@@ -1,0 +1,313 @@
+{
+	"types": {
+		"State": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "initial",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Interrupt": [
+			{
+				"name": "at",
+				"type": "int",
+				"default": 0
+			},
+			{
+				"name": "event",
+				"type": "string",
+				"default": "E"
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"TimedTransition": [
+			{
+				"name": "after",
+				"type": "int",
+				"default": 0
+			}
+		],
+		"InterruptTransition": [
+			{
+				"name": "interrupt",
+				"type": "string",
+				"default": "E"
+			}
+		],
+		"Time": [
+			{
+				"name": "clock",
+				"type": "int",
+				"default": 0
+			}
+		],
+		"AbstractInterrupt": [
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Next": [],
+		"End": [
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Visualisation": [
+			{
+				"name": "red",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "yellow",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "green",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"VisualisedBy": []
+	},
+	"constraints": [
+		{
+			"name": "max-one-instance",
+			"event": "pre-create",
+			"code": "getAllNodes(['/Formalisms/TrafficLight/TrafficLight/Time']).length == 0",
+			"targetType": "Time"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "AbstractInterrupt"
+		},
+		{
+			"name": "one-time-instance",
+			"event": "",
+			"targetType": "*",
+			"code": "var time_instances = getAllNodes(['/Formalisms/TrafficLight/TrafficLight/Time']);\ntime_instances.length == 1"
+		}
+	],
+	"actions": [
+		{
+			"name": "set-clock",
+			"event": "post-create",
+			"code": "setAttr('clock', 1)",
+			"targetType": "Time"
+		},
+		{
+			"name": "set-clock",
+			"event": "post-create",
+			"targetType": "*",
+			"code": "var instances = getAllNodes(['/Formalisms/TrafficLight/TrafficLight/Time']);\nconsole.log(instances.length);\nif (instances.length) {\n   setAttr('clock', 0, instances[0]);\n}"
+		}
+	],
+	"cardinalities": {
+		"State": [
+			{
+				"dir": "out",
+				"type": "TimedTransition",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "VisualisedBy",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "TimedTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "InterruptTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "InterruptTransition",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Interrupt": [
+			{
+				"dir": "out",
+				"type": "Next",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Next",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"TimedTransition": [
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"InterruptTransition": [
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Time": [],
+		"AbstractInterrupt": [
+			{
+				"dir": "in",
+				"type": "Next",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Next": [
+			{
+				"dir": "in",
+				"type": "Interrupt",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AbstractInterrupt",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Interrupt",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "End",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"End": [
+			{
+				"dir": "in",
+				"type": "Next",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Visualisation": [
+			{
+				"dir": "in",
+				"type": "VisualisedBy",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"VisualisedBy": [
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Visualisation",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"State": {
+			"State": [
+				"TimedTransition",
+				"InterruptTransition"
+			],
+			"Visualisation": [
+				"VisualisedBy"
+			]
+		},
+		"Interrupt": {
+			"AbstractInterrupt": [
+				"Next"
+			],
+			"Interrupt": [
+				"Next"
+			],
+			"End": [
+				"Next"
+			]
+		}
+	},
+	"connectorTypes": {
+		"TimedTransition": "visual",
+		"InterruptTransition": "visual",
+		"Next": "visual",
+		"VisualisedBy": "visual"
+	},
+	"types2parentTypes": {
+		"State": [],
+		"Interrupt": [
+			"AbstractInterrupt"
+		],
+		"TimedTransition": [],
+		"InterruptTransition": [],
+		"Time": [],
+		"AbstractInterrupt": [],
+		"Next": [],
+		"End": [
+			"AbstractInterrupt"
+		],
+		"Visualisation": [],
+		"VisualisedBy": [],
+		"one-time-instance": [],
+		"set-clock": []
+	}
+}

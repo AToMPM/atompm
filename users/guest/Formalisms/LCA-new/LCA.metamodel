@@ -1,0 +1,98 @@
+{
+	"types": {
+		"Node": [
+			{
+				"name": "id",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "input",
+				"type": "string",
+				"default": "false"
+			},
+			{
+				"name": "highlight",
+				"type": "string",
+				"default": "no"
+			}
+		],
+		"parent": [],
+		"ancestor": []
+	},
+	"constraints": [],
+	"actions": [],
+	"cardinalities": {
+		"Node": [
+			{
+				"dir": "out",
+				"type": "parent",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "parent",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "ancestor",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "ancestor",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"parent": [
+			{
+				"dir": "in",
+				"type": "Node",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Node",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"ancestor": [
+			{
+				"dir": "in",
+				"type": "Node",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Node",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Node": {
+			"Node": [
+				"parent",
+				"ancestor"
+			]
+		}
+	},
+	"connectorTypes": {
+		"parent": "visual",
+		"ancestor": "visual"
+	},
+	"types2parentTypes": {
+		"Node": [],
+		"parent": [],
+		"ancestor": []
+	}
+}

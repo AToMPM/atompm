@@ -1,0 +1,899 @@
+{
+	"csm": {
+		"nodes": {
+			"0": {
+				"typename": {
+					"type": "string",
+					"value": "RuleIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						709,
+						290
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"48": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "25"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "12"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"49": {
+								"textContent": {
+									"type": "string",
+									"value": "R_CompileCode"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ \n\t'textContent': \n\t\tgetAttr('filename').match(/.*\\/(.*)\\.model/)[1] \n})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										6,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"51": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										16.248998508095582,
+										5.9989985080955535
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "48",
+								"dest": 51
+							},
+							{
+								"src": 51,
+								"dest": "49"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/Rule/0.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon"
+			},
+			"2": {
+				"typename": {
+					"type": "string",
+					"value": "RuleIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						708,
+						150
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"48": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "25"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "12"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"49": {
+								"textContent": {
+									"type": "string",
+									"value": "R_CreateActionCode"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ \n\t'textContent': \n\t\tgetAttr('filename').match(/.*\\/(.*)\\.model/)[1] \n})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										6,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"51": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										16.248998508095582,
+										5.9989985080955535
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "48",
+								"dest": 51
+							},
+							{
+								"src": 51,
+								"dest": "49"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/Rule/2.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon"
+			},
+			"4": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#7fff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnSuccessLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						942.4516695856004,
+						263.999
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess/4.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/0.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/4.instance": "M909,299L942,299L942,264",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/4.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/0.instance": "M942,264L878,264L878,288.99928684807264"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink"
+			},
+			"7": {
+				"typename": {
+					"type": "string",
+					"value": "RuleIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						711,
+						217
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"48": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "25"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "12"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"49": {
+								"textContent": {
+									"type": "string",
+									"value": "R_InitActionCode"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ \n\t'textContent': \n\t\tgetAttr('filename').match(/.*\\/(.*)\\.model/)[1] \n})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										6,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"51": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										16.248998508095582,
+										5.9989985080955535
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "48",
+								"dest": 51
+							},
+							{
+								"src": 51,
+								"dest": "49"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/Rule/7.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon"
+			},
+			"8": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#bbbbbb",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnNotApplicableLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						754.9989985080956,
+						194.49900000000002
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable/8.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/2.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/8.instance": "M755,172L755,194.50000000000003",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/8.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/7.instance": "M755,194.57806804258163L755,216.99933432098769"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink"
+			},
+			"9": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#7fff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnSuccessLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						843.9989985080956,
+						194.49900000000002
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess/9.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/2.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/9.instance": "M844.0000000018467,172.99999999999997L844,194.50000000000003",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/9.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/7.instance": "M844,194.57821413236653L844.0000000000002,215.9993034072472"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink"
+			},
+			"10": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#7fff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnSuccessLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						799.9989985080956,
+						264.499
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess/10.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/7.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/10.instance": "M800,239.00000000000003L800,264.5",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/10.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/0.instance": "M800.0000000000001,264.5776998931243L800,289.9994125336409"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink"
+			}
+		},
+		"edges": [],
+		"metamodels": [
+			"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons"
+		]
+	},
+	"asm": {
+		"nodes": {
+			"0": {
+				"filename": {
+					"type": "string",
+					"value": "/Formalisms/ActionCode/ds_ActionCode2FileSystem(Java)/R_CompileCode.model"
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/Rule"
+			},
+			"2": {
+				"filename": {
+					"type": "string",
+					"value": "/Formalisms/ActionCode/ds_ActionCode2FileSystem(Java)/R_CreateActionCode.model"
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": true
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/Rule"
+			},
+			"4": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess"
+			},
+			"7": {
+				"filename": {
+					"type": "string",
+					"value": "/Formalisms/ActionCode/ds_ActionCode2FileSystem(Java)/R_InitActionCode.model"
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/Rule"
+			},
+			"8": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable"
+			},
+			"9": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess"
+			},
+			"10": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess"
+			}
+		},
+		"edges": [
+			{
+				"src": "0",
+				"dest": "4"
+			},
+			{
+				"src": "4",
+				"dest": "0"
+			},
+			{
+				"src": "2",
+				"dest": "8"
+			},
+			{
+				"src": "8",
+				"dest": "7"
+			},
+			{
+				"src": "2",
+				"dest": "9"
+			},
+			{
+				"src": "9",
+				"dest": "7"
+			},
+			{
+				"src": "7",
+				"dest": "10"
+			},
+			{
+				"src": "10",
+				"dest": "0"
+			}
+		],
+		"metamodels": [
+			"/Formalisms/__Transformations__/Transformation/Transformation"
+		]
+	}
+}

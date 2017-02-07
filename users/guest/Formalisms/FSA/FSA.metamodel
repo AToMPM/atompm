@@ -1,0 +1,78 @@
+{
+	"types": {
+		"State": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "S_"
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"InputEvents": [
+			{
+				"name": "eventList",
+				"type": "string",
+				"default": "abc"
+			}
+		],
+		"Transition": [
+			{
+				"name": "event",
+				"type": "string",
+				"default": "a"
+			}
+		]
+	},
+	"constraints": [],
+	"actions": [],
+	"cardinalities": {
+		"State": [
+			{
+				"dir": "out",
+				"type": "Transition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Transition",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"InputEvents": [],
+		"Transition": [
+			{
+				"dir": "in",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "State",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"State": {
+			"State": [
+				"Transition"
+			]
+		}
+	},
+	"connectorTypes": {
+		"Transition": "visual"
+	},
+	"types2parentTypes": {
+		"State": [],
+		"InputEvents": [],
+		"Transition": []
+	}
+}

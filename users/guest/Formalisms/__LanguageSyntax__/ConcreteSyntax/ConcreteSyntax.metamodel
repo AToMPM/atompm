@@ -1,0 +1,2111 @@
+{
+	"types": {
+		"Icon": [
+			{
+				"name": "typename",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<double>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "orientation",
+				"type": "double",
+				"default": 0
+			},
+			{
+				"name": "scale",
+				"type": "list<double>",
+				"default": [
+					1,
+					1
+				]
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"Link": [
+			{
+				"name": "link-style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"stroke-opacity": 1,
+					"stroke-width": 2
+				}
+			},
+			{
+				"name": "arrowHead",
+				"type": "ENUM(circle-black,circle-black-large,circle-white,circle-white-large,diamond-black,diamond-black-large,diamond-white,diamond-white-large,triangle-black,triangle-black-large,triangle-white,triangle-white-large,arrow-black,arrow-black-large,arrow-empty,arrow-empty-large,custom)",
+				"default": "custom"
+			},
+			{
+				"name": "arrowTail",
+				"type": "ENUM(circle-black,circle-black-large,circle-white,circle-white-large,diamond-black,diamond-black-large,diamond-white,diamond-white-large,triangle-black,triangle-black-large,triangle-white,triangle-white-large,arrow-black,arrow-black-large,arrow-empty,arrow-empty-large,custom)",
+				"default": "arrow-black"
+			},
+			{
+				"name": "typename",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<double>",
+				"default": [
+					0,
+					0
+				]
+			},
+			{
+				"name": "orientation",
+				"type": "double",
+				"default": 0
+			},
+			{
+				"name": "scale",
+				"type": "list<double>",
+				"default": [
+					1,
+					1
+				]
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"VisualObject": [
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#ffffff",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"Rectangle": [
+			{
+				"name": "width",
+				"type": "double",
+				"default": 100
+			},
+			{
+				"name": "height",
+				"type": "double",
+				"default": 100
+			},
+			{
+				"name": "cornerRadius",
+				"type": "double",
+				"default": 5
+			},
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#ffffff",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"Circle": [
+			{
+				"name": "r",
+				"type": "double",
+				"default": 50
+			},
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#ffffff",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"Ellipse": [
+			{
+				"name": "rx",
+				"type": "double",
+				"default": 50
+			},
+			{
+				"name": "ry",
+				"type": "double",
+				"default": 30
+			},
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#ffffff",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"Polygon": [
+			{
+				"name": "r",
+				"type": "double",
+				"default": 50
+			},
+			{
+				"name": "sides",
+				"type": "int",
+				"default": 5
+			},
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#ffffff",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"Star": [
+			{
+				"name": "r",
+				"type": "double",
+				"default": 50
+			},
+			{
+				"name": "rays",
+				"type": "int",
+				"default": 5
+			},
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#ffffff",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"Text": [
+			{
+				"name": "textContent",
+				"type": "string",
+				"default": "T..."
+			},
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#000000",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"Path": [
+			{
+				"name": "segments",
+				"type": "string",
+				"default": "m0,0l100,0"
+			},
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#ffffff",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		],
+		"IconContents": [],
+		"RightOf": [
+			{
+				"name": "distance",
+				"type": "double",
+				"default": 0
+			},
+			{
+				"name": "alignment",
+				"type": "ENUM('top','bottom','center')",
+				"default": "center"
+			}
+		],
+		"Below": [
+			{
+				"name": "distance",
+				"type": "double",
+				"default": 0
+			},
+			{
+				"name": "alignment",
+				"type": "ENUM('right','left','center')",
+				"default": "center"
+			}
+		],
+		"Span": [
+			{
+				"name": "width",
+				"type": "boolean",
+				"default": true
+			},
+			{
+				"name": "ratio",
+				"type": "double",
+				"default": 1
+			}
+		],
+		"Contain": [],
+		"Image": [
+			{
+				"name": "src",
+				"type": "string",
+				"default": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/defaultImage.png"
+			},
+			{
+				"name": "width",
+				"type": "double",
+				"default": 48
+			},
+			{
+				"name": "height",
+				"type": "double",
+				"default": 48
+			},
+			{
+				"name": "style",
+				"type": "map<string,string>",
+				"default": {
+					"stroke": "#000000",
+					"stroke-dasharray": "",
+					"fill": "#ffffff",
+					"fill-opacity": 1,
+					"font-size": "20px",
+					"stroke-width": 1,
+					"arrow-start": "none",
+					"arrow-end": "none"
+				}
+			},
+			{
+				"name": "mapper",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,csattr:val,...} */"
+			},
+			{
+				"name": "parser",
+				"type": "code",
+				"default": "/* specify code that evaluates to an associative array of the form {...,attr:val,...} */"
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noIconOrLinkRotation",
+			"event": "post-edit",
+			"code": "getAttr('orientation') == 0",
+			"targetType": "Icon"
+		},
+		{
+			"name": "noIconOrLinkRotation",
+			"event": "post-edit",
+			"code": "getAttr('orientation') == 0",
+			"targetType": "Link"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "VisualObject"
+		},
+		{
+			"name": "validRatio",
+			"event": "post-update",
+			"code": "getAttr('ratio') > 0 && getAttr('ratio') <= 1;",
+			"targetType": "Span"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Icon": [
+			{
+				"dir": "out",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Link": [
+			{
+				"dir": "out",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"VisualObject": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Rectangle": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Circle": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Ellipse": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Polygon": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Star": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Text": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Path": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"IconContents": [
+			{
+				"dir": "in",
+				"type": "Icon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"RightOf": [
+			{
+				"dir": "in",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Below": [
+			{
+				"dir": "in",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Span": [
+			{
+				"dir": "in",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Contain": [
+			{
+				"dir": "in",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VisualObject",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rectangle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Circle",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Ellipse",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Polygon",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Star",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Text",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Path",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Image",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Image": [
+			{
+				"dir": "in",
+				"type": "IconContents",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "RightOf",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Below",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Span",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Contain",
+				"min": "0",
+				"max": "Infinity"
+			}
+		]
+	},
+	"legalConnections": {
+		"Icon": {
+			"VisualObject": [
+				"IconContents"
+			],
+			"Rectangle": [
+				"IconContents"
+			],
+			"Circle": [
+				"IconContents"
+			],
+			"Ellipse": [
+				"IconContents"
+			],
+			"Polygon": [
+				"IconContents"
+			],
+			"Star": [
+				"IconContents"
+			],
+			"Text": [
+				"IconContents"
+			],
+			"Path": [
+				"IconContents"
+			],
+			"Image": [
+				"IconContents"
+			]
+		},
+		"Link": {
+			"VisualObject": [
+				"IconContents"
+			],
+			"Rectangle": [
+				"IconContents"
+			],
+			"Circle": [
+				"IconContents"
+			],
+			"Ellipse": [
+				"IconContents"
+			],
+			"Polygon": [
+				"IconContents"
+			],
+			"Star": [
+				"IconContents"
+			],
+			"Text": [
+				"IconContents"
+			],
+			"Path": [
+				"IconContents"
+			],
+			"Image": [
+				"IconContents"
+			]
+		},
+		"VisualObject": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		},
+		"Rectangle": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		},
+		"Circle": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		},
+		"Ellipse": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		},
+		"Polygon": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		},
+		"Star": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		},
+		"Text": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		},
+		"Path": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		},
+		"Image": {
+			"VisualObject": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Rectangle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Circle": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Ellipse": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Polygon": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Star": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Text": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Path": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			],
+			"Image": [
+				"RightOf",
+				"Below",
+				"Span",
+				"Contain"
+			]
+		}
+	},
+	"connectorTypes": {
+		"IconContents": "containment",
+		"RightOf": "visual",
+		"Below": "visual",
+		"Span": "visual",
+		"Contain": "containment"
+	},
+	"types2parentTypes": {
+		"Icon": [],
+		"Link": [
+			"Icon"
+		],
+		"VisualObject": [],
+		"Rectangle": [
+			"VisualObject"
+		],
+		"Circle": [
+			"VisualObject"
+		],
+		"Ellipse": [
+			"VisualObject"
+		],
+		"Polygon": [
+			"VisualObject"
+		],
+		"Star": [
+			"VisualObject"
+		],
+		"Text": [
+			"VisualObject"
+		],
+		"Path": [
+			"VisualObject"
+		],
+		"IconContents": [],
+		"RightOf": [],
+		"Below": [],
+		"Span": [],
+		"Contain": [],
+		"Image": [
+			"VisualObject"
+		]
+	}
+}

@@ -1,0 +1,681 @@
+{
+	"csm": {
+		"nodes": {
+			"0": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						199,
+						225
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#7CFC00",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "OPEN"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/0.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"1": {
+				"typename": {
+					"type": "string",
+					"value": "BasicStateIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						473,
+						374
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"4": {
+								"r": {
+									"type": "double",
+									"value": 20
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#20B2AA",
+										"fill": "#E6E6FA",
+										"fill-opacity": 0.75,
+										"stroke-width": 2
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var style = { \"stroke\": \"#20B2AA\",\n\t\t    \"fill\": \"#E6E6FA\",\n\t\t    \"fill-opacity\": 0.75,\n   \t\t    \"stroke-width\": 2};\n\nif( getAttr('isStart') )\n\tstyle['stroke'] = '#7CFC00';\n\n({'style' : style})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Circle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										18,
+										1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"5": {
+								"textContent": {
+									"type": "string",
+									"value": "CLOSED"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({'textContent':getAttr('name')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": "({'name':getAttr('textContent')})"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										2,
+										43
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"6": {
+								"distance": {
+									"type": "double",
+									"value": 10
+								},
+								"alignment": {
+									"type": "ENUM(\"right\",\"left\",\"center\")",
+									"value": "\"center\""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Below",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										32.99899850809555,
+										45.99899850809561
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ff00",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "5",
+								"dest": "6"
+							},
+							{
+								"src": "6",
+								"dest": "4"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState/1.instance"
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon"
+			},
+			"2": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						358.48849144406114,
+						276.4989127234831
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "KEYUP_ESC  ||\nCANCELED_DIALOG  ||\nOKAYED_DIALOG"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/2.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/2.instance": "M257,249L383,284",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/2.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/1.instance": "M383,284L490.99965734617837,388.9990966399248"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			},
+			"3": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#000000",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "TransitionLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						"354.3752325415361,50%",
+						"353.5363182827484,50%"
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"16": {
+								"textContent": {
+									"type": "string",
+									"value": "SHOW_DIALOG"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ 'textContent' : getAttr('triggers').join('  ||\\n') })"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										0
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							}
+						},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition/3.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/1.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/3.instance": "M491,398L354.3752325415361,353.5363182827484",
+						"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink/3.instance--/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/BasicStateIcon/0.instance": "M354.3752325415361,353.5363182827484L322,343L253.0001741211973,258.0002144971271"
+					}
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons/TransitionLink"
+			}
+		},
+		"edges": [],
+		"metamodels": [
+			"/Formalisms/SimpleStateChart/SimpleStateChart.defaultIcons"
+		]
+	},
+	"asm": {
+		"nodes": {
+			"0": {
+				"name": {
+					"type": "string",
+					"value": "OPEN"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": "__showDialog();"
+				},
+				"exitAction": {
+					"type": "code",
+					"value": ""
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": true
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"1": {
+				"name": {
+					"type": "string",
+					"value": "CLOSED"
+				},
+				"entryAction": {
+					"type": "code",
+					"value": "__closeDialog();"
+				},
+				"exitAction": {
+					"type": "code",
+					"value": ""
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/BasicState"
+			},
+			"2": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"KEYUP_ESC",
+						"CANCELED_DIALOG",
+						"OKAYED_DIALOG"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": ""
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			},
+			"3": {
+				"triggers": {
+					"type": "list<string>",
+					"value": [
+						"SHOW_DIALOG"
+					]
+				},
+				"guard": {
+					"type": "code",
+					"value": "true"
+				},
+				"action": {
+					"type": "code",
+					"value": ""
+				},
+				"$type": "/Formalisms/SimpleStateChart/SimpleStateChart/Transition"
+			}
+		},
+		"edges": [
+			{
+				"src": "0",
+				"dest": "2"
+			},
+			{
+				"src": "2",
+				"dest": "1"
+			},
+			{
+				"src": "1",
+				"dest": "3"
+			},
+			{
+				"src": "3",
+				"dest": "0"
+			}
+		],
+		"metamodels": [
+			"/Formalisms/SimpleStateChart/SimpleStateChart"
+		]
+	}
+}

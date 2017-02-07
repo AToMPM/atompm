@@ -1,0 +1,5329 @@
+{
+	"types": {
+		"RuleBlock": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"AtomicRuleBlock": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"CompositeRuleBlock": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"QRule": [
+			{
+				"name": "query",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"ARule": [
+			{
+				"name": "rule",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"FRule": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "rule",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"SRule": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "rule",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"Sequence": [
+			{
+				"name": "ref",
+				"type": "file<T_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"CRule": [
+			{
+				"name": "ref",
+				"type": "file<T_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"BRule": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"BSRule": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"LRule": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "nested",
+				"type": "int",
+				"default": 1
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"LQSRule": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "nested",
+				"type": "int",
+				"default": 1
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"TrafoElement": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"Start": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"EndSuccess": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"ImplicitOrderCompositeRuleBlock": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"ExplicitOrderCompositeRuleBlock": [
+			{
+				"name": "ref",
+				"type": "file<T_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"EndFail": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"success": [],
+		"fail": [],
+		"sub-rule": [],
+		"initial": [],
+		"base": [],
+		"loop": [],
+		"branch": [],
+		"LFRule": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "nested",
+				"type": "int",
+				"default": 1
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"LSRule": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "nested",
+				"type": "int",
+				"default": 1
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"Positionable": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"CQRule2": [
+			{
+				"name": "innerQuery",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "query",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		],
+		"CQRule3": [
+			{
+				"name": "secondInnerQuery",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "innerQuery",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "query",
+				"type": "file<R_.*\\.model>",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "RuleName"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": [
+					0,
+					0
+				]
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "RuleBlock"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "AtomicRuleBlock"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "CompositeRuleBlock"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "TrafoElement"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "ImplicitOrderCompositeRuleBlock"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "ExplicitOrderCompositeRuleBlock"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Positionable"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"RuleBlock": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"AtomicRuleBlock": [
+			{
+				"dir": "in",
+				"type": "base",
+				"min": "",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"CompositeRuleBlock": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"QRule": [
+			{
+				"dir": "in",
+				"type": "base",
+				"min": "",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"ARule": [
+			{
+				"dir": "in",
+				"type": "base",
+				"min": "",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"FRule": [
+			{
+				"dir": "in",
+				"type": "base",
+				"min": "",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"SRule": [
+			{
+				"dir": "in",
+				"type": "base",
+				"min": "",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"Sequence": [
+			{
+				"dir": "out",
+				"type": "sub-rule",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"CRule": [
+			{
+				"dir": "out",
+				"type": "sub-rule",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"BRule": [
+			{
+				"dir": "out",
+				"type": "branch",
+				"min": 2,
+				"max": "*"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"BSRule": [
+			{
+				"dir": "out",
+				"type": "branch",
+				"min": 2,
+				"max": "*"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"LRule": [
+			{
+				"dir": "out",
+				"type": "loop",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "base",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"LQSRule": [
+			{
+				"dir": "out",
+				"type": "loop",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "base",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"TrafoElement": [
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"Start": [
+			{
+				"dir": "out",
+				"type": "initial",
+				"min": "1",
+				"max": "1"
+			}
+		],
+		"EndSuccess": [
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"ImplicitOrderCompositeRuleBlock": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"ExplicitOrderCompositeRuleBlock": [
+			{
+				"dir": "out",
+				"type": "sub-rule",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"EndFail": [
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"success": [
+			{
+				"dir": "in",
+				"type": "TrafoElement",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "TrafoElement",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "RuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "EndSuccess",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndSuccess",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ImplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ImplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "EndFail",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndFail",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"fail": [
+			{
+				"dir": "in",
+				"type": "TrafoElement",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "TrafoElement",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "RuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "EndSuccess",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndSuccess",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ImplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ImplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "EndFail",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndFail",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"sub-rule": [
+			{
+				"dir": "in",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "TrafoElement",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndSuccess",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ImplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndFail",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"initial": [
+			{
+				"dir": "in",
+				"type": "Start",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ImplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"base": [
+			{
+				"dir": "in",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"loop": [
+			{
+				"dir": "in",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ImplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"branch": [
+			{
+				"dir": "in",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AtomicRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "QRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ARule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Sequence",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "BSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LQSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ImplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExplicitOrderCompositeRuleBlock",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LFRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LSRule",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule2",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CQRule3",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"LFRule": [
+			{
+				"dir": "out",
+				"type": "loop",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "base",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"LSRule": [
+			{
+				"dir": "out",
+				"type": "loop",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "out",
+				"type": "base",
+				"min": 1,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"Positionable": [],
+		"CQRule2": [
+			{
+				"dir": "in",
+				"type": "base",
+				"min": "",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		],
+		"CQRule3": [
+			{
+				"dir": "in",
+				"type": "base",
+				"min": "",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "branch",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "loop",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "success",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "success",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "fail",
+				"min": 0,
+				"max": "*"
+			},
+			{
+				"dir": "out",
+				"type": "fail",
+				"min": 0,
+				"max": 1
+			},
+			{
+				"dir": "in",
+				"type": "sub-rule",
+				"min": 0,
+				"max": 1
+			}
+		]
+	},
+	"legalConnections": {
+		"RuleBlock": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"AtomicRuleBlock": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"CompositeRuleBlock": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"QRule": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"ARule": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"FRule": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"SRule": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"Sequence": {
+			"TrafoElement": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"sub-rule",
+				"success",
+				"fail"
+			]
+		},
+		"CRule": {
+			"TrafoElement": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"sub-rule",
+				"success",
+				"fail"
+			]
+		},
+		"BRule": {
+			"RuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			]
+		},
+		"BSRule": {
+			"RuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"branch",
+				"success",
+				"fail"
+			],
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			]
+		},
+		"LRule": {
+			"RuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			]
+		},
+		"LQSRule": {
+			"RuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			]
+		},
+		"TrafoElement": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"Start": {
+			"RuleBlock": [
+				"initial"
+			],
+			"AtomicRuleBlock": [
+				"initial"
+			],
+			"CompositeRuleBlock": [
+				"initial"
+			],
+			"QRule": [
+				"initial"
+			],
+			"ARule": [
+				"initial"
+			],
+			"FRule": [
+				"initial"
+			],
+			"SRule": [
+				"initial"
+			],
+			"Sequence": [
+				"initial"
+			],
+			"CRule": [
+				"initial"
+			],
+			"BRule": [
+				"initial"
+			],
+			"BSRule": [
+				"initial"
+			],
+			"LRule": [
+				"initial"
+			],
+			"LQSRule": [
+				"initial"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"initial"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"initial"
+			],
+			"LFRule": [
+				"initial"
+			],
+			"LSRule": [
+				"initial"
+			],
+			"CQRule2": [
+				"initial"
+			],
+			"CQRule3": [
+				"initial"
+			]
+		},
+		"EndSuccess": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"ImplicitOrderCompositeRuleBlock": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"ExplicitOrderCompositeRuleBlock": {
+			"TrafoElement": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"sub-rule",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"sub-rule",
+				"success",
+				"fail"
+			]
+		},
+		"EndFail": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"LFRule": {
+			"RuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			]
+		},
+		"LSRule": {
+			"RuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"loop",
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"loop",
+				"base",
+				"success",
+				"fail"
+			],
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			]
+		},
+		"CQRule2": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		},
+		"CQRule3": {
+			"TrafoElement": [
+				"success",
+				"fail"
+			],
+			"RuleBlock": [
+				"success",
+				"fail"
+			],
+			"AtomicRuleBlock": [
+				"success",
+				"fail"
+			],
+			"CompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"QRule": [
+				"success",
+				"fail"
+			],
+			"ARule": [
+				"success",
+				"fail"
+			],
+			"FRule": [
+				"success",
+				"fail"
+			],
+			"SRule": [
+				"success",
+				"fail"
+			],
+			"Sequence": [
+				"success",
+				"fail"
+			],
+			"CRule": [
+				"success",
+				"fail"
+			],
+			"BRule": [
+				"success",
+				"fail"
+			],
+			"BSRule": [
+				"success",
+				"fail"
+			],
+			"LRule": [
+				"success",
+				"fail"
+			],
+			"LQSRule": [
+				"success",
+				"fail"
+			],
+			"EndSuccess": [
+				"success",
+				"fail"
+			],
+			"ImplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"ExplicitOrderCompositeRuleBlock": [
+				"success",
+				"fail"
+			],
+			"EndFail": [
+				"success",
+				"fail"
+			],
+			"LFRule": [
+				"success",
+				"fail"
+			],
+			"LSRule": [
+				"success",
+				"fail"
+			],
+			"CQRule2": [
+				"success",
+				"fail"
+			],
+			"CQRule3": [
+				"success",
+				"fail"
+			]
+		}
+	},
+	"connectorTypes": {
+		"success": "visual",
+		"fail": "visual",
+		"sub-rule": "containment",
+		"initial": "visual",
+		"base": "containment",
+		"loop": "containment",
+		"branch": "containment"
+	},
+	"types2parentTypes": {
+		"RuleBlock": [
+			"Positionable",
+			"TrafoElement"
+		],
+		"AtomicRuleBlock": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock"
+		],
+		"CompositeRuleBlock": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock"
+		],
+		"QRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"AtomicRuleBlock"
+		],
+		"ARule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"AtomicRuleBlock"
+		],
+		"FRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"AtomicRuleBlock",
+			"ARule"
+		],
+		"SRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"AtomicRuleBlock",
+			"ARule"
+		],
+		"Sequence": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ExplicitOrderCompositeRuleBlock"
+		],
+		"CRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ExplicitOrderCompositeRuleBlock"
+		],
+		"BRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock"
+		],
+		"BSRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock",
+			"BRule"
+		],
+		"LRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock"
+		],
+		"LQSRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock",
+			"LRule"
+		],
+		"TrafoElement": [
+			"Positionable"
+		],
+		"Start": [
+			"Positionable"
+		],
+		"EndSuccess": [
+			"Positionable",
+			"TrafoElement"
+		],
+		"ImplicitOrderCompositeRuleBlock": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock"
+		],
+		"ExplicitOrderCompositeRuleBlock": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock"
+		],
+		"EndFail": [
+			"Positionable",
+			"TrafoElement"
+		],
+		"success": [],
+		"fail": [],
+		"sub-rule": [],
+		"initial": [],
+		"base": [],
+		"loop": [],
+		"branch": [],
+		"LFRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock",
+			"LRule"
+		],
+		"LSRule": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"CompositeRuleBlock",
+			"ImplicitOrderCompositeRuleBlock",
+			"LRule"
+		],
+		"Positionable": [],
+		"CQRule2": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"AtomicRuleBlock",
+			"QRule"
+		],
+		"CQRule3": [
+			"Positionable",
+			"TrafoElement",
+			"RuleBlock",
+			"AtomicRuleBlock",
+			"QRule",
+			"CQRule2"
+		]
+	}
+}

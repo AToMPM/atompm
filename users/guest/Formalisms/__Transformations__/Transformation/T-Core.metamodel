@@ -1,0 +1,2165 @@
+{
+	"types": {
+		"Primitive": [
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"CompositePrimitive": [
+			{
+				"name": "ref",
+				"type": "string",
+				"default": "/Formalisms/.."
+			},
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"RulePrimitive": [
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"ControlPrimitive": [
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Composer": [
+			{
+				"name": "ref",
+				"type": "string",
+				"default": "/Formalisms/.."
+			},
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Matcher": [
+			{
+				"name": "max",
+				"type": "int",
+				"default": "1000"
+			},
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Rewriter": [
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Iterator": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": "1000"
+			},
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Resolver": [
+			{
+				"name": "externalMatchesOnly",
+				"type": "string",
+				"default": "0"
+			},
+			{
+				"name": "customResolution",
+				"type": "string",
+				"default": "#Define how to resolve any conflict that occurred.\n#You can access:\n#  - the model via packet.graph\n#  - the match sets via packet.match_sets\n#  - the current match via match.\n#Returning True means that all conflicts have been resolved\nreturn False "
+			},
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Rollbacker": [
+			{
+				"name": "maxIterations",
+				"type": "int",
+				"default": "1000"
+			},
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Synchronizer": [
+			{
+				"name": "threads",
+				"type": "int",
+				"default": 2
+			},
+			{
+				"name": "customMerge",
+				"type": "string",
+				"default": "#Define  how to merge the successful packets.\n#You can access:\n#  the list of packets via packets.\n#Returning None means that the packets cannot be merged.\n#Otherwise return a single packet\nreturn None "
+			},
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Selector": [
+			{
+				"name": "pattern",
+				"type": "string",
+				"default": "/Formalisms/..."
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": "core"
+			},
+			{
+				"name": "alias",
+				"type": "string",
+				"default": "1"
+			},
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"StartPacketIn": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"initial": [],
+		"EndSuccess": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"EndFail": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"port": [
+			{
+				"name": "output",
+				"type": "ENUM(success,fail,exception)",
+				"default": "success"
+			},
+			{
+				"name": "input",
+				"type": "ENUM(packetIn,nextIn,cancelIn,successIn)",
+				"default": "packetIn"
+			}
+		],
+		"EndException": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"StartNextIn": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"StartCancelIn": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"Positionable": [
+			{
+				"name": "position",
+				"type": "list<int>",
+				"default": "[0,0]"
+			}
+		],
+		"endExceptionPort": [],
+		"endSuccessPort": [],
+		"endFailPort": []
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Primitive"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "CompositePrimitive"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "RulePrimitive"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "ControlPrimitive"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Positionable"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Primitive": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"CompositePrimitive": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"RulePrimitive": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"ControlPrimitive": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Composer": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Matcher": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Rewriter": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Iterator": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Resolver": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Rollbacker": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Synchronizer": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Selector": [
+			{
+				"dir": "in",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "port",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"StartPacketIn": [
+			{
+				"dir": "out",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"initial": [
+			{
+				"dir": "in",
+				"type": "StartPacketIn",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Primitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "StartNextIn",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "StartCancelIn",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RulePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ControlPrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Composer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Matcher",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rewriter",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Iterator",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Resolver",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rollbacker",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Synchronizer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Selector",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"EndSuccess": [
+			{
+				"dir": "in",
+				"type": "endSuccessPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"EndFail": [
+			{
+				"dir": "in",
+				"type": "endFailPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"port": [
+			{
+				"dir": "in",
+				"type": "Primitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Primitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CompositePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "CompositePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "RulePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "RulePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ControlPrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ControlPrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Composer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Composer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Matcher",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Matcher",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rewriter",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rewriter",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Iterator",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Iterator",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Resolver",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Resolver",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rollbacker",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Rollbacker",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Synchronizer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Synchronizer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Selector",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Selector",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"EndException": [
+			{
+				"dir": "in",
+				"type": "endExceptionPort",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"StartNextIn": [
+			{
+				"dir": "out",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"StartCancelIn": [
+			{
+				"dir": "out",
+				"type": "initial",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Positionable": [],
+		"endExceptionPort": [
+			{
+				"dir": "in",
+				"type": "Primitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndException",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CompositePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "RulePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ControlPrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Composer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Matcher",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rewriter",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Iterator",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Resolver",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rollbacker",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Synchronizer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Selector",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"endSuccessPort": [
+			{
+				"dir": "in",
+				"type": "Primitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndSuccess",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CompositePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "RulePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ControlPrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Composer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Matcher",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rewriter",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Iterator",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Resolver",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rollbacker",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Synchronizer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Selector",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"endFailPort": [
+			{
+				"dir": "in",
+				"type": "Primitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EndFail",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "CompositePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "RulePrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ControlPrimitive",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Composer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Matcher",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rewriter",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Iterator",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Resolver",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Rollbacker",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Synchronizer",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Selector",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Primitive": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"CompositePrimitive": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"RulePrimitive": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"ControlPrimitive": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"Composer": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"Matcher": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"Rewriter": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"Iterator": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"Resolver": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"Rollbacker": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"Synchronizer": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"Selector": {
+			"Primitive": [
+				"port"
+			],
+			"CompositePrimitive": [
+				"port"
+			],
+			"RulePrimitive": [
+				"port"
+			],
+			"ControlPrimitive": [
+				"port"
+			],
+			"Composer": [
+				"port"
+			],
+			"Matcher": [
+				"port"
+			],
+			"Rewriter": [
+				"port"
+			],
+			"Iterator": [
+				"port"
+			],
+			"Resolver": [
+				"port"
+			],
+			"Rollbacker": [
+				"port"
+			],
+			"Synchronizer": [
+				"port"
+			],
+			"Selector": [
+				"port"
+			],
+			"EndException": [
+				"endExceptionPort"
+			],
+			"EndSuccess": [
+				"endSuccessPort"
+			],
+			"EndFail": [
+				"endFailPort"
+			]
+		},
+		"StartPacketIn": {
+			"Primitive": [
+				"initial"
+			],
+			"CompositePrimitive": [
+				"initial"
+			],
+			"RulePrimitive": [
+				"initial"
+			],
+			"ControlPrimitive": [
+				"initial"
+			],
+			"Composer": [
+				"initial"
+			],
+			"Matcher": [
+				"initial"
+			],
+			"Rewriter": [
+				"initial"
+			],
+			"Iterator": [
+				"initial"
+			],
+			"Resolver": [
+				"initial"
+			],
+			"Rollbacker": [
+				"initial"
+			],
+			"Synchronizer": [
+				"initial"
+			],
+			"Selector": [
+				"initial"
+			]
+		},
+		"StartNextIn": {
+			"Primitive": [
+				"initial"
+			],
+			"CompositePrimitive": [
+				"initial"
+			],
+			"RulePrimitive": [
+				"initial"
+			],
+			"ControlPrimitive": [
+				"initial"
+			],
+			"Composer": [
+				"initial"
+			],
+			"Matcher": [
+				"initial"
+			],
+			"Rewriter": [
+				"initial"
+			],
+			"Iterator": [
+				"initial"
+			],
+			"Resolver": [
+				"initial"
+			],
+			"Rollbacker": [
+				"initial"
+			],
+			"Synchronizer": [
+				"initial"
+			],
+			"Selector": [
+				"initial"
+			]
+		},
+		"StartCancelIn": {
+			"Primitive": [
+				"initial"
+			],
+			"CompositePrimitive": [
+				"initial"
+			],
+			"RulePrimitive": [
+				"initial"
+			],
+			"ControlPrimitive": [
+				"initial"
+			],
+			"Composer": [
+				"initial"
+			],
+			"Matcher": [
+				"initial"
+			],
+			"Rewriter": [
+				"initial"
+			],
+			"Iterator": [
+				"initial"
+			],
+			"Resolver": [
+				"initial"
+			],
+			"Rollbacker": [
+				"initial"
+			],
+			"Synchronizer": [
+				"initial"
+			],
+			"Selector": [
+				"initial"
+			]
+		}
+	},
+	"connectorTypes": {
+		"initial": "visual",
+		"port": "visual",
+		"endExceptionPort": "visual",
+		"endSuccessPort": "visual",
+		"endFailPort": "visual"
+	},
+	"types2parentTypes": {
+		"Primitive": [
+			"Positionable"
+		],
+		"CompositePrimitive": [
+			"Primitive",
+			"Positionable"
+		],
+		"RulePrimitive": [
+			"Primitive",
+			"Positionable"
+		],
+		"ControlPrimitive": [
+			"Primitive",
+			"Positionable"
+		],
+		"Composer": [
+			"CompositePrimitive",
+			"Primitive",
+			"Positionable"
+		],
+		"Matcher": [
+			"RulePrimitive",
+			"Primitive",
+			"Positionable"
+		],
+		"Rewriter": [
+			"RulePrimitive",
+			"Primitive",
+			"Positionable"
+		],
+		"Iterator": [
+			"RulePrimitive",
+			"Primitive",
+			"Positionable"
+		],
+		"Resolver": [
+			"RulePrimitive",
+			"Primitive",
+			"Positionable"
+		],
+		"Rollbacker": [
+			"Iterator",
+			"RulePrimitive",
+			"Primitive",
+			"Positionable"
+		],
+		"Synchronizer": [
+			"ControlPrimitive",
+			"Primitive",
+			"Positionable"
+		],
+		"Selector": [
+			"ControlPrimitive",
+			"Primitive",
+			"Positionable"
+		],
+		"StartPacketIn": [
+			"Positionable"
+		],
+		"initial": [],
+		"EndSuccess": [
+			"Positionable"
+		],
+		"EndFail": [
+			"Positionable"
+		],
+		"port": [],
+		"EndException": [
+			"Positionable"
+		],
+		"StartNextIn": [
+			"Positionable"
+		],
+		"StartCancelIn": [
+			"Positionable"
+		],
+		"Positionable": [],
+		"endExceptionPort": [],
+		"endSuccessPort": [],
+		"endFailPort": []
+	}
+}

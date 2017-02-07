@@ -1,0 +1,149 @@
+{
+	"types": {
+		"Transition": [
+			{
+				"name": "tname",
+				"type": "string",
+				"default": "#"
+			}
+		],
+		"Place": [
+			{
+				"name": "pname",
+				"type": "string",
+				"default": "#"
+			},
+			{
+				"name": "tokens",
+				"type": "int",
+				"default": 0
+			}
+		],
+		"T2P": [
+			{
+				"name": "weight",
+				"type": "int",
+				"default": 1
+			}
+		],
+		"P2T": [
+			{
+				"name": "weight",
+				"type": "int",
+				"default": 1
+			}
+		],
+		"inhibitor": []
+	},
+	"constraints": [],
+	"actions": [],
+	"cardinalities": {
+		"Transition": [
+			{
+				"dir": "out",
+				"type": "T2P",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "P2T",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "inhibitor",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Place": [
+			{
+				"dir": "in",
+				"type": "T2P",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "P2T",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "inhibitor",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"T2P": [
+			{
+				"dir": "in",
+				"type": "Transition",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Place",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"P2T": [
+			{
+				"dir": "in",
+				"type": "Place",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Transition",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"inhibitor": [
+			{
+				"dir": "in",
+				"type": "Place",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Transition",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Transition": {
+			"Place": [
+				"T2P"
+			]
+		},
+		"Place": {
+			"Transition": [
+				"P2T",
+				"inhibitor"
+			]
+		}
+	},
+	"connectorTypes": {
+		"T2P": "visual",
+		"P2T": "visual",
+		"inhibitor": "visual"
+	},
+	"types2parentTypes": {
+		"Transition": [],
+		"Place": [],
+		"T2P": [],
+		"P2T": [],
+		"inhibitor": []
+	}
+}

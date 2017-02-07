@@ -1,0 +1,2428 @@
+{
+	"csm": {
+		"nodes": {
+			"3": {
+				"typename": {
+					"type": "string",
+					"value": "ExhaustRandomIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						764,
+						287
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"37": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "100"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "10"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"38": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0 l10,15 l-5,0 l0,35 l5,0 l-10,15 l-10,-15 l5,0 l0-35 l-5,0z"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#3CB371",
+										"stroke-dasharray": "",
+										"fill": "#3CB371",
+										"fill-opacity": 1,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										211,
+										18
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"39": {
+								"distance": {
+									"type": "double",
+									"value": 0
+								},
+								"alignment": {
+									"type": "ENUM(\"top\",\"bottom\",\"center\")",
+									"value": "center"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/RightOf",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										197.4989985080956,
+										45.99899850809555
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ff0000",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							},
+							"40": {
+								"textContent": {
+									"type": "string",
+									"value": "R_disableAction\nR_disableConstraint\nR_removeLowerBound\nR_renameClass\nR_changeAttrType\nR_renameAssociation\nR_renameSelfAssociation\nR_makeConcrete\nR_disableClassActionsConstraints\nR_renameCardinalities"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var filenames = getAttr('filenames').map(\n\t\t\t\tfunction(f)\n\t\t\t\t{\n\t\t\t\t\treturn f.match(/.*\\/(.*)\\.model/)[1];\n\t\t\t\t});\n\n({'textContent': filenames.join('\\n')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										4,
+										-3
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"41": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										12.890662583693938,
+										4.548997593600802
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "38",
+								"dest": 39
+							},
+							{
+								"src": 39,
+								"dest": "37"
+							},
+							{
+								"src": "37",
+								"dest": 41
+							},
+							{
+								"src": 41,
+								"dest": "40"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom/3.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon"
+			},
+			"5": {
+				"typename": {
+					"type": "string",
+					"value": "ExhaustRandomIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						769,
+						498
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"37": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "100"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "10"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"38": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0 l10,15 l-5,0 l0,35 l5,0 l-10,15 l-10,-15 l5,0 l0-35 l-5,0z"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#3CB371",
+										"stroke-dasharray": "",
+										"fill": "#3CB371",
+										"fill-opacity": 1,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										211,
+										18
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"39": {
+								"distance": {
+									"type": "double",
+									"value": 0
+								},
+								"alignment": {
+									"type": "ENUM(\"top\",\"bottom\",\"center\")",
+									"value": "center"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/RightOf",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										197.4989985080956,
+										45.99899850809555
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ff0000",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							},
+							"40": {
+								"textContent": {
+									"type": "string",
+									"value": "R_addPLabel\nR_addPLabelAction\nR_addMatchSubtypes\nR_addSelfAssociationAttributes\nR_addAssociationAttributes"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var filenames = getAttr('filenames').map(\n\t\t\t\tfunction(f)\n\t\t\t\t{\n\t\t\t\t\treturn f.match(/.*\\/(.*)\\.model/)[1];\n\t\t\t\t});\n\n({'textContent': filenames.join('\\n')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										4,
+										-3
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"41": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										12.890662583693938,
+										4.548997593600802
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "38",
+								"dest": 39
+							},
+							{
+								"src": 39,
+								"dest": "37"
+							},
+							{
+								"src": "37",
+								"dest": 41
+							},
+							{
+								"src": 41,
+								"dest": "40"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom/5.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon"
+			},
+			"6": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#7fff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnSuccessLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						880.498636365139,
+						442.1499998347108
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess/6.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/3.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/6.instance": "M881,387L880.498636365139,442.1499998347108",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/6.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/5.instance": "M880.4993194216745,442.07486361581493L880.0000024778362,496.9997274380165"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink"
+			},
+			"7": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#bbbbbb",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnNotApplicableLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						846.4986725677577,
+						444.64999984337067
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable/7.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/3.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/7.instance": "M847,388L846.4986725677577,444.64999984337067",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/7.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/5.instance": "M846.4993374580781,444.57486723716227L846.0000023480541,500.9997346699037"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink"
+			},
+			"12": {
+				"typename": {
+					"type": "string",
+					"value": "RuleIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						775,
+						824
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"48": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "25"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "12"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										1,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"49": {
+								"textContent": {
+									"type": "string",
+									"value": "R_addCS"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "({ \n\t'textContent': \n\t\tgetAttr('filename').match(/.*\\/(.*)\\.model/)[1] \n})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										6,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"51": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										16.248998508095582,
+										5.9989985080955535
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "48",
+								"dest": 51
+							},
+							{
+								"src": 51,
+								"dest": "49"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/Rule/12.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon"
+			},
+			"15": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#7fff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnSuccessLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						1100.1202704733287,
+						831.2405409466569
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess/15.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/12.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/15.instance": "M972,845L1103,837L1100.1202704733287,831.2405409466569",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/15.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/12.instance": "M1100.1202704733287,831.2405409466569L1093,817L973.0009824555858,835.9998444445323"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink"
+			},
+			"16": {
+				"typename": {
+					"type": "string",
+					"value": "ExhaustRandomIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						778,
+						924
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"37": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "100"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "10"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"38": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0 l10,15 l-5,0 l0,35 l5,0 l-10,15 l-10,-15 l5,0 l0-35 l-5,0z"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#3CB371",
+										"stroke-dasharray": "",
+										"fill": "#3CB371",
+										"fill-opacity": 1,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										211,
+										18
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"39": {
+								"distance": {
+									"type": "double",
+									"value": 0
+								},
+								"alignment": {
+									"type": "ENUM(\"top\",\"bottom\",\"center\")",
+									"value": "center"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/RightOf",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										197.4989985080956,
+										45.99899850809555
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ff0000",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							},
+							"40": {
+								"textContent": {
+									"type": "string",
+									"value": "R_addCSPLabel\nR_addCSConnectorPLabel"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var filenames = getAttr('filenames').map(\n\t\t\t\tfunction(f)\n\t\t\t\t{\n\t\t\t\t\treturn f.match(/.*\\/(.*)\\.model/)[1];\n\t\t\t\t});\n\n({'textContent': filenames.join('\\n')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										4,
+										-3
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"41": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										12.890662583693938,
+										4.548997593600802
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "38",
+								"dest": 39
+							},
+							{
+								"src": 39,
+								"dest": "37"
+							},
+							{
+								"src": "37",
+								"dest": 41
+							},
+							{
+								"src": 41,
+								"dest": "40"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom/16.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon"
+			},
+			"19": {
+				"typename": {
+					"type": "string",
+					"value": "ExhaustRandomIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						768,
+						656
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"37": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "100"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "10"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"38": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0 l10,15 l-5,0 l0,35 l5,0 l-10,15 l-10,-15 l5,0 l0-35 l-5,0z"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#3CB371",
+										"stroke-dasharray": "",
+										"fill": "#3CB371",
+										"fill-opacity": 1,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										211,
+										18
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"39": {
+								"distance": {
+									"type": "double",
+									"value": 0
+								},
+								"alignment": {
+									"type": "ENUM(\"top\",\"bottom\",\"center\")",
+									"value": "center"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/RightOf",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										197.4989985080956,
+										45.99899850809555
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ff0000",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							},
+							"40": {
+								"textContent": {
+									"type": "string",
+									"value": "R_renameCS\nR_renameCSConnector\nR_clearParsersMappers\nR_clearIconParsersMappers"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var filenames = getAttr('filenames').map(\n\t\t\t\tfunction(f)\n\t\t\t\t{\n\t\t\t\t\treturn f.match(/.*\\/(.*)\\.model/)[1];\n\t\t\t\t});\n\n({'textContent': filenames.join('\\n')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										4,
+										-3
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"41": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										12.890662583693938,
+										4.548997593600802
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "38",
+								"dest": 39
+							},
+							{
+								"src": 39,
+								"dest": "37"
+							},
+							{
+								"src": "37",
+								"dest": 41
+							},
+							{
+								"src": 41,
+								"dest": "40"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom/19.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon"
+			},
+			"23": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#bbbbbb",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnNotApplicableLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						852.5019999952592,
+						789.6499996444444
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable/23.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/19.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/23.instance": "M852,752L852.5019999952592,789.6499996444444",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/23.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/12.instance": "M852.5009973327454,789.5747999559101L852.9999946714074,826.9996003555556"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink"
+			},
+			"24": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#7fff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnSuccessLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						895.509740237836,
+						790.6499996626749
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess/24.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/19.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/24.instance": "M893,752L895.509740237836,790.6499996626749",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/24.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/12.instance": "M895.5048574774653,790.5748051529672L897.9999747225283,828.9996107269354"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink"
+			},
+			"25": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#bbbbbb",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnNotApplicableLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						878,
+						882.5
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable/25.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/RuleIcon/12.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/25.instance": "M878,841L878,882.5",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/25.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/16.instance": "M878,882.576646302731L878,923.9996388445347"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink"
+			},
+			"30": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#7fff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnSuccessLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						859.5,
+						622.5
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess/30.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/5.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/30.instance": "M859,590L859.5,622.5",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/30.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/19.instance": "M859.501150294956,622.5747691721422L859.999992906691,654.9995389349112"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink"
+			},
+			"31": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#bbbbbb",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnNotApplicableLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						909,
+						626.5
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable/31.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/5.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/31.instance": "M909,595L909,626.5",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/31.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/19.instance": "M909,626.5771773507198L909,657.999524313429"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink"
+			},
+			"32": {
+				"typename": {
+					"type": "string",
+					"value": "ExhaustRandomIcon"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						779,
+						1072
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {
+							"37": {
+								"width": {
+									"type": "double",
+									"value": "200"
+								},
+								"height": {
+									"type": "double",
+									"value": "100"
+								},
+								"cornerRadius": {
+									"type": "double",
+									"value": "10"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Rectangle",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										0,
+										-1
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"38": {
+								"segments": {
+									"type": "string",
+									"value": "m0,0 l10,15 l-5,0 l0,35 l5,0 l-10,15 l-10,-15 l5,0 l0-35 l-5,0z"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#3CB371",
+										"stroke-dasharray": "",
+										"fill": "#3CB371",
+										"fill-opacity": 1,
+										"font-size": "20px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": ""
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Path",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										211,
+										18
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"39": {
+								"distance": {
+									"type": "double",
+									"value": 0
+								},
+								"alignment": {
+									"type": "ENUM(\"top\",\"bottom\",\"center\")",
+									"value": "center"
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/RightOf",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										197.4989985080956,
+										45.99899850809555
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#ff0000",
+										"stroke-dasharray": "",
+										"stroke-opacity": 1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							},
+							"40": {
+								"textContent": {
+									"type": "string",
+									"value": "R_removeAttributedGenericLink\nR_removeGenericLink\nR_removeGenericLinkTwo\nR_removeAttributedGenericLinkTwo\nR_removeGenericLinks\nR_removeAttributedGenericLinks"
+								},
+								"style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#000000",
+										"stroke-dasharray": "",
+										"fill": "#ffffff",
+										"fill-opacity": 0.75,
+										"font-size": "13px",
+										"stroke-width": 1,
+										"arrow-start": "none",
+										"arrow-end": "none"
+									}
+								},
+								"mapper": {
+									"type": "code",
+									"value": "var filenames = getAttr('filenames').map(\n\t\t\t\tfunction(f)\n\t\t\t\t{\n\t\t\t\t\treturn f.match(/.*\\/(.*)\\.model/)[1];\n\t\t\t\t});\n\n({'textContent': filenames.join('\\n')})"
+								},
+								"parser": {
+									"type": "code",
+									"value": ""
+								},
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Text",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										4,
+										-3
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								}
+							},
+							"41": {
+								"$type": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax/Contain",
+								"position": {
+									"type": "list<double>",
+									"value": [
+										12.890662583693938,
+										4.548997593600802
+									]
+								},
+								"orientation": {
+									"type": "double",
+									"value": 0
+								},
+								"scale": {
+									"type": "list<double>",
+									"value": [
+										1,
+										1
+									]
+								},
+								"link-style": {
+									"type": "map<string,string>",
+									"value": {
+										"stroke": "#00ffff",
+										"stroke-dasharray": "",
+										"stroke-opacity": 0.1,
+										"arrow-start": "none",
+										"arrow-end": "classic-wide-long"
+									}
+								}
+							}
+						},
+						"edges": [
+							{
+								"src": "38",
+								"dest": 39
+							},
+							{
+								"src": 39,
+								"dest": "37"
+							},
+							{
+								"src": "37",
+								"dest": 41
+							},
+							{
+								"src": 41,
+								"dest": "40"
+							}
+						]
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom/32.instance"
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon"
+			},
+			"33": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#bbbbbb",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnNotApplicableLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						854.5,
+						1047
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable/33.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/16.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/33.instance": "M854,1022L854.5,1047",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink/33.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/32.instance": "M854.5014939980239,1047.0746999011951L854.9999880160001,1071.9994008"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnNotApplicableLink"
+			},
+			"34": {
+				"link-style": {
+					"type": "map<string,string>",
+					"value": {
+						"stroke": "#7fff00",
+						"stroke-dasharray": "",
+						"stroke-opacity": 1,
+						"stroke-width": 1,
+						"arrow-start": "none",
+						"arrow-end": "classic-wide-long"
+					}
+				},
+				"typename": {
+					"type": "string",
+					"value": "OnSuccessLink"
+				},
+				"position": {
+					"type": "list<double>",
+					"value": [
+						887.5,
+						1048
+					]
+				},
+				"orientation": {
+					"type": "double",
+					"value": 0
+				},
+				"scale": {
+					"type": "list<double>",
+					"value": [
+						1,
+						1
+					]
+				},
+				"mapper": {
+					"type": "code",
+					"value": ""
+				},
+				"parser": {
+					"type": "code",
+					"value": ""
+				},
+				"$contents": {
+					"type": "map<string,*>",
+					"value": {
+						"nodes": {},
+						"edges": []
+					}
+				},
+				"$asuri": {
+					"type": "string",
+					"value": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess/34.instance"
+				},
+				"$segments": {
+					"type": "map<string,list<string>>",
+					"value": {
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/16.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/34.instance": "M888,1023L887.5,1048",
+						"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink/34.instance--/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/ExhaustRandomIcon/32.instance": "M887.4985060019761,1048.0746999011951L887.0000119839999,1072.9994007999999"
+					}
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons/OnSuccessLink"
+			}
+		},
+		"edges": [],
+		"metamodels": [
+			"/Formalisms/__Transformations__/TransformationRule/TransformationRule.defaultIcons",
+			"/Formalisms/__Transformations__/Transformation/Transformation.defaultIcons",
+			"/Formalisms/GenericGraph/GenericGraph.defaultIcons.pattern",
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons.pattern"
+		]
+	},
+	"asm": {
+		"nodes": {
+			"3": {
+				"filenames": {
+					"type": "list<string>",
+					"value": [
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_disableAction.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_disableConstraint.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_removeLowerBound.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_renameClass.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_changeAttrType.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_renameAssociation.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_renameSelfAssociation.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_makeConcrete.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_disableClassActionsConstraints.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_renameCardinalities.model"
+					]
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": true
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom"
+			},
+			"5": {
+				"filenames": {
+					"type": "list<string>",
+					"value": [
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_addPLabel.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_addPLabelAction.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_addMatchSubtypes.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_addSelfAssociationAttributes.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_addAssociationAttributes.model"
+					]
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom"
+			},
+			"6": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess"
+			},
+			"7": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable"
+			},
+			"12": {
+				"filename": {
+					"type": "string",
+					"value": "Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_addCS.model"
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/Rule"
+			},
+			"15": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess"
+			},
+			"16": {
+				"filenames": {
+					"type": "list<string>",
+					"value": [
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_addCSPLabel.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_addCSConnectorPLabel.model"
+					]
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom"
+			},
+			"19": {
+				"filenames": {
+					"type": "list<string>",
+					"value": [
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_renameCS.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_renameCSConnector.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_clearParsersMappers.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_clearIconParsersMappers.model"
+					]
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom"
+			},
+			"23": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable"
+			},
+			"24": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess"
+			},
+			"25": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable"
+			},
+			"30": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess"
+			},
+			"31": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable"
+			},
+			"32": {
+				"filenames": {
+					"type": "list<string>",
+					"value": [
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_removeAttributedGenericLink.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_removeGenericLink.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_removeGenericLinkTwo.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_removeAttributedGenericLinkTwo.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_removeGenericLinks.model",
+						"Formalisms/__LanguageSyntax__/SimpleClassDiagram/RAMification/rules/R_removeAttributedGenericLinks.model"
+					]
+				},
+				"isStart": {
+					"type": "boolean",
+					"value": false
+				},
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/ExhaustRandom"
+			},
+			"33": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnNotApplicable"
+			},
+			"34": {
+				"$type": "/Formalisms/__Transformations__/Transformation/Transformation/OnSuccess"
+			}
+		},
+		"edges": [
+			{
+				"src": "3",
+				"dest": "6"
+			},
+			{
+				"src": "6",
+				"dest": "5"
+			},
+			{
+				"src": "3",
+				"dest": "7"
+			},
+			{
+				"src": "7",
+				"dest": "5"
+			},
+			{
+				"src": "12",
+				"dest": "15"
+			},
+			{
+				"src": "15",
+				"dest": "12"
+			},
+			{
+				"src": "19",
+				"dest": "23"
+			},
+			{
+				"src": "23",
+				"dest": "12"
+			},
+			{
+				"src": "19",
+				"dest": "24"
+			},
+			{
+				"src": "24",
+				"dest": "12"
+			},
+			{
+				"src": "12",
+				"dest": "25"
+			},
+			{
+				"src": "25",
+				"dest": "16"
+			},
+			{
+				"src": "5",
+				"dest": "30"
+			},
+			{
+				"src": "30",
+				"dest": "19"
+			},
+			{
+				"src": "5",
+				"dest": "31"
+			},
+			{
+				"src": "31",
+				"dest": "19"
+			},
+			{
+				"src": "16",
+				"dest": "33"
+			},
+			{
+				"src": "33",
+				"dest": "32"
+			},
+			{
+				"src": "16",
+				"dest": "34"
+			},
+			{
+				"src": "34",
+				"dest": "32"
+			}
+		],
+		"metamodels": [
+			"/Formalisms/__Transformations__/TransformationRule/TransformationRule",
+			"/Formalisms/__Transformations__/Transformation/Transformation",
+			"/Formalisms/GenericGraph/GenericGraph.pattern",
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.pattern"
+		]
+	}
+}

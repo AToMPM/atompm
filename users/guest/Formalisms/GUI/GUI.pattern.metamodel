@@ -1,0 +1,538 @@
+{
+	"types": {
+		"__pVisualElement": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "size",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "id",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pInput": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "text",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "size",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "id",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pList": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "choices",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "clickable",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "size",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "id",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pLabel": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "text",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "size",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "id",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pContainer": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "layout",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "orientation",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "size",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "id",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pButton": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "text",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "size",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "position",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "id",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pContain": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pCanvas": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"__pCanvasContents": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\nfalse",
+			"targetType": "VisualElement"
+		}
+	],
+	"actions": [
+		{
+			"name": "distinctPLabels",
+			"event": "post-create",
+			"code": "if( getAttr(\"__pLabel\") == \"\" )\n{\n\tvar pLabels = getAllNodes().\n\t\t\t\t\t\t\tfilter( function(n) {return hasAttr(\"__pLabel\",n);} ).\n\t\t\t\t\t\t\t\tmap( function(n) {return getAttr(\"__pLabel\",n);} ),\n\t\t i\t\t\t= \"0\";\n\n\twhile( _utils.contains(pLabels,i) )\n\t\ti = String(parseInt(i)+1);\n\tsetAttr(\"__pLabel\",i);\n}",
+			"targetType": "*"
+		}
+	],
+	"cardinalities": {
+		"__pVisualElement": [
+			{
+				"dir": "in",
+				"type": "__pContain",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pCanvasContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pInput": [
+			{
+				"dir": "in",
+				"type": "__pContain",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pCanvasContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pList": [
+			{
+				"dir": "in",
+				"type": "__pContain",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pCanvasContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pLabel": [
+			{
+				"dir": "in",
+				"type": "__pContain",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pCanvasContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pContainer": [
+			{
+				"dir": "out",
+				"type": "__pContain",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pContain",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pCanvasContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pButton": [
+			{
+				"dir": "in",
+				"type": "__pContain",
+				"min": 0,
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "__pCanvasContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pContain": [
+			{
+				"dir": "in",
+				"type": "__pContainer",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pVisualElement",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pInput",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pList",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pLabel",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pContainer",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pButton",
+				"min": 0,
+				"max": "1"
+			}
+		],
+		"__pCanvas": [
+			{
+				"dir": "out",
+				"type": "__pCanvasContents",
+				"min": 0,
+				"max": "Infinity"
+			}
+		],
+		"__pCanvasContents": [
+			{
+				"dir": "in",
+				"type": "__pCanvas",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pVisualElement",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pInput",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pList",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pLabel",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pContainer",
+				"min": 0,
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "__pButton",
+				"min": 0,
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"__pContainer": {
+			"__pVisualElement": [
+				"__pContain"
+			],
+			"__pInput": [
+				"__pContain"
+			],
+			"__pList": [
+				"__pContain"
+			],
+			"__pLabel": [
+				"__pContain"
+			],
+			"__pContainer": [
+				"__pContain"
+			],
+			"__pButton": [
+				"__pContain"
+			]
+		},
+		"__pCanvas": {
+			"__pVisualElement": [
+				"__pCanvasContents"
+			],
+			"__pInput": [
+				"__pCanvasContents"
+			],
+			"__pList": [
+				"__pCanvasContents"
+			],
+			"__pLabel": [
+				"__pCanvasContents"
+			],
+			"__pContainer": [
+				"__pCanvasContents"
+			],
+			"__pButton": [
+				"__pCanvasContents"
+			]
+		}
+	},
+	"connectorTypes": {
+		"__pContain": "containment",
+		"__pCanvasContents": "containment"
+	},
+	"types2parentTypes": {
+		"__pVisualElement": [],
+		"__pInput": [
+			"__pVisualElement"
+		],
+		"__pList": [
+			"__pVisualElement"
+		],
+		"__pLabel": [
+			"__pVisualElement"
+		],
+		"__pContainer": [
+			"__pVisualElement"
+		],
+		"__pButton": [
+			"__pVisualElement"
+		],
+		"__pContain": [],
+		"__pCanvas": [],
+		"__pCanvasContents": []
+	}
+}

@@ -1,0 +1,183 @@
+{
+	"types": {
+		"Class": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "Class_"
+			},
+			{
+				"name": "attributes",
+				"type": "list<$ATTRIBUTE>",
+				"default": []
+			},
+			{
+				"name": "constraints",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "actions",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "cardinalities",
+				"type": "list<$CARDINALITY>",
+				"default": []
+			},
+			{
+				"name": "abstract",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"GlobalConstraint": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "GC_"
+			},
+			{
+				"name": "event",
+				"type": "$EVENT",
+				"default": ""
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"GlobalAction": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "GA_"
+			},
+			{
+				"name": "event",
+				"type": "$EVENT",
+				"default": ""
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"Association": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "Association_"
+			},
+			{
+				"name": "attributes",
+				"type": "list<$ATTRIBUTE>",
+				"default": []
+			},
+			{
+				"name": "constraints",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "actions",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "cardinalities",
+				"type": "list<$CARDINALITY>",
+				"default": []
+			},
+			{
+				"name": "linktype",
+				"type": "ENUM(visual,containment)",
+				"default": "visual"
+			}
+		],
+		"Inheritance": []
+	},
+	"constraints": [
+		{
+			"name": "noInheritanceLoops",
+			"event": "post-create",
+			"code": "/*newline*/var mm      = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/',/*newline*/    nout    = getNeighbors('>',mm+'Class'),/*newline*/    visited = [];/*newline*/function dfs(to_visit)/*newline*/{/*newline*/    var curr = to_visit.pop();/*newline*/    if( curr == undefined )/*newline*/        return true;/*newline*/    else if( visited.indexOf(curr) > -1 )/*newline*/        return false;/*newline*/    else/*newline*/    {/*newline*/        visited.push(curr);/*newline*/        var ntype = (getAttr('$type',curr) == mm+'Class' ? /*newline*/                    mm+'Inheritance' : mm+'Class');/*newline*/        return dfs( to_visit.concat(getNeighbors('>',ntype,curr)) );/*newline*/    }/*newline*/}/*newline*/dfs(nout);",
+			"targetType": "Inheritance"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Class": [
+			{
+				"dir": "out",
+				"type": "Association",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Association",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Inheritance",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Inheritance",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"GlobalConstraint": [],
+		"GlobalAction": [],
+		"Association": [
+			{
+				"dir": "in",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Inheritance": [
+			{
+				"dir": "in",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Class",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Class": {
+			"Class": [
+				"Association",
+				"Inheritance"
+			]
+		}
+	},
+	"connectorTypes": {
+		"Association": "visual",
+		"Inheritance": "visual"
+	},
+	"types2parentTypes": {}
+}

@@ -1,0 +1,123 @@
+{
+	"types": {
+		"__pAConfiguration": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "enabled",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pHTTPDebugger": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "serverAddr",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "enabled",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pCustom": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "options",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "enabled",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		],
+		"__pHTTPPerfMonitor": [
+			{
+				"name": "__pLabel",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "__pMatchSubtypes",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "serverAddr",
+				"type": "code",
+				"default": "getAttr()"
+			},
+			{
+				"name": "enabled",
+				"type": "code",
+				"default": "getAttr()"
+			}
+		]
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "/* comment next line to enable this constraint */\nthrow \"IgnoredConstraint\"\nfalse",
+			"targetType": "AConfiguration"
+		}
+	],
+	"actions": [
+		{
+			"name": "distinctPLabels",
+			"event": "post-create",
+			"code": "if( getAttr(\"__pLabel\") == \"\" )\n{\n\tvar pLabels = getAllNodes().\n\t\t\t\t\t\t\tfilter( function(n) {return hasAttr(\"__pLabel\",n);} ).\n\t\t\t\t\t\t\t\tmap( function(n) {return getAttr(\"__pLabel\",n);} ),\n\t\t i\t\t\t= \"0\";\n\n\twhile( _utils.contains(pLabels,i) )\n\t\ti = String(parseInt(i)+1);\n\tsetAttr(\"__pLabel\",i);\n}",
+			"targetType": "*"
+		}
+	],
+	"cardinalities": {
+		"__pAConfiguration": [],
+		"__pHTTPDebugger": [],
+		"__pCustom": [],
+		"__pHTTPPerfMonitor": []
+	},
+	"legalConnections": {},
+	"connectorTypes": {},
+	"types2parentTypes": {
+		"__pAConfiguration": [],
+		"__pHTTPDebugger": [
+			"__pAConfiguration"
+		],
+		"__pCustom": [
+			"__pAConfiguration"
+		],
+		"__pHTTPPerfMonitor": [
+			"__pAConfiguration"
+		]
+	}
+}

@@ -1,0 +1,3298 @@
+{
+	"types": {
+		"Element": [
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Task": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"InitialNode": [
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"FinalNode": [
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"ControlNode": [
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"JoinNode": [
+			{
+				"name": "id",
+				"type": "int",
+				"default": "1"
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"ForkNode": [
+			{
+				"name": "id",
+				"type": "int",
+				"default": "1"
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"AutoTask": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"ManualTask": [
+			{
+				"name": "Message",
+				"type": "string",
+				"default": "0"
+			},
+			{
+				"name": "Duration",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "Executing",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"EditModel": [
+			{
+				"name": "Message",
+				"type": "string",
+				"default": "0"
+			},
+			{
+				"name": "Duration",
+				"type": "int",
+				"default": 1000
+			},
+			{
+				"name": "Executing",
+				"type": "boolean",
+				"default": false
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"OpenModel": [
+			{
+				"name": "Location@2",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "extension",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"SaveModel": [
+			{
+				"name": "Location@2",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "extension",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"VerifyAS": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"OpenTransformation": [
+			{
+				"name": "Location@2",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "extension",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"ExecTransformation": [
+			{
+				"name": "Mode",
+				"type": "string",
+				"default": "play"
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Parameters": [
+			{
+				"name": "parameterList",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"LoadToolbar": [
+			{
+				"name": "Location@2",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "extension",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"GenerateAS": [
+			{
+				"name": "Location@2",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"GenerateCS": [
+			{
+				"name": "Location@2",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"DecisionNode": [
+			{
+				"name": "condition",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"GeneratePMM": [
+			{
+				"name": "Location@2",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "extension",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "name",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"IterationNode": [
+			{
+				"name": "iterations",
+				"type": "int",
+				"default": "1"
+			},
+			{
+				"name": "condition",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "current",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Flow": [
+			{
+				"name": "chosen",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Alternative": [
+			{
+				"name": "isTrue",
+				"type": "boolean",
+				"default": false
+			}
+		],
+		"Dependency": [
+			{
+				"name": "srcParam",
+				"type": "string",
+				"default": ""
+			},
+			{
+				"name": "tarParam",
+				"type": "string",
+				"default": ""
+			}
+		],
+		"Link": []
+	},
+	"constraints": [
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Element"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "Task"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "ControlNode"
+		},
+		{
+			"name": "noAbstractInstances",
+			"event": "pre-create",
+			"code": "false",
+			"targetType": "AutoTask"
+		}
+	],
+	"actions": [],
+	"cardinalities": {
+		"Element": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Task": [
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"InitialNode": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"FinalNode": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"ControlNode": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"JoinNode": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"ForkNode": [
+			{
+				"dir": "out",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"AutoTask": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"ManualTask": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"EditModel": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"OpenModel": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"SaveModel": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"VerifyAS": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"OpenTransformation": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"ExecTransformation": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Parameters": [],
+		"LoadToolbar": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"GenerateAS": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"GenerateCS": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"DecisionNode": [
+			{
+				"dir": "out",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"GeneratePMM": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Flow",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Dependency",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"IterationNode": [
+			{
+				"dir": "out",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Link",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "Alternative",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Flow": [
+			{
+				"dir": "in",
+				"type": "ForkNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Task",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AutoTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ManualTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EditModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SaveModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VerifyAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExecTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LoadToolbar",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GenerateAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GenerateCS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GeneratePMM",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Alternative": [
+			{
+				"dir": "in",
+				"type": "DecisionNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Task",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AutoTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ManualTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EditModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SaveModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VerifyAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExecTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LoadToolbar",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GenerateAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GenerateCS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GeneratePMM",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "IterationNode",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Dependency": [
+			{
+				"dir": "in",
+				"type": "Task",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Task",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "AutoTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AutoTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ManualTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ManualTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "EditModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EditModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "SaveModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SaveModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "VerifyAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VerifyAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "OpenTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ExecTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExecTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LoadToolbar",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LoadToolbar",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "GenerateAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GenerateAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "GenerateCS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GenerateCS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "GeneratePMM",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GeneratePMM",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"Link": [
+			{
+				"dir": "",
+				"type": "",
+				"min": "2",
+				"max": ""
+			},
+			{
+				"dir": "in",
+				"type": "Element",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Element",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "Task",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Task",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "InitialNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "InitialNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "FinalNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "FinalNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ControlNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ControlNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "JoinNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "JoinNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ForkNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ForkNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "AutoTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "AutoTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ManualTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ManualTask",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "EditModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "EditModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "SaveModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "SaveModel",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "VerifyAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "VerifyAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "OpenTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "OpenTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "ExecTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "ExecTransformation",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "LoadToolbar",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "LoadToolbar",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "GenerateAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GenerateAS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "GenerateCS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GenerateCS",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "DecisionNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "DecisionNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "GeneratePMM",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "GeneratePMM",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "in",
+				"type": "IterationNode",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "IterationNode",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Element": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link"
+			],
+			"ManualTask": [
+				"Link"
+			],
+			"EditModel": [
+				"Link"
+			],
+			"OpenModel": [
+				"Link"
+			],
+			"SaveModel": [
+				"Link"
+			],
+			"VerifyAS": [
+				"Link"
+			],
+			"OpenTransformation": [
+				"Link"
+			],
+			"ExecTransformation": [
+				"Link"
+			],
+			"LoadToolbar": [
+				"Link"
+			],
+			"GenerateAS": [
+				"Link"
+			],
+			"GenerateCS": [
+				"Link"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"Task": {
+			"Task": [
+				"Dependency",
+				"Link"
+			],
+			"AutoTask": [
+				"Dependency",
+				"Link"
+			],
+			"ManualTask": [
+				"Dependency",
+				"Link"
+			],
+			"EditModel": [
+				"Dependency",
+				"Link"
+			],
+			"OpenModel": [
+				"Dependency",
+				"Link"
+			],
+			"SaveModel": [
+				"Dependency",
+				"Link"
+			],
+			"VerifyAS": [
+				"Dependency",
+				"Link"
+			],
+			"OpenTransformation": [
+				"Dependency",
+				"Link"
+			],
+			"ExecTransformation": [
+				"Dependency",
+				"Link"
+			],
+			"LoadToolbar": [
+				"Dependency",
+				"Link"
+			],
+			"GenerateAS": [
+				"Dependency",
+				"Link"
+			],
+			"GenerateCS": [
+				"Dependency",
+				"Link"
+			],
+			"GeneratePMM": [
+				"Dependency",
+				"Link"
+			],
+			"Element": [
+				"Link"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"InitialNode": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link"
+			],
+			"ManualTask": [
+				"Link"
+			],
+			"EditModel": [
+				"Link"
+			],
+			"OpenModel": [
+				"Link"
+			],
+			"SaveModel": [
+				"Link"
+			],
+			"VerifyAS": [
+				"Link"
+			],
+			"OpenTransformation": [
+				"Link"
+			],
+			"ExecTransformation": [
+				"Link"
+			],
+			"LoadToolbar": [
+				"Link"
+			],
+			"GenerateAS": [
+				"Link"
+			],
+			"GenerateCS": [
+				"Link"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"FinalNode": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link"
+			],
+			"ManualTask": [
+				"Link"
+			],
+			"EditModel": [
+				"Link"
+			],
+			"OpenModel": [
+				"Link"
+			],
+			"SaveModel": [
+				"Link"
+			],
+			"VerifyAS": [
+				"Link"
+			],
+			"OpenTransformation": [
+				"Link"
+			],
+			"ExecTransformation": [
+				"Link"
+			],
+			"LoadToolbar": [
+				"Link"
+			],
+			"GenerateAS": [
+				"Link"
+			],
+			"GenerateCS": [
+				"Link"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"ControlNode": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link"
+			],
+			"ManualTask": [
+				"Link"
+			],
+			"EditModel": [
+				"Link"
+			],
+			"OpenModel": [
+				"Link"
+			],
+			"SaveModel": [
+				"Link"
+			],
+			"VerifyAS": [
+				"Link"
+			],
+			"OpenTransformation": [
+				"Link"
+			],
+			"ExecTransformation": [
+				"Link"
+			],
+			"LoadToolbar": [
+				"Link"
+			],
+			"GenerateAS": [
+				"Link"
+			],
+			"GenerateCS": [
+				"Link"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"JoinNode": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link"
+			],
+			"ManualTask": [
+				"Link"
+			],
+			"EditModel": [
+				"Link"
+			],
+			"OpenModel": [
+				"Link"
+			],
+			"SaveModel": [
+				"Link"
+			],
+			"VerifyAS": [
+				"Link"
+			],
+			"OpenTransformation": [
+				"Link"
+			],
+			"ExecTransformation": [
+				"Link"
+			],
+			"LoadToolbar": [
+				"Link"
+			],
+			"GenerateAS": [
+				"Link"
+			],
+			"GenerateCS": [
+				"Link"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"ForkNode": {
+			"Task": [
+				"Flow",
+				"Link"
+			],
+			"AutoTask": [
+				"Flow",
+				"Link"
+			],
+			"ManualTask": [
+				"Flow",
+				"Link"
+			],
+			"EditModel": [
+				"Flow",
+				"Link"
+			],
+			"OpenModel": [
+				"Flow",
+				"Link"
+			],
+			"SaveModel": [
+				"Flow",
+				"Link"
+			],
+			"VerifyAS": [
+				"Flow",
+				"Link"
+			],
+			"OpenTransformation": [
+				"Flow",
+				"Link"
+			],
+			"ExecTransformation": [
+				"Flow",
+				"Link"
+			],
+			"LoadToolbar": [
+				"Flow",
+				"Link"
+			],
+			"GenerateAS": [
+				"Flow",
+				"Link"
+			],
+			"GenerateCS": [
+				"Flow",
+				"Link"
+			],
+			"GeneratePMM": [
+				"Flow",
+				"Link"
+			],
+			"Element": [
+				"Link"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"AutoTask": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"ManualTask": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"EditModel": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"OpenModel": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"SaveModel": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"VerifyAS": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"OpenTransformation": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"ExecTransformation": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"LoadToolbar": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"GenerateAS": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"GenerateCS": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"DecisionNode": {
+			"Task": [
+				"Alternative",
+				"Link"
+			],
+			"AutoTask": [
+				"Alternative",
+				"Link"
+			],
+			"ManualTask": [
+				"Alternative",
+				"Link"
+			],
+			"EditModel": [
+				"Alternative",
+				"Link"
+			],
+			"OpenModel": [
+				"Alternative",
+				"Link"
+			],
+			"SaveModel": [
+				"Alternative",
+				"Link"
+			],
+			"VerifyAS": [
+				"Alternative",
+				"Link"
+			],
+			"OpenTransformation": [
+				"Alternative",
+				"Link"
+			],
+			"ExecTransformation": [
+				"Alternative",
+				"Link"
+			],
+			"LoadToolbar": [
+				"Alternative",
+				"Link"
+			],
+			"GenerateAS": [
+				"Alternative",
+				"Link"
+			],
+			"GenerateCS": [
+				"Alternative",
+				"Link"
+			],
+			"GeneratePMM": [
+				"Alternative",
+				"Link"
+			],
+			"Element": [
+				"Link"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"GeneratePMM": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Dependency"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Dependency"
+			],
+			"ManualTask": [
+				"Link",
+				"Dependency"
+			],
+			"EditModel": [
+				"Link",
+				"Dependency"
+			],
+			"OpenModel": [
+				"Link",
+				"Dependency"
+			],
+			"SaveModel": [
+				"Link",
+				"Dependency"
+			],
+			"VerifyAS": [
+				"Link",
+				"Dependency"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Dependency"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateAS": [
+				"Link",
+				"Dependency"
+			],
+			"GenerateCS": [
+				"Link",
+				"Dependency"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Dependency"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		},
+		"IterationNode": {
+			"Element": [
+				"Link"
+			],
+			"Task": [
+				"Link",
+				"Alternative"
+			],
+			"InitialNode": [
+				"Link"
+			],
+			"FinalNode": [
+				"Link"
+			],
+			"ControlNode": [
+				"Link"
+			],
+			"JoinNode": [
+				"Link"
+			],
+			"ForkNode": [
+				"Link"
+			],
+			"AutoTask": [
+				"Link",
+				"Alternative"
+			],
+			"ManualTask": [
+				"Link",
+				"Alternative"
+			],
+			"EditModel": [
+				"Link",
+				"Alternative"
+			],
+			"OpenModel": [
+				"Link",
+				"Alternative"
+			],
+			"SaveModel": [
+				"Link",
+				"Alternative"
+			],
+			"VerifyAS": [
+				"Link",
+				"Alternative"
+			],
+			"OpenTransformation": [
+				"Link",
+				"Alternative"
+			],
+			"ExecTransformation": [
+				"Link",
+				"Alternative"
+			],
+			"LoadToolbar": [
+				"Link",
+				"Alternative"
+			],
+			"GenerateAS": [
+				"Link",
+				"Alternative"
+			],
+			"GenerateCS": [
+				"Link",
+				"Alternative"
+			],
+			"DecisionNode": [
+				"Link"
+			],
+			"GeneratePMM": [
+				"Link",
+				"Alternative"
+			],
+			"IterationNode": [
+				"Link"
+			]
+		}
+	},
+	"connectorTypes": {
+		"Flow": "visual",
+		"Alternative": "visual",
+		"Dependency": "visual",
+		"Link": "visual"
+	},
+	"types2parentTypes": {
+		"Element": [],
+		"Task": [
+			"Element"
+		],
+		"InitialNode": [
+			"Element",
+			"ControlNode"
+		],
+		"FinalNode": [
+			"Element",
+			"ControlNode"
+		],
+		"ControlNode": [
+			"Element"
+		],
+		"JoinNode": [
+			"Element",
+			"ControlNode"
+		],
+		"ForkNode": [
+			"Element",
+			"ControlNode"
+		],
+		"AutoTask": [
+			"Element",
+			"Task"
+		],
+		"ManualTask": [
+			"Element",
+			"Task"
+		],
+		"EditModel": [
+			"Element",
+			"Task",
+			"ManualTask"
+		],
+		"OpenModel": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"SaveModel": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"VerifyAS": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"OpenTransformation": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"ExecTransformation": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"Parameters": [],
+		"LoadToolbar": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"GenerateAS": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"GenerateCS": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"DecisionNode": [
+			"Element",
+			"ControlNode"
+		],
+		"GeneratePMM": [
+			"Element",
+			"Task",
+			"AutoTask"
+		],
+		"IterationNode": [
+			"Element",
+			"ControlNode",
+			"DecisionNode"
+		],
+		"Flow": [],
+		"Alternative": [],
+		"Dependency": [],
+		"Link": []
+	}
+}

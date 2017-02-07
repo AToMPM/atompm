@@ -1,0 +1,142 @@
+{
+	"types": {
+		"GlobalConstraint": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "GC_"
+			},
+			{
+				"name": "event",
+				"type": "$EVENT",
+				"default": ""
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"GlobalAction": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "GA_"
+			},
+			{
+				"name": "event",
+				"type": "$EVENT",
+				"default": ""
+			},
+			{
+				"name": "code",
+				"type": "code",
+				"default": ""
+			}
+		],
+		"Entity": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "Entity_"
+			},
+			{
+				"name": "attributes",
+				"type": "list<$ATTRIBUTE>",
+				"default": []
+			},
+			{
+				"name": "constraints",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "actions",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "cardinalities",
+				"type": "list<$CARDINALITY>",
+				"default": []
+			}
+		],
+		"Relationship": [
+			{
+				"name": "name",
+				"type": "string",
+				"default": "Relationship_"
+			},
+			{
+				"name": "attributes",
+				"type": "list<$ATTRIBUTE>",
+				"default": []
+			},
+			{
+				"name": "constraints",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "actions",
+				"type": "list<$EVENT_HANDLER>",
+				"default": []
+			},
+			{
+				"name": "cardinalities",
+				"type": "list<$CARDINALITY>",
+				"default": []
+			},
+			{
+				"name": "linktype",
+				"type": "ENUM(visual,containment)",
+				"default": "visual"
+			}
+		]
+	},
+	"constraints": [],
+	"actions": [],
+	"cardinalities": {
+		"GlobalConstraint": [],
+		"GlobalAction": [],
+		"Entity": [
+			{
+				"dir": "out",
+				"type": "Relationship",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "Relationship",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Relationship": [
+			{
+				"dir": "in",
+				"type": "Entity",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Entity",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Entity": {
+			"Entity": [
+				"Relationship"
+			]
+		}
+	},
+	"connectorTypes": {
+		"Relationship": "visual"
+	},
+	"types2parentTypes": {}
+}

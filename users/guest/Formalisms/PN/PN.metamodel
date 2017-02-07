@@ -1,0 +1,119 @@
+{
+	"types": {
+		"Place": [
+			{
+				"name": "tokens",
+				"type": "int",
+				"default": 0
+			},
+			{
+				"name": "pname",
+				"type": "string",
+				"default": "P_"
+			}
+		],
+		"Transition": [
+			{
+				"name": "tname",
+				"type": "string",
+				"default": "T_"
+			}
+		],
+		"PlaceToTransition": [
+			{
+				"name": "weight",
+				"type": "int",
+				"default": 1
+			}
+		],
+		"TransitionToPlace": [
+			{
+				"name": "weight",
+				"type": "int",
+				"default": 1
+			}
+		]
+	},
+	"constraints": [],
+	"actions": [],
+	"cardinalities": {
+		"Place": [
+			{
+				"dir": "out",
+				"type": "PlaceToTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "in",
+				"type": "TransitionToPlace",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"Transition": [
+			{
+				"dir": "in",
+				"type": "PlaceToTransition",
+				"min": "0",
+				"max": "Infinity"
+			},
+			{
+				"dir": "out",
+				"type": "TransitionToPlace",
+				"min": "0",
+				"max": "Infinity"
+			}
+		],
+		"PlaceToTransition": [
+			{
+				"dir": "in",
+				"type": "Place",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Transition",
+				"min": "0",
+				"max": "1"
+			}
+		],
+		"TransitionToPlace": [
+			{
+				"dir": "in",
+				"type": "Transition",
+				"min": "0",
+				"max": "1"
+			},
+			{
+				"dir": "out",
+				"type": "Place",
+				"min": "0",
+				"max": "1"
+			}
+		]
+	},
+	"legalConnections": {
+		"Place": {
+			"Transition": [
+				"PlaceToTransition"
+			]
+		},
+		"Transition": {
+			"Place": [
+				"TransitionToPlace"
+			]
+		}
+	},
+	"connectorTypes": {
+		"PlaceToTransition": "visual",
+		"TransitionToPlace": "visual"
+	},
+	"types2parentTypes": {
+		"Place": [],
+		"Transition": [],
+		"PlaceToTransition": [],
+		"TransitionToPlace": []
+	}
+}
