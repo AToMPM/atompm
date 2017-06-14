@@ -179,9 +179,11 @@ GeometryUtils = function(){
 	 * Resizes the containers of icons (specified as uri array) that have moved within
 	 * them as required and uninsert dragged-out icons.
 	 */
-	this.resizeContainers = function(icons,context,dryRun,disabledDragouts) {
+	this.resizeContainers = function(icons,context,dryRun,disabledDragouts,reqs) {
 		if( icons.length == 0 )
 			return (dryRun ? [] : undefined);
+        if( reqs == undefined )
+            reqs = [];
 	
 		var requests 			  = [],
 			 containers2changes = {},
@@ -245,7 +247,11 @@ GeometryUtils = function(){
 	 				 }
 				 };
 	
-		icons.forEach(
+		icons.filter(
+            function(ic) {
+                return reqs.map(function(_node) {return _node['uri'];}).indexOf(ic + '.cs') < 0;
+            })
+            .forEach(
 			function(it)
 			{
 				if( !(it in __icons) || __isConnectionType(it) )
@@ -276,13 +282,16 @@ GeometryUtils = function(){
 					 'uri':HttpUtils.url(uri+'.cs',__NO_USERNAME+__NO_WID),
 					 'reqData':{'changes':containers2changes[uri]}});
 	
-		requests = 
-			requests.concat(
-				utils.flatten(
-					GeometryUtils.resizeContainers(
-						 utils.keys(containers2changes),
-						 containers2changes,
-						 true)));
+        for (var req_id in requests) {
+            var to_concat = utils.flatten(GeometryUtils.resizeContainers(
+                                                         utils.keys(containers2changes),
+                                                         containers2changes,
+                                                         true,
+                                                         false,
+                                                         requests)
+                                         )
+            requests = requests.concat(to_concat);
+        }
 	
 		if( dryRun )
 			return requests;	

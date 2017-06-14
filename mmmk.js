@@ -874,7 +874,9 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 		{
 			var inCounts 	= {},
 				 outCounts	= {},
-				 model 		= (model == undefined ? this.model : model);
+				 model 		= (model == undefined ? this.model : model),
+                 outContainments = {},
+                 containmentTargets = {};
 
 			if( model.nodes == undefined ||
 				 model.edges == undefined ||
@@ -886,7 +888,9 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			{
 				var edge 	 = model.edges[i],
 					 srcType  = this.__getType(model.nodes[edge['src']]['$type']),
-					 destType = this.__getType(model.nodes[edge['dest']]['$type']);
+					 destType = this.__getType(model.nodes[edge['dest']]['$type']),
+                     srcMetamodel = this.__getMetamodel(model.nodes[edge['src']]['$type']),
+                     destMetamodel = this.__getMetamodel(model.nodes[edge['dest']]['$type']);
 				
 				if( inCounts[edge['dest']] == undefined )
 					inCounts[edge['dest']] = {};
@@ -899,8 +903,23 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 				if( outCounts[edge['src']][destType] == undefined )
 					outCounts[edge['src']][destType] = 0;
 				outCounts[edge['src']][destType]++;
+                
+                if ( outContainments[edge['src']] == undefined ) {
+                    outContainments[edge['src']] = [];
+                }
+                if (destType in this.metamodels[destMetamodel]['connectorTypes'] && this.metamodels[destMetamodel]['connectorTypes'][destType] == 'containment') {
+                    outContainments[edge['src']].push(edge['dest']);
+                }
+                
+                if ( containmentTargets[edge['src']] == undefined ) {
+                    containmentTargets[edge['src']] = [];
+                }
+                if (srcType in this.metamodels[srcMetamodel]['connectorTypes'] && this.metamodels[srcMetamodel]['connectorTypes'][srcType] == 'containment') {
+                    containmentTargets[edge['src']].push(edge['dest']);
+                }
 			}
 
+            var checked_for_loops = []
 			for( var id in model.nodes )
 			{
 				var metamodel = this.__getMetamodel(model.nodes[id]['$type']),
@@ -917,6 +936,31 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 								cardinality['min'] > (inCounts[id] == undefined || inCounts[id][tc] == undefined ? 0 : inCounts[id][tc]) )
 						return {'$err':'insufficient incoming connections of type '+tc+' for '+model.nodes[id]['$type']+'/'+id};
 				}
+                
+                if (checked_for_loops.indexOf(id) < 0 && !(type in this.metamodels[metamodel]['connectorTypes'])) {
+                    var visited = [],
+                        tv = [id];
+                    function dfs(to_visit) {
+                        var curr = to_visit.pop();
+                        if( curr == undefined )
+                            return undefined; // no more to check
+                        else if( visited.indexOf(curr) > -1 )
+                            return {'$err':'containment loop found for ' + model.nodes[id]['$type']+'/'+id}; // error: loop found!
+                        else {
+                            visited.push(curr);
+                            // find all (containment) associations linked to the object, and add their targets to the to_visit list.
+                            for ( var oc_idx in outContainments[curr] ) {
+                                to_visit = to_visit.concat(containmentTargets[outContainments[curr][oc_idx]]);
+                            }
+                            return dfs( to_visit );
+                        }
+                    }
+                    var res = dfs(tv);
+                    if (res != undefined) {
+                        return res;
+                    }
+                    checked_for_loops= checked_for_loops.concat(visited);
+                }
 			}
 			
 			for( var metamodel in this.metamodels )

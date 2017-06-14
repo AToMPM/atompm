@@ -194,9 +194,11 @@ function __createEdge(segments,style,edgeId,linkuri)
     for (var id in __icons) {
         __icons[id]['ordernr'] = undefined;
     }
-    function getOrderNr(id) {
+    function getOrderNr(id,visited) {
         var icon = __icons[id];
+        if (visited.indexOf(icon) > 0) return
         if (icon['ordernr']) return;
+        visited.push(icon);
         if (__isConnectionType(id)) {
             // I like my edges as I like my women: always on top
             icon['ordernr'] = 9999;
@@ -204,7 +206,7 @@ function __createEdge(segments,style,edgeId,linkuri)
             for (var edgeId in icon['edgesIn']) {
                 var associationid = __edges[icon['edgesIn'][edgeId]]['start']
                 if (__isContainmentConnectionType(associationid)) {
-                    getOrderNr(__edges[__icons[associationid]['edgesIn'][0]]['start']);
+                    getOrderNr(__edges[__icons[associationid]['edgesIn'][0]]['start'], visited);
                     icon['ordernr'] = __icons[__edges[__icons[associationid]['edgesIn'][0]]['start']]['ordernr'] + 1
                 }
             }
@@ -214,7 +216,7 @@ function __createEdge(segments,style,edgeId,linkuri)
         }
     }
     for (var id in __icons) {
-        getOrderNr(id);
+        getOrderNr(id, []);
     }
     
     Object.keys(__icons).concat().sort(function(a, b) {return __icons[a]['ordernr'] - __icons[b]['ordernr']}).forEach(function(el) {
@@ -426,10 +428,14 @@ function __legalConnections(uri1,uri2,ctype)
 	3. return 'setified' concatenation of results from steps 1 and 2 */
 function __getIconsInContainer(container)
 {
-	function getExplicitContents(container)
+	function getExplicitContents(container, contents)
 	{
 		if( __isConnectionType(container) )
 			return [];
+        
+        if( contents.indexOf(container) > -1 ) {
+            return []
+        }
 	
 		var contents = 
 			utils.flatten(__icons[container]['edgesOut'].map(
@@ -446,12 +452,14 @@ function __getIconsInContainer(container)
 								}).concat([linkuri]);
 				}));
 
-		return utils.toSet(
-					contents.concat(
-						utils.flatten(contents.map(getExplicitContents))));
+        for (var ct_idx in contents) {
+            var to_concat = utils.flatten(getExplicitContents(contents[ct_idx], contents));
+            contents.concat(to_concat);
+        }
+        return utils.toSet(contents);
 	}
 
-	var explicitContents = getExplicitContents(container),
+	var explicitContents = getExplicitContents(container, []),
 		 implicitContents = [];
 
 	for( var uri in __icons )
