@@ -832,9 +832,16 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 									 var changes = {};
 	 								 for( var fullattr in attrVals )
 	 									 changes[fullattr] = attrVals[fullattr];
-									 changelogs.push(
-											 _mmmk.update(id,changes)['changelog'] );
-	 								 callback( _utils.flatten(changelogs) );
+                                     var result = _mmmk.update(id,changes);
+                                     if ( '$err' in result )
+                                         callback( 
+                                            [{'op':'SYSOUT',
+                                              'text':'ERROR :: '+result['$err']}]);
+                                     else {
+                                         changelogs.push(
+                                                 result['changelog'] );
+                                         callback( _utils.flatten(changelogs) );
+                                     }
 								 }
  							 },
 						 failuref = 
