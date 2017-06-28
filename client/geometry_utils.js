@@ -247,11 +247,7 @@ GeometryUtils = function(){
 	 				 }
 				 };
 	
-		icons.filter(
-            function(ic) {
-                return reqs.map(function(_node) {return _node['uri'];}).indexOf(ic + '.cs') < 0;
-            })
-            .forEach(
+		icons.forEach(
 			function(it)
 			{
 				if( !(it in __icons) || __isConnectionType(it) )
@@ -483,7 +479,7 @@ GeometryUtils = function(){
 					}
 					else
 					{
-						/* rotation/scale only */ 						
+						/* rotation/scale only */
 						var offset	 = [icon.getAttr('__x') - __selection['bbox'].x,
 						 				 	 icon.getAttr('__y') - __selection['bbox'].y],
 							 rsOffset = GeometryUtils.transformPoint(
