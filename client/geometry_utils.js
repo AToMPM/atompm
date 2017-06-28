@@ -605,7 +605,8 @@ GeometryUtils = function(){
 				insertRequests.forEach(
 					function(r)
 					{
-						toBeInserted[r['reqData']['dest']] = r['reqData']['src'];
+                        if ('reqData' in r)
+                            toBeInserted[r['reqData']['dest']] = r['reqData']['src'];
 					});
 			}
 	
