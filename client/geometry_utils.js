@@ -257,11 +257,14 @@ GeometryUtils = function(){
 					function(edgeId)
 					{
 						var linkIn = __edgeId2ends(edgeId)[0];
-						if( __isContainmentConnectionType(linkIn) )
-							resizeContainer(
-								__edgeId2ends(__icons[linkIn]['edgesIn'][0])[0],
-								linkIn,
-								it);
+						if( __isContainmentConnectionType(linkIn) ) {
+                            if ( reqs.map(function(_node) {return _node['uri'];}).indexOf(__edgeId2ends(__icons[linkIn]['edgesIn'][0])[0] + '.cs') < 0 ) {
+                                resizeContainer(
+                                    __edgeId2ends(__icons[linkIn]['edgesIn'][0])[0],
+                                    linkIn,
+                                    it);
+                            }
+                        }
 					});
 	
 				if( context.toBeInserted && it in context.toBeInserted )
