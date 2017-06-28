@@ -428,12 +428,12 @@ function __legalConnections(uri1,uri2,ctype)
 	3. return 'setified' concatenation of results from steps 1 and 2 */
 function __getIconsInContainer(container)
 {
-	function getExplicitContents(container, contents)
+	function getExplicitContents(container, explored)
 	{
 		if( __isConnectionType(container) )
 			return [];
         
-        if( contents.indexOf(container) > -1 ) {
+        if( explored.indexOf(container) > -1 ) {
             return []
         }
 	
@@ -451,10 +451,12 @@ function __getIconsInContainer(container)
 									return __edges[_edgeId]['end'];	
 								}).concat([linkuri]);
 				}));
+                
+        explored.push(container)
 
         for (var ct_idx in contents) {
-            var to_concat = utils.flatten(getExplicitContents(contents[ct_idx], contents));
-            contents.concat(to_concat);
+            var to_concat = utils.flatten(getExplicitContents(contents[ct_idx], explored));
+            contents = contents.concat(to_concat);
         }
         return utils.toSet(contents);
 	}
