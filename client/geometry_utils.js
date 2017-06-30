@@ -122,6 +122,8 @@ GeometryUtils = function(){
 	 * Applies the effects of the specified transformation to the preview overlay
 	 */
 	this.previewSelectionTransformation = function(op,dir) {
+        if (transformationPreviewOverlay == undefined)
+            return
 		var bbox  = __selection['bbox'],
 			 scale = (dir > 0 ? 1.05 : 0.95),
 			 angle = (dir > 0 ? 3 : -3);
@@ -139,6 +141,8 @@ GeometryUtils = function(){
 	 * Moves the transformation preview overlay to the specified coordinates
 	 */
 	this.previewSelectionTranslation = function(x,y) {
+        if (transformationPreviewOverlay == undefined)
+            return
 		var _x = parseInt(transformationPreviewOverlay.node.getAttribute('_x')),
 			 _y = parseInt(transformationPreviewOverlay.node.getAttribute('_y'));
 		transformationPreviewOverlay.translate(x-_x,y-_y);
@@ -451,6 +455,8 @@ GeometryUtils = function(){
 				 former tasks are computed and bundled with those that effect the 
 				 latter... the results of this form the emitted batchEdit */
 	this.transformSelection = function(callingContext,insertInfo) {
+        if (transformationPreviewOverlay == undefined)
+            return
 		var T = transformationPreviewOverlay.node.getAttribute('transform');
 		if( T == null || T == 'matrix(1,0,0,1,0,0)' )
 		{
