@@ -133,9 +133,9 @@ class SimulationGUI(Tk):
             self.light_change_events.append((self.counter + random.random() * 500 + 300, item, turn_green))
         
         if self.train is not None:
-            self.train.speed += self.train.acceleration / 2
-            self.label_speed.config(text="Speed: %.2f" % self.train.speed)
-            self.travelled_x += float(self.train.speed) / 20
+            self.train.velocity += self.train.acceleration / 2
+            self.label_speed.config(text="Speed: %.2f" % self.train.velocity)
+            self.travelled_x += float(self.train.velocity) / 20
             delta_x = -int(self.travelled_x - self.travelled_x_int)
             self.travelled_x_int = int(self.travelled_x)
             # Move rails
