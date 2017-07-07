@@ -125,6 +125,7 @@ class PythonExecutionContext :
 		self._context = \
 			{'getAttr' 				: dAPI._getAttr,
 			 'hasAttr'				: dAPI._hasAttr,
+			 'getAttrNames'		    : dAPI._getAttrNames,
 		 	 'setAttr' 				: dAPI._setAttr,
 			 'getAllNodes' 			: dAPI._getAllNodes,
 			 'getNeighbors' 		: dAPI._getNeighbors,
