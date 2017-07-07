@@ -253,11 +253,14 @@ class Match(dict):
         '''
         mapping = {}
         for label in self.iterkeys():
-            sourceNode = source_graph.get_node(self[label])
+            try:
+                sourceNode = source_graph.get_node(self[label])
+            except KeyError:
+                raise Exception('The matched node %s does not exist' % label)
             if sourceNode is not None:
                 mapping[label] = sourceNode
             else:
-                raise Exception('The matched node does not exist')
+                raise Exception('The matched node %s does not exist' % label)
         return mapping
     
     def to_mapping(self, source_graph, pattern_graph):

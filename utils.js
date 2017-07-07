@@ -85,7 +85,7 @@ utils.flatten =
 	{
 		return (arrays.length == 0 ?
 					[] :
-					arrays.reduce(function(a,b) {return a.concat(b);}));
+					[].concat.apply([], arrays));
 	};
 	
 

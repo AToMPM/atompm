@@ -259,6 +259,17 @@ DataUtils = function(){
 							  'dest':it,
 							  'pos':[pathCenter.x,pathCenter.y],
 							  'segments':segments}});
+                              
+                 __icons[it]['edgesIn'].forEach(
+                        function(edgeId)
+                        {
+                            var linkIn = __edgeId2ends(edgeId)[0];
+                            if( __isContainmentConnectionType(linkIn) ) {
+                                requests.push(
+                                     {'method':'DELETE',
+                                      'uri':HttpUtils.url(linkIn,__NO_USERNAME+__NO_WID)});
+                            }
+                        });
 			});
 		
 		if( dryRun )

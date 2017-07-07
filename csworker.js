@@ -711,12 +711,16 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 					continue;
 
 				var ldi 		= vobjs[vid]['$linkDecoratorInfo']['value'],
-					 pp  		= _svg.fns.getPointOnPathAtRatio(path,ldi.xratio),
-					 yoffset	= new _svg.types.Point(0,ldi.yoffset).rotate(pp.O),
-					 endAt	= (ldi.xratio >= 1 ? 
+					 pp  		= _svg.fns.getPointOnPathAtRatio(path,ldi.xratio);
+                     
+                if (pp == undefined)
+                    continue
+                
+				var yoffset	= new _svg.types.Point(0,ldi.yoffset).rotate(pp.O),
+					endAt	= (ldi.xratio >= 1 ? 
 						 				new _svg.types.Point(100,0).rotate(pp.O) :
 										new _svg.types.Point(0,0)),
-					 changes = {};
+					changes = {};
 				pp.x += yoffset.x - link['position']['value'][0];
 				pp.y += yoffset.y - link['position']['value'][1];
 
@@ -832,9 +836,16 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 									 var changes = {};
 	 								 for( var fullattr in attrVals )
 	 									 changes[fullattr] = attrVals[fullattr];
-									 changelogs.push(
-											 _mmmk.update(id,changes)['changelog'] );
-	 								 callback( _utils.flatten(changelogs) );
+                                     var result = _mmmk.update(id,changes);
+                                     if ( '$err' in result )
+                                         callback( 
+                                            [{'op':'SYSOUT',
+                                              'text':'ERROR :: '+result['$err']}]);
+                                     else {
+                                         changelogs.push(
+                                                 result['changelog'] );
+                                         callback( _utils.flatten(changelogs) );
+                                     }
 								 }
  							 },
 						 failuref = 

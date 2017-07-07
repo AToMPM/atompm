@@ -122,6 +122,8 @@ GeometryUtils = function(){
 	 * Applies the effects of the specified transformation to the preview overlay
 	 */
 	this.previewSelectionTransformation = function(op,dir) {
+        if (transformationPreviewOverlay == undefined)
+            return
 		var bbox  = __selection['bbox'],
 			 scale = (dir > 0 ? 1.05 : 0.95),
 			 angle = (dir > 0 ? 3 : -3);
@@ -139,6 +141,8 @@ GeometryUtils = function(){
 	 * Moves the transformation preview overlay to the specified coordinates
 	 */
 	this.previewSelectionTranslation = function(x,y) {
+        if (transformationPreviewOverlay == undefined)
+            return
 		var _x = parseInt(transformationPreviewOverlay.node.getAttribute('_x')),
 			 _y = parseInt(transformationPreviewOverlay.node.getAttribute('_y'));
 		transformationPreviewOverlay.translate(x-_x,y-_y);
@@ -247,11 +251,7 @@ GeometryUtils = function(){
 	 				 }
 				 };
 	
-		icons.filter(
-            function(ic) {
-                return reqs.map(function(_node) {return _node['uri'];}).indexOf(ic + '.cs') < 0;
-            })
-            .forEach(
+		icons.forEach(
 			function(it)
 			{
 				if( !(it in __icons) || __isConnectionType(it) )
@@ -261,11 +261,14 @@ GeometryUtils = function(){
 					function(edgeId)
 					{
 						var linkIn = __edgeId2ends(edgeId)[0];
-						if( __isContainmentConnectionType(linkIn) )
-							resizeContainer(
-								__edgeId2ends(__icons[linkIn]['edgesIn'][0])[0],
-								linkIn,
-								it);
+						if( __isContainmentConnectionType(linkIn) ) {
+                            if ( reqs.map(function(_node) {return _node['uri'];}).indexOf(__edgeId2ends(__icons[linkIn]['edgesIn'][0])[0] + '.cs') < 0 ) {
+                                resizeContainer(
+                                    __edgeId2ends(__icons[linkIn]['edgesIn'][0])[0],
+                                    linkIn,
+                                    it);
+                            }
+                        }
 					});
 	
 				if( context.toBeInserted && it in context.toBeInserted )
@@ -452,6 +455,8 @@ GeometryUtils = function(){
 				 former tasks are computed and bundled with those that effect the 
 				 latter... the results of this form the emitted batchEdit */
 	this.transformSelection = function(callingContext,insertInfo) {
+        if (transformationPreviewOverlay == undefined)
+            return
 		var T = transformationPreviewOverlay.node.getAttribute('transform');
 		if( T == null || T == 'matrix(1,0,0,1,0,0)' )
 		{
@@ -483,7 +488,7 @@ GeometryUtils = function(){
 					}
 					else
 					{
-						/* rotation/scale only */ 						
+						/* rotation/scale only */
 						var offset	 = [icon.getAttr('__x') - __selection['bbox'].x,
 						 				 	 icon.getAttr('__y') - __selection['bbox'].y],
 							 rsOffset = GeometryUtils.transformPoint(
@@ -606,7 +611,8 @@ GeometryUtils = function(){
 				insertRequests.forEach(
 					function(r)
 					{
-						toBeInserted[r['reqData']['dest']] = r['reqData']['src'];
+                        if ('reqData' in r)
+                            toBeInserted[r['reqData']['dest']] = r['reqData']['src'];
 					});
 			}
 	
