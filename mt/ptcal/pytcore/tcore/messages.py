@@ -283,9 +283,9 @@ class Match(dict):
         '''
         for pattern_node in mapping:
             #print "Pattern Graph: ", pattern_graph
-            #print "Pattern Graph.vs: ", pattern_graph.vs
+            #print "len(Pattern Graph.vs): ", pattern_graph.vcount()
             #print "Pattern Node: ", pattern_node
-            if pattern_node < len(pattern_graph.vs):
+            if pattern_node < pattern_graph.vcount():
                 #print "Pattern Graph.vs[pattern_node]: ", pattern_graph.vs[pattern_node]
                 label = pattern_graph.vs[pattern_node][Himesis.Constants.MT_LABEL]
                 guid = source_graph.vs[mapping[pattern_node]][Himesis.Constants.GUID]

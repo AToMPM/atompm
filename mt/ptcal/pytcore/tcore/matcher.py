@@ -171,7 +171,7 @@ class Matcher(RulePrimitive):
                         for nac_mapping in nacMatcher.match_iter(context=bridgeMapping):
                             # Make the mapping into {...,NAClabel:graphIndex,...}
                             match = Match()
-                            match.from_mapping(nac_mapping, graph, self.condition)
+                            match.from_mapping(nac_mapping, graph, NAC)
                             if NAC[HC.MT_CONSTRAINT](match.to_label_mapping(graph), graph):
                                 # An occurrence of the NAC is found: current mapping is not valid
                                 invalid = True
