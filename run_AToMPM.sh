@@ -15,6 +15,7 @@ if [ ! -d "dependencies" ]; then
     # First fetch Node.JS
     curl -L -O http://msdl.uantwerpen.be/AToMPM/node-v4.5.0.tar.gz
     tar -xvzf node*
+    rm node-*.tar.gz
     cd node*
     ./configure --prefix=$working_dir/dependencies/node.js
     make -j5
@@ -25,6 +26,7 @@ if [ ! -d "dependencies" ]; then
     # Install zlib seperately
     curl -L -O http://msdl.uantwerpen.be/AToMPM/zlib-1.2.8.tar.gz
     tar -xvzf zlib-*
+    rm zlib-*.tar.gz
     cd zlib-*
     ./configure --prefix=$working_dir/dependencies/localPython
     make
@@ -32,6 +34,7 @@ if [ ! -d "dependencies" ]; then
     cd ..
     curl -L -O http://msdl.uantwerpen.be/AToMPM/Python-2.7.12.tar.xz
     tar -xvf Python-*
+    rm Python-*.tar.xz
     cd Python-2.7.12
     ./configure --prefix=$working_dir/dependencies/localPython
     sed -i "s/^#zlib/zlib/g" Modules/Setup
@@ -48,6 +51,7 @@ if [ ! -d "dependencies" ]; then
     # Install igraph C core
     curl -L -O http://msdl.uantwerpen.be/AToMPM/igraph-0.7.1.tar.gz
     tar -xvzf igraph-*
+    rm igraph-*.tar.gz
     cd igraph-*
     ./configure
     make -j5
@@ -55,6 +59,7 @@ if [ ! -d "dependencies" ]; then
     # Install python-igraph binding
     curl -L -O http://msdl.uantwerpen.be/AToMPM/python-igraph-0.7.1.post6.tar.gz
     tar -xvzf python-igraph-*
+    rm python-igraph-*.tar.gz
     cd python-igraph-*
     rm setup.cfg
     echo "[build_ext]" > setup.cfg
