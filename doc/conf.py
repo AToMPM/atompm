@@ -51,8 +51,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'AToMPM'
-copyright = u'2016, Raphael Mannadiar, Simon Van Mierlo, Huseyin Ergin, Conner Hansen, Eugene Syriani, Jonathan Corley'
-author = u'Raphael Mannadiar, Simon Van Mierlo, Huseyin Ergin, Conner Hansen, Eugene Syriani, Jonathan Corley'
+copyright = u'2016, Eugene Syriani, Hans Vangheluwe, Raphael Mannadiar, Conner Hansen, Simon Van Mierlo, Huseyin Ergin, Jonathan Corley'
+author = u'Eugene Syriani, Hans Vangheluwe, Raphael Mannadiar, Conner Hansen, Simon Van Mierlo, Huseyin Ergin, Jonathan Corley'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
