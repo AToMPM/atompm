@@ -7,7 +7,7 @@
 To install AToMPM on Windows, follow these steps:
 * Download and install the latest Python 2.7.X (32-bit) from http://python.org/download/
 * Download and install python-igraph from http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
-* Download and install node.js version 4.5.0 from https://nodejs.org/en/
+* Download and install node.js version 4.5.0 from https://nodejs.org/download/release/v4.5.0/
 * Download and unzip the AToMPM sources from https://msdl.uantwerpen.be/git/simon/AToMPM/archive/master.zip.
 * In the AToMPM folder, run the command 'npm install'.
 
@@ -24,7 +24,7 @@ To run AToMPM, execute the `run_AToMPM.sh` script inside of the main AToMPM fold
 To install AToMPM on Mac, follow these steps:
 * Download and install the latest Python 2.7.X (32-bit) from http://python.org/download/
 * Download and install python-igraph from http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph
-* Download and install node.js version 4.5.0 from https://nodejs.org/en/
+* Download and install node.js version 4.5.0 from https://nodejs.org/download/release/v4.5.0/
 * Download and unzip the AToMPM sources from https://msdl.uantwerpen.be/git/simon/AToMPM/archive/master.zip.
 * In the AToMPM folder, run the command 'npm install'.
 
