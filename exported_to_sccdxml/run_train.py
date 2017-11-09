@@ -134,7 +134,7 @@ class SimulationGUI(Tk):
         
         if self.train is not None:
             self.train.velocity += self.train.acceleration / 2
-            self.label_speed.config(text="Speed: %.2f" % self.train.velocity)
+            self.label_speed.config(text="Velocity: %.2f" % self.train.velocity)
             self.travelled_x += float(self.train.velocity) / 20
             delta_x = -int(self.travelled_x - self.travelled_x_int)
             self.travelled_x_int = int(self.travelled_x)
