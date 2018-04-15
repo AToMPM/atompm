@@ -101,6 +101,7 @@ class DesignerAPI :
         for the caller to do with them what he wants... '''
     def __raise(self,msg) :
         self._ex['$err'] = msg
+        print("Error: " + str(msg))
         raise RuntimeError(msg)
 
 
@@ -212,7 +213,9 @@ class DesignerAPI :
                 pLabels.append(pLabel)
         return pLabels
 
-
+    def _getNodesFromLabels(self, pLabels):
+        nodes = [self._graph.vs[self._pl2gi[pLabel]] for pLabel in pLabels]
+        return nodes
 
     def _getNeighbors(self,dir,type,pLabel) :
         if not self._type.startswith('pattern') :

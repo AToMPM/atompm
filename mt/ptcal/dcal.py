@@ -128,6 +128,7 @@ class PythonExecutionContext :
 			 'getAttrNames'		    : dAPI._getAttrNames,
 		 	 'setAttr' 				: dAPI._setAttr,
 			 'getAllNodes' 			: dAPI._getAllNodes,
+			 'getNodesFromLabels'	: dAPI._getNodesFromLabels,
 			 'getNeighbors' 		: dAPI._getNeighbors,
 			 'isConnectionType' 	: dAPI._isConnectionType,
 			 'httpReq'		 		: dAPI._httpReq,
