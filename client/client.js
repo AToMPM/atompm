@@ -318,7 +318,7 @@ function _saveModel(fname,backup,autosave)
 			var options = {'extensions':['\\.model'],
 						   'multipleChoice':false,
 						   'manualInput':true,
-						   'title':'specify target model',
+						   'title':'specify target model\nextension: .model',
 						   'startDir':'model'},
 				callback =
 					function(fnames)
