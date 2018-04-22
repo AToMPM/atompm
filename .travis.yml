@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+ - "node"
+ 
+env:
+ - PYTHONVER="python2"
+# - PYTHONVER="python3"
+    
+before_script:
+    pip install --user python-igraph
+    
+script:
+ - ./run_tests.sh
+    
