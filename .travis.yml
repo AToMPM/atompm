@@ -7,7 +7,7 @@ env:
 # - PYTHONVER="python3"
     
 before_script:
-    pip install --user igraph
+    pip install --user python-igraph
     
 script:
  - ./run_tests.sh
