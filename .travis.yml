@@ -9,7 +9,8 @@ env:
 before_script:
  - "sh -e node httpwsd.js"
  - sleep 3
+ - "sh -e $PYTHONVER mt/main.py"
     
 script:
- - "sh -e $PYTHONVER mt/main.py"
+ - sleep 1
     
