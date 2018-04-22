@@ -5,11 +5,7 @@ node_js:
 env:
  - PYTHONVER="python2"
  - PYTHONVER="python3"
-
-before_script:
- - node httpwsd.js &
- - $PYTHONVER mt/main.py &
     
 script:
- - sleep 1
+ - ./run_tests
     
