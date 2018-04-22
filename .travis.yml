@@ -2,6 +2,10 @@ language: node_js
 node_js:
  - "node"
  
+python:
+ - "2.7"
+ - "3.6"
+
 script:
     node httpwsd.js &
     python2 mt/main.py &
