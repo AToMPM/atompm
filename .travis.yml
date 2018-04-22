@@ -4,7 +4,10 @@ node_js:
  
 env:
  - PYTHONVER="python2"
- - PYTHONVER="python3"
+# - PYTHONVER="python3"
+    
+before_script:
+    pip install --user igraph
     
 script:
  - ./run_tests.sh
