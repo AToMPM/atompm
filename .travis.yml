@@ -7,8 +7,8 @@ env:
  - PYTHONVER="python3"
 
 before_script:
- - timeout --preserve-status 10s node httpwsd.js
- - timeout --preserve-status 10s $PYTHONVER mt/main.py
+ - node httpwsd.js &
+ - $PYTHONVER mt/main.py &
     
 script:
  - sleep 1
