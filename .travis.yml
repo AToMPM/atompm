@@ -6,6 +6,13 @@ python:
  - "2.7"
  - "3.6"
 
+before_script:
+    node -v
+    python -V
+    
+    node httpwsd.js
+    sleep 3
+    
 script:
-    node httpwsd.js &
-    python mt/main.py &
+    python mt/main.py
+    
