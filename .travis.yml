@@ -2,14 +2,14 @@ language: node_js
 node_js:
  - "node"
  
-python:
- - "2.7"
- - "3.6"
+env:
+ - PYTHONVER="python2"
+ - PYTHONVER="python3"
 
 before_script:
- - node httpwsd.js
+ - "sh -e node httpwsd.js"
  - sleep 3
     
 script:
- - python mt/main.py
+ - "sh -e $PYTHONVER mt/main.py"
     
