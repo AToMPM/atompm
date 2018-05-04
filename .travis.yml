@@ -7,8 +7,7 @@ cache:
     - $HOME/.cache/pip
 
 before_script:
-    - pip install -U pip wheel
-    - pip install --user python-igraph
+    - sudo pip install python-igraph
 
 script:
     - ./run_tests.sh
