@@ -1,12 +1,14 @@
 language: node_js
 node_js:
- - "node"
+    - "node"
     
-cache: pip
+cache:
+  directories:
+    - $HOME/.cache/pip
 
 before_script:
     pip install --user python-igraph
 
 script:
- - ./run_tests.sh
+    - ./run_tests.sh
     
