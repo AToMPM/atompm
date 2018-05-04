@@ -2,9 +2,11 @@ language: node_js
 node_js:
  - "node"
     
+cache: pip
+
 before_script:
     pip install --user python-igraph
-    
+        
 script:
  - ./run_tests.sh
     
