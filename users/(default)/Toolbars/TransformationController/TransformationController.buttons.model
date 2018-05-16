@@ -1084,7 +1084,10 @@
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons"
+			"/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons",
+			"/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax.defaultIcons",
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons",
+			"/Formalisms/SCCD/SCCD.defaultIcons"
 		]
 	},
 	"asm": {
@@ -1100,7 +1103,7 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options  = {'extensions':['T_.*\\\\.model'],\n                'multipleChoice':true,\n                'title':'choose transformation model to run',\n                'startDir':'transformation'},\n    callback = function(fnames)\n               {\n                    _httpReq(\n                        'PUT',\n                        '/__mt/current.transform?wid='+_context.wid,\n                        {'transfs':fnames,\n                         'username':_context.username});\n               };\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options  = {'extensions':['T_.*\\\\.model'],\n                'multipleChoice':true,\n                'title':'choose transformation model to run\\nexample:T_transformToSC.model',\n                'startDir':'transformation'},\n    callback = function(fnames)\n               {\n                    _httpReq(\n                        'PUT',\n                        '/__mt/current.transform?wid='+_context.wid,\n                        {'transfs':fnames,\n                         'username':_context.username});\n               };\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -1182,7 +1185,10 @@
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__Utilities__/Buttons/Buttons"
+			"/Formalisms/__Utilities__/Buttons/Buttons",
+			"/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax",
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram",
+			"/Formalisms/SCCD/SCCD"
 		]
 	}
 }

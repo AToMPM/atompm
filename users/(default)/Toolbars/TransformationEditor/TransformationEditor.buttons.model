@@ -904,7 +904,9 @@
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons"
+			"/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons",
+			"/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax.defaultIcons",
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons"
 		]
 	},
 	"asm": {
@@ -920,7 +922,7 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options  = {'extensions':['R_.*\\\\.model'],\n                'multipleChoice':false,\n                'title':'choose rule model to load',\n                'startDir':'transformation'},\n    callback =  function(fnames)\n                {\n                    _loadModel(fnames[0]);\n                };\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options  = {'extensions':['R_.*\\\\.model'],\n                'multipleChoice':false,\n                'title':'choose rule model to load\\nexample: R_TimedTransition.model',\n                'startDir':'transformation'},\n    callback =  function(fnames)\n                {\n                    _loadModel(fnames[0]);\n                };\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -935,7 +937,7 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options  = {'extensions':['\\\\..*Icons\\\\.pattern\\\\.metamodel'],\n                'multipleChoice':true,\n                'title':'choose pattern metamodel to load',\n                'startDir':'transformation'},\n    callback = function(fnames)\n               {\n                    fnames.forEach( function(fname) {_loadToolbar(fname);} );\n               };\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options  = {'extensions':['\\\\..*Icons\\\\.pattern\\\\.metamodel'],\n                'multipleChoice':true,\n                'title':'choose pattern metamodel to load\\nexample: TrafficLight.defaultIcons.pattern.metamodel',\n                'startDir':'transformation'},\n    callback = function(fnames)\n               {\n                    fnames.forEach( function(fname) {_loadToolbar(fname);} );\n               };\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -950,7 +952,7 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options  = {'extensions':['T_.*\\\\.model'],\n                'multipleChoice':false,\n                'title':'choose transformation model to load',\n                'startDir':'transformation'},\n    callback =  function(fnames)\n                {\n                    _loadModel(fnames[0]);\n                };\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options  = {'extensions':['T_.*\\\\.model'],\n                'multipleChoice':false,\n                'title':'choose transformation model to load\\nexample: T_translateToSC.model',\n                'startDir':'transformation'},\n    callback =  function(fnames)\n                {\n                    _loadModel(fnames[0]);\n                };\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -965,7 +967,7 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n\t       'manualInput':true,\n               'title':'specify target model',\n               'startDir':'model'},\n    callback =\n\tfunction(fnames)\n\t{\n\t\t_newTransformation(fnames[0]);\n\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n\t       'manualInput':true,\n               'title':'specify target model\\nexample: T_translateToSC.model',\n               'startDir':'model'},\n    callback =\n\tfunction(fnames)\n\t{\n\t\t_newTransformation(fnames[0]);\n\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -980,14 +982,16 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n\t       'manualInput':true,\n               'title':'specify target model',\n               'startDir':'model'},\n    callback =\n\tfunction(fnames)\n\t{\n\t\t_newRule(fnames[0]);\n\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n\t       'manualInput':true,\n               'title':'specify target model\\nexample: R_TimedTransition.model',\n               'startDir':'model'},\n    callback =\n\tfunction(fnames)\n\t{\n\t\t_newRule(fnames[0]);\n\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			}
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__Utilities__/Buttons/Buttons"
+			"/Formalisms/__Utilities__/Buttons/Buttons",
+			"/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax",
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram"
 		]
 	}
 }
