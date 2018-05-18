@@ -4,6 +4,7 @@
 set -e
 
 #run server
+echo "Starting server..."
 node httpwsd.js &
 serverpid=$!
 sleep 3
@@ -16,6 +17,7 @@ if ! kill -0 "$serverpid"; then
 fi
 
 #run mt script
+echo "Starting model transformation script..."
 python2 mt/main.py &
 mtpid=$!
 sleep 3
@@ -27,3 +29,16 @@ if ! kill -0 "$mtpid"; then
     exit $mt_status
 fi
 
+echo "Starting tests..."
+
+#start nightwatch tests
+nightwatch
+
+
+echo "Stopping server and mt script..."
+kill "$serverpid"
+kill "$mtpid"
+
+
+
+echo "Finished!"
