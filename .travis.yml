@@ -11,6 +11,8 @@ addons:
   chrome: stable
 
 before_script:
+ - xvfb-run make test
+
  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
  - pip install --user python-igraph
     
