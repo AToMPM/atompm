@@ -13,5 +13,13 @@
   "dependencies": {
     "socket.io": "^0.9.19",
     "socket.io-client": "^0.9.16"
+  },
+  "devDependencies": {
+    "nightwatch": "^0.9.21",
+    "selenium-server": "^3.12.0",
+    "chromedriver": "^2.38.3"
+  },
+  "scripts" : {
+    "test" : "./run_tests.sh"
   }
 }
