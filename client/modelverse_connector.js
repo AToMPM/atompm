@@ -56,7 +56,7 @@ class ModelVerseConnector {
             function (resolve, reject) {
                 let callback = function (status, resp) {
                     if (utils.isHttpSuccessCode(status)) {
-                        //console.log("send_command Resolve: " + resp);
+                        console.log("send_command Resolve: " + resp);
                         resolve(resp);
                     } else {
                         console.log("send_command Reject: " + resp);
@@ -81,6 +81,8 @@ class ModelVerseConnector {
                 params = params.slice(0, -1);
 
                 console.log("Sending: " + params);
+                //console.log(params);
+
                 HttpUtils.httpReq("POST", ModelVerseConnector.address,
                     params,
                     callback
@@ -154,50 +156,39 @@ class ModelVerseConnector {
 
     };
 
-
-    //TODO: Cache this data if too slow
-    static async get_files_in_folder(folder_name){
-        return await ModelVerseConnector.model_list(folder_name);
-    }
-
-    static model_list(folder_name){
+    static model_list(data){
 
         return new Promise(function(resolve, reject) {
 
-
-            console.log("Listing models in: '" + folder_name + "'");
-
-            let folder_param = folder_name;
-
-            //fix slashes on filename
-            if (folder_param.endsWith("/")){
-                folder_param = folder_param.slice(0, -1);
-            }
-
-            if (folder_param.startsWith("/")){
-                folder_param = folder_param.slice(1);
-            }
-
+            let folders = data[0];
+            let files = data[1];
 
             let model_types = {
-                "data": utils.jsons(["model_list", folder_param])
+                "data": utils.jsons(["model_list", folder_name])
             };
+
+            console.log("Listing models in: " + folder_name);
 
             ModelVerseConnector.send_command(model_types).then(ModelVerseConnector.get_output)
                 .then(function (data) {
-                    let files = [];
+                    console.log("model_list");
 
                     data = data.replace("Success: ", "");
                     let new_files = JSON.parse(data).split("\n");
+                    console.log(new_files);
 
                     for (let i in new_files) {
                         let file = new_files[i];
 
-                        files.push(folder_name + file);
+                        console.log("Found file: " + file);
+
+                        if (file.endsWith("/")) {
+                            folders.push(file);
+                        }
+                        files.push(file);
                     }
 
-                    files.sort();
-                    resolve(files);
+                    resolve([folders, files]);
                 });
 
         });
@@ -206,51 +197,44 @@ class ModelVerseConnector {
 
     static choose_model(){
 
-        console.log("Choosing model...");
+
+        console.log("Choosing model: ");
+
+        let folders = [""];
+        let files = [];
 
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
-        let startDir = "/";
-        let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, false, __getRecentDir(startDir));
-        let feedback = GUIUtils.getTextSpan('', "feedback");
-        let title = "ModelVerse Explorer";
+        this.model_list(folders[0]).then(
+            function(data){
+                console.log("DATA");
+                console.log(data);
+            }
+        );
 
-        let callback = function (filenames) {
-            ModelVerseConnector.load_model(filenames[0]);
-        };
-
-        GUIUtils.setupAndShowDialog(
-                    [fileb['filebrowser'], null, null, feedback],
-                    function () {
-                        let value = [fileb['getselection']()];
-                        if (value.length > 0 && value[0] != "" && startDir) {
-                            __setRecentDir(startDir, value[0].substring(0, value[0].lastIndexOf('/') + 1));
-                        }
-                        return value;
-                    },
-                    __TWO_BUTTONS,
-                    title,
-                    callback);
+        // while (folders.length > 0) {
+        //
+        //
+        //     let folder_name = folders[0].replace("/", "");
+        // }
 
         ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
 
+        console.log("Folders");
+        console.log(folders);
+        console.log("Files");
+        console.log(files);
     }
 
-    static load_model(filename) {
+    static dump_model() {
 
-        let model_name = filename;
+        this.choose_model();
 
-        //fix slashes on filename
-        if (model_name.endsWith("/")){
-            model_name = model_name.slice(0, -1);
-        }
-
-        if (model_name.startsWith("/")){
-            model_name = model_name.slice(1);
-        }
+        return;
 
 
-        console.log("Loading model: " + model_name);
+        let model_name = "formalisms/SimpleClassDiagrams";
+        console.log("Dumping model: " + model_name);
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
         let model_types = {
