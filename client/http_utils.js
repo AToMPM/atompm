@@ -59,7 +59,10 @@ HttpUtils = function(){
 //			console.debug(utils.jsons(params));
 			req.open(method, url, !sync); 
 			req.onreadystatechange = onreadystatechange;
-			req.send(utils.jsons(params));
+
+			let paramValue = (typeof params == "string")?
+				params : utils.jsons(params);
+			req.send(paramValue);
 		}
 	};
 	
