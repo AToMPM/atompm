@@ -280,7 +280,7 @@ function _loadModel(fname)
 		else
 			__saveas = fname;
 		DataUtils.loadm(fname);
-		if (__msg != '')
+		if (__msg != '' && __msg != null)
 			WindowManagement.openDialog(_CUSTOM,{'widgets':[{'id':'1','type':'text','label':'text message','default':''}],"title":__msg});
 	}
 }
@@ -295,7 +295,7 @@ function _loadToolbar(fname)
 		DataUtils.loadbm(fname);
 	else if( __isIconMetamodel(fname) )
 		DataUtils.loadmm(fname);
-	if (__msg != '')
+	if (__msg != '' && __msg != null)
 		WindowManagement.openDialog(_CUSTOM,{'widgets':[{'id':'1','type':'text','label':'text message','default':''}],"title":__msg});
 }
 

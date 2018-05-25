@@ -20,7 +20,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 
 /****************************** GLOBAL CONSTANTS ******************************/
 var __WEBPAGE__ = 'http://www-ens.iro.umontreal.ca/~syriani/atompm/atompm.htm',
-    __VERSION__ = '0.5.4',
+    __VERSION__ = '0.7.0',
     __DEFAULT_SAVEAS		 	= '.autosave.model',
 	 __TITLE						= 'AToMPM',
 	 __EXITWARNING				= 'There are unsaved changes. Proceeding will cause'+
