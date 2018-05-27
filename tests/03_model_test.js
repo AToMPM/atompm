@@ -52,15 +52,15 @@ module.exports = {
     },
 
     //fails due to issue #28
-    // 'Load two models' : function (client) {
-    //
-    //     let filenames = [
-    //         'Formalisms/ClassicDEVS/ClassicDEVS.model',
-    //         'Formalisms/Annotation/AnnotationMM.model'
-    //     ];
-    //
-    //     loadModel(client, filenames);
-    // },
+    'Load two models' : function (client) {
+
+        let filenames = [
+            'Formalisms/ClassicDEVS/ClassicDEVS.model',
+            'Formalisms/Annotation/AnnotationMM.model'
+        ];
+
+        loadModel(client, filenames);
+    },
 
 
     after : function (client) {
