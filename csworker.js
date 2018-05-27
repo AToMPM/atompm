@@ -457,64 +457,78 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 						  	current model, if any... when step['insert'] is specified,
 							adjust $asuris to compensate for offsetting of inserted asm
 							and $segments to compensate for upcoming offsetting of to-
-							be-inserted csm */			
-						else if( step['op'] == 'RESETM' )
-							actions.push(
-								function()
-								{
-									manageHitchhiker(
-										step['old_name'], 
-										{'csm':_mmmk.read()});
-									manageHitchhiker(step['new_name']);
-	
-									var csm = hitchhiker['csm'];
-									if( step['insert'] )
-									{
-										var asoffset = parseInt(step['insert']),
-											 csoffset = _mmmk.next_id,
-											 _csm     = eval('('+ csm +')'),
-											 incUri   = 
-											 	function(oldUri,offset)
-												{
-													var matches = oldUri.
-															match(/(.+\/)(.+)(\.instance)/);
-													return matches[1]+
-															 (parseInt(matches[2])+offset)+
-			 												 matches[3];										
-												};
+							be-inserted csm */
+                        else if (step['op'] == 'RESETM')
+                            actions.push(
+                                function () {
+                                    manageHitchhiker(
+                                        step['old_name'],
+                                        {'csm': _mmmk.read()});
+                                    manageHitchhiker(step['new_name']);
 
-										for( var id in _csm.nodes )
-										{
-											_csm.nodes[id]['$asuri']['value'] = 
-												incUri(_csm.nodes[id]['$asuri']['value'],
-														 asoffset);
-											
-											if( ! ('$segments' in _csm.nodes[id]) )
-												continue;
+                                    var csm = hitchhiker['csm'];
+                                    var _csm = eval('(' + csm + ')');
+                                    if (step['insert']) {
+                                        var asoffset = parseInt(step['insert']),
+                                            csoffset = _mmmk.next_id,
+                                            incUri =
+                                                function (oldUri, offset) {
+                                                    var matches = oldUri.match(/(.+\/)(.+)(\.instance)/);
+                                                    return matches[1] +
+                                                        (parseInt(matches[2]) + offset) +
+                                                        matches[3];
+                                                };
 
-											var segments = 
-													_csm.nodes[id]['$segments']['value'],
-												 _segments = {};
-											for( var edgeId in segments )
-											{
-												var uris = edgeId.match(
-														/^(.*\.instance)--(.*\.instance)$/);
-												_segments[incUri(uris[1],csoffset)+'--'+
-															 incUri(uris[2],csoffset)] = 
-													segments[edgeId];											
-											}
-											_csm.nodes[id]['$segments']['value']=_segments;
-										}
-										csm = _utils.jsons(_csm,null,'\t');
-									}
+                                        for (var id in _csm.nodes) {
+                                            _csm.nodes[id]['$asuri']['value'] =
+                                                incUri(_csm.nodes[id]['$asuri']['value'],
+                                                    asoffset);
 
-				 					cschangelogs.push(
-											_mmmk.loadModel(
-														step['new_name'], 
-														csm, 
-														step['insert'])['changelog']);
-									return __successContinuable();
-								});
+                                            if (!('$segments' in _csm.nodes[id]))
+                                                continue;
+
+                                            var segments =
+                                                    _csm.nodes[id]['$segments']['value'],
+                                                _segments = {};
+                                            for (var edgeId in segments) {
+                                                var uris = edgeId.match(
+                                                    /^(.*\.instance)--(.*\.instance)$/);
+                                                _segments[incUri(uris[1], csoffset) + '--' +
+                                                incUri(uris[2], csoffset)] =
+                                                    segments[edgeId];
+                                            }
+                                            _csm.nodes[id]['$segments']['value'] = _segments;
+                                        }
+                                        csm = _utils.jsons(_csm, null, '\t');
+                                    }
+
+                                    //see if any cs metamodels are missing
+                                    //this fixes issue #28
+                                    //this loading should be done elsewhere in the model loading chain
+                                    for (var i in _csm.metamodels) {
+                                        var mm = _csm.metamodels[i];
+
+                                        if (!(_mmmk.model.metamodels.includes(mm))) {
+                                            console.error("Last-minute loading for CS metamodel: " + mm);
+
+                                            var csmm = _fs.readFile('./users/' + mm, 'utf8');
+                                            _mmmk.loadMetamodel(mm, csmm);
+                                        }
+                                    }
+
+                                    var res = _mmmk.loadModel(
+                                        step['new_name'],
+                                        csm,
+                                        step['insert']);
+
+                                    if (res["$err"] == undefined) {
+                                        cschangelogs.push(res['changelog']);
+                                        return __successContinuable();
+                                    } else {
+                                        return __errorContinuable();
+                                    }
+
+                                });
 	
 						/* forward this SYSOUT command */
 						else if( step['op'] == 'SYSOUT' ) 
