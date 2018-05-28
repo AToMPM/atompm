@@ -769,10 +769,17 @@ GUIUtils = function(){
 									 _ERROR,
 									 'error in button code ::\n '+res['$err']);
 			 		 });
-//			 		 var url = HttpUtils.url(imgSrc(name),__NO_WID);
-			 		 img.attr("src", HttpUtils.url(imgSrc(name),__NO_WID));
-			 		 div.append(img);
-			 		 return div;
+                     var url = HttpUtils.url(imgSrc(name),__NO_WID);
+                     img.attr("src", url);
+
+                     //handle missing icon
+                     let defaultUrl = HttpUtils.url("/Formalisms/default.icon.png");
+                     let missingMsg = "Warning: The icon \"" + url + "\" is missing! The default icon has been used.";
+                     let onerrorStr = "this.onerror = ''; this.src = '" + defaultUrl + "'; console.log('" + missingMsg + "');";
+                     img.attr('onerror', onerrorStr);
+
+                     div.append(img);
+                     return div;
 			 	 };
 
 		GUIUtils.removeToolbar(tb);
@@ -814,9 +821,41 @@ GUIUtils = function(){
 		if( tb_div.children().length == 0 )
 			tb_div.append( GUIUtils.getTextSpan(tb,'toolbar_alt') );
 
-		$('#div_dock').append(tb_div);
+        //get the toolbar
+        let dock = $('#div_dock');
 
-		__loadedToolbars[tb] = data;
+        //create an array and add the new toolbar
+        let items = Array.from(dock[0].childNodes);
+        items.push(tb_div[0]);
+
+        //sort the dock
+        items.sort(function(a, b) {
+
+            //main menu comes first
+            if (a.id.includes("MainMenu")){
+                return -1;
+            }
+
+            //toolbars come first
+            if (a.id.includes("Toolbars") && !(b.id.includes("Toolbars"))){
+                return -1;
+            }
+
+            if (b.id.includes("Toolbars") && !(a.id.includes("Toolbars"))){
+                return 1;
+            }
+
+            //otherwise, sort by name
+            return a.id == b.id? 0 : (a.id > b.id ? 1 : -1);
+        });
+
+        //add the elements back into the dock
+        for (let i = 0; i < items.length; ++i) {
+            dock.append(items[i]);
+        }
+
+
+        __loadedToolbars[tb] = data;
 	};
 	
 	return this;
