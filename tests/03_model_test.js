@@ -51,7 +51,6 @@ module.exports = {
 
     },
 
-    //fails due to issue #28
     'Load two models' : function (client) {
 
         let filenames = [
