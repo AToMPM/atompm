@@ -1,5 +1,7 @@
 # AToMPM - A Tool for Multi-Paradigm Modelling
 
+AToMPM stands for "A Tool for Multi-Paradigm Modeling". It is a research framework from which you can generate domain-specific modeling web-based tools that run on the cloud. AToMPM is an open-source framework for designing DSML environements, performing model transformations, and manipulating and managing models. It runs completely over the web, making it independent from any operating system, platform, or device it may execute on. AToMPM follows the philosophy of modeling everything explicitly, at the right level of abstraction(s), using the most appropriate formalism(s) and process(es), being completely modeled by itself.
+
 ## Installation
 
 To install AToMPM, follow these steps:
@@ -39,3 +41,8 @@ Documentation can be found here: https://msdl.uantwerpen.be/documentation/AToMPM
 
 ## Testing
 To run tests on AToMPM, run `npm test'
+
+## LICENSING
+The AToMPM project is licensed under the LGPL as stated in COPYING.lesser.
+
+AToMPM is copyright of the AToMPM team, which includes Raphael Mannadiar, Conner Hansen, Eugene Syriani, Hans Vangheluwe, Simon Van Mierlo, Huseyin Ergin, Jonathan Corley, Yentl Van Tendeloo, Vasco Sousa, and Bentley James Oakes

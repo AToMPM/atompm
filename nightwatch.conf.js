@@ -1,3 +1,8 @@
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team
+*  See COPYING, COPYING.lesser, and README.md for full details
+*/
+
 const seleniumServer = require("selenium-server");
 const chromedriver = require("chromedriver");
 
