@@ -26,6 +26,7 @@ var DataUtils; /* The Data Utilities object. Handles the loaded objects, edges, 
 var EditUtils; /* Handles the Copy, Paste, Undo, and Redo options. Consider merging this with GUIUtils */
 var GeometryUtils; /* Handles transformations and translations. */
 var MMMUtils;
+var Layout; /*For auto-layout capabilities. */
 
 var currentKeys = [];
 

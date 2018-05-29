@@ -808,6 +808,12 @@ function __iconToFront(tgt)
 	__icons[__vobj2uri(tgt)]['icon'].toFront();
 }
 
+/*---------------------------- LAYOUT -----------------------------*/
+
+function _autolayout()
+{
+    Layout.autolayout()
+}
 
 /*---------------------------- SELECTION OVERLAY -----------------------------*/
 
