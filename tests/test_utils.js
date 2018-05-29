@@ -21,7 +21,7 @@ function load_model(client, fnames) {
             }, [name], null
         );
 
-        client.pause(1000);
+        client.pause(500);
 
         client.getTitle(function (title) {
             this.assert.ok(title.includes(name), "Check for model: " + name);
@@ -51,11 +51,11 @@ function load_toolbar(client, fnames) {
 let user = "./users/testuser/";
 let glob = require('glob');
 
-let getFiles = function (client, dir, pattern, failing_files) {
-    glob(dir + pattern, callback(client, failing_files));
+let getFiles = function (client, dir, pattern, load_function, failing_files) {
+    glob(dir + pattern, callback(client, load_function, failing_files));
 };
 
-function callback(client, failing_files) {
+function callback(client, load_function, failing_files) {
     return function (err, res) {
         if (err) {
             assert(false, "Error in reading directory: " + user + "Toolbars");
@@ -73,12 +73,13 @@ function callback(client, failing_files) {
             }
 
             //console.log(filenames);
-            load_toolbar(client, filenames);
+            load_function(client, filenames);
         }
     }
 }
 
 module.exports = {
+    '@disabled': true,
     login,
     load_model,
     load_toolbar,

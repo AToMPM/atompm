@@ -1,4 +1,5 @@
 let test_utils = require('./test_utils');
+let user = "./users/testuser/";
 
 module.exports = {
 
@@ -25,6 +26,10 @@ module.exports = {
 
         test_utils.load_model(client, filenames);
     },
+
+    // 'Load all models' : function (client) {
+    //     test_utils.getFiles(client, user, '/**/*.model', test_utils.load_model);
+    // },
 
     after : function (client) {
         client.end();

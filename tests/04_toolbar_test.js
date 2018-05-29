@@ -21,14 +21,14 @@ module.exports = {
     'Load all toolbars': function (client) {
 
         console.log("Testing toolbars...");
-        test_utils.getFiles(client, user, '/**/*.buttons.model');
+        test_utils.getFiles(client, user, '/**/*.buttons.model', test_utils.load_toolbar);
 
         console.log("Testing metamodels...");
         let failing_files = ['/Formalisms/__Templates__/ConcreteSyntaxTemplate.defaultIcons.metamodel'];
-        test_utils.getFiles(client, user, '/**/*Icons.metamodel', failing_files);
+        test_utils.getFiles(client, user, '/**/*Icons.metamodel', test_utils.load_toolbar, failing_files);
 
         console.log("Testing pattern metamodels...");
-        test_utils.getFiles(client, user, '/**/*Icons.pattern.metamodel');
+        test_utils.getFiles(client, user, '/**/*Icons.pattern.metamodel', test_utils.load_toolbar);
     },
 
     after: function (client) {
