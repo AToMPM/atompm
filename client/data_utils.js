@@ -293,37 +293,44 @@ DataUtils = function(){
 	/**
 	 * Request that the specified model be loaded
 	 */
-	this.loadm = function(fname,insert) {
-		HttpUtils.httpReq(
-				'PUT',
-				HttpUtils.url('/current.model', __NO_USERNAME),
-				{'m':HttpUtils.url(fname,__NO_WID),
-				 'insert':insert},
-				function(statusCode,resp)
-				{
-					if( ! utils.isHttpSuccessCode(statusCode) )
-					{
-						if( (matches = resp.match(/metamodel not loaded :: (.*)/)) )
-						{
-							var missing = matches[1]+'.metamodel';
-							console.warn('auto-loading missing metamodel :: '+missing);
-							DataUtils.loadmm(
-									missing,
-									function(_statusCode,_resp)
-									{
-										if( ! utils.isHttpSuccessCode(_statusCode) )
-											WindowManagement.openDialog(_ERROR,_resp);
-										else
-											DataUtils.loadm(fname,insert);
-									});
-						}
-						else
-							WindowManagement.openDialog(_ERROR,resp);
-					}
-					else
-						WindowManagement.setWindowTitle();
-				});				
-	};
+    this.loadm = function (fname, insert) {
+        HttpUtils.httpReq(
+            'PUT',
+            HttpUtils.url('/current.model', __NO_USERNAME),
+            {
+                'm': HttpUtils.url(fname, __NO_WID),
+                'insert': insert
+            },
+            function (statusCode, resp) {
+                if (utils.isHttpSuccessCode(statusCode)) {
+                    WindowManagement.setWindowTitle();
+                    return;
+                }
+
+                if ((matches = resp.match(/metamodel not loaded :: (.*)/))) {
+                    var missing = matches[1] + '.metamodel';
+                    console.warn('auto-loading missing metamodel :: ' + missing);
+                    DataUtils.loadmm(missing,
+                        function (_statusCode, _resp) {
+                            if (!utils.isHttpSuccessCode(_statusCode)) {
+
+                                if (_resp.includes("ENOENT")) {
+                                    _resp = utils.jsonp(_resp);
+                                    _resp = "Error! File not found: " + _resp['path'];
+                                }
+                                WindowManagement.openDialog(_ERROR, _resp);
+                            }
+                            else {
+                                DataUtils.loadm(fname, insert);
+                            }
+                        });
+                }
+                else
+                    WindowManagement.openDialog(_ERROR, resp);
+
+
+            });
+    };
 	
 	/*
 	CASE 1: asmm is already loaded but with a different csmm

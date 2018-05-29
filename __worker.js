@@ -308,6 +308,11 @@ function __postMessage(msg)
 				  _utils.jsons(msg.data) : 
 				  msg.data)));
 
+	//make sure that reason is a string
+	if (typeof msg.reason == 'object'){
+		msg.reason = _utils.jsons(msg.reason);
+	}
+
 	if( 'respIndex' in msg )
 		__onRequestResponse(msg.respIndex);
 

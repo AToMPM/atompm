@@ -192,7 +192,13 @@
 							 'hitchhiker':reqData['hitchhiker'],
 							 'respIndex':resp});
 					},
-					function(err) 	{__postInternalErrorMsg(resp,err);}
+					function (err) {
+
+						if (err['code'].includes("ENOENT")) {
+							err = "Error! File not found: " + err['path'];
+						}
+						__postInternalErrorMsg(resp, err);
+					}
 			);
 		},
 

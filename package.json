@@ -16,11 +16,12 @@
     "socket.io-client": "^0.9.16"
   },
   "devDependencies": {
+    "chromedriver": "^2.38.3",
+    "glob": "^7.1.2",
     "nightwatch": "^0.9.21",
-    "selenium-server": "^3.12.0",
-    "chromedriver": "^2.38.3"
+    "selenium-server": "^3.12.0"
   },
-  "scripts" : {
-    "test" : "./run_tests.sh"
+  "scripts": {
+    "test": "./run_tests.sh"
   }
 }
