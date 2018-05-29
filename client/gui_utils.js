@@ -653,6 +653,7 @@ GUIUtils = function(){
 					callback(input); 
 				}
 			});
+			ok.attr("id", "dialog_btn");
 			ok.html('ok');
 			dialog.append(ok);
 		}
