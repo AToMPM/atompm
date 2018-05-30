@@ -4,7 +4,7 @@
 */
 
 /****************************** GLOBAL CONSTANTS ******************************/
-var __WEBPAGE__ = 'http://www-ens.iro.umontreal.ca/~syriani/atompm/atompm.htm',
+var __WEBPAGE__ = 'https://atompm.github.io/',
     __VERSION__ = '0.7.0',
     __DEFAULT_SAVEAS		 	= '.autosave.model',
 	 __TITLE						= 'AToMPM',
