@@ -28,13 +28,18 @@ HttpUtils = function(){
 		var onreadystatechange = function(ev) {
 			 if( req.readyState == 4 )
 			 {
-	 			 console.debug(method+' '+url+' >> '+req.status);
-				 if( req.status == 0 )
-	 				 WindowManagement.openDialog(__FATAL_ERROR,'lost connection to back-end');
-				 else if( onresponse )
-					 onresponse(req.status,req.responseText);
-				 else if( ! utils.isHttpSuccessCode(req.status) )
-	 				 WindowManagement.openDialog(_ERROR,req.responseText);
+                 console.debug(method + ' ' + url + ' >> ' + req.status);
+
+                 //ignore calls made to other addresses
+                 if (url.startsWith("http://")) {
+                     onresponse(req.status, req.responseText);
+                 }
+                 else if (req.status == 0)
+                     WindowManagement.openDialog(__FATAL_ERROR, 'lost connection to back-end');
+                 else if (onresponse)
+                     onresponse(req.status, req.responseText);
+                 else if (!utils.isHttpSuccessCode(req.status))
+                     WindowManagement.openDialog(_ERROR, req.responseText);
 			 }
  		 };
 	

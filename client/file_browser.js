@@ -266,7 +266,7 @@ class FileBrowser{
                     3 create navigation toolbar for complete directory hierarchy
                     4 replace previous content div, if any, with new one
                       5 clear past selection, if any, and remember current folder */
-                function (folder, fnames) {
+                async function (folder, fnames) {
                     var div = $('#div_fileb-contents'),
                         folders = [],
                         files = [],
@@ -289,7 +289,7 @@ class FileBrowser{
                     //bentley: the ModelVerse only examines one folder at a time
                     let file_list = fnames;
                     if (!(Array.isArray(fnames))){
-                        file_list = fnames(folder);
+                        file_list = await fnames(folder);
                     }
 
                     let _folder = utils.regexpe(folder);
