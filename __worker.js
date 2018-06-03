@@ -129,13 +129,13 @@ var keepaliveAgent = new _http.Agent({keepAlive: true, maxSockets: 10, maxFreeSo
 /* return a failure continuable */
 function __errorContinuable(err)	
 {
-	return function(callback,errback) {errback(err);}
+	return function(callback,errback) {errback(err);};
 }
 
 /* return a success continuable */
 function __successContinuable(arg)	
 {
-	return function(callback,errback) {callback(arg);}
+	return function(callback,errback) {callback(arg);};
 }
 
 
@@ -628,7 +628,7 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 							 method,
  							 uri,
 							 reqData,
- 							 _wlib)
+ 							 _wlib);
  						 return true;
 	 				 }
 	 			 }) )
@@ -752,7 +752,7 @@ function POST_batchedit(resp,reqData)
 			 							  '/batchCheckpoint?wid='+__wid+
 	  										  '&backstagePass='+__backstagePass,
 				 						  {'name':name});
-						  }
+						  };
 	 		 },
 		 actions = [__successContinuable(), setbchkpt(startchkpt)];
 
@@ -813,7 +813,7 @@ function POST_batchedit(resp,reqData)
 					function()	
 					{
 						__backstagePass = undefined;
-						__postInternalErrorMsg(resp,err)
+						__postInternalErrorMsg(resp,err);
 					},
 					function(undoErr)	
 					{	

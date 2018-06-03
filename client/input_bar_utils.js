@@ -32,7 +32,7 @@ InputBarUtils = function(){
 			}
 			
 		}
-	}
+	};
 	
 	return this;
 }();

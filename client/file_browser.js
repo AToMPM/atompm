@@ -37,10 +37,10 @@ class FileBrowser{
                                 console.log("/" + window.localStorage.getItem('user') + fileb['getcurrfolder']() + folder_name + '.folder');
                                 DataUtils.createFolder("/" + window.localStorage.getItem('user') + fileb['getcurrfolder']() + folder_name + '.folder', function (statusCode, resp) {
                                     if (!utils.isHttpSuccessCode(statusCode)) {
-                                        feedback.html(resp)
+                                        feedback.html(resp);
                                     } else {
                                         feedback.html('created ' + folder_name);
-                                        fnames.push(fileb['getcurrfolder']() + folder_name + "/")
+                                        fnames.push(fileb['getcurrfolder']() + folder_name + "/");
                                         fileb['refresh'](fnames);
                                     }
                                 });
@@ -219,7 +219,7 @@ class FileBrowser{
                     title,
                     callback);
             });
-    };
+    }
 
 
     /**
@@ -410,13 +410,13 @@ class FileBrowser{
                 return input.val();
             },
             'clearselection': function () {
-                clearSelection()
+                clearSelection();
             },
             'refresh': function (fnames, the_folder) {
                 setCurrentFileBrowserFolder(the_folder || currfolder, fnames);
             }
         };
-    };
+    }
 
 
 }
