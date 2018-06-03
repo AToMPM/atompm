@@ -169,7 +169,7 @@ SVG.types.ATransformable.prototype.transform =
 	function(tstr)
 	{
 		return this.__transform(SVG.fns.__getTransformationMatrix(tstr));
-	}
+	};
 
 /* apply the given transformation matrix to this element */
 SVG.types.ATransformable.prototype.__transform = 
@@ -425,13 +425,13 @@ _utils.extend(SVG.types.LinearPath, SVG.types.ATransformable);
 
 
 /*----------------------------------------------------------------------------*/
-SVG.types.CubicPath = function() {}	//TBC
-SVG.types.Circle		= function() {}	//TBC
-SVG.types.Ellipse	= function() {}	//TBC
-SVG.types.Rectangle	= function() {}	//TBC
-SVG.types.Polygon	= function() {}	//TBC
-SVG.types.Star		= function() {}	//TBC
-SVG.types.Image		= function() {}	//TBC
+SVG.types.CubicPath = function() {};	//TBC
+SVG.types.Circle		= function() {};	//TBC
+SVG.types.Ellipse	= function() {};	//TBC
+SVG.types.Rectangle	= function() {};	//TBC
+SVG.types.Polygon	= function() {};	//TBC
+SVG.types.Star		= function() {};	//TBC
+SVG.types.Image		= function() {};	//TBC
 
 
 

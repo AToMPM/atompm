@@ -434,7 +434,7 @@ var httpserver = _http.createServer(
                                          _fs.unlink(newname);
                                      }
                                 }
-                            _fspp.mv(userdir+"/"+folder+fname,userdir+data,onmove)
+                            _fspp.mv(userdir+"/"+folder+fname,userdir+data,onmove);
                         } else {
                             // rename
                             var matches  = url.pathname.match(/^\/(.*?)\/(.*\/)?(.*)\.(file|folder)$/),
@@ -450,10 +450,10 @@ var httpserver = _http.createServer(
                                          else
                                              __respond(resp,200);
                                      };
-                            _fs.rename(userdir+folder+fname,userdir+folder+data,onrename)
+                            _fs.rename(userdir+folder+fname,userdir+folder+data,onrename);
                         }
                     }
-                )
+                );
 				
 			}
             
@@ -723,7 +723,7 @@ wsserver.sockets.on('connection',
 		  	has no more registered sockets, terminate it */
 		function unregister(wid)
 		{
-			var i = workerIds2socketIds[wid].indexOf(socket.id)
+			var i = workerIds2socketIds[wid].indexOf(socket.id);
 			if( i == -1 )
 				__send(socket,403,'already unregistered from worker');
 			else

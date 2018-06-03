@@ -216,7 +216,7 @@ function __highlight(uri,followCrossFormalismLinks,timeout,color)
 
 function isHighlighted(uri)
 {
-	return __highlighted.length > 0 && __highlighted.filter(function(hl) {return uri == hl['uri']}).length == 1;
+	return __highlighted.length > 0 && __highlighted.filter(function(hl) {return uri == hl['uri'];}).length == 1;
 }
 
 
@@ -224,11 +224,11 @@ function __unhighlight(uri)
 {
 	if( __highlighted.length > 0 )
 	{
-		__highlighted.filter(function(hl) {return !uri || uri == hl['uri']}).forEach(function(hl) {hl.turnOff()})
+		__highlighted.filter(function(hl) {return !uri || uri == hl['uri'];}).forEach(function(hl) {hl.turnOff();});
 		if (!uri) {
 			__highlighted = [];
 		} else {
-			__highlighted = __highlighted.filter(function(hl) {return uri != hl['uri']})
+			__highlighted = __highlighted.filter(function(hl) {return uri != hl['uri'];});
 		}
 		
 	}

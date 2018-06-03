@@ -202,7 +202,7 @@ __canvasBehaviourStatechart = {
 					if( ! GeometryUtils.areTransformationsAllowed() )
 						console.warn('the selection dragging mode can only be activated if '+
 										 'all of the ends of selected edges are also selected, '+
-										 'and if the geometry controls are inactive')
+										 'and if the geometry controls are inactive');
 					else			
 						this.__T(this.__STATE_DRAGGING_SELECTION,event);
 				}
@@ -212,7 +212,7 @@ __canvasBehaviourStatechart = {
 					if( ! GeometryUtils.areTransformationsAllowed() )
 						console.warn('the geometry controls can only be activated if all '+
 										 'of the ends of selected edges are also selected, and'+
-										 'if the geometry controls aren\'t already active')
+										 'if the geometry controls aren\'t already active');
 					else			
 						GeometryUtils.showGeometryControlsOverlay();
 				}
@@ -423,5 +423,5 @@ __canvasBehaviourStatechart = {
 				}
 			}
 		}
-	}
+	};
 

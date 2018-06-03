@@ -15,4 +15,4 @@ __specialTypes = {
 	'$ARG':'map<[name,type],[string,string]>',
 	
 	'$METHOD':'map<[name,args,returntype,body],[string,list<$ARG>,string,code]>'
-}
+};

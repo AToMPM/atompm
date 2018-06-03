@@ -97,7 +97,7 @@ Layout = function(){
             var s = edgeSource[assoc];
             var t = edgeTarget[assoc];
 
-            links.push({source: s, target: t})
+            links.push({source: s, target: t});
         }
 
 
