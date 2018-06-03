@@ -56,7 +56,7 @@ class ModelVerseConnector {
             function (resolve, reject) {
                 let callback = function (status, resp) {
                     if (utils.isHttpSuccessCode(status)) {
-                        console.log("send_command Resolve: " + resp);
+                        //console.log("send_command Resolve: " + resp);
                         resolve(resp);
                     } else {
                         console.log("send_command Reject: " + resp);
@@ -80,7 +80,7 @@ class ModelVerseConnector {
                 //take off last &
                 params = params.slice(0, -1);
 
-                //console.log(params);
+                console.log("Sending: " + params);
                 HttpUtils.httpReq("POST", ModelVerseConnector.address,
                     params,
                     callback
@@ -196,6 +196,7 @@ class ModelVerseConnector {
                         files.push(folder_name + file);
                     }
 
+                    files.sort();
                     resolve(files);
                 });
 
@@ -215,9 +216,7 @@ class ModelVerseConnector {
         let title = "ModelVerse Explorer";
 
         let callback = function (filenames) {
-            console.log("Callback");
-            console.log(filenames);
-            //ModelVerseConnector.load_model(filenames[0]);
+            ModelVerseConnector.load_model(filenames[0]);
         };
 
         GUIUtils.setupAndShowDialog(
@@ -239,11 +238,19 @@ class ModelVerseConnector {
 
     static load_model(filename) {
 
-        this.choose_model();
-
         let model_name = filename;
 
-        console.log("Dumping model: " + model_name);
+        //fix slashes on filename
+        if (model_name.endsWith("/")){
+            model_name = model_name.slice(0, -1);
+        }
+
+        if (model_name.startsWith("/")){
+            model_name = model_name.slice(1);
+        }
+
+
+        console.log("Loading model: " + model_name);
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
         let model_types = {
