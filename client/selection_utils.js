@@ -153,7 +153,9 @@ function __flash(uri,color,timeout)
 	function turnOff()
 	{
 		try			{__icons[uri]['icon'].unhighlight();} 
-		catch(err)	{}
+		catch(err)	{
+			console.log(err);
+		}
 	}
 	window.setTimeout(turnOff,timeout || 500);
 }
@@ -199,13 +201,17 @@ function __highlight(uri,followCrossFormalismLinks,timeout,color)
 				 function() 
 				 {
 					 try			{__icons[uri]['icon'].unhighlight();}
-					 catch(err)	{}
+					 catch(err)	{
+					 	console.log(err);
+					 }
 
 					 if( followCrossFormalismLinks != undefined )
 					 	neighbors.nodes.forEach( 
 							function(n) {
 	  							try			{__icons[n]['icon'].unhighlight();}
-								catch(err)	{}
+								catch(err)	{
+	  								console.log(err);
+								}
 							} );
 					 if( timeout != undefined )
 						 window.clearTimeout(tid);

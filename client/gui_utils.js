@@ -187,7 +187,7 @@ GUIUtils = function(){
 		else if( type.match(/^\$/) )
 			return GUIUtils.getInputField(__specialTypes[type],value);
 	
-		else if (matches = type.match("^file<(.*)>")) {
+		else if ((matches = type.match("^file<(.*)>"))) {
 			var input 	 = GUIUtils.getFileInput(value,matches[1],"code_style string_input",1),
 				 getinput = function(_){return _.val();};
         }

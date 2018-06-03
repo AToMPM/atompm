@@ -25,8 +25,10 @@ WindowEventHelper = function(){
 				
 				// Are we actually in the table?
 				if( table != null && table.rows != undefined){
-					for(var i=0, row; row = table.rows[i]; i++){
-						
+					for(var i=0; i < table.length; i++){
+
+						let row = table.rows[i];
+
 						// Is the current row the parent row of the active element?
 						if( row == activeElement.parentNode.parentNode ){
 							if( currentKeys[ KEY_SHIFT ] == 1){
