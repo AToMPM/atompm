@@ -10,7 +10,9 @@
 		atom3 supported 'save' events as a hack to enable forcing mm validation...
 		in atompm, such validation is carried out by _mmmk.validateModel (which
 		clients can 'call') and thus, we do no support 'save' events... */
-{
+
+const _utils = require('./utils');
+module.exports = {
 	/********************************* GLOBALS *********************************/
 	'metamodels':{},
 	'model':{'nodes':{},'edges':[],'metamodels':[]},
