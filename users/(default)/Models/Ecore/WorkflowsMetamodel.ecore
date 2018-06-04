@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Workflows" nsURI="http://WorkflowsMM" nsPrefix="Workflows"> 
+  <eClassifiers xsi:type="ecore:EClass" name="InitialNode" eSuperTypes="#//ControlNode"/> 
+  <eClassifiers xsi:type="ecore:EClass" name="FinalNode" eSuperTypes="#//ControlNode"/> 
+  <eClassifiers xsi:type="ecore:EClass" name="JoinNode" eSuperTypes="#//ControlNode"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="ForkNode" eSuperTypes="#//ControlNode"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Flow" eType="#//Task" containment="true"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="EditModel" eSuperTypes="#//ManualTask"/> 
+  <eClassifiers xsi:type="ecore:EClass" name="OpenModel" eSuperTypes="#//AutoTask"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Location@2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="SaveModel" eSuperTypes="#//AutoTask"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Location@2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="VerifyAS" eSuperTypes="#//AutoTask"/> 
+  <eClassifiers xsi:type="ecore:EClass" name="OpenTransformation" eSuperTypes="#//AutoTask"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Location@2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="ExecTransformation" eSuperTypes="#//AutoTask"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Mode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="play"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="Parameters"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterList" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="LoadToolbar" eSuperTypes="#//AutoTask"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Location@2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="GenerateAS" eSuperTypes="#//AutoTask"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Location@2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="GenerateCS" eSuperTypes="#//AutoTask"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Location@2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="GeneratePMM" eSuperTypes="#//AutoTask"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Location@2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="IterationNode" eSuperTypes="#//DecisionNode"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iterations" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="WorkflowsRoot"> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="InitialNodeLink" lowerBound="1" upperBound="-1" eType="#//InitialNode" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FinalNodeLink" lowerBound="1" upperBound="-1" eType="#//FinalNode" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="JoinNodeLink" lowerBound="1" upperBound="-1" eType="#//JoinNode" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ForkNodeLink" lowerBound="1" upperBound="-1" eType="#//ForkNode" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="EditModelLink" lowerBound="1" upperBound="-1" eType="#//EditModel" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="OpenModelLink" lowerBound="1" upperBound="-1" eType="#//OpenModel" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SaveModelLink" lowerBound="1" upperBound="-1" eType="#//SaveModel" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="VerifyASLink" lowerBound="1" upperBound="-1" eType="#//VerifyAS" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="OpenTransformationLink" lowerBound="1" upperBound="-1" eType="#//OpenTransformation" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ExecTransformationLink" lowerBound="1" upperBound="-1" eType="#//ExecTransformation" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ParametersLink" lowerBound="1" upperBound="-1" eType="#//Parameters" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="LoadToolbarLink" lowerBound="1" upperBound="-1" eType="#//LoadToolbar" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="GenerateASLink" lowerBound="1" upperBound="-1" eType="#//GenerateAS" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="GenerateCSLink" lowerBound="1" upperBound="-1" eType="#//GenerateCS" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="GeneratePMMLink" lowerBound="1" upperBound="-1" eType="#//GeneratePMM" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="IterationNodeLink" lowerBound="1" upperBound="-1" eType="#//IterationNode" containment="true"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="current" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Link" eType="#//Element"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="Task" abstract="true" eSuperTypes="#//Element"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Dependency" eType="#//Task"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="ControlNode" abstract="true" eSuperTypes="#//Element"/> 
+  <eClassifiers xsi:type="ecore:EClass" name="AutoTask" abstract="true" eSuperTypes="#//Task"/> 
+  <eClassifiers xsi:type="ecore:EClass" name="ManualTask" eSuperTypes="#//Task"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="0"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1000"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Executing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="DecisionNode" eSuperTypes="#//ControlNode"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Alternative" eType="#//Task"/> 
+  </eClassifiers> 
+</ecore:EPackage>

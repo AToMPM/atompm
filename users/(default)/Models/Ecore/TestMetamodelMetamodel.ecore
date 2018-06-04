@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestMetamodel" nsURI="http://TestMetamodel" nsPrefix="TestMetamodel"> 
+  <eClassifiers xsi:type="ecore:EClass" name="Alone"/> 
+  <eClassifiers xsi:type="ecore:EClass" name="AloneAttr"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="int" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="string" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="Hola"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="float" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="boolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file_html" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//undefined"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="map_int_string" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//undefined"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="list_int" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//undefined" defaultValueLiteral="1,2"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enum" eType="#//Enum"/> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enum2" eType="#//Enum2"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="Source"> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="OneToOne" lowerBound="1" eType="#//TargetAbstract" containment="true"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="Sub1" eSuperTypes="#//TargetAbstract"> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ManyToOne" eType="#//TargetMany" containment="true"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="Sub2" eSuperTypes="#//TargetAbstract"> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Containment" eType="#//Composite" containment="true"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="TestMetamodelRoot"> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AloneLink" lowerBound="1" upperBound="-1" eType="#//Alone" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AloneAttrLink" lowerBound="1" upperBound="-1" eType="#//AloneAttr" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SourceLink" lowerBound="1" upperBound="-1" eType="#//Source" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Sub1Link" lowerBound="1" upperBound="-1" eType="#//Sub1" containment="true"/> 
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Sub2Link" lowerBound="1" upperBound="-1" eType="#//Sub2" containment="true"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="TargetAbstract" abstract="true"> 
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EClass" name="TargetMany"/> 
+  <eClassifiers xsi:type="ecore:EClass" name="Composite"/> 
+  <eClassifiers xsi:type="ecore:EEnum" name="Enum"> 
+    <eLiterals name="One,Two,Three"/> 
+  </eClassifiers> 
+  <eClassifiers xsi:type="ecore:EEnum" name="Enum2"> 
+    <eLiterals name="Four,Five,Six,Seven"/> 
+  </eClassifiers> 
+</ecore:EPackage>

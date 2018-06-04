@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?> 
+<undefined xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns="http://sample2"> 
+  <InputEventsLink eventList=""> 
+  </InputEventsLink> 
+  <InputEventsLink eventList="aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbababababab"> 
+  </InputEventsLink> 
+  <StateLink name="S_PowerOn" current="true"> 
+    <Transition name="S_PowerOff"> 
+    </Transition> 
+    <Transition name="S_PowerOn"> 
+    </Transition> 
+  </StateLink> 
+  <StateLink name="S_PowerOff" current="false"> 
+    <Transition name="S_PowerOn"> 
+    </Transition> 
+    <Transition name="S_PowerOff"> 
+    </Transition> 
+  </StateLink> 
+</undefined>
