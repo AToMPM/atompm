@@ -1,4 +1,19 @@
-{	
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+const _utils = require('../utils');
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _fspp	= _do.convert(require('../___fs++'), ['mkdirs']);
+
+module.exports = {
 	'interfaces': [{'method':'POST', 'url=':'/exportmmtomd'}],
 	'csworker':
 		function(resp, method, uri, reqData, wcontext) {
@@ -84,7 +99,7 @@
 								} else {
 									edges[as.edges[i].dest] = ([as.edges[i].src, as.edges[i + 1].dest]);
 								}
-							};
+							}
 							// Add superclass Link to all Edges (this is class is not present in AToMPM thus not contained in as.nodes)
 							for (var key in as.nodes) {
 								// console.log(key);
@@ -94,12 +109,12 @@
 								}
 							}
 							
-							file_contents += 'Model ' + reqData['name'] + ' {\n'
+							file_contents += 'Model ' + reqData['name'] + ' {\n';
 							
 							var sorted_nodes = [];
 							var sorted_edges = [];
 							var nodes_no_superclasses = [];
-							var c_to_superclass = {}
+							var c_to_superclass = {};
 							// copy superclasses dictionary
 							for (var key in superclasses_ids) {
 								c_to_superclass[key] = superclasses_ids[key].slice(0);
@@ -119,7 +134,7 @@
 							// get all nodes without any superclasses
 							for (var key in as.nodes) {
 								if (!(key in superclasses_ids)) {
-									nodes_no_superclasses.push(key)
+									nodes_no_superclasses.push(key);
 								}
 							}
 							// topological sort
@@ -211,7 +226,7 @@
 									'list<double>': 'double[*]',
 									'list<real>': 'double[*]',
 									'code': 'String'
-									}
+									};
 									
 									// DEPRECATED: No longer needed after adding the Link Node
 									// if (key in edges) {
@@ -224,8 +239,8 @@
 										file_contents += node.attributes['value'][prop].name + ':' + (t in typemapping ? typemapping[t] : t) + (node.attributes['value'][prop]['default'] != '' ?  ' = ' + (t.search('list') >= 0 ? '[' : '') + node.attributes['value'][prop]['default'] + (t.search('list') >= 0 ? ']' : '') : '') + ';\n';
 									}
 									file_contents += '}\n';	
-								};
-							};
+								}
+							}
 							file_contents += '}\n';
 							_fs.writeFileSync('./exported_to_md/' + reqData['name'] + '.mdepth', file_contents);
 							__postMessage({	'statusCode': 200,
@@ -235,7 +250,7 @@
 					);					
 				},
 				function(err) {__postInternalErrorMsg(resp, err);}
-			)
+			);
 		},
 	'asworker':
 		function(resp, method, uri, reqData, wcontext)
@@ -244,4 +259,4 @@
 				{'statusCode': 200,
 					 'respIndex': resp});	
 		}
-}
+};

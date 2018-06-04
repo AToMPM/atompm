@@ -1,4 +1,20 @@
-{
+const {
+    __errorContinuable,
+    __httpReq,
+    __wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+const _utils = require('../utils');
+const _mmmk = require("../mmmk");
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _fspp	= _do.convert(require('../___fs++'), ['mkdirs']);
+
+module.exports = {
     'interfaces'
 :
     [{'method': 'POST', 'url=': '/exportM2Ecore'}],
@@ -270,8 +286,8 @@
                             for (var i = 0; i < listContained.length; i++) {
                                 contained += space(deep + 2) + '<' + listContained[i].linkType;
                                 var attributes = '';
-                                if (listContained[i].attributes != null) {
-                                }
+                                // if (listContained[i].attributes != null) {
+                                // }
                                 contained += writeAttributes(listContained[i], deep + 2);
                                 if (listContained[i].contain.length > 0)
                                     contained += writeContained(listContained[i].contain, deep + 2);
@@ -385,7 +401,7 @@
             function (err) {
                 __postInternalErrorMsg(resp, err);
             }
-        )
+        );
     }
 
 ,
@@ -399,4 +415,4 @@
                 'respIndex': resp
             });
     }
-}
+};

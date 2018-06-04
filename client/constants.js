@@ -56,7 +56,7 @@ var __WEBPAGE__ = 'https://atompm.github.io/',
 	 __CONTAINMENT_LINK	 	= 'containment',
 
 	 __EVENT_RIGHT_RELEASE_CANVAS			= 0,
- 	 __EVENT_RIGHT_RELEASE_ICON			= 1
+ 	 __EVENT_RIGHT_RELEASE_ICON			= 1,
  	 __EVENT_RIGHT_PRESS_ICON				= 2,
  	 __EVENT_LEFT_RELEASE_CANVAS			= 3,
 	 __EVENT_LEFT_RELEASE_ICON				= 4,

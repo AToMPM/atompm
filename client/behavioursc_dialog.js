@@ -91,4 +91,4 @@ __dialogBehaviourStatechart = {
 				}
 			}
 		}	
-}
+};

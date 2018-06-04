@@ -10,7 +10,13 @@
 		atom3 supported 'save' events as a hack to enable forcing mm validation...
 		in atompm, such validation is carried out by _mmmk.validateModel (which
 		clients can 'call') and thus, we do no support 'save' events... */
-{
+
+const _utils = require('./utils');
+const _util = require("util");
+const _mt = require("./libmt");
+const _styleinfo = require('./styleinfo');
+
+module.exports = {
 	/********************************* GLOBALS *********************************/
 	'metamodels':{},
 	'model':{'nodes':{},'edges':[],'metamodels':[]},
@@ -867,7 +873,7 @@
 				 model.edges == undefined ||
 				 model.metamodels == undefined ||
 				 model.metamodels.length == 0 )
-				return {'$err':'provided model is either empty or not an atompm model'}
+				return {'$err':'provided model is either empty or not an atompm model'};
 
 			for( var i in model.edges )
 			{
@@ -904,7 +910,7 @@
                 }
 			}
 
-            var checked_for_loops = []
+            var checked_for_loops = [];
 			for( var id in model.nodes )
 			{
 				var metamodel = this.__getMetamodel(model.nodes[id]['$type']),
@@ -925,6 +931,7 @@
                 if (checked_for_loops.indexOf(id) < 0 && !(type in this.metamodels[metamodel]['connectorTypes'])) {
                     var visited = [],
                         tv = [id];
+// eslint-disable-next-line no-inner-declarations
                     function dfs(to_visit) {
                         var curr = to_visit.pop();
                         if( curr == undefined )
@@ -1004,7 +1011,6 @@
 					var model =	_utils.jsonp(this.read());
 					nodes = {};
 					for (var id in model.nodes) {
-						console
 						if (model.nodes[id]['$type'].slice(0, CS.length) == CS) {
 							nodes[id] = model.nodes[id];
 						}
@@ -1409,7 +1415,7 @@
 										if( mm.legalConnections[type] == undefined )
 											mm.legalConnections[type] = {};
 										if( mm.legalConnections[type][nntype] == undefined )
-											mm.legalConnections[type][nntype] = []
+											mm.legalConnections[type][nntype] = [];
 										mm.legalConnections[type][nntype].push(ntype);
 									});
 								});
@@ -1525,8 +1531,8 @@
 			else if( log == 'UNDOREDO' )
 				this.undoredoJournal.push(step);
 
-			else if( log == 'DONTLOG' )
-				;
+			//else if( log == 'DONTLOG' )
+			//	;
 		},
 
 
@@ -1915,4 +1921,4 @@
 			{
 				return fulltype.match(/.*\/(.*)/)[1];
 			}
-}
+};

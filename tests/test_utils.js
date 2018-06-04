@@ -102,7 +102,7 @@ function callback(client, load_function, files_to_skip) {
             //console.log(filenames);
             load_function(client, filenames);
         }
-    }
+    };
 }
 
 module.exports = {

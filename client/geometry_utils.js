@@ -107,7 +107,7 @@ GeometryUtils = function(){
 	 */
 	this.previewSelectionTransformation = function(op,dir) {
         if (transformationPreviewOverlay == undefined)
-            return
+            return;
 		var bbox  = __selection['bbox'],
 			 scale = (dir > 0 ? 1.05 : 0.95),
 			 angle = (dir > 0 ? 3 : -3);
@@ -126,7 +126,7 @@ GeometryUtils = function(){
 	 */
 	this.previewSelectionTranslation = function(x,y) {
         if (transformationPreviewOverlay == undefined)
-            return
+            return;
 		var _x = parseInt(transformationPreviewOverlay.node.getAttribute('_x')),
 			 _y = parseInt(transformationPreviewOverlay.node.getAttribute('_y'));
 		transformationPreviewOverlay.translate(x-_x,y-_y);
@@ -276,7 +276,7 @@ GeometryUtils = function(){
                                                          true,
                                                          false,
                                                          requests)
-                                         )
+                                         );
             requests = requests.concat(to_concat);
         }
 	
@@ -440,7 +440,7 @@ GeometryUtils = function(){
 				 latter... the results of this form the emitted batchEdit */
 	this.transformSelection = function(callingContext,insertInfo) {
         if (transformationPreviewOverlay == undefined)
-            return
+            return;
 		var T = transformationPreviewOverlay.node.getAttribute('transform');
 		if( T == null || T == 'matrix(1,0,0,1,0,0)' )
 		{

@@ -1,5 +1,17 @@
 /* a more advanced hello world plugin... it listens for "POST /hello.cs", "POST /hello.as" and "POST /hello" requests... "POST /hello.cs" requests are received and handled by "csworker"... "POST /hello.as" requests are received by "csworker" and forwarded to "asworker" for handling... "POST /hello" requests trigger a misuse error */
-{
+const {
+    __errorContinuable,
+    __httpReq,
+    __wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+
+module.exports = {
 	'interfaces'	: 
 		[{'method':'POST', 'urlm':'^/hello\.[ac]s$'},
 		 {'method':'POST', 'url=':'/hello'}],
@@ -52,5 +64,5 @@
 					 'sequence#':__sequenceNumber(),
 					 'respIndex':resp});
 		}
-}
+};
 

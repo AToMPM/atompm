@@ -73,7 +73,10 @@ exports.findfiles =
                                             if (_fs.lstatSync(path).isDirectory()) {
                                                 newpath = newpath + '/';
                                             }
-                                        } catch (e) {}                                        
+                                        } catch (e) {
+                                            console.log("Error!");
+                                            console.log(e);
+										}
                                         return newpath;
 									});
 							paths.pop();
@@ -95,7 +98,7 @@ exports.findfiles =
                                     if (_fs.lstatSync(path).isDirectory()) {
                                         return path + "/";
                                     } else return path;
-                                })
+                                });
 							callback(err,newpaths.join('\n'),stderr);
                         }
 					});

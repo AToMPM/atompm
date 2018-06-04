@@ -336,7 +336,7 @@ function _saveModel(fname,backup,autosave)
 	  collaborator) inherit them */
 function _setInvisibleMetamodels(mms)
 {
-	mms = mms.map( function(mm) {return mm.match(/(.*)\.metamodel/)[1]} );
+	mms = mms.map( function(mm) {return mm.match(/(.*)\.metamodel/)[1];} );
 
 	function hideOrShow(uri,icon)
 	{
@@ -396,8 +396,8 @@ function _newFormalism(formalism_name) {
 			if( ! utils.isHttpSuccessCode(statusCode) ) {
 				WindowManagement.openDialog(_ERROR, 'failed to create new formalism :: '+resp);
             } else {
-                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".model")
-                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".defaultIcons.model")
+                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".model");
+                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".defaultIcons.model");
             }
 		});
 }
@@ -418,7 +418,7 @@ function _newTransformation(transformation_loc) {
                 if( ! utils.isHttpSuccessCode(statusCode) ) {
                     WindowManagement.openDialog(_ERROR, 'failed to create new transformation :: '+resp);
                 } else {
-                    WindowManagement.spawnClient(transformation_loc)
+                    WindowManagement.spawnClient(transformation_loc);
                 }
             });
     } else {
@@ -442,7 +442,7 @@ function _newRule(rule_loc) {
                 if( ! utils.isHttpSuccessCode(statusCode) ) {
                     WindowManagement.openDialog(_ERROR, 'failed to create new rule :: '+resp);
                 } else {
-                    WindowManagement.spawnClient(rule_loc)
+                    WindowManagement.spawnClient(rule_loc);
                 }
             });
     } else {
@@ -562,7 +562,7 @@ function _loadModelInWindow(args/*fname[]*/)
 	else if(tf > 0 )
 		option = 'TF';
 	else if (vas == 'VAS')
-		option = 'VAS';;
+		option = 'VAS';
 	WindowManagement.spawnClientOption(loc[aid],'',loc[path],option,loc[msg]);
 }
 
@@ -633,7 +633,7 @@ function _openNewDialog(args)
 				}
 				data += ','+msg;				
 				data = '{'+data;
-				data += '}'
+				data += '}';
 				_updateAttr({"asid":pid,"attr":"parameterList","val":data});
 				play = function()
                {
@@ -684,7 +684,7 @@ function _loadToolbarInWindow(args/*fname[]*/)
 	else if(tr > 0 )
 		option = 'TR';
 	else if(tf > 0 )
-		option = 'TF';;	
+		option = 'TF';	
 	WindowManagement.spawnClientOption(loc[path],loc[aid],option,'',loc[msg]);
 }
 
@@ -812,7 +812,7 @@ function __iconToFront(tgt)
 
 function _autolayout()
 {
-    Layout.autolayout()
+    Layout.autolayout();
 }
 
 /*---------------------------- SELECTION OVERLAY -----------------------------*/
