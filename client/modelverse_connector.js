@@ -8,6 +8,8 @@ class ModelVerseConnector {
         ModelVerseConnector.ERROR = 0;
         ModelVerseConnector.WORKING = 1;
         ModelVerseConnector.OKAY = 2;
+
+        ModelVerseConnector.curr_model = null;
     }
 
     guid() {
@@ -40,9 +42,54 @@ class ModelVerseConnector {
                 data = data.replace("Success: ", "");
                 data = eval(JSON.parse(data));
 
-                // for (let i in resp) {
-                //     console.log(resp[i]);
-                // }
+                let metamodel = "Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons.metamodel";
+
+
+                let class_type = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/ClassIcon";
+
+                DataUtils.loadmm(metamodel,
+                    function(){
+                        console.log("Metamodel loaded: " + metamodel);
+                    });
+
+                let model_classes = [];
+                let model_associations = [];
+
+                let class_types = ["class", "Class", "SimpleAttribute"];
+                for (let i in data) {
+                    let obj = data[i];
+                     console.log(obj);
+
+                    if (class_types.includes(obj["__type"])) {
+
+                        model_classes.push(obj["__id"]);
+                    }
+                    // elif "__source" in k and "__target" in k:
+                    //     print(k)
+                    //     self.associations.append((k["__source"], k["__target"], k["id"], k["type"]))
+                    // else:
+                    //     print(k)
+
+
+
+
+
+                }
+
+                __typeToCreate = class_type;
+                for (const id of model_classes){
+
+                    let updateClass = function(status, resp){
+
+                        let data = JSON.parse(resp);
+
+                        let uri = class_type + "/" + data["data"] + ".instance";
+                        let changes = {"name": id};
+                        DataUtils.update(uri, changes);
+                    };
+
+                    DataUtils.create(100, 100, updateClass);
+                }
 
                 resolve();
             });
@@ -93,7 +140,7 @@ class ModelVerseConnector {
             function (resolve, reject) {
                 let callback = function (status, resp) {
                     if (utils.isHttpSuccessCode(status)) {
-                        console.log("get_output Resolve: " + resp);
+                        //console.log("get_output Resolve: " + resp);
                         resolve(resp);
                     } else {
                         console.log("get_output reject: " + resp);
@@ -210,6 +257,17 @@ class ModelVerseConnector {
 
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
+        if (ModelVerseConnector.curr_model){
+            let command = {"data": utils.jsons(["drop"])};
+            this.send_command(command).then(this.get_output)
+            .then(function(data){
+                //console.log(command);
+                //console.log(data);
+
+                ModelVerseConnector.curr_model = null;
+            });
+        }
+
         let startDir = "/";
         let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, false, __getRecentDir(startDir));
         let feedback = GUIUtils.getTextSpan('', "feedback");
@@ -239,6 +297,7 @@ class ModelVerseConnector {
     static load_model(filename) {
 
         let model_name = filename;
+        let metamodel = "formalisms/SimpleClassDiagrams";
 
         //fix slashes on filename
         if (model_name.endsWith("/")){
@@ -252,13 +311,14 @@ class ModelVerseConnector {
 
         console.log("Loading model: " + model_name);
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
+        ModelVerseConnector.curr_model = filename;
 
         let model_types = {
             "data": utils.jsons(["model_types", model_name])
         };
 
         let model_modify = {
-            "data": utils.jsons(["model_modify", model_name, model_name])
+            "data": utils.jsons(["model_modify", model_name, metamodel])
         };
 
         let model_dump = {
@@ -281,8 +341,9 @@ class ModelVerseConnector {
                 ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
             })
             .catch(
-                function () {
+                function (err) {
                     console.log("Error with model dump!");
+                    console.log(err);
                     ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
                 }
             );
