@@ -42,6 +42,7 @@ class ModelVerseConnector {
                 data = data.replace("Success: ", "");
                 data = eval(JSON.parse(data));
 
+<<<<<<< HEAD
                 let metamodel = "Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons.metamodel";
 
 
@@ -141,6 +142,7 @@ class ModelVerseConnector {
                 let callback = function (status, resp) {
                     if (utils.isHttpSuccessCode(status)) {
                         //console.log("get_output Resolve: " + resp);
+
                         resolve(resp);
                     } else {
                         console.log("get_output reject: " + resp);
@@ -268,6 +270,7 @@ class ModelVerseConnector {
             });
         }
 
+
         let startDir = "/";
         let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, false, __getRecentDir(startDir));
         let feedback = GUIUtils.getTextSpan('', "feedback");
@@ -319,6 +322,7 @@ class ModelVerseConnector {
 
         let model_modify = {
             "data": utils.jsons(["model_modify", model_name, metamodel])
+
         };
 
         let model_dump = {
@@ -344,6 +348,7 @@ class ModelVerseConnector {
                 function (err) {
                     console.log("Error with model dump!");
                     console.log(err);
+
                     ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
                 }
             );
