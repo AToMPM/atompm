@@ -497,9 +497,15 @@ process.on('message',
 
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
-			_wlib   = eval('('+_fs.readFileSync('.'+__wtype+'.js', 'utf8')+')');
-			_mmmk   = eval('('+_fs.readFileSync('./mmmk.js', 'utf8')+')');
-			_mt  	  = eval('('+_fs.readFileSync('./libmt.js', 'utf8')+')');
+
+			if (__wtype == "/asworker"){
+				_wlib = require("./asworker");
+			}else {
+                _wlib = eval('(' + _fs.readFileSync('.' + __wtype + '.js', 'utf8') + ')');
+			}
+			_mmmk   = require('./mmmk');
+
+            _mt  	  = eval('('+_fs.readFileSync('./libmt.js', 'utf8')+')');
 
 			_plugins = {};
 			_fs.readdirSync('./plugins').forEach(
@@ -826,3 +832,17 @@ function POST_batchedit(resp,reqData)
 			}
 	);
 }
+
+module.exports = {
+	__errorContinuable,
+	__successContinuable,
+	__httpReq,
+	__wHttpReq,
+
+	__postInternalErrorMsg,
+	__sequenceNumber,
+
+	__postMessage,
+	__uri_to_id
+
+};
