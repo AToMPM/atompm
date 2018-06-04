@@ -505,7 +505,7 @@ process.on('message',
 			}
 			_mmmk   = require('./mmmk');
 
-            _mt  	  = eval('('+_fs.readFileSync('./libmt.js', 'utf8')+')');
+            _mt  	  = require('./libmt');
 
 			_plugins = {};
 			_fs.readdirSync('./plugins').forEach(
