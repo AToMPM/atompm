@@ -211,6 +211,16 @@ WindowEventHelper = function(){
 	this.isKeyPressed = function( keyCode ){
 		return currentKeys[ keyCode ] == 1;
 	};
+
+	/**
+	 * Called when the window gains focus
+	 * Resets all keys
+	 */
+	this.onfocus = function(){
+		for (let keyCode in currentKeys){
+			currentKeys[ keyCode ] = 0;
+		}
+	};
 	
 	/**
 	 * Initializes the default window behavior
@@ -223,6 +233,7 @@ WindowEventHelper = function(){
 		window.onmousemove = this.onMouseMove;
 		window.onkeydown = this.onKeyDown;
 		window.onkeyup = this.onKeyUp;
+		window.onfocus = this.onfocus;
 	};
 	
 	return this;
