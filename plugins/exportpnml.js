@@ -1,5 +1,21 @@
 /* a simple hello world plugin... it listens for "POST /hello" requests... requests are received by "csworker" and forwarded to "asworker"... both respond with their __worker\'s id and with a counter of the number of handled requests */
-{
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+const _utils = require('../utils');
+const _mmmk = require("../mmmk");
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _fspp	= _do.convert(require('../___fs++'), ['mkdirs']);
+
+module.exports = {
 	'interfaces'	: [{'method':'POST', 'url=':'/pnml'}],
 
 
@@ -34,7 +50,7 @@
 								var cs = _utils.jsonp(res);
 								var as = _utils.jsonp(asdata['data']);
 								
-								function addPlace(name,id,x,y,initial) {
+								let addPlace = function(name,id,x,y,initial) {
 									var file='<place id="'+id+'">\n';
 									file+='<name>\n';
 								    file +='<text>"'+name+'"</text>\n';
@@ -48,22 +64,22 @@
     							    }
                                     file+='</place>\n';
                                     return file;
-								}
-								function addTrans(name,id,x,y) {
+								};
+								let addTrans = function(name,id,x,y) {
 									var file='<transition id="'+id+'">\n <name> <text>'+name+'</text>\n';
 									file+='<graphics>   <offset x="22" y="-14"/>  </graphics>\n';
                                    file+='</name>\n<graphics> <position x="'+x+'" y="'+y+'"/></graphics>\n</transition>\n';
                                    return file;
-								}
-								function addArc(from,to) {
+								};
+								let addArc = function(from,to) {
 									var file='<arc id="'+from+to+'" source="'+from+'" target="'+to+'">\n';
                                     file+='<inscription> <text>1</text> </inscription> </arc>\n';
                                     return file;
-								}
+								};
 								var mData = {
 										'csm':_utils.jsonp(res),
 										'asm':_utils.jsonp(asdata['data'])},
-									 path  = reqData['fname']
+									 path  = reqData['fname'];
 									 dir	 = _path.dirname(path).replace(/"/g,'\\"'),
 									 
 									 writeActions = 
@@ -78,7 +94,7 @@
 											    var x=0;
 											    var y=0;
 											    var initial = 0;
-											    var name = ''
+											    var name = '';
 											    var tokens =  0;
 												if (as.nodes[key]['$type'].indexOf('Transition') != -1) {
 													x = cs.nodes[key]['position']['value'][0];
@@ -117,7 +133,7 @@
 										  _fs.write(fd,head);
 										  _fs.close(fd);
 											});
-											 return true
+											 return true;
 										 }];
 								_do.chain(writeActions)(
 									function()
@@ -151,4 +167,4 @@
 					 'sequence#':__sequenceNumber(),
 					 'respIndex':resp});
 		}
-}
+};

@@ -517,8 +517,7 @@ process.on('message',
 							throw 'invalid plugin filename, see user\'s manual';
 
 						p = p.match(/(.*)\.js$/)[1];
-						_plugins[p] = eval(
-							'('+_fs.readFileSync('./plugins/'+p+'.js','utf8')+')');
+						_plugins[p] = require('./plugins/' + p);
 						if( ! ('interfaces' in _plugins[p]) ||
 							 ! ('csworker' in _plugins[p])  ||
 							 ! ('asworker' in _plugins[p]) )

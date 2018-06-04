@@ -1,5 +1,19 @@
 /* a simple plugin that outputs some general information about a model... the point here is to demo how to use _mmmk from a plugin */
-{
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+const _utils = require('../utils');
+const _mmmk = require("../mmmk");
+
+module.exports = {
 	'interfaces'	: [{'method':'GET', 'url=':'/stats'}],
 
 
@@ -11,7 +25,7 @@
 		{
 			var model = _utils.jsonp(_mmmk.read()),
 				 t2i	 = {};
-console.warn(model, typeof(model))			
+			console.warn(model, typeof(model));
 			for( var id in model.nodes )
 			{
 				var node = model.nodes[id];
@@ -54,6 +68,6 @@ console.warn(model, typeof(model))
   					 'sequence#':__sequenceNumber(),
 					 'respIndex':resp});
 		}
-}
+};
 
 
