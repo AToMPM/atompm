@@ -184,7 +184,6 @@ function __createEdge(segments,style,edgeId,linkuri)
         if (icon['ordernr']) return;
         visited.push(icon);
         if (__isConnectionType(id)) {
-            // I like my edges as I like my women: always on top
             icon['ordernr'] = 9999;
         } else if (icon['edgesIn'].length > 0) {
             for (var edgeId in icon['edgesIn']) {
@@ -207,7 +206,6 @@ function __createEdge(segments,style,edgeId,linkuri)
         __icons[el]['icon'].toFront();
     });
     Object.keys(__edges).forEach(function(el) {
-        // I like my edges as I like my women: always on top
         __edges[el]['icon'].toFront();
     });
     
