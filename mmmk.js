@@ -12,6 +12,9 @@
 		clients can 'call') and thus, we do no support 'save' events... */
 
 const _utils = require('./utils');
+const _util = require("util");
+const _mt = require("./libmt");
+
 module.exports = {
 	/********************************* GLOBALS *********************************/
 	'metamodels':{},
