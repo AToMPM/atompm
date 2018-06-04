@@ -41,8 +41,7 @@ class ModelVerseConnector {
 
                 data = data.replace("Success: ", "");
                 data = eval(JSON.parse(data));
-
-<<<<<<< HEAD
+                
                 let metamodel = "Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons.metamodel";
 
 
