@@ -50,12 +50,14 @@ DataUtils = function(){
 	 * Request creation of an instance of __typeToCreate at the specified
 	 * x and y coordinates
 	 */
-	this.create = function(x,y){
+	this.create = function(x,y, callback){
 		if( __typeToCreate != undefined )
 			HttpUtils.httpReq(
 					'POST',
 					HttpUtils.url(__typeToCreate+'.type',__NO_USERNAME),
-					{'pos':[x,y]});
+					{'pos':[x,y]},
+					callback
+			);
 		else
 			WindowManagement.openDialog(_ERROR,'you must select a type to create');
 	};
