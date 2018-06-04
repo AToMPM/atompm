@@ -1,4 +1,20 @@
-{
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+const _utils = require('../utils');
+const _mmmk = require("../mmmk");
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _fspp	= _do.convert(require('../___fs++'), ['mkdirs']);
+
+module.exports = {
 	'interfaces'	: [{'method':'POST', 'url=':'/generatecode'}],
 
 	'csworker'		: 
@@ -56,7 +72,7 @@
 								if (possibleRoots.size > 1) {
 									 __postInternalErrorMsg(resp,"There can only be 1 root, found " + possibleRoots.size);
 								} else {
-									function generateFolder(key, prefix) {
+									let generateFolder = function(key, prefix) {
 										var dir = prefix + as.nodes[key]['name']['value'] + '/';
 										writeActions = _fspp.mkdirs(dir);
 										_do.chain(writeActions)(
@@ -70,7 +86,7 @@
 										for (var subFolder in subFolders[key]) {
 											generateFolder(subFolders[key][subFolder], dir);
 										}
-									}
+									};
 									generateFolder(possibleRoots[0], './generated_code/' + reqData['root'] + '/');
 									__postMessage({'statusCode':200,
 												   'respIndex':resp});
@@ -93,4 +109,4 @@
 				{'statusCode':200,
 					 'respIndex':resp});	
 		}
-}
+};

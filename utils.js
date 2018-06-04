@@ -298,7 +298,7 @@ utils.createCookie =
 		}
 		else var expires = "";
 		document.cookie = name+"="+value+expires+"; path=/";
-	}
+	};
 
 /* returns the value of the cookie with given name */
 utils.readCookie =
@@ -311,13 +311,13 @@ utils.readCookie =
 			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
 		}
 		return null;
-	}
+	};
 
 /* erases the cookie with given name */
 utils.eraseCookie =
 	function(name) {
 		createCookie(name,"",-1);
-	}
+	};
 	
 __pendingCalls = {};
 
@@ -334,7 +334,7 @@ utils.doAfterUnlessRepeated =
 			clearTimeout(__pendingCalls[func]);
 		}
 		__pendingCalls[func] = setTimeout(doIt, ms);
-	}
+	};
 
 /* NOTE: 'exports' exists in back-end 'require', but not in browser import...
 			this ensures no errors are reported during browser imports */
@@ -367,4 +367,4 @@ exports.values 						= utils.values;
 exports.createCookie				= utils.createCookie;
 exports.readCookie					= utils.readCookie;
 exports.eraseCookie					= utils.eraseCookie;
-exports.doAfterUnlessRepeated		= utils.doAfterUnlessRepeated
+exports.doAfterUnlessRepeated		= utils.doAfterUnlessRepeated;

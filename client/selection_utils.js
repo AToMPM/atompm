@@ -153,7 +153,9 @@ function __flash(uri,color,timeout)
 	function turnOff()
 	{
 		try			{__icons[uri]['icon'].unhighlight();} 
-		catch(err)	{}
+		catch(err)	{
+			console.log(err);
+		}
 	}
 	window.setTimeout(turnOff,timeout || 500);
 }
@@ -199,13 +201,17 @@ function __highlight(uri,followCrossFormalismLinks,timeout,color)
 				 function() 
 				 {
 					 try			{__icons[uri]['icon'].unhighlight();}
-					 catch(err)	{}
+					 catch(err)	{
+					 	console.log(err);
+					 }
 
 					 if( followCrossFormalismLinks != undefined )
 					 	neighbors.nodes.forEach( 
 							function(n) {
 	  							try			{__icons[n]['icon'].unhighlight();}
-								catch(err)	{}
+								catch(err)	{
+	  								console.log(err);
+								}
 							} );
 					 if( timeout != undefined )
 						 window.clearTimeout(tid);
@@ -216,7 +222,7 @@ function __highlight(uri,followCrossFormalismLinks,timeout,color)
 
 function isHighlighted(uri)
 {
-	return __highlighted.length > 0 && __highlighted.filter(function(hl) {return uri == hl['uri']}).length == 1;
+	return __highlighted.length > 0 && __highlighted.filter(function(hl) {return uri == hl['uri'];}).length == 1;
 }
 
 
@@ -224,11 +230,11 @@ function __unhighlight(uri)
 {
 	if( __highlighted.length > 0 )
 	{
-		__highlighted.filter(function(hl) {return !uri || uri == hl['uri']}).forEach(function(hl) {hl.turnOff()})
+		__highlighted.filter(function(hl) {return !uri || uri == hl['uri'];}).forEach(function(hl) {hl.turnOff();});
 		if (!uri) {
 			__highlighted = [];
 		} else {
-			__highlighted = __highlighted.filter(function(hl) {return uri != hl['uri']})
+			__highlighted = __highlighted.filter(function(hl) {return uri != hl['uri'];});
 		}
 		
 	}

@@ -1,5 +1,17 @@
 /* a simple hello world plugin... it listens for "POST /hello" requests... requests are received by "csworker" and forwarded to "asworker"... both respond with their __worker\'s id and with a counter of the number of handled requests */
-{
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+
+module.exports = {
 	'interfaces'	: [{'method':'POST', 'url=':'/hello'}],
 
 
@@ -40,4 +52,4 @@
 					 'sequence#':__sequenceNumber(),
 					 'respIndex':resp});
 		}
-}
+};

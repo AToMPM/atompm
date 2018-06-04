@@ -596,7 +596,7 @@ WindowManagement = function(){
 				 c.__trafo = trafo;
 				 c.__msg = msg;
 				if (trafo == undefined){
-					trafo = option
+					trafo = option;
 				}
 				if( tbname ){
 						toolbars = tbname.split(",");
@@ -735,7 +735,7 @@ WindowManagement = function(){
 		if(ev!=null && ev.keyCode==13) {
 			$('#div_dialog_' + (__dialog_stack.length-1).toString() + " .okbutton").click();
 		}
-        __dialog_stack.pop()
+        __dialog_stack.pop();
 		var dialog = $('#div_dialog_'+__dialog_stack.length);
         dialog.remove();
 		if (!__dialog_stack.length) {

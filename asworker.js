@@ -2,8 +2,23 @@
 *  Copyright 2011 by the AToMPM team and licensed under the LGPL
 *  See COPYING.lesser and README.md in the root of this project for full details
 */
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("./__worker");
 
-{
+const _do = require("./___do");
+const _utils = require('./utils');
+const _mmmk = require("./mmmk");
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+
+
+module.exports = {
 	/************************** REST REQUEST HANDLING **************************/
 	/* INTENT :
 			ask our mtworker to do something (e.g., change transformation execution
@@ -499,4 +514,4 @@
 					 'sequence#':__sequenceNumber(),
 					 'respIndex':resp});
 		}	
-}
+};

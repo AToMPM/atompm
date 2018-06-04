@@ -1,5 +1,20 @@
 /* SCCDXML exporter plugin*/
-{
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+const _utils = require('../utils');
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _fspp	= _do.convert(require('../___fs++'), ['mkdirs']);
+
+module.exports = {
 	'interfaces'	: [{'method':'POST', 'url=':'/exporttosccdxml'}],
 	'csworker'		: 
         function(resp,method,uri,reqData,wcontext)
@@ -41,7 +56,7 @@
 								}
 								
 								function find_initial(state){
-									var substates = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/contain' || as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/ocContain'}).map(function(tid) {return as.nodes[tid]});
+									var substates = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/contain' || as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/ocContain';}).map(function(tid) {return as.nodes[tid];});
 									for (var sidx in substates){
 										var substate = as.nodes[outgoing[substates[sidx]['$key']]];
 										if(substate['isStart']['value']){
@@ -51,7 +66,7 @@
 								}
 								
 								function get_full_path(state){
-									var parent_link = incoming[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/contain' || as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/ocContain' || as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/containOC' || as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/includes'}).map(function(tid) {return as.nodes[tid]})[0];
+									var parent_link = incoming[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/contain' || as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/ocContain' || as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/containOC' || as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/includes';}).map(function(tid) {return as.nodes[tid];})[0];
 									if (parent_link != undefined){
 										var parent = as.nodes[incoming[parent_link['$key']][0]];
 										return get_full_path(parent).concat([state['name']['value']]);
@@ -106,9 +121,9 @@
 										else{
 											contents += ' scope="' + r['scope'] + '">\n';
 										}
-										arguments = r['arguments'];
-										for (var aidx in arguments){
-											var arg = arguments[aidx];
+										let args = r['arguments'];
+										for (var aidx in args){
+											var arg = args[aidx];
 											if(arg != ""){
 												contents += '<parameter expr="' + xml_safe(arg) + '"/>\n';
 											}
@@ -123,7 +138,7 @@
 									if(outgoing[state['$key']] == undefined){
 										return "";
 									}
-									var transitions = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/transition'}).map(function(tid) {return as.nodes[tid]});
+									var transitions = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/transition';}).map(function(tid) {return as.nodes[tid];});
 									for (var tidx in transitions){
 										var transition = transitions[tidx];
 										contents += "<transition ";
@@ -208,10 +223,10 @@
 											ocContain = [];
 									}
 									else{
-										var containOC = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/containOC'}).map(function(tid) {return as.nodes[tid]});
-										var contain = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/contain'}).map(function(tid) {return as.nodes[tid]});
-										var ocContain = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/ocContain'}).map(function(tid) {return as.nodes[tid]});
-										var history = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/includes'}).map(function(tid) {return as.nodes[tid]});
+										var containOC = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/containOC';}).map(function(tid) {return as.nodes[tid];});
+										var contain = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/contain';}).map(function(tid) {return as.nodes[tid];});
+										var ocContain = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/ocContain';}).map(function(tid) {return as.nodes[tid];});
+										var history = outgoing[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/includes';}).map(function(tid) {return as.nodes[tid];});
 									}
 									var s = as.nodes[state['$key']];
 									if (is_root){
@@ -248,7 +263,7 @@
 										contents += '</state>\n';
 									}
 									else {
-										var history = incoming[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/includes'}).map(function(tid) {return as.nodes[tid]});
+										var history = incoming[state['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/includes';}).map(function(tid) {return as.nodes[tid];});
 										if (history.length > 0){
 											contents += '<history id="' + s['name']['value'] + '" type="' + s['type']['value'].trim() + '"/>\n';
 										}
@@ -270,14 +285,14 @@
 										for (var e_key in as.edges) {
 											var e = as.edges[e_key];
 											if (e['dest'] == key) {
-												safe_add(incoming[key], e['src'])
+												safe_add(incoming[key], e['src']);
 												if (!(e['src'] in outgoing)) {
 													outgoing[e['src']] = [];
 												}
 												safe_add(outgoing[e['src']], key);
 											}
 											if (e['src'] == key) {
-												safe_add(outgoing[key], e['dest'])
+												safe_add(outgoing[key], e['dest']);
 												if (!(e['dest'] in incoming)) {
 													incoming[e['dest']] = [];
 												}
@@ -303,12 +318,12 @@
 									if(!external){
 										file_contents += '<class name="' + node['name']['value'] + '" default="true">\n';
 										file_contents += '\t<relationships>\n';
-										inheritances = outgoing[node['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/Inheritance'}).map(function(tid) {return as.nodes[tid]});
+										inheritances = outgoing[node['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/Inheritance';}).map(function(tid) {return as.nodes[tid];});
 										for (var iidx in inheritances){
 											target = as.nodes[outgoing[inheritances[iidx]['$key']][0]];
 											file_contents += '\t\t<inheritance class="' + target['name']['value'] + '"/>\n';
 										}
-										associations = outgoing[node['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/Association'}).map(function(tid) {return as.nodes[tid]});
+										associations = outgoing[node['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/Association';}).map(function(tid) {return as.nodes[tid];});
 										for (var iidx in associations){
 											target = as.nodes[outgoing[associations[iidx]['$key']][0]];
 											file_contents += '\t\t<association name="' + associations[iidx]['name']['value'] + '" class="' + target['name']['value'] + '"/>\n';
@@ -333,7 +348,7 @@
 											file_contents += '\t</method>\n';
 										}
 										
-										var behaviour = outgoing[node['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/behaviour'}).map(function(tid) {return as.nodes[tid]});
+										var behaviour = outgoing[node['$key']].filter(function(el) {return as.nodes[el]['$type'] == '/Formalisms/SCCD/SCCD/behaviour';}).map(function(tid) {return as.nodes[tid];});
 										var statechart = as.nodes[outgoing[behaviour[0]['$key']][0]];
 										file_contents += recursive(statechart, true);
 										file_contents += '</class>\n';
@@ -348,7 +363,7 @@
 					);
 				},
 				function(err) {__postInternalErrorMsg(resp, err);}
-			)
+			);
 		},
 
 	'asworker'		: 
@@ -359,4 +374,4 @@
 					{'statusCode':200, 
 					 'respIndex':resp});
 		}
-}
+};

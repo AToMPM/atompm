@@ -1,9 +1,13 @@
+
 /* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
 *  Copyright 2011 by the AToMPM team and licensed under the LGPL
 *  See COPYING.lesser and README.md in the root of this project for full details
 */
 
-{
+const _utils = require('./utils');
+
+/* eslint-disable no-inner-declarations */
+module.exports = {
 	/* apply transformation T to specified model 
 
 		TBI:: this method only supports transforming class diagrams to ER diagrams
@@ -51,8 +55,8 @@
                                         new_model.nodes[parent_id]['attributes']['value'].filter(
                                             function(attr) {
                                                 return !new_model.nodes[child_id]['attributes']['value'].find(
-                                                    function(el) {return el['name'] == attr['name']}
-                                                )
+                                                    function(el) {return el['name'] == attr['name'];}
+                                                );
                                             }
                                         )
                                     );
@@ -61,8 +65,8 @@
                                         new_model.nodes[parent_id]['constraints']['value'].filter(
                                             function(constr) {
                                                 return !new_model.nodes[child_id]['constraints']['value'].find(
-                                                    function(el) {return el['name'] == constr['name']}
-                                                )
+                                                    function(el) {return el['name'] == constr['name'];}
+                                                );
                                             }
                                         )
                                     );
@@ -71,8 +75,8 @@
                                         new_model.nodes[parent_id]['actions']['value'].filter(
                                             function(act) {
                                                 return !new_model.nodes[child_id]['actions']['value'].find(
-                                                    function(el) {return el['name'] == act['name']}
-                                                )
+                                                    function(el) {return el['name'] == act['name'];}
+                                                );
                                             }
                                         )
                                     );
@@ -81,8 +85,8 @@
                                         new_model.nodes[parent_id]['cardinalities']['value'].filter(
                                             function(card) {
                                                 return !new_model.nodes[child_id]['cardinalities']['value'].find(
-                                                    function(el) {return el['dir'] == card['dir'] && el['type'] == card['type']}
-                                                )
+                                                    function(el) {return el['dir'] == card['dir'] && el['type'] == card['type'];}
+                                                );
                                             }
                                         )
                                     );
@@ -182,7 +186,7 @@
 							new_model.nodes[id]['constraints']['value'].push(
 									{'name':'noAbstractInstances',
 									 'event':'pre-create',
-									 'code':'false'})
+									 'code':'false'});
 						}
 					}
 					else if( new_model.nodes[id]['$type'] == SCD+'/Association' )
@@ -197,7 +201,7 @@
 							a) remove all edges pertaining to it
 							b) remove it */
 						new_model.edges = new_model.edges.filter(
-								function(edge)	{return edge['src'] != id && edge['dest'] != id});
+								function(edge)	{return edge['src'] != id && edge['dest'] != id;});
 						delete new_model.nodes[id];
 					}
 				}
@@ -211,11 +215,11 @@
 					var type = new_model.nodes[id]['name']['value'];
 					if( types2parentTypes[type] == undefined ) 
 					{
-						types2parentTypes[type] = []
+						types2parentTypes[type] = [];
 						ids2ancestors[id].forEach(
 								function(a)
 								{
-									types2parentTypes[type].push(new_model.nodes[a]['name']['value'])
+									types2parentTypes[type].push(new_model.nodes[a]['name']['value']);
 								});
 					}
 				}
@@ -471,5 +475,5 @@
 
 			return {'asmm':asmm,'csmms':csmms};
 		}
-}
+};
 

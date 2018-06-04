@@ -174,7 +174,7 @@ GUIUtils = function(){
 			var vals 	 = type.match(/^ENUM\((.*)\)$/)[1],
 				 input 	 = GUIUtils.getSelector(vals.split(','),false,[value]),
 				 getinput = 
-					 function(_){return HttpUtils.getSelectorSelection(_)[0]};
+					 function(_){return HttpUtils.getSelectorSelection(_)[0];};
 		}
 	
 		else if( type.match(/^boolean$/) )
@@ -187,9 +187,9 @@ GUIUtils = function(){
 		else if( type.match(/^\$/) )
 			return GUIUtils.getInputField(__specialTypes[type],value);
 	
-		else if (matches = type.match("^file<(.*)>")) {
+		else if ((matches = type.match("^file<(.*)>"))) {
 			var input 	 = GUIUtils.getFileInput(value,matches[1],"code_style string_input",1),
-				 getinput = function(_){return _.val();}
+				 getinput = function(_){return _.val();};
         }
 	
 		else
@@ -273,7 +273,7 @@ GUIUtils = function(){
         });
         string_input.extra_el = extra_el;
         return string_input;
-    }
+    };
 	
 	/**
 	 * Constructs a <textarea> element. In this element, Alt + Right Arrow

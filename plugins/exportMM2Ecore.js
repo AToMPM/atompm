@@ -1,4 +1,20 @@
-{
+const {
+    __errorContinuable,
+    __httpReq,
+    __wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+const _utils = require('../utils');
+const _mmmk = require("../mmmk");
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _fspp	= _do.convert(require('../___fs++'), ['mkdirs']);
+
+module.exports = {
     'interfaces'
 :
     [{'method': 'POST', 'url=': '/exportMM2Ecore'}],
@@ -58,7 +74,7 @@
                             'float': 'EFloat',
                             'boolean': 'EBoolean',
                             'code': 'EString'
-                        }
+                        };
 
 
                         /**
@@ -602,7 +618,7 @@
             function (err) {
                 __postInternalErrorMsg(resp, err);
             }
-        )
+        );
     }
 
 ,
@@ -616,4 +632,4 @@
                 'respIndex': resp
             });
     }
-}
+};

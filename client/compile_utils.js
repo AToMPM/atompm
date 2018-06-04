@@ -201,7 +201,7 @@ CompileUtils = function(){
 				continue;
 	
 			var r  = __getVobjGeomAttrVal(vobj['orientation']['value']),
-				 sx = __getVobjGeomAttrVal(vobj['scale']['value'][0])
+				 sx = __getVobjGeomAttrVal(vobj['scale']['value'][0]);
 				 sy = __getVobjGeomAttrVal(vobj['scale']['value'][1]);
 			vobjects[vid].attr(vobj['style']['value']);
 			vobjects[vid].transform(

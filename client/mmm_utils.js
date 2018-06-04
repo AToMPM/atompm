@@ -180,7 +180,7 @@ function __createEdge(segments,style,edgeId,linkuri)
     }
     function getOrderNr(id,visited) {
         var icon = __icons[id];
-        if (visited.indexOf(icon) > 0) return
+        if (visited.indexOf(icon) > 0) return;
         if (icon['ordernr']) return;
         visited.push(icon);
         if (__isConnectionType(id)) {
@@ -188,10 +188,10 @@ function __createEdge(segments,style,edgeId,linkuri)
             icon['ordernr'] = 9999;
         } else if (icon['edgesIn'].length > 0) {
             for (var edgeId in icon['edgesIn']) {
-                var associationid = __edges[icon['edgesIn'][edgeId]]['start']
+                var associationid = __edges[icon['edgesIn'][edgeId]]['start'];
                 if (__isContainmentConnectionType(associationid)) {
                     getOrderNr(__edges[__icons[associationid]['edgesIn'][0]]['start'], visited);
-                    icon['ordernr'] = __icons[__edges[__icons[associationid]['edgesIn'][0]]['start']]['ordernr'] + 1
+                    icon['ordernr'] = __icons[__edges[__icons[associationid]['edgesIn'][0]]['start']]['ordernr'] + 1;
                 }
             }
             if (!icon['ordernr']) icon['ordernr'] = 0;
@@ -203,7 +203,7 @@ function __createEdge(segments,style,edgeId,linkuri)
         getOrderNr(id, []);
     }
     
-    Object.keys(__icons).concat().sort(function(a, b) {return __icons[a]['ordernr'] - __icons[b]['ordernr']}).forEach(function(el) {
+    Object.keys(__icons).concat().sort(function(a, b) {return __icons[a]['ordernr'] - __icons[b]['ordernr'];}).forEach(function(el) {
         __icons[el]['icon'].toFront();
     });
     Object.keys(__edges).forEach(function(el) {
@@ -418,7 +418,7 @@ function __getIconsInContainer(container)
 			return [];
         
         if( explored.indexOf(container) > -1 ) {
-            return []
+            return [];
         }
 	
 		var contents = 
@@ -436,7 +436,7 @@ function __getIconsInContainer(container)
 								}).concat([linkuri]);
 				}));
                 
-        explored.push(container)
+        explored.push(container);
 
         for (var ct_idx in contents) {
             var to_concat = utils.flatten(getExplicitContents(contents[ct_idx], explored));
