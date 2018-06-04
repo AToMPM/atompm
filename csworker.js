@@ -177,7 +177,17 @@
 			SYSOUT message announcing the launching of the rule... a sensible and 
 		  	nice solution would be not to remember such changelogs in
 			__handledSeqNums */
+let {
+    __id_to_uri,
+    __ids2uris, __nextSequenceNumber,
+    __postBadReqErrorMsg,
+    __postForbiddenErrorMsg,
+    __wtype,
+    GET__current_state
+} = require("./__worker");
+
 const {
+	__batchCheckpoint,
     __errorContinuable,
     __httpReq,
 	__wHttpReq,
@@ -191,6 +201,10 @@ const _do = require("./___do");
 const _utils = require('./utils');
 const _mmmk = require("./mmmk");
 const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _path = require('path');
+const _fspp	= _do.convert(require('./___fs++'), ['mkdirs']);
+const _svg = require('./libsvg').SVG;
+const _mt = require('./libmt');
 
 const _siocl = require('socket.io-client');
 
@@ -1893,9 +1907,9 @@ module.exports = {
 					{
 						var sn = asdata['sequence#'];
 						if( self.__nextASWSequenceNumber - 1 > sn )
-							self['PUT *.model'](resp,urin);
+							self['PUT *.model'](resp,uri);
 						else if( self.__nextASWSequenceNumber - 1 < sn )
-							setTimeout(self['PUT *.model'], 200, resp, urin);
+							setTimeout(self['PUT *.model'], 200, resp, uri);
 						else
 						{
 							if( (res = _mmmk.read())['$err'] )

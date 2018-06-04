@@ -106,14 +106,10 @@
 
 /**************************** LIBRARIES and GLOBALS ****************************/
 var  _util 	= require('util'),
-	 //_path 	= require('path'),
 	 _http 	= require('http'),
 	 _do  	= require('./___do'),
 	 _fs 	 	= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
-	//_fspp	= _do.convert(require('./___fs++'), ['mkdirs']),
 	 _utils	= require('./utils'),
-	 //_styleinfo = require('./styleinfo'),
-	 //_svg		= require('./libsvg').SVG,
 	 _wlib,
 	 _mmmk,
 	 _mt,
@@ -840,9 +836,20 @@ module.exports = {
 	__wHttpReq,
 
 	__postInternalErrorMsg,
+	__postForbiddenErrorMsg,
+	__postBadReqErrorMsg,
 	__sequenceNumber,
 
 	__postMessage,
-	__uri_to_id
+	__uri_to_id,
+	__id_to_uri,
+	__batchCheckpoint,
+
+	GET__current_state,
+
+	//GLOBAL VARS
+	__ids2uris,
+	__nextSequenceNumber,
+	__wtype,
 
 };
