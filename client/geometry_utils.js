@@ -305,13 +305,23 @@ GeometryUtils = function(){
 					var img = $('<img>');
 					img.attr('class', 'geometry_ctrl');
 					img.attr('src', 'client/media/'+x+'.png');
-					img.get(0).onmousewheel = 
-						function(event)	
-						{
-							var dir = event.wheelDelta;
-							GeometryUtils.previewSelectionTransformation(x,dir);
-							return false;
-						};
+
+					let wheelFunc = function(event)
+					{
+						let dir = null;
+						if (event.wheelDelta){
+							dir = event.wheelDelta;
+						}else if (event.deltaY){
+							dir = event.deltaY;
+						}
+						GeometryUtils.previewSelectionTransformation(x,dir);
+						return false;
+					};
+
+					//detect mouse wheel on all browsers
+					img.get(0).onmousewheel = wheelFunc;
+					img.get(0).onwheel = wheelFunc;
+
 					geometryControlsOverlay.append(img);
 				});
 			var img = $('<img>');

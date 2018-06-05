@@ -309,7 +309,8 @@ CompileUtils = function(){
 								BehaviorManager.handleUserEvent(__EVENT_MIDDLE_RELEASE_ICON,event);
 						}
 					};
-				icon.node.onmousewheel = 
+
+				let shiftWheelFunction =
 					function(event)
 					{
 						if( event.shiftKey )
@@ -318,6 +319,10 @@ CompileUtils = function(){
 							return false;
 						}
 					};
+
+				icon.node.onmousewheel = shiftWheelFunction;
+				icon.node.onwheel = shiftWheelFunction;
+
 				/*icon.node.onmouseover = 
 					function(event)
 					{
