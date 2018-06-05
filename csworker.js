@@ -1467,7 +1467,7 @@ module.exports = {
                  _do.chain(actions)(
                         function(res) 	
                         {
-                            __postMessage({'statusCode':202, 'respIndex':resp});
+                            __postMessage({'statusCode':202, 'respIndex':resp, 'reason': res});
                         },
                         function(err) 	{__postInternalErrorMsg(resp,err);}
                  );
