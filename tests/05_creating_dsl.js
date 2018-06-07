@@ -81,8 +81,8 @@ function get_assoc_div(num) {
 
 module.exports = {
 
-    beforeEach: function (client) {
-        client.url('http://localhost:8124/atompm').pause(300);
+    beforeEach: function (client, done) {
+        client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
     },
 
     'Login': function (client) {
@@ -102,6 +102,7 @@ module.exports = {
         client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
 
         let name_field = "#tr_name > td:nth-child(2) > textarea";
+        let num_elements = 0;
 
         //BUILD CLASSES
         let start_x = 50;
@@ -126,6 +127,8 @@ module.exports = {
                     .mouseButtonClick('right')
                     .pause(500)
                     .waitForElementPresent(class_div, 500, "Created class: " + class_div);
+
+                num_elements++;
             }
         }
 
@@ -211,6 +214,8 @@ module.exports = {
                 .mouseButtonClick('left')
                 .pause(500)
             ;
+
+            num_elements++;
         }
 
         //SET ASSOCS
@@ -263,9 +268,9 @@ module.exports = {
 
             let cardinality_field = "#tr_cardinalities > td:nth-child(2) > textarea";
 
-            let prev_num_elements = num_classes + inheri_classes.length;
-            let assoc_div = get_assoc_div(prev_num_elements + assoc_num);
+            let assoc_div = get_assoc_div(num_elements);
             assoc_num++;
+            num_elements++;
 
             let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
             //tiny offset to not hit other arrows
@@ -343,7 +348,42 @@ module.exports = {
             ;
         }
 
-        client.pause(2000);
+        //CREATE CONSTRAINT
+        let div_id = num_elements;
+        let constraint_div = get_class_div(div_id).replace("ClassIcon", "GlobalConstraintIcon");
+
+        let constraintIcon = "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2e metamodel\\2f GlobalConstraintIcon";
+        client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
+        client.click(constraintIcon);
+
+        client
+            .moveToElement(canvas, 100, 150)
+            .mouseButtonClick('right')
+            .pause(500)
+            .waitForElementPresent(constraint_div, 500, "Created class: " + constraint_div);
+
+        let pre_create_opt = "#tr_event > td:nth-child(2) > select > option:nth-child(2)";
+        let code_field = "#tr_code > td:nth-child(2) > textarea";
+        let constraint_code = "let C_classes = getAllNodes(['Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/umlIcons/ClassIcon']);\n" +
+            "C_classes.length <= 2;";
+        client
+            .moveToElement(constraint_div, 10, 10)
+            .mouseButtonClick('middle')
+            .waitForElementPresent("#dialog_btn", 1000, "Constraint menu opens")
+            .clearValue(name_field)
+            .setValue(name_field, "max-two-instances")
+            .moveToElement(pre_create_opt, 0, 0)
+            .mouseButtonClick('left')
+            .clearValue(code_field)
+            .setValue(code_field, constraint_code)
+            .click("#dialog_btn")
+            .waitForElementNotPresent("#dialog_btn", 1000, "Constraint menu closes")
+            .moveToElement(canvas, 0, 100)
+            .mouseButtonClick('left')
+            .pause(1000);
+
+
+        client.pause(200000);
     },
 
     after: function (client) {
