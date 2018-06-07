@@ -784,6 +784,13 @@ module.exports = {
 
     },
 
+
+    'Create CS model': function (client) {
+
+
+
+    },
+
     after: function (client) {
         client.end();
     },
