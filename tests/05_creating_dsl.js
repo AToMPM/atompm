@@ -333,7 +333,7 @@ module.exports = {
                     .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
                     .moveToElement(canvas, 0, 100)
                     .mouseButtonClick('left')
-                    .pause(1000);
+                    .pause(500);
             }
 
             if (in_card) {
@@ -347,13 +347,13 @@ module.exports = {
                     .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
                     .moveToElement(canvas, 0, 100)
                     .mouseButtonClick('left')
-                    .pause(1000);
+                    .pause(500);
             }
             client.getElementSize(assoc_div, function (result) {
                 client
                     .moveToElement(assoc_div, result.value.width / 2, result.value.height / 2)
                     .mouseButtonClick('middle')
-                    .waitForElementPresent("#dialog_btn", 5000000, "Editing assoc name opens")
+                    .waitForElementPresent("#dialog_btn", 1000, "Editing assoc name opens")
                     .clearValue(name_field)
                     .setValue(name_field, name);
 
