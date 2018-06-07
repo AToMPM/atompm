@@ -1,4 +1,5 @@
 let test_utils = require('./test_utils');
+let model_building_utils = require('./model_building_utils');
 let user = "./users/testuser/";
 
 function get_all_attrs() {
@@ -71,13 +72,6 @@ function get_all_attrs2() {
         "]";
 }
 
-function get_class_div(num) {
-    return "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2f ClassIcon\\2f " + (num) + "\\2e instance";
-}
-
-function get_assoc_div(num) {
-    return "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2f AssociationLink\\2f " + (num) + "\\2e instance > text:nth-child(1)";
-}
 
 module.exports = {
 
@@ -90,7 +84,7 @@ module.exports = {
         test_utils.login(client);
     },
 
-    'Create model': function (client) {
+    'Create AS model': function (client) {
         let filename = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons.metamodel';
         test_utils.load_toolbar(client, [filename]);
 
@@ -116,45 +110,18 @@ module.exports = {
 
         let num_classes = x_coords.length * y_coords.length;
 
-        let i = 0;
-        for (let x of x_coords) {
-            for (let y of y_coords) {
-
-                let class_div = get_class_div(i);
-                i++;
-
-                client
-                    .moveToElement(canvas, x, y)
-                    .mouseButtonClick('right')
-                    .pause(500)
-                    .waitForElementPresent(class_div, 500, "Created class: " + class_div);
-
-                num_elements++;
-            }
-        }
+        num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements);
 
         // SET NAMES FOR CLASSES
         for (let i = 0; i < num_classes; i++) {
             let class_name = "Class" + String.fromCharCode(65 + i);
-            let class_div = get_class_div(i);
-
-            client.waitForElementPresent(class_div, 1000, "Looking for class");
-
-            client.moveToElement(class_div, 10, 10)
-                .mouseButtonClick('middle')
-                .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
-                .clearValue(name_field)
-                .setValue(name_field, class_name)
-                .click("#dialog_btn")
-                .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
-                .moveToElement(canvas, 0, 100)
-                .mouseButtonClick('left')
-                .pause(1000)
-            ;
+            let attrs = {};
+            attrs[name_field] = class_name;
+            model_building_utils.set_attribs(client, i, attrs);
         }
 
         // SET ATTRIBUTES
-        let class_div = get_class_div(0);
+        let class_div = model_building_utils.get_class_div(0);
         let attrib_field = "#tr_attributes > td:nth-child(2) > textarea";
 
         client.moveToElement(class_div, 10, 10)
@@ -171,7 +138,7 @@ module.exports = {
 
 
         let abstract_class = 4;
-        let class_div2 = get_class_div(abstract_class);
+        let class_div2 = model_building_utils.get_class_div(abstract_class);
         let attrib_field2 = "#tr_attributes > td:nth-child(2) > textarea";
         let checkbox = "#tr_abstract > td:nth-child(2) > input[type=\"checkbox\"]";
         client.moveToElement(class_div2, 10, 10)
@@ -194,8 +161,8 @@ module.exports = {
             [abstract_class, abstract_class + 3]];
 
         for (let inheri_set of inheri_classes) {
-            let sup = get_class_div(inheri_set[0]);
-            let sub = get_class_div(inheri_set[1]);
+            let sup = model_building_utils.get_class_div(inheri_set[0]);
+            let sub = model_building_utils.get_class_div(inheri_set[1]);
 
             let inheri_relation = "#div_dialog_0 > select > option:nth-child(2)";
             //tiny offset to not hit other arrows
@@ -260,8 +227,8 @@ module.exports = {
         let assoc_num = 0;
         for (let assoc of assocs) {
 
-            let from_ele = get_class_div(assoc[0]);
-            let to_ele = get_class_div(assoc[1]);
+            let from_ele = model_building_utils.get_class_div(assoc[0]);
+            let to_ele = model_building_utils.get_class_div(assoc[1]);
             let name = assoc[2];
             let isContain = assoc[3];
             let out_card = assoc[4];
@@ -269,7 +236,7 @@ module.exports = {
 
             let cardinality_field = "#tr_cardinalities > td:nth-child(2) > textarea";
 
-            let assoc_div = get_assoc_div(num_elements);
+            let assoc_div = model_building_utils.get_assoc_div(num_elements);
             assoc_num++;
             num_elements++;
 
@@ -350,7 +317,7 @@ module.exports = {
         }
 
         //CREATE CONSTRAINT
-        let constraint_div = get_class_div(num_elements).replace("ClassIcon", "GlobalConstraintIcon");
+        let constraint_div = model_building_utils.get_element_div("GlobalConstraintIcon", num_elements);
 
         let constraintIcon = "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2e metamodel\\2f GlobalConstraintIcon";
         client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
@@ -450,6 +417,13 @@ module.exports = {
         );
 
         client.pause(500);
+    },
+
+
+    'Create CS model': function (client) {
+
+
+
     },
 
     after: function (client) {
