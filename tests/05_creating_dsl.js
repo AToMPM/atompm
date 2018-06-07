@@ -321,6 +321,58 @@ module.exports = {
                         .mouseButtonClick('left');
                 }
 
+            if (out_card) {
+
+                client
+                    .moveToElement(from_ele, 10, 10)
+                    .mouseButtonClick('middle')
+                    .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
+                    .clearValue(cardinality_field)
+                    .setValue(cardinality_field, JSON.stringify(out_card))
+                    .click("#dialog_btn")
+                    .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
+                    .moveToElement(canvas, 0, 100)
+                    .mouseButtonClick('left')
+                    .pause(1000);
+            }
+
+            if (in_card) {
+                client
+                    .moveToElement(to_ele, 10, 10)
+                    .mouseButtonClick('middle')
+                    .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
+                    .clearValue(cardinality_field)
+                    .setValue(cardinality_field, JSON.stringify(in_card))
+                    .click("#dialog_btn")
+                    .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
+                    .moveToElement(canvas, 0, 100)
+                    .mouseButtonClick('left')
+                    .pause(1000);
+            }
+            client.getElementSize(assoc_div, function (result) {
+                client
+                    .moveToElement(assoc_div, result.value.width / 2, result.value.height / 2)
+                    .mouseButtonClick('middle')
+                    .waitForElementPresent("#dialog_btn", 5000000, "Editing assoc name opens")
+                    .clearValue(name_field)
+                    .setValue(name_field, name);
+
+                if (isContain) {
+                    let contain_opt = "#tr_linktype > td:nth-child(2) > select > option:nth-child(2)";
+
+                    client
+                        .moveToElement(contain_opt, 0, 0)
+                        .mouseButtonClick('left');
+                }
+
+
+                client
+                    .click("#dialog_btn")
+                    .waitForElementNotPresent("#dialog_btn", 1000, "Editing assoc name closes")
+                    .moveToElement(canvas, 0, 100)
+                    .mouseButtonClick('left')
+                    .pause(500);
+            })
 
                 client
                     .click("#dialog_btn")
