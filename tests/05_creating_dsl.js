@@ -71,6 +71,10 @@ function get_all_attrs2() {
         "]";
 }
 
+function get_class_id(num){
+    return "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2f ClassIcon\\2f " + (num) + "\\2e instance";
+}
+
 module.exports = {
 
     beforeEach: function (client) {
@@ -103,12 +107,18 @@ module.exports = {
         let y_diff = 150;
         let y_coords = [start_y, start_y + y_diff, start_y + 2 * y_diff];
 
+        let i = 0;
         for (let x of x_coords) {
             for (let y of y_coords) {
+
+                let class_div = get_class_id(i);
+                i++;
+
                 client
                     .moveToElement(canvas, x, y)
                     .mouseButtonClick('right')
-                    .pause(500);
+                    .pause(500)
+                    .waitForElementPresent(class_div, 500, "Created class: " + class_div);
             }
         }
 
@@ -117,7 +127,7 @@ module.exports = {
         let name_field = "#tr_name > td:nth-child(2) > textarea";
         for (let i = 0; i < num_classes; i++) {
             let class_name = "Class" + String.fromCharCode(65 + i);
-            let class_div = "#div_canvas > svg > g:nth-child(" + (3 + i) + ")";
+            let class_div = get_class_id(i);
 
             client.waitForElementPresent(class_div, 1000, "Looking for class");
 
@@ -135,7 +145,7 @@ module.exports = {
         }
 
         //SET ATTRIBUTES
-        let class_div = "#div_canvas > svg > g:nth-child(" + (3) + ")";
+        let class_div = get_class_id(0);
         let attrib_field = "#tr_attributes > td:nth-child(2) > textarea";
 
         client.moveToElement(class_div, 10, 10)
@@ -152,7 +162,7 @@ module.exports = {
 
 
         let abstract_class = 4;
-        let class_div2 = "#div_canvas > svg > g:nth-child(" + (abstract_class) + ")";
+        let class_div2 = get_class_id(abstract_class);
         let attrib_field2 = "#tr_attributes > td:nth-child(2) > textarea";
         let checkbox = "#tr_abstract > td:nth-child(2) > input[type=\"checkbox\"]";
         client.moveToElement(class_div2, 10, 10)
@@ -175,8 +185,8 @@ module.exports = {
             [abstract_class, abstract_class + 3]];
 
         for (let inheri_set of inheri_classes) {
-            let sup = "#div_canvas > svg > g:nth-child(" + (inheri_set[0]) + ")";
-            let sub = "#div_canvas > svg > g:nth-child(" + (inheri_set[1]) + ")";
+            let sup = get_class_id(inheri_set[0]);
+            let sub = get_class_id(inheri_set[1]);
 
             let inheri_relation = "#div_dialog_0 > select > option:nth-child(2)";
             //tiny offset to not hit other arrows
@@ -198,8 +208,83 @@ module.exports = {
             ;
         }
 
+        //SET ASSOCS
+        let assocs = [
+            //from, to, name, isContain, start_card, end_card
 
-        //client.pause(5000);
+            [0, 1, "testAssoc", false, null, null],
+            [2, 3, "oneToOne", false,
+                [{
+                    "dir": "out",
+                    "type": "OneToOne",
+                    "min": "1",
+                    "max": "1"
+                }],
+                [{
+                    "dir": "in",
+                    "type": "OneToOne",
+                    "min": "1",
+                    "max": "1"
+                }]
+            ],
+            [4, 5, "ManyToOne", false,
+                null,
+                [{
+                    "dir": "in",
+                    "type": "ManyToOne",
+                    "min": "0",
+                    "max": "1"
+                }]
+            ],
+            [6, 7, "Containment", true,
+                null, null
+            ],
+            [8, 8, "self", false,
+                null, null
+            ]
+        ];
+
+        client.pause(1000);
+        //let i = 0;
+        for (let assoc of assocs){
+
+            let from_ele = get_class_id(assoc[0]);
+            let to_ele = get_class_id(assoc[1]);
+            let name = assoc[2];
+            let isContain = assoc[3];
+            let outCard = assoc[4];
+            let inCard = assoc[5];
+
+            // let assoc_num = 10 + i * 3;
+            // let assoc_div = "#div_canvas > svg > g:nth-child(" + (assoc_num) + ")";
+            // i = i + 1;
+
+            let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
+            //tiny offset to not hit other arrows
+            let offset = 2 * assoc[0] + 2 * assoc[1];
+
+            client
+                .moveToElement(from_ele, 20, 20)
+                .mouseButtonDown('right')
+                .moveToElement(to_ele, 20 + offset, 20 + offset)
+                .mouseButtonUp('right')
+                .pause(500)
+                .click(assoc_relation)
+                .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
+                .click("#dialog_btn")
+                .pause(500)
+                .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes")
+                .moveToElement(canvas, 0, 100)
+                .mouseButtonClick('left')
+                .pause(500)
+
+
+                // .moveToElement(assoc_div, 1, 1)
+                // .mouseButtonClick('middle')
+            ;
+        }
+
+        client.pause(2000);
     },
 
     after: function (client) {

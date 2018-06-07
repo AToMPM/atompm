@@ -269,6 +269,7 @@ CompileUtils = function(){
 				icon.setAttr('__r',0);			
 				icon.setAttr('__sx',1);
 				icon.setAttr('__sy',1);
+				icon.setAttr('id', id);
 			}
 	
 			if( 'attrs' in options )
