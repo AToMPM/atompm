@@ -71,8 +71,12 @@ function get_all_attrs2() {
         "]";
 }
 
-function get_class_id(num){
+function get_class_div(num) {
     return "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2f ClassIcon\\2f " + (num) + "\\2e instance";
+}
+
+function get_assoc_div(num) {
+    return "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2f AssociationLink\\2f " + (num) + "\\2e instance > text:nth-child(1)";
 }
 
 module.exports = {
@@ -97,6 +101,7 @@ module.exports = {
         let canvas = "#div_canvas";
         client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
 
+        let name_field = "#tr_name > td:nth-child(2) > textarea";
 
         //BUILD CLASSES
         let start_x = 50;
@@ -107,11 +112,13 @@ module.exports = {
         let y_diff = 150;
         let y_coords = [start_y, start_y + y_diff, start_y + 2 * y_diff];
 
+        let num_classes = x_coords.length * y_coords.length;
+
         let i = 0;
         for (let x of x_coords) {
             for (let y of y_coords) {
 
-                let class_div = get_class_id(i);
+                let class_div = get_class_div(i);
                 i++;
 
                 client
@@ -123,11 +130,9 @@ module.exports = {
         }
 
         //SET NAMES FOR CLASSES
-        let num_classes = 9;
-        let name_field = "#tr_name > td:nth-child(2) > textarea";
         for (let i = 0; i < num_classes; i++) {
             let class_name = "Class" + String.fromCharCode(65 + i);
-            let class_div = get_class_id(i);
+            let class_div = get_class_div(i);
 
             client.waitForElementPresent(class_div, 1000, "Looking for class");
 
@@ -145,7 +150,7 @@ module.exports = {
         }
 
         //SET ATTRIBUTES
-        let class_div = get_class_id(0);
+        let class_div = get_class_div(0);
         let attrib_field = "#tr_attributes > td:nth-child(2) > textarea";
 
         client.moveToElement(class_div, 10, 10)
@@ -162,7 +167,7 @@ module.exports = {
 
 
         let abstract_class = 4;
-        let class_div2 = get_class_id(abstract_class);
+        let class_div2 = get_class_div(abstract_class);
         let attrib_field2 = "#tr_attributes > td:nth-child(2) > textarea";
         let checkbox = "#tr_abstract > td:nth-child(2) > input[type=\"checkbox\"]";
         client.moveToElement(class_div2, 10, 10)
@@ -185,8 +190,8 @@ module.exports = {
             [abstract_class, abstract_class + 3]];
 
         for (let inheri_set of inheri_classes) {
-            let sup = get_class_id(inheri_set[0]);
-            let sub = get_class_id(inheri_set[1]);
+            let sup = get_class_div(inheri_set[0]);
+            let sub = get_class_div(inheri_set[1]);
 
             let inheri_relation = "#div_dialog_0 > select > option:nth-child(2)";
             //tiny offset to not hit other arrows
@@ -210,7 +215,7 @@ module.exports = {
 
         //SET ASSOCS
         let assocs = [
-            //from, to, name, isContain, start_card, end_card
+            //from, to, name, isContain, out_card, in_card
 
             [0, 1, "testAssoc", false, null, null],
             [2, 3, "oneToOne", false,
@@ -244,20 +249,23 @@ module.exports = {
             ]
         ];
 
-        client.pause(1000);
-        //let i = 0;
-        for (let assoc of assocs){
+        client.pause(500);
 
-            let from_ele = get_class_id(assoc[0]);
-            let to_ele = get_class_id(assoc[1]);
+        let assoc_num = 0;
+        for (let assoc of assocs) {
+
+            let from_ele = get_class_div(assoc[0]);
+            let to_ele = get_class_div(assoc[1]);
             let name = assoc[2];
             let isContain = assoc[3];
-            let outCard = assoc[4];
-            let inCard = assoc[5];
+            let out_card = assoc[4];
+            let in_card = assoc[5];
 
-            // let assoc_num = 10 + i * 3;
-            // let assoc_div = "#div_canvas > svg > g:nth-child(" + (assoc_num) + ")";
-            // i = i + 1;
+            let cardinality_field = "#tr_cardinalities > td:nth-child(2) > textarea";
+
+            let prev_num_elements = num_classes + inheri_classes.length;
+            let assoc_div = get_assoc_div(prev_num_elements + assoc_num);
+            assoc_num++;
 
             let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
             //tiny offset to not hit other arrows
@@ -276,11 +284,62 @@ module.exports = {
                 .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes")
                 .moveToElement(canvas, 0, 100)
                 .mouseButtonClick('left')
-                .pause(500)
+                .pause(1000)
+                .waitForElementPresent(assoc_div, 3000, "Assoc name present: " + assoc_div);
+
+            if (out_card) {
+
+                client
+                    .moveToElement(from_ele, 10, 10)
+                    .mouseButtonClick('middle')
+                    .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
+                    .clearValue(cardinality_field)
+                    .setValue(cardinality_field, JSON.stringify(out_card))
+                    .click("#dialog_btn")
+                    .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
+                    .moveToElement(canvas, 0, 100)
+                    .mouseButtonClick('left')
+                    .pause(1000);
+            }
+
+            if (in_card) {
+                client
+                    .moveToElement(to_ele, 10, 10)
+                    .mouseButtonClick('middle')
+                    .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
+                    .clearValue(cardinality_field)
+                    .setValue(cardinality_field, JSON.stringify(in_card))
+                    .click("#dialog_btn")
+                    .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
+                    .moveToElement(canvas, 0, 100)
+                    .mouseButtonClick('left')
+                    .pause(1000);
+            }
+            client.getElementSize(assoc_div, function (result) {
+                client
+                    .moveToElement(assoc_div, result.value.width / 2, result.value.height / 2)
+                    .mouseButtonClick('middle')
+                    .waitForElementPresent("#dialog_btn", 5000000, "Editing assoc name opens")
+                    .clearValue(name_field)
+                    .setValue(name_field, name);
+
+                if (isContain) {
+                    let contain_opt = "#tr_linktype > td:nth-child(2) > select > option:nth-child(2)";
+
+                    client
+                        .moveToElement(contain_opt, 0, 0)
+                        .mouseButtonClick('left');
+                }
 
 
-                // .moveToElement(assoc_div, 1, 1)
-                // .mouseButtonClick('middle')
+                client
+                    .click("#dialog_btn")
+                    .waitForElementNotPresent("#dialog_btn", 1000, "Editing assoc name closes")
+                    .moveToElement(canvas, 0, 100)
+                    .mouseButtonClick('left')
+                    .pause(500);
+            })
+
             ;
         }
 
