@@ -101,6 +101,7 @@ module.exports = {
         let canvas = "#div_canvas";
         client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
 
+        let test_folder = "autotest";
         let name_field = "#tr_name > td:nth-child(2) > textarea";
         let num_elements = 0;
 
@@ -132,7 +133,7 @@ module.exports = {
             }
         }
 
-        //SET NAMES FOR CLASSES
+        // SET NAMES FOR CLASSES
         for (let i = 0; i < num_classes; i++) {
             let class_name = "Class" + String.fromCharCode(65 + i);
             let class_div = get_class_div(i);
@@ -152,7 +153,7 @@ module.exports = {
             ;
         }
 
-        //SET ATTRIBUTES
+        // SET ATTRIBUTES
         let class_div = get_class_div(0);
         let attrib_field = "#tr_attributes > td:nth-child(2) > textarea";
 
@@ -226,13 +227,13 @@ module.exports = {
             [2, 3, "oneToOne", false,
                 [{
                     "dir": "out",
-                    "type": "OneToOne",
+                    "type": "oneToOne",
                     "min": "1",
                     "max": "1"
                 }],
                 [{
                     "dir": "in",
-                    "type": "OneToOne",
+                    "type": "oneToOne",
                     "min": "1",
                     "max": "1"
                 }]
@@ -289,8 +290,8 @@ module.exports = {
                 .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes")
                 .moveToElement(canvas, 0, 100)
                 .mouseButtonClick('left')
-                .pause(1000)
-                .waitForElementPresent(assoc_div, 3000, "Assoc name present: " + assoc_div);
+                .pause(500)
+                .waitForElementPresent(assoc_div, 1000, "Assoc name present: " + assoc_div);
 
             if (out_card) {
 
@@ -304,7 +305,7 @@ module.exports = {
                     .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
                     .moveToElement(canvas, 0, 100)
                     .mouseButtonClick('left')
-                    .pause(1000);
+                    .pause(500);
             }
 
             if (in_card) {
@@ -318,13 +319,13 @@ module.exports = {
                     .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
                     .moveToElement(canvas, 0, 100)
                     .mouseButtonClick('left')
-                    .pause(1000);
+                    .pause(500);
             }
             client.getElementSize(assoc_div, function (result) {
                 client
                     .moveToElement(assoc_div, result.value.width / 2, result.value.height / 2)
                     .mouseButtonClick('middle')
-                    .waitForElementPresent("#dialog_btn", 5000000, "Editing assoc name opens")
+                    .waitForElementPresent("#dialog_btn", 1000, "Editing assoc name opens")
                     .clearValue(name_field)
                     .setValue(name_field, name);
 
@@ -349,8 +350,7 @@ module.exports = {
         }
 
         //CREATE CONSTRAINT
-        let div_id = num_elements;
-        let constraint_div = get_class_div(div_id).replace("ClassIcon", "GlobalConstraintIcon");
+        let constraint_div = get_class_div(num_elements).replace("ClassIcon", "GlobalConstraintIcon");
 
         let constraintIcon = "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2e metamodel\\2f GlobalConstraintIcon";
         client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
@@ -383,7 +383,73 @@ module.exports = {
             .pause(1000);
 
 
-        client.pause(200000);
+        //SAVE MODEL
+        let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModel";
+        let new_file_text = "#new_file";
+        let model_name = "autotest.model";
+
+        client.waitForElementPresent(save_button, 1000, "Looking for save button")
+            .click(save_button)
+            .waitForElementPresent("#dialog_btn", 1000, "Save menu opens");
+
+        let test_folder_div = "#" + test_folder;
+        client.element('css selector', test_folder_div, function (result) {
+                if (result.status == -1) {
+                    let new_folder_btn = "#new_folder";
+                    client.click(new_folder_btn)
+                        .setAlertText(test_folder)
+                        .acceptAlert();
+                }
+                client.click(test_folder_div);
+
+                client.element('css selector', "#" + model_name, function (result) {
+                        if (result.status == -1) {
+                            client.click(new_file_text)
+                                .clearValue(new_file_text)
+                                .setValue(new_file_text, model_name)
+                                .click("#dialog_btn");
+                        } else {
+                            client.click("#" + model_name)
+                                .click("#dialog_btn");
+                        }
+
+                        client.waitForElementNotPresent("#dialog_btn", 1000, "Save menu closes");
+                    }
+                );
+            }
+        );
+
+        //COMPILE TO ASMM
+
+        let ASMM_button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToASMM";
+        client.waitForElementPresent(ASMM_button, 1000, "Looking for ASMM button")
+            .click(ASMM_button)
+            .waitForElementPresent("#dialog_btn", 2000, "ASMM menu opens");
+
+        client.element('css selector', test_folder_div, function (result) {
+            if (result.status != -1) {
+                client.click(test_folder_div);
+            }
+        });
+
+
+        let metamodel_name = "autotest.metamodel";
+        client.element('css selector', "#" + metamodel_name, function (result) {
+                if (result.status == -1) {
+                    client.click(new_file_text)
+                        .clearValue(new_file_text)
+                        .setValue(new_file_text, metamodel_name)
+                        .click("#dialog_btn");
+                } else {
+                    client.click("#" + metamodel_name)
+                        .click("#dialog_btn");
+                }
+
+                client.waitForElementNotPresent("#dialog_btn", 2000, "ASMM menu closes");
+            }
+        );
+
+        client.pause(500);
     },
 
     after: function (client) {

@@ -1409,6 +1409,11 @@ module.exports = {
 					types2legalNeighborTypes[type].forEach(
 							function(ntype)
 							{
+								if (types2legalNeighborTypes[ntype] == undefined){
+									let msg = "Error! Problem with edges for class: " + type +"\nFound constraints: " + JSON.stringify(types2legalNeighborTypes[type]);
+									throw msg;
+								}
+
 								types2legalNeighborTypes[ntype].forEach(
 									function(nntype)
 									{
@@ -1426,7 +1431,7 @@ module.exports = {
 			}
 			catch(err)
 			{
-				return {'$err':'invalid metamodel model, crashed on :: '+err};
+				return {'$err':'invalid metamodel model, crashed on :: ' + err};
 			}
 		},
 
