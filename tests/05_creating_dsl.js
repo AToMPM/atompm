@@ -289,9 +289,9 @@ module.exports = {
                     .pause(500);
             }
             client.getElementSize(assoc_div, function (result) {
-                client
-                    .moveToElement(assoc_div, result.value.width / 2, result.value.height / 2)
-                    .mouseButtonClick('middle')
+
+                model_building_utils.move_to_element_ratio(client, assoc_div, 50, 50)
+                client.mouseButtonClick('middle')
                     .waitForElementPresent("#dialog_btn", 1000, "Editing assoc name opens")
                     .clearValue(name_field)
                     .setValue(name_field, name);
@@ -422,8 +422,82 @@ module.exports = {
 
     'Create CS model': function (client) {
 
+        let filename = '/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax.defaultIcons.metamodel';
+        test_utils.load_toolbar(client, [filename]);
 
+        let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/IconIcon";
+        client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
+        client.click(classIcon);
 
+        let canvas = "#div_canvas";
+        client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
+
+        let test_folder = "autotest";
+        let name_field = "#tr_typename > td:nth-child(2) > textarea";
+        let num_elements = 0;
+
+        //BUILD CLASSES
+        let icon_type = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/IconIcon\\/";
+
+        let start_x = 50;
+        let x_diff = 350;
+        let x_coords = [start_x];//, start_x + x_diff];//, start_x + 2 * x_diff];
+
+        let start_y = 200;
+        let y_diff = 200;
+        let y_coords = [start_y];//, start_y + y_diff];//, start_y + 2 * y_diff];
+
+        let num_classes = x_coords.length * y_coords.length;
+
+        num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements, icon_type);
+
+        // SET NAMES FOR CLASSES
+        for (let i = 0; i < num_classes; i++) {
+            let class_name = "Class" + String.fromCharCode(65 + i) + "Icon";
+            let attrs = {};
+            attrs[name_field] = class_name;
+            model_building_utils.set_attribs(client, i, attrs, icon_type);
+        }
+
+        // BUILD TEXT FOR ICONS
+        let textIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/TextIcon";
+        let textType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/TextIcon\\/";
+        let textContent_field = "#tr_textContent > td:nth-child(2) > textarea";
+
+        client.waitForElementPresent(textIcon, 2000, "Check for text icon...");
+        client.click(textIcon);
+
+        for (let i = 0; i < num_classes; i++) {
+
+            let text = "Class" + String.fromCharCode(65 + i);
+
+            let textDiv = model_building_utils.build_div(textType, num_elements);
+            let iconDiv = model_building_utils.build_div(icon_type, i);
+
+            let attrs = {};
+            attrs[textContent_field] = text;
+
+            client
+                .pause(300)
+                .moveToElement(canvas, 20, 200)
+                .mouseButtonClick('right')
+                .pause(500)
+                .waitForElementPresent(textDiv, 500, "Created text: " + textDiv);
+
+            model_building_utils.set_attribs(client, num_elements, attrs, textType);
+
+            client.moveToElement(textDiv, 10, 10)
+                .mouseButtonClick('left')
+                .pause(300)
+                .mouseButtonDown('left');
+
+            model_building_utils.move_to_element_ratio(client, iconDiv, 50, 10);
+            client.mouseButtonUp('left');
+
+            num_elements++;
+
+            client.pause(2000);
+        }
     },
 
     after: function (client) {
