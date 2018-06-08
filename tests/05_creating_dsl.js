@@ -804,19 +804,19 @@ module.exports = {
         //BUILD CLASSES
         let icon_type = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/IconIcon\\/";
 
-        let start_x = 50;
+        let start_x = 200;
         let x_diff = 350;
-        let x_coords = [start_x];//, start_x + x_diff];//, start_x + 2 * x_diff];
+        let x_coords = [start_x, start_x + x_diff, start_x + 2 * x_diff];
 
-        let start_y = 200;
-        let y_diff = 200;
-        let y_coords = [start_y];//, start_y + y_diff];//, start_y + 2 * y_diff];
+        let start_y = 150;
+        let y_diff = 180;
+        let y_coords = [start_y, start_y + y_diff, start_y + 2 * y_diff];
 
         let num_classes = x_coords.length * y_coords.length;
 
         num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements, icon_type);
 
-        // SET NAMES FOR CLASSES
+        //SET NAMES FOR CLASSES
         for (let i = 0; i < num_classes; i++) {
             let class_name = "Class" + String.fromCharCode(65 + i) + "Icon";
             let attrs = {};
@@ -851,18 +851,75 @@ module.exports = {
 
             model_building_utils.set_attribs(client, num_elements, attrs, textType);
 
+            num_elements++;
+
             client.moveToElement(textDiv, 10, 10)
                 .mouseButtonClick('left')
                 .pause(300)
-                .mouseButtonDown('left');
+                .mouseButtonDown('left')
+                .pause(300);
 
-            model_building_utils.move_to_element_ratio(client, iconDiv, 50, 10);
+            model_building_utils.move_to_element_ratio(client, iconDiv, 35, 15);
             client.mouseButtonUp('left');
+
+            model_building_utils.click_off(client);
+
+            //inner link counts as an element
+            num_elements++;
+        }
+
+
+        // BUILD SYMBOLS FOR ICONS
+        let symbols = ["RectangleIcon", "CircleIcon", "EllipseIcon", "PolygonIcon", "StarIcon", "PathIcon", "ImageIcon"];
+        let getIcon = function (type) {
+            return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/" + type;
+        };
+        let getType = function (type) {
+            return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/" + type + "\\/";
+        };
+
+        for (let i = 0; i < num_classes; i++) {
+
+            let currSymbol = symbols[i % symbols.length];
+            client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...");
+            client.click(getIcon(currSymbol));
+
+
+            let symbolDiv = model_building_utils.build_div(getType(currSymbol), num_elements);
+            console.log(currSymbol);
+            console.log(symbolDiv);
+            let iconDiv = model_building_utils.build_div(icon_type, i);
+
+
+            client
+                .pause(300)
+                .moveToElement(canvas, 50, 200)
+                .mouseButtonClick('right')
+                .pause(1000)
+                .waitForElementPresent(symbolDiv, 500, "Created symbol: " + symbolDiv);
+
+            model_building_utils.click_off(client);
 
             num_elements++;
 
-            client.pause(2000);
+            model_building_utils.move_to_element_ratio(client, symbolDiv, 50, 50);
+            client
+                .mouseButtonClick('left')
+                .pause(300)
+                .mouseButtonDown('left')
+                .pause(300);
+
+            model_building_utils.move_to_element_ratio(client, iconDiv, 30, 40);
+            client.pause(300).mouseButtonUp('left');
+
+            model_building_utils.click_off(client);
+
+            //inner link counts as an element
+            num_elements++;
         }
+
+        client.pause(1000);
+
     },
 
     after: function (client) {
