@@ -368,6 +368,7 @@ class FileBrowser{
                     subfolders.forEach(function (subfolder) {
                         var navbutton = $('<button>');
                         navbutton.html(subfolder);
+                        navbutton.attr('id', 'navbar_' + subfolder);
                         navbutton.click(navbuttononclick);
                         navdiv.append(navbutton);
                     });
