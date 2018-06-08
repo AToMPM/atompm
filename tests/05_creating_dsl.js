@@ -72,6 +72,41 @@ function get_all_attrs2() {
         "]";
 }
 
+let assocs = [
+    //from, to, name, isContain, out_card, in_card
+
+    [0, 1, "testAssoc", false, null, null],
+    [2, 3, "oneToOne", false,
+        [{
+            "dir": "out",
+            "type": "oneToOne",
+            "min": "1",
+            "max": "1"
+        }],
+        [{
+            "dir": "in",
+            "type": "oneToOne",
+            "min": "1",
+            "max": "1"
+        }]
+    ],
+    [4, 5, "ManyToOne", false,
+        null,
+        [{
+            "dir": "in",
+            "type": "ManyToOne",
+            "min": "0",
+            "max": "1"
+        }]
+    ],
+    [6, 7, "Containment", true,
+        null, null
+    ],
+    [8, 8, "self", false,
+        null, null
+    ]
+];
+
 
 module.exports = {
 
@@ -187,40 +222,7 @@ module.exports = {
         }
 
         //SET ASSOCS
-        let assocs = [
-            //from, to, name, isContain, out_card, in_card
 
-            [0, 1, "testAssoc", false, null, null],
-            [2, 3, "oneToOne", false,
-                [{
-                    "dir": "out",
-                    "type": "oneToOne",
-                    "min": "1",
-                    "max": "1"
-                }],
-                [{
-                    "dir": "in",
-                    "type": "oneToOne",
-                    "min": "1",
-                    "max": "1"
-                }]
-            ],
-            [4, 5, "ManyToOne", false,
-                null,
-                [{
-                    "dir": "in",
-                    "type": "ManyToOne",
-                    "min": "0",
-                    "max": "1"
-                }]
-            ],
-            [6, 7, "Containment", true,
-                null, null
-            ],
-            [8, 8, "self", false,
-                null, null
-            ]
-        ];
 
         client.pause(500);
 
@@ -351,70 +353,15 @@ module.exports = {
 
 
         //SAVE MODEL
-        let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModel";
-        let new_file_text = "#new_file";
         let model_name = "autotest.model";
+        let folder_name = "autotest";
+        model_building_utils.save_model(client, folder_name, model_name);
 
-        client.waitForElementPresent(save_button, 1000, "Looking for save button")
-            .click(save_button)
-            .waitForElementPresent("#dialog_btn", 1000, "Save menu opens");
-
-        let test_folder_div = "#" + test_folder;
-        client.element('css selector', test_folder_div, function (result) {
-                if (result.status == -1) {
-                    let new_folder_btn = "#new_folder";
-                    client.click(new_folder_btn)
-                        .setAlertText(test_folder)
-                        .acceptAlert();
-                }
-                client.click(test_folder_div);
-
-                client.element('css selector', "#" + model_name, function (result) {
-                        if (result.status == -1) {
-                            client.click(new_file_text)
-                                .clearValue(new_file_text)
-                                .setValue(new_file_text, model_name)
-                                .click("#dialog_btn");
-                        } else {
-                            client.click("#" + model_name)
-                                .click("#dialog_btn");
-                        }
-
-                        client.waitForElementNotPresent("#dialog_btn", 1000, "Save menu closes");
-                    }
-                );
-            }
-        );
 
         //COMPILE TO ASMM
 
-        let ASMM_button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToASMM";
-        client.waitForElementPresent(ASMM_button, 1000, "Looking for ASMM button")
-            .click(ASMM_button)
-            .waitForElementPresent("#dialog_btn", 2000, "ASMM menu opens");
-
-        client.element('css selector', test_folder_div, function (result) {
-            if (result.status != -1) {
-                client.click(test_folder_div);
-            }
-        });
-
-
         let metamodel_name = "autotest.metamodel";
-        client.element('css selector', "#" + metamodel_name, function (result) {
-                if (result.status == -1) {
-                    client.click(new_file_text)
-                        .clearValue(new_file_text)
-                        .setValue(new_file_text, metamodel_name)
-                        .click("#dialog_btn");
-                } else {
-                    client.click("#" + metamodel_name)
-                        .click("#dialog_btn");
-                }
-
-                client.waitForElementNotPresent("#dialog_btn", 2000, "ASMM menu closes");
-            }
-        );
+        model_building_utils.compile_model(client, "AS", folder_name, metamodel_name);
 
         client.pause(500);
     },
@@ -440,7 +387,7 @@ module.exports = {
         let icon_type = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/IconIcon\\/";
 
         let start_x = 200;
-        let x_diff = 350;
+        let x_diff = 250;
         let x_coords = [start_x, start_x + x_diff, start_x + 2 * x_diff];
 
         let start_y = 150;
@@ -505,7 +452,7 @@ module.exports = {
 
 
         // BUILD SYMBOLS FOR ICONS
-        let symbols = ["RectangleIcon", "CircleIcon", "EllipseIcon", "PolygonIcon", "StarIcon", "PathIcon", "ImageIcon"];
+        let symbols = ["RectangleIcon", "CircleIcon", "StarIcon", "PolygonIcon", "EllipseIcon", "EllipseIcon", "PathIcon", "ImageIcon"];
         let getIcon = function (type) {
             return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/" + type;
         };
@@ -521,8 +468,6 @@ module.exports = {
 
 
             let symbolDiv = model_building_utils.build_div(getType(currSymbol), num_elements);
-            console.log(currSymbol);
-            console.log(symbolDiv);
             let iconDiv = model_building_utils.build_div(icon_type, i);
 
 
@@ -552,6 +497,42 @@ module.exports = {
             //inner link counts as an element
             num_elements++;
         }
+
+        // BUILD LINKS
+        let linkIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/LinkIcon";
+        let linkType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/LinkIcon\\/";
+        let link_typename_field = "#tr_typename > td:nth-child(2) > textarea";
+
+        let link_y_coords = [];
+        let link_x_coords = [start_x + 3 * x_diff, start_x + 4 * x_diff];
+
+        for (let i = 0; i < assocs.length / 2; i++) {
+            link_y_coords.push(start_y + i * y_diff);
+        }
+
+        client.waitForElementPresent(linkIcon, 2000, "Check for link icon...");
+        client.click(linkIcon);
+
+        let num_elements_before = num_elements;
+        model_building_utils.create_classes(client, link_x_coords, link_y_coords, num_elements, linkType);
+
+        //SET NAMES FOR LINKS
+        for (let i = 0; i < assocs.length; i++) {
+            let link_name = assocs[i][2] + "Link";
+            let attrs = {};
+            attrs[link_typename_field] = link_name;
+            model_building_utils.set_attribs(client, num_elements_before + i, attrs, linkType);
+        }
+
+        //remove unneeded elements
+        model_building_utils.delete_element(client, model_building_utils.build_div(icon_type, 4));
+        model_building_utils.delete_element(client, model_building_utils.build_div(linkType, 50));
+
+
+        let folder_name = "autotest";
+        model_building_utils.save_model(client, folder_name, "autotestCS.model");
+
+        model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
 
         client.pause(1000);
 

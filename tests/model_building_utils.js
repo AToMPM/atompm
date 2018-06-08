@@ -23,7 +23,7 @@ function create_classes(client, x_coords, y_coords, curr_num_elements, element_t
 
             let class_div = "";
             if (element_type != undefined){
-                class_div = element_type + (curr_num_elements) + "\\2e instance";
+                class_div = this.build_div(element_type, curr_num_elements);
             } else {
                 class_div = this.get_class_div(curr_num_elements);
             }
@@ -85,6 +85,100 @@ function click_off(client){
         .mouseButtonClick('left');
 }
 
+function save_model(client, folder_name, model_name){
+        let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModel";
+        let new_file_text = "#new_file";
+
+        client.waitForElementPresent(save_button, 1000, "Looking for save button")
+            .click(save_button)
+            .waitForElementPresent("#dialog_btn", 1000, "Save menu opens");
+
+        let root_button = "#navbar_\\2f";
+        client.waitForElementPresent(root_button, 1000, "Find root button")
+            .click(root_button);
+
+        let folder_name_div = "#" + folder_name;
+        client.element('css selector', folder_name_div, function (result) {
+                if (result.status == -1) {
+                    let new_folder_btn = "#new_folder";
+                    client.click(new_folder_btn)
+                        .setAlertText(folder_name)
+                        .acceptAlert();
+                }
+                client.click(folder_name_div);
+
+                client.element('css selector', "#" + model_name, function (result) {
+                        if (result.status == -1) {
+                            client.click(new_file_text)
+                                .clearValue(new_file_text)
+                                .setValue(new_file_text, model_name)
+                                .pause(200)
+                                .click("#dialog_btn");
+                        } else {
+                            client.click("#" + model_name)
+                                .pause(200)
+                                .click("#dialog_btn");
+                        }
+
+                        client.waitForElementNotPresent("#dialog_btn", 1000, "Save menu closes");
+                    }
+                );
+            }
+        );
+}
+
+function compile_model(client, compile_type, folder_name, model_name){
+
+
+        let button = "";
+        let button_name = compile_type;
+
+        if (button_name == "AS"){
+            button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToASMM";
+        }else if (button_name == "CS"){
+            button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToCSMM";
+        }
+
+
+        client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
+            .click(button)
+            .waitForElementPresent("#dialog_btn", 2000, button_name + " menu opens");
+
+        let root_button = "#navbar_\\2f";
+        client.waitForElementPresent(root_button, 1000, "Find root button")
+            .click(root_button);
+
+        let folder_div = "#" + folder_name;
+        client.element('css selector', folder_div, function (result) {
+            if (result.status != -1) {
+                client.click(folder_div);
+            }
+        });
+
+        let new_file_text = "#new_file";
+        client.element('css selector', "#" + model_name, function (result) {
+                if (result.status == -1) {
+                    client.click(new_file_text)
+                        .clearValue(new_file_text)
+                        .setValue(new_file_text, model_name)
+                        .click("#dialog_btn");
+                } else {
+                    client.click("#" + model_name)
+                        .click("#dialog_btn");
+                }
+
+                client.waitForElementNotPresent("#dialog_btn", 2000, button_name + " menu closes");
+            }
+        );
+}
+
+function delete_element(client, element){
+    client.moveToElement(element, 10, 10);
+    client.mouseButtonClick('left');
+    client.keys(client.Keys.DELETE);
+    this.click_off(client);
+}
+
 module.exports = {
     '@disabled': true,
     get_element_div,
@@ -92,7 +186,10 @@ module.exports = {
     get_class_div,
     build_div,
     create_classes,
+    delete_element,
     set_attribs,
     move_to_element_ratio,
-    click_off
+    click_off,
+    save_model,
+    compile_model
 };
