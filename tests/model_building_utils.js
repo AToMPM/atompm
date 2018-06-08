@@ -43,13 +43,16 @@ function create_classes(client, x_coords, y_coords, curr_num_elements, element_t
 
 function set_attribs(client, num, attrs, element_type) {
 
-    let class_div = "";
+    let element_div = "";
     if (element_type != undefined){
-        class_div = element_type + (num) + "\\2e instance";
+        element_div = this.build_div(element_type, num);
     } else {
-        class_div = this.get_class_div(num);
+        element_div = this.get_class_div(num);
     }
-    client.moveToElement(class_div, 10, 10)
+    //"#\\2f Formalisms\\2f __LanguageSyntax__\\2f ConcreteSyntax\\2f ConcreteSyntax\\2e defaultIcons\\2f TextIcon\\2f 1\\2e instance"
+    client
+        .waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div)
+        .moveToElement(element_div, 10, 10)
         .mouseButtonClick('middle')
         .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens");
 
@@ -70,10 +73,16 @@ function set_attribs(client, num, attrs, element_type) {
 function move_to_element_ratio(client, element, x_ratio, y_ratio){
 
     client.getElementSize(element, function (result) {
-        let x_pos = x_ratio/100 * result.value.width;
-        let y_pos = y_ratio/100 * result.value.height;
+        let x_pos = Math.trunc(x_ratio/100 * result.value.width);
+        let y_pos = Math.trunc(y_ratio/100 * result.value.height);
         client.moveToElement(element, x_pos, y_pos);
     });
+}
+
+function click_off(client){
+    client
+        .moveToElement(canvas, 0, 100)
+        .mouseButtonClick('left');
 }
 
 module.exports = {
@@ -84,5 +93,6 @@ module.exports = {
     build_div,
     create_classes,
     set_attribs,
-    move_to_element_ratio
+    move_to_element_ratio,
+    click_off
 };
