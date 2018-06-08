@@ -805,7 +805,7 @@ module.exports = {
         let icon_type = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/IconIcon\\/";
 
         let start_x = 200;
-        let x_diff = 350;
+        let x_diff = 250;
         let x_coords = [start_x, start_x + x_diff, start_x + 2 * x_diff];
 
         let start_y = 150;
@@ -870,7 +870,7 @@ module.exports = {
 
 
         // BUILD SYMBOLS FOR ICONS
-        let symbols = ["RectangleIcon", "CircleIcon", "EllipseIcon", "PolygonIcon", "StarIcon", "PathIcon", "ImageIcon"];
+        let symbols = ["RectangleIcon", "CircleIcon", "StarIcon", "PolygonIcon", "EllipseIcon", "EllipseIcon", "PathIcon", "ImageIcon"];
         let getIcon = function (type) {
             return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/" + type;
         };
@@ -886,8 +886,6 @@ module.exports = {
 
 
             let symbolDiv = model_building_utils.build_div(getType(currSymbol), num_elements);
-            console.log(currSymbol);
-            console.log(symbolDiv);
             let iconDiv = model_building_utils.build_div(icon_type, i);
 
 
@@ -917,6 +915,42 @@ module.exports = {
             //inner link counts as an element
             num_elements++;
         }
+
+        // BUILD LINKS
+        let linkIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/LinkIcon";
+        let linkType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/LinkIcon\\/";
+        let link_typename_field = "#tr_typename > td:nth-child(2) > textarea";
+
+        let link_y_coords = [];
+        let link_x_coords = [start_x + 3 * x_diff, start_x + 4 * x_diff];
+
+        for (let i = 0; i < assocs.length / 2; i++) {
+            link_y_coords.push(start_y + i * y_diff);
+        }
+
+        client.waitForElementPresent(linkIcon, 2000, "Check for link icon...");
+        client.click(linkIcon);
+
+        let num_elements_before = num_elements;
+        model_building_utils.create_classes(client, link_x_coords, link_y_coords, num_elements, linkType);
+
+        //SET NAMES FOR LINKS
+        for (let i = 0; i < assocs.length; i++) {
+            let link_name = assocs[i][2] + "Link";
+            let attrs = {};
+            attrs[link_typename_field] = link_name;
+            model_building_utils.set_attribs(client, num_elements_before + i, attrs, linkType);
+        }
+
+        //remove unneeded elements
+        model_building_utils.delete_element(client, model_building_utils.build_div(icon_type, 4));
+        model_building_utils.delete_element(client, model_building_utils.build_div(linkType, 50));
+
+
+        let folder_name = "autotest";
+        model_building_utils.save_model(client, folder_name, "autotestCS.model");
+
+        model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
 
         client.pause(1000);
 
