@@ -870,7 +870,7 @@ module.exports = {
 
 
         // BUILD SYMBOLS FOR ICONS
-        let symbols = ["RectangleIcon", "CircleIcon", "StarIcon", "PolygonIcon", "EllipseIcon", "EllipseIcon", "PathIcon", "ImageIcon"];
+        let symbols = ["PathIcon", "CircleIcon", "StarIcon", "PolygonIcon", "EllipseIcon", "EllipseIcon", "RectangleIcon", "ImageIcon"];
         let getIcon = function (type) {
             return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/" + type;
         };
@@ -907,7 +907,7 @@ module.exports = {
                 .mouseButtonDown('left')
                 .pause(300);
 
-            model_building_utils.move_to_element_ratio(client, iconDiv, 30, 40);
+            model_building_utils.move_to_element_ratio(client, iconDiv, 50, 55);
             client.pause(300).mouseButtonUp('left');
 
             model_building_utils.click_off(client);
@@ -951,6 +951,110 @@ module.exports = {
         model_building_utils.save_model(client, folder_name, "autotestCS.model");
 
         model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
+
+        client.pause(1000);
+
+    },
+
+    'Create model': function (client) {
+
+        let test_toolbar = '/autotest/autotest.defaultIcons.metamodel';
+        test_utils.load_toolbar(client, [test_toolbar]);
+
+        let class_names = [];
+        for (let i = 0; i < 9; i++) {
+            let class_name = "Class" + String.fromCharCode(65 + i) + "Icon";
+
+            if (class_name == "ClassEIcon") {
+                continue; //skip ClassEIcon
+            }
+            class_names.push(class_name);
+        }
+
+        //BUILD CLASSES
+        let class_icon = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e metamodel\\2f ";
+        let class_type = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2f ";
+
+        let start_x = 200;
+        let x_diff = 300;
+        let x_coords = [start_x, start_x + x_diff, start_x + 2 * x_diff];
+
+        let start_y = 150;
+        let y_diff = 180;
+        let y_coords = [start_y, start_y + y_diff, start_y + 2 * y_diff];
+
+        let coords = [];
+        for (let x of x_coords) {
+            for (let y of y_coords) {
+                coords.push([x, y]);
+            }
+        }
+
+        let num_elements = 0;
+        let element_map = {};
+
+        for (let i = 0; i < class_names.length; i++) {
+            let class_name = class_names[i];
+            let class_btn = class_icon + class_name;
+
+            client.waitForElementPresent(class_btn, 2000, "Check for class icon: " + class_btn);
+            client.click(class_btn);
+
+            let class_div = class_type + class_name + "\\2f ";
+
+            let built_class_div = model_building_utils.create_class(client, coords[i][0], coords[i][1], num_elements, class_div);
+
+            element_map[class_name] = built_class_div;
+
+            num_elements++;
+
+        }
+
+        model_building_utils.click_off(client);
+
+        // BUILD ASSOCIATIONS
+        for (let assoc of assocs) {
+            let from_class_name = "Class" + String.fromCharCode(65 + assoc[0]) + "Icon";
+            let to_class_name = "Class" + String.fromCharCode(65 + assoc[1]) + "Icon";
+
+            if (from_class_name == "ClassEIcon") {
+                from_class_name = "ClassHIcon";
+            }
+
+            if (to_class_name == "ClassEIcon") {
+                from_class_name = "ClassFIcon";
+            }
+
+            //select the text of the class
+            let text_div = " > text:nth-child(1)";
+            let from_class_div = element_map[from_class_name] + text_div;
+            let to_class_div = element_map[to_class_name] + text_div;
+
+            // console.log(from_class_div);
+            // console.log(to_class_div);
+
+
+            let isContainAssoc = assoc[3];
+            if (!isContainAssoc) {
+                model_building_utils.move_to_element_ratio(client, from_class_div, 30, 50);
+                client.mouseButtonDown('right');
+                model_building_utils.move_to_element_ratio(client, to_class_div, 70, 50);
+                client.mouseButtonUp('right').pause(2000);
+            } else {
+                model_building_utils.move_to_element_ratio(client, to_class_div, 30, 50);
+                client.mouseButtonClick('left').pause(500);
+                client.mouseButtonDown('left');
+                model_building_utils.move_to_element_ratio(client, from_class_div, 50, 120);
+                client.mouseButtonUp('left').pause(2000);
+            }
+
+            model_building_utils.click_off(client);
+
+        }
+        
+        // SAVE INSTANCE MODEL
+        let folder_name = "autotest";
+        model_building_utils.save_model(client, folder_name, "autotest_instance.model");
 
         client.pause(1000);
 
