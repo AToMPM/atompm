@@ -8,7 +8,7 @@ __specialTypes = {
 
 	'$CARDINALITY':'map<[dir,type,min,max],[string,string,string,string]>',
 
-	'$EVENT':'ENUM(pre-connect,pre-create,pre-disconnect,pre-delete,pre-edit,post-connect,post-create,post-disconnect,post-delete,post-edit)',
+	'$EVENT':'ENUM(pre-connect,pre-create,pre-disconnect,pre-delete,pre-edit,post-connect,post-create,post-disconnect,post-delete,post-edit,validate)',
 
 	'$EVENT_HANDLER':'map<[name,event,code],[string,$EVENT,code]>',
 	

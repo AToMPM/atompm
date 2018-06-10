@@ -813,41 +813,55 @@ module.exports = {
 				types2ids[type].push(id);
 			}
 
-			for( var i in allHandlers )
-			{
-				var handler = allHandlers[i];
-				if( _utils.contains(events,handler['event']) )
-				{
-					if( handler['targetType'] == '*' )
-					{
-						for( var j in ids )
-							if( (res = this.__runDesignerCode(
-														handler['code'],
-														handler['event']+' '+handler['name'],
-														handlerType,
-														ids[j])) )
-								return res;
+            for (let i in allHandlers) {
+                let handler = allHandlers[i];
 
-						if( ids.length == 0 )
-							if( (res = this.__runDesignerCode(
-														handler['code'],
-														handler['event']+' '+handler['name'],
-														handlerType)) )
-								return res;
-					}
-					else
-						for( var j in types2ids[handler['targetType']] )
-						{
-							var id = types2ids[handler['targetType']][j];
-							if( (res = this.__runDesignerCode(
-														handler['code'],
-														handler['event']+' '+handler['name'],
-														handlerType,
-														id)) )
-								return res;
-						}
-				}
-			}
+                let handled = _utils.contains(events, handler['event']) ||
+                    (_utils.contains(events, "validate") && handler['event'] == ""); //handle legacy events
+
+                if (!handled) {
+                    continue;
+                }
+                if (handler['targetType'] == '*') {
+                    let result = null;
+                    for (let j in ids) {
+                        result = this.__runDesignerCode(
+                            handler['code'],
+                            handler['event'] + ' ' + handler['name'],
+                            handlerType,
+                            ids[j]);
+                        if (result) {
+                            return result;
+                        }
+                    }
+
+                    if (ids.length == 0) {
+                        result = this.__runDesignerCode(
+                            handler['code'],
+                            handler['event'] + ' ' + handler['name'],
+                            handlerType);
+
+                        if (result) {
+                            return result;
+                        }
+                    }
+                }
+                else {
+                    for (let j in types2ids[handler['targetType']]) {
+                        let id = types2ids[handler['targetType']][j];
+                        let result = this.__runDesignerCode(
+                            handler['code'],
+                            handler['event'] + ' ' + handler['name'],
+                            handlerType,
+                            id);
+
+                        if (result) {
+                            return result;
+                        }
+                    }
+                }
+
+            }
 		},
 
 
@@ -954,10 +968,13 @@ module.exports = {
                     checked_for_loops= checked_for_loops.concat(visited);
                 }
 			}
-			
-			for( var metamodel in this.metamodels )
-				if( (err=this.__runEventHandlers(this.metamodels[metamodel]['constraints'], [''], [], 'constraint')) )
-					return err;
+
+            for (let metamodel in this.metamodels) {
+
+                let err = this.__runEventHandlers(this.metamodels[metamodel]['constraints'], ['validate'], [], 'constraint');
+                if (err)
+                    return err;
+            }
 		},
 
 
