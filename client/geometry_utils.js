@@ -305,6 +305,7 @@ GeometryUtils = function(){
 					var img = $('<img>');
 					img.attr('class', 'geometry_ctrl');
 					img.attr('src', 'client/media/'+x+'.png');
+					img.attr('id', x + "_btn");
 
 					let wheelFunc = function(event)
 					{
@@ -327,6 +328,7 @@ GeometryUtils = function(){
 			var img = $('<img>');
 			img.attr('class', 'geometry_ctrl');
 			img.attr('src', 'client/media/ok.png');
+			img.attr('id', "ok_btn");
 			img.click(function(event) {GeometryUtils.transformSelection(__GEOM_TRANSF);});
 			geometryControlsOverlay.append(img);
 		}

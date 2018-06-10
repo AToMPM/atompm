@@ -633,12 +633,38 @@ module.exports = {
             model_building_utils.click_off(client);
 
         }
-        
+
+        //SCALE AND ROTATE TESTS
+
+        let scale_element_div = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassDIcon\\/3\\.instance";
+        model_building_utils.move_to_element_ratio(client, scale_element_div, 50, 50);
+        client.mouseButtonClick('left').pause(300);
+        //client.setValue(scale_element_div, client.Keys.CONTROL);
+
+        //TODO: Can't send CONTROL key
+        client.execute(function () {
+            GeometryUtils.showGeometryControlsOverlay();
+        }, [], null);
+
+
+        let resize_btn_div = "#resize_btn";
+        let resizeH_btn_div = "#resizeH_btn";
+        let resizeW_btn_div = "#resizeW_btn";
+        let rotate_btn_div = "#rotate_btn";
+        let ok_btn_div = "#ok_btn";
+
+        model_building_utils.scroll_geometry_element(client, resize_btn_div, 120, 8);
+        model_building_utils.scroll_geometry_element(client, resizeH_btn_div, -60, 8);
+        model_building_utils.scroll_geometry_element(client, resizeW_btn_div, -60, 8);
+        model_building_utils.scroll_geometry_element(client, rotate_btn_div, 120, 8);
+        client.click(ok_btn_div);
+
         // SAVE INSTANCE MODEL
         let folder_name = "autotest";
         model_building_utils.save_model(client, folder_name, "autotest_instance.model");
 
         client.pause(1000);
+
 
     },
 

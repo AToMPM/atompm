@@ -188,6 +188,20 @@ function delete_element(client, element){
     this.click_off(client);
 }
 
+function scroll_geometry_element(client, element, scrollAmount, scrollTimes){
+        client.waitForElementPresent(element, 2000, element + " present");
+        this.move_to_element_ratio(client, element, 50, 50);
+        client.execute(function(btn_div, scrollAmount, scrollTimes){
+            let element = $(btn_div);
+            for (let i=0; i < scrollTimes; i++){
+                element.get(0).onwheel(scrollAmount);
+            }
+        }, [element, scrollAmount, scrollTimes], null);
+
+        client.pause(1000);
+}
+
+
 module.exports = {
     '@disabled': true,
     get_element_div,
@@ -201,5 +215,6 @@ module.exports = {
     move_to_element_ratio,
     click_off,
     save_model,
-    compile_model
+    compile_model,
+    scroll_geometry_element
 };
