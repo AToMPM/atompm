@@ -337,9 +337,8 @@ module.exports = {
             }
 
             if (in_card) {
-                client
-                    .moveToElement(to_ele, 10, 10)
-                    .mouseButtonClick('middle')
+                model_building_utils.move_to_element_ratio(client, to_ele, 50, 50);
+                client.mouseButtonClick('middle')
                     .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
                     .clearValue(cardinality_field)
                     .setValue(cardinality_field, JSON.stringify(in_card))
@@ -351,7 +350,7 @@ module.exports = {
             }
             client.getElementSize(assoc_div, function (result) {
 
-                model_building_utils.move_to_element_ratio(client, assoc_div, 50, 50)
+                model_building_utils.move_to_element_ratio(client, assoc_div, 50, 50);
                 client.mouseButtonClick('middle')
                     .waitForElementPresent("#dialog_btn", 1000, "Editing assoc name opens")
                     .clearValue(name_field)
@@ -1053,7 +1052,6 @@ module.exports = {
         }
 
         //SCALE AND ROTATE TESTS
-
         let scale_element_div = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassDIcon\\/3\\.instance";
         model_building_utils.move_to_element_ratio(client, scale_element_div, 50, 50);
         client.mouseButtonClick('left').pause(300);
@@ -1072,10 +1070,31 @@ module.exports = {
         let ok_btn_div = "#ok_btn";
 
         model_building_utils.scroll_geometry_element(client, resize_btn_div, 120, 8);
-        model_building_utils.scroll_geometry_element(client, resizeH_btn_div, -60, 8);
-        model_building_utils.scroll_geometry_element(client, resizeW_btn_div, -60, 8);
+        model_building_utils.scroll_geometry_element(client, resizeH_btn_div, -120, 4);
+        model_building_utils.scroll_geometry_element(client, resizeW_btn_div, -120, 4);
         model_building_utils.scroll_geometry_element(client, rotate_btn_div, 120, 8);
-        client.click(ok_btn_div);
+        client.click(ok_btn_div).pause(500);
+
+        model_building_utils.click_off(client);
+
+        //SET ATTRIBUTES
+
+        let AClass = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassAIcon\\/";
+
+        let AAttribs = {};
+        AAttribs['int'] = 123;
+        AAttribs['string'] = "bonjour";
+        AAttribs['float'] = "123.456";
+        AAttribs['boolean'] = false;
+
+        let attribs = {};
+        for (let [key, value] of Object.entries(AAttribs)) {
+            let new_key = "#tr_" + key + " > td:nth-child(2) > textarea:nth-child(1)";
+            attribs[new_key] = value;
+        }
+        //TODO: Set other attribs
+        model_building_utils.set_attribs(client, 0, attribs, AClass);
+
 
         // SAVE INSTANCE MODEL
         let folder_name = "autotest";
