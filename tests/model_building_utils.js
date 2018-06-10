@@ -17,22 +17,30 @@ function get_assoc_div(num) {
     return get_element_div("AssociationLink", num) + " > text:nth-child(1)";
 }
 
+function create_class(client, x, y, i, element_type){
+
+    let class_div = "";
+    if (element_type != undefined){
+        class_div = this.build_div(element_type, i);
+    } else {
+        class_div = this.get_class_div(i);
+    }
+
+    client
+        .moveToElement(canvas, x, y)
+        .mouseButtonClick('right')
+        .pause(500)
+        .waitForElementPresent(class_div, 500, "Created class: " + class_div);
+
+    return class_div;
+
+}
+
 function create_classes(client, x_coords, y_coords, curr_num_elements, element_type) {
     for (let x of x_coords) {
         for (let y of y_coords) {
 
-            let class_div = "";
-            if (element_type != undefined){
-                class_div = this.build_div(element_type, curr_num_elements);
-            } else {
-                class_div = this.get_class_div(curr_num_elements);
-            }
-
-            client
-                .moveToElement(canvas, x, y)
-                .mouseButtonClick('right')
-                .pause(500)
-                .waitForElementPresent(class_div, 500, "Created class: " + class_div);
+            this.create_class(client, x, y, curr_num_elements, element_type);
 
             curr_num_elements++;
         }
@@ -75,6 +83,7 @@ function move_to_element_ratio(client, element, x_ratio, y_ratio){
     client.getElementSize(element, function (result) {
         let x_pos = Math.trunc(x_ratio/100 * result.value.width);
         let y_pos = Math.trunc(y_ratio/100 * result.value.height);
+        //console.log("X: " + x_pos + " Y: " + y_pos);
         client.moveToElement(element, x_pos, y_pos);
     });
 }
@@ -185,6 +194,7 @@ module.exports = {
     get_assoc_div,
     get_class_div,
     build_div,
+    create_class,
     create_classes,
     delete_element,
     set_attribs,
