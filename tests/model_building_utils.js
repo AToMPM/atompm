@@ -51,6 +51,8 @@ function create_classes(client, x_coords, y_coords, curr_num_elements, element_t
 
 function create_assoc(client, start_div, end_div, relation_div, offset) {
 
+    this.click_off(client);
+
     this.move_to_element_ratio(client, start_div, 50 + offset, 50 + offset);
     client.mouseButtonDown('right');
     this.move_to_element_ratio(client, end_div, 50 + offset, 50 + offset);
@@ -70,7 +72,17 @@ function create_assoc(client, start_div, end_div, relation_div, offset) {
 
 }
 
-function set_attribs(client, num, attrs, element_type) {
+function move_element(client, from_div, to_div, from_offset, to_offset){
+
+    this.click_off(client);
+    this.move_to_element_ratio(client, from_div, from_offset[0], from_offset[1]);
+    client.mouseButtonClick('left').pause(300);
+    client.mouseButtonDown('left');
+    this.move_to_element_ratio(client, to_div, to_offset[0], to_offset[1]);
+    client.mouseButtonUp('left').pause(300);
+}
+
+function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
 
     let element_div = "";
     if (element_type != undefined) {
@@ -79,10 +91,18 @@ function set_attribs(client, num, attrs, element_type) {
         element_div = this.get_class_div(num);
     }
 
+    if (div_suffix != undefined){
+        element_div += div_suffix;
+    }
+
     this.click_off(client);
 
+    if (offset == undefined){
+        offset = [50, 50];
+    }
+
     client.waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div);
-    this.move_to_element_ratio(client, element_div, 50, 50);
+    this.move_to_element_ratio(client, element_div, offset[0], offset[1]);
     client.mouseButtonClick('middle')
         .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens");
 
@@ -261,7 +281,7 @@ function scroll_geometry_element(client, element, scrollAmount, scrollTimes) {
         }
     }, [element, scrollAmount, scrollTimes], null);
 
-    client.pause(1000);
+    client.pause(300);
 }
 
 
@@ -281,5 +301,6 @@ module.exports = {
     save_model,
     load_model,
     compile_model,
-    scroll_geometry_element
+    scroll_geometry_element,
+    move_element
 };

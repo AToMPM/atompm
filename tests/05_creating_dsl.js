@@ -63,12 +63,17 @@ function get_all_attrs2() {
         "      \"name\": \"name\",\n" +
         "      \"type\": \"string\",\n" +
         "      \"default\": \"test\"\n" +
-        "   },\n" +
+        "   }" +
+        "]";
+}
+
+function get_all_attrs3() {
+    return "[\n" +
         "   {\n" +
-        "      \"name\": \"\",\n" +
-        "      \"type\": \"\",\n" +
-        "      \"default\": \"\"\n" +
-        "   }\n" +
+        "      \"name\": \"test\",\n" +
+        "      \"type\": \"string\",\n" +
+        "      \"default\": \"hello\"\n" +
+        "   }" +
         "]";
 }
 
@@ -156,9 +161,9 @@ module.exports = {
         }
 
         // SET ATTRIBUTES
-        let class_div = model_building_utils.get_class_div(0);
+        //TODO: Use modelbuildingutils.set_attribs
+        let class_div = model_building_utils.get_class_div(8);
         let attrib_field = "#tr_attributes > td:nth-child(2) > textarea";
-
         client.moveToElement(class_div, 10, 10)
             .mouseButtonClick('middle')
             .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
@@ -168,26 +173,38 @@ module.exports = {
             .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
             .moveToElement(canvas, 0, 100)
             .mouseButtonClick('left')
-            .pause(1000)
+            .pause(500)
+        ;
+
+        let class_div3 = model_building_utils.get_class_div(0);
+        client.moveToElement(class_div3, 10, 10)
+            .mouseButtonClick('middle')
+            .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
+            .clearValue(attrib_field)
+            .setValue(attrib_field, get_all_attrs3())
+            .click("#dialog_btn")
+            .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
+            .moveToElement(canvas, 0, 100)
+            .mouseButtonClick('left')
+            .pause(500)
         ;
 
 
         let abstract_class = 4;
         let class_div2 = model_building_utils.get_class_div(abstract_class);
-        let attrib_field2 = "#tr_attributes > td:nth-child(2) > textarea";
         let checkbox = "#tr_abstract > td:nth-child(2) > input[type=\"checkbox\"]";
         model_building_utils.move_to_element_ratio(client, class_div2, 50, 50);
         client.mouseButtonClick('middle')
             .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
-            .clearValue(attrib_field2)
-            .setValue(attrib_field2, get_all_attrs2())
+            .clearValue(attrib_field)
+            .setValue(attrib_field, get_all_attrs2())
             .moveToElement(checkbox, 0, 0)
             .mouseButtonClick('left')
             .click("#dialog_btn")
             .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
             .moveToElement(canvas, 0, 100)
             .mouseButtonClick('left')
-            .pause(1000)
+            .pause(500)
         ;
 
         //CREATE INHERITANCE
@@ -622,13 +639,13 @@ module.exports = {
                 model_building_utils.move_to_element_ratio(client, from_class_div, 20, 50);
                 client.mouseButtonDown('right');
                 model_building_utils.move_to_element_ratio(client, to_class_div, 80, 50);
-                client.mouseButtonUp('right').pause(2000);
+                client.mouseButtonUp('right').pause(300);
             } else {
                 model_building_utils.move_to_element_ratio(client, to_class_div, 30, 50);
-                client.mouseButtonClick('left').pause(500);
+                client.mouseButtonClick('left').pause(300);
                 client.mouseButtonDown('left');
                 model_building_utils.move_to_element_ratio(client, from_class_div, 50, 120);
-                client.mouseButtonUp('left').pause(2000);
+                client.mouseButtonUp('left').pause(300);
             }
 
             num_elements++;
@@ -665,7 +682,7 @@ module.exports = {
 
         //SET ATTRIBUTES
 
-        let AClass = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassAIcon\\/";
+        let IClass = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassIIcon\\/";
 
         let AAttribs = {};
         AAttribs['int'] = 123;
@@ -679,7 +696,8 @@ module.exports = {
             attribs[new_key] = value;
         }
         //TODO: Set other attribs
-        model_building_utils.set_attribs(client, 0, attribs, AClass);
+        let div_suffix = " > text";
+        model_building_utils.set_attribs(client, 7, attribs, IClass, div_suffix, [1, 1]);
 
 
         // VERIFY MODEL
