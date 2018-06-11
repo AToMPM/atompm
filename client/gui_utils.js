@@ -208,7 +208,7 @@ GUIUtils = function(){
 	 * 
 	 * @param choices - the choices for the <select> element
 	 * @param multipleChoice - if true, allows for multiple options to be selected
-	 * @param defaultSelect - sets the default selection for the list
+	 * @param defaultSelection - sets the default selection for the list
 	 * @param numVisibleOptions - sets the number of visible options
 	 */
 	this.getSelector = function(choices,multipleChoice,defaultSelection,numVisibleOptions){
@@ -223,6 +223,7 @@ GUIUtils = function(){
 					var option = $('<option>');
 					option.val( choice ); 
 					option.html( choice );
+					option.attr('id', "choice_" + choice);
 					select.append(option);
 					if( defaultSelection != undefined && 
 						 utils.contains(defaultSelection,choice) )

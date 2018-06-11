@@ -29,7 +29,7 @@ function create_class(client, x, y, i, element_type) {
     client
         .moveToElement(canvas, x, y)
         .mouseButtonClick('right')
-        .pause(500)
+        .pause(300)
         .waitForElementPresent(class_div, 500, "Created class: " + class_div);
 
     return class_div;
@@ -85,7 +85,7 @@ function set_attribs(client, num, attrs, element_type) {
         .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
         .moveToElement(canvas, 0, 100)
         .mouseButtonClick('left')
-        .pause(500)
+        .pause(300)
     ;
 }
 

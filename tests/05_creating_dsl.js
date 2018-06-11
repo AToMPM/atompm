@@ -331,7 +331,8 @@ module.exports = {
 
         let pre_create_opt = "#tr_event > td:nth-child(2) > select > option:nth-child(2)";
         let code_field = "#tr_code > td:nth-child(2) > textarea";
-        let constraint_code = "let C_classes = getAllNodes(['Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/umlIcons/ClassIcon']);\n" +
+        let validate_choice = "#choice_validate";
+        let constraint_code = "let C_classes = getAllNodes(['/autotest/autotest/ClassC']);\n" +
             "C_classes.length <= 2;";
         client
             .moveToElement(constraint_div, 10, 10)
@@ -339,6 +340,8 @@ module.exports = {
             .waitForElementPresent("#dialog_btn", 1000, "Constraint menu opens")
             .clearValue(name_field)
             .setValue(name_field, "max-two-instances")
+            .waitForElementPresent(validate_choice, 2000, "Find validate option")
+            .click(validate_choice)
             .moveToElement(pre_create_opt, 0, 0)
             .mouseButtonClick('left')
             .clearValue(code_field)
@@ -384,8 +387,8 @@ module.exports = {
         //BUILD CLASSES
         let icon_type = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/IconIcon\\/";
 
-        let start_x = 200;
-        let x_diff = 250;
+        let start_x = 100;
+        let x_diff = 225;
         let x_coords = [start_x, start_x + x_diff, start_x + 2 * x_diff];
 
         let start_y = 150;
@@ -616,9 +619,9 @@ module.exports = {
 
             let isContainAssoc = assoc[3];
             if (!isContainAssoc) {
-                model_building_utils.move_to_element_ratio(client, from_class_div, 30, 50);
+                model_building_utils.move_to_element_ratio(client, from_class_div, 20, 50);
                 client.mouseButtonDown('right');
-                model_building_utils.move_to_element_ratio(client, to_class_div, 70, 50);
+                model_building_utils.move_to_element_ratio(client, to_class_div, 80, 50);
                 client.mouseButtonUp('right').pause(2000);
             } else {
                 model_building_utils.move_to_element_ratio(client, to_class_div, 30, 50);
@@ -627,6 +630,8 @@ module.exports = {
                 model_building_utils.move_to_element_ratio(client, from_class_div, 50, 120);
                 client.mouseButtonUp('left').pause(2000);
             }
+
+            num_elements++;
 
             model_building_utils.click_off(client);
 
@@ -675,6 +680,29 @@ module.exports = {
         }
         //TODO: Set other attribs
         model_building_utils.set_attribs(client, 0, attribs, AClass);
+
+
+        // VERIFY MODEL
+        let verify_btn = "#\\/Toolbars\\/MainMenu\\/MainMenu\\.buttons\\.model\\/validateM";
+        let dialog_btn = "#dialog_btn";
+
+        client.waitForElementPresent(verify_btn, 2000, "Find verify button")
+            .click(verify_btn)
+            .waitForElementNotPresent(dialog_btn, 2000, "No constraint violation");
+
+        let new_x = start_x + 3 * x_diff;
+        let class_btn = class_icon + "ClassCIcon";
+        let CClass_type = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassCIcon\\/";
+        client.click(class_btn);
+
+        model_building_utils.create_class(client, new_x, start_y, num_elements, CClass_type);
+        model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
+
+        client.click(verify_btn)
+            .waitForElementPresent(dialog_btn, 2000, "Constraint violation")
+            .click(dialog_btn).pause(1000);
+
+        model_building_utils.click_off(client);
 
 
         // SAVE INSTANCE MODEL
