@@ -16,5 +16,5 @@ before_script:
  - pip install --user python-igraph
     
 script:
- - xvfb-run --server-args="-screen 0 1440x900x24" ./run_tests.sh
+ - xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh
     
