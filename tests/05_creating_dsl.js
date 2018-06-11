@@ -1041,10 +1041,10 @@ module.exports = {
                 client.mouseButtonUp('right').pause(2000);
             } else {
                 model_building_utils.move_to_element_ratio(client, to_class_div, 30, 50);
-                client.mouseButtonClick('left').pause(500);
+                client.mouseButtonClick('left').pause(300);
                 client.mouseButtonDown('left');
                 model_building_utils.move_to_element_ratio(client, from_class_div, 50, 120);
-                client.mouseButtonUp('left').pause(2000);
+                client.mouseButtonUp('left').pause(300);
             }
 
             num_elements++;
@@ -1081,7 +1081,7 @@ module.exports = {
 
         //SET ATTRIBUTES
 
-        let AClass = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassAIcon\\/";
+        let IClass = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassIIcon\\/";
 
         let AAttribs = {};
         AAttribs['int'] = 123;
@@ -1095,7 +1095,8 @@ module.exports = {
             attribs[new_key] = value;
         }
         //TODO: Set other attribs
-        model_building_utils.set_attribs(client, 0, attribs, AClass);
+        let div_suffix = " > text";
+        model_building_utils.set_attribs(client, 7, attribs, IClass, div_suffix, [1, 1]);
 
 
         // VERIFY MODEL
