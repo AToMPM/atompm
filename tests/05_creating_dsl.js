@@ -1035,9 +1035,9 @@ module.exports = {
 
             let isContainAssoc = assoc[3];
             if (!isContainAssoc) {
-                model_building_utils.move_to_element_ratio(client, from_class_div, 30, 50);
+                model_building_utils.move_to_element_ratio(client, from_class_div, 20, 50);
                 client.mouseButtonDown('right');
-                model_building_utils.move_to_element_ratio(client, to_class_div, 70, 50);
+                model_building_utils.move_to_element_ratio(client, to_class_div, 80, 50);
                 client.mouseButtonUp('right').pause(2000);
             } else {
                 model_building_utils.move_to_element_ratio(client, to_class_div, 30, 50);
@@ -1046,6 +1046,8 @@ module.exports = {
                 model_building_utils.move_to_element_ratio(client, from_class_div, 50, 120);
                 client.mouseButtonUp('left').pause(2000);
             }
+
+            num_elements++;
 
             model_building_utils.click_off(client);
 
@@ -1094,6 +1096,29 @@ module.exports = {
         }
         //TODO: Set other attribs
         model_building_utils.set_attribs(client, 0, attribs, AClass);
+
+
+        // VERIFY MODEL
+        let verify_btn = "#\\/Toolbars\\/MainMenu\\/MainMenu\\.buttons\\.model\\/validateM";
+        let dialog_btn = "#dialog_btn";
+
+        client.waitForElementPresent(verify_btn, 2000, "Find verify button")
+            .click(verify_btn)
+            .waitForElementNotPresent(dialog_btn, 2000, "No constraint violation");
+
+        let new_x = start_x + 3 * x_diff;
+        let class_btn = class_icon + "ClassCIcon";
+        let CClass_type = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassCIcon\\/";
+        client.click(class_btn);
+
+        model_building_utils.create_class(client, new_x, start_y, num_elements, CClass_type);
+        model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
+
+        client.click(verify_btn)
+            .waitForElementPresent(dialog_btn, 2000, "Constraint violation")
+            .click(dialog_btn).pause(1000);
+
+        model_building_utils.click_off(client);
 
 
         // SAVE INSTANCE MODEL
