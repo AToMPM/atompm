@@ -49,6 +49,27 @@ function create_classes(client, x_coords, y_coords, curr_num_elements, element_t
     return curr_num_elements;
 }
 
+function create_assoc(client, start_div, end_div, relation_div, offset) {
+
+    this.move_to_element_ratio(client, start_div, 50 + offset, 50 + offset);
+    client.mouseButtonDown('right');
+    this.move_to_element_ratio(client, end_div, 50 + offset, 50 + offset);
+    client.mouseButtonUp('right').pause(300);
+
+    if (relation_div.length > 0) {
+        client.waitForElementPresent(relation_div, 1000, "Relation option present: " + relation_div);
+        client.click(relation_div);
+        client.waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
+            .click("#dialog_btn")
+            .pause(300)
+            .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
+    }
+
+    this.click_off(client);
+    client.pause(300);
+
+}
+
 function set_attribs(client, num, attrs, element_type) {
 
     let element_div = "";
@@ -58,10 +79,11 @@ function set_attribs(client, num, attrs, element_type) {
         element_div = this.get_class_div(num);
     }
 
-    client
-        .waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div)
-        .moveToElement(element_div, 10, 10)
-        .mouseButtonClick('middle')
+    this.click_off(client);
+
+    client.waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div);
+    this.move_to_element_ratio(client, element_div, 50, 50);
+    client.mouseButtonClick('middle')
         .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens");
 
     for (const [key, value] of Object.entries(attrs)) {
@@ -103,6 +125,29 @@ function click_off(client) {
     client
         .moveToElement(canvas, 0, 100)
         .mouseButtonClick('left');
+}
+
+function load_model(client, folder_name, model_name) {
+
+    let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
+
+    client.waitForElementPresent(load_button, 1000, "Looking for load button")
+        .click(load_button)
+        .waitForElementPresent("#dialog_btn", 1000, "Load menu opens");
+
+    let root_button = "#navbar_\\2f";
+    client.waitForElementPresent(root_button, 1000, "Find root button")
+        .click(root_button);
+
+    let folder_name_div = "#" + folder_name;
+    client.click(folder_name_div);
+
+    client.click("#" + model_name)
+        .pause(200)
+        .click("#dialog_btn");
+
+    client.waitForElementNotPresent("#dialog_btn", 1000, "Save menu closes");
+
 }
 
 function save_model(client, folder_name, model_name) {
@@ -149,7 +194,6 @@ function save_model(client, folder_name, model_name) {
 
 function compile_model(client, compile_type, folder_name, model_name) {
 
-
     let button = "";
     let button_name = compile_type;
 
@@ -157,8 +201,9 @@ function compile_model(client, compile_type, folder_name, model_name) {
         button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToASMM";
     } else if (button_name == "CS") {
         button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToCSMM";
+    } else if (button_name == "pattern") {
+        button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToPatternMM";
     }
-
 
     client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
         .click(button)
@@ -176,14 +221,21 @@ function compile_model(client, compile_type, folder_name, model_name) {
     });
 
     let new_file_text = "#new_file";
-    client.element('css selector', "#" + model_name, function (result) {
+    let model_div = "#" + model_name.replace(".", "\\.");
+    client.element('css selector', model_div, function (result) {
+
             if (result.status == -1) {
+                //don't create new file with pattern compilation
+                if (button_name == "pattern") {
+                    client.assert.ok(false, "File found: " + model_name);
+                }
+
                 client.click(new_file_text)
                     .clearValue(new_file_text)
                     .setValue(new_file_text, model_name)
                     .click("#dialog_btn");
             } else {
-                client.click("#" + model_name)
+                client.click(model_div)
                     .click("#dialog_btn");
             }
 
@@ -221,11 +273,13 @@ module.exports = {
     build_div,
     create_class,
     create_classes,
+    create_assoc,
     delete_element,
     set_attribs,
     move_to_element_ratio,
     click_off,
     save_model,
+    load_model,
     compile_model,
     scroll_geometry_element
 };
