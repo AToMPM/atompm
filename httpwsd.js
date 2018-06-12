@@ -38,7 +38,7 @@ function __respond(response, statusCode, reason, data, headers)
 {
 	response.writeHead(
 			statusCode,
-			reason,
+			JSON.stringify(reason),
 			(headers || {'Content-Type': 'text/plain'}));
 
 	var encoding = 

@@ -114,8 +114,11 @@ var  _util 	= require('util'),
 	 _mmmk,
 	 _mt,
 	 _plugins,
-	 __wid,
 	 __wtype;
+
+//have worker id global so that workers can detect it when loaded
+global.__wid = null;
+
 var keepaliveAgent = new _http.Agent({keepAlive: true, maxSockets: 10, maxFreeSockets: 5}); // proposed by yentl to improve performance
 
 
