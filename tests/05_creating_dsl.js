@@ -239,9 +239,7 @@ module.exports = {
         }
 
         //SET ASSOCS
-
-
-        client.pause(500);
+        client.pause(300);
 
         let assoc_num = 0;
         for (let assoc of assocs) {
@@ -261,8 +259,10 @@ module.exports = {
 
             let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
             //tiny offset to not hit other arrows
-            let offset = 2 * assoc[0] + 2 * assoc[1];
+            let offset = 3 * assoc[0] + 3 * assoc[1];
 
+            //TODO: Change to
+            // model_building_utils.create_assoc(client, from_ele, to_ele, assoc_relation, offset);
             client
                 .moveToElement(from_ele, 20, 20)
                 .mouseButtonDown('right')
@@ -321,67 +321,13 @@ module.exports = {
                         .mouseButtonClick('left');
                 }
 
-            if (out_card) {
-
-                client
-                    .moveToElement(from_ele, 10, 10)
-                    .mouseButtonClick('middle')
-                    .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
-                    .clearValue(cardinality_field)
-                    .setValue(cardinality_field, JSON.stringify(out_card))
-                    .click("#dialog_btn")
-                    .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
-                    .moveToElement(canvas, 0, 100)
-                    .mouseButtonClick('left')
-                    .pause(500);
-            }
-
-            if (in_card) {
-                model_building_utils.move_to_element_ratio(client, to_ele, 50, 50);
-                client.mouseButtonClick('middle')
-                    .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
-                    .clearValue(cardinality_field)
-                    .setValue(cardinality_field, JSON.stringify(in_card))
-                    .click("#dialog_btn")
-                    .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
-                    .moveToElement(canvas, 0, 100)
-                    .mouseButtonClick('left')
-                    .pause(500);
-            }
-            client.getElementSize(assoc_div, function (result) {
-
-                model_building_utils.move_to_element_ratio(client, assoc_div, 50, 50);
-                client.mouseButtonClick('middle')
-                    .waitForElementPresent("#dialog_btn", 1000, "Editing assoc name opens")
-                    .clearValue(name_field)
-                    .setValue(name_field, name);
-
-                if (isContain) {
-                    let contain_opt = "#tr_linktype > td:nth-child(2) > select > option:nth-child(2)";
-
-                    client
-                        .moveToElement(contain_opt, 0, 0)
-                        .mouseButtonClick('left');
-                }
-
-
                 client
                     .click("#dialog_btn")
                     .waitForElementNotPresent("#dialog_btn", 1000, "Editing assoc name closes")
                     .moveToElement(canvas, 0, 100)
                     .mouseButtonClick('left')
                     .pause(500);
-            })
-
-                client
-                    .click("#dialog_btn")
-                    .waitForElementNotPresent("#dialog_btn", 1000, "Editing assoc name closes")
-                    .moveToElement(canvas, 0, 100)
-                    .mouseButtonClick('left')
-                    .pause(500);
-            })
-
-            ;
+            });
         }
 
         //CREATE CONSTRAINT
