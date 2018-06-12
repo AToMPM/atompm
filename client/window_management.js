@@ -460,11 +460,20 @@ WindowManagement = function(){
 				if( args['ignoreKey'] != undefined && 
 					 args['ignoreKey'](attr,args['data'][attr]['value']) )
 					continue;
-	
-				var tr = $('<tr>');
-				var ii = GUIUtils.getInputField(
-						args['data'][attr]['type'],
-						args['data'][attr]['value']);
+
+                var tr = $('<tr>');
+                tr.attr("id", "tr_" + attr);
+                var ii = null;
+                try {
+                    ii = GUIUtils.getInputField(
+                        args['data'][attr]['type'],
+                        args['data'][attr]['value']);
+                } catch (err) {
+                    console.log(args['data'][attr]);
+                    WindowManagement.openDialog(
+                        _ERROR,
+                        'unexpected error in editing mode ::\n ' + err + '\n' + utils.jsons(args['data'][attr]));
+                }
 //				var tr = table.append( $('<tr>') ),
 //					 ii = GUIUtils.getInputField(
 //							 args['data'][attr]['type'],

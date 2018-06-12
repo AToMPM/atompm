@@ -269,6 +269,7 @@ CompileUtils = function(){
 				icon.setAttr('__r',0);			
 				icon.setAttr('__sx',1);
 				icon.setAttr('__sy',1);
+				icon.setAttr('id', id);
 			}
 	
 			if( 'attrs' in options )
@@ -342,26 +343,51 @@ CompileUtils = function(){
 	/**
 	 * Compile the current model to an Abstract Syntax Metamodel
 	 */
-	this.compileToASMM = function(fname){
-		if( ! __isAbstractSyntaxMetamodel(fname) )
-			WindowManagement.openDialog(
-				_ERROR,
-				'invalid extension... abstract syntax metamodels are "*.metamodel" files');
-		else
-			HttpUtils.httpReq('PUT', HttpUtils.url(fname,__FORCE_GET));
-	};
-	
-	/**
-	 * Compile the current model to a Concrete Syntax Metamodel
-	 */
-	this.compileToCSMM = function(fname){
-		if( ! __isIconMetamodel(fname) )
-			WindowManagement.openDialog(
-				_ERROR,
-				'invalid extension... icon definition metamodels are "*Icons.metamodel" files');
-		else
-			HttpUtils.httpReq('PUT', HttpUtils.url(fname,__FORCE_GET));
-	};
+    this.compileToASMM = function (fname) {
+        if (!__isAbstractSyntaxMetamodel(fname))
+            WindowManagement.openDialog(
+                _ERROR,
+                'invalid extension... abstract syntax metamodels are "*.metamodel" files');
+        else
+            HttpUtils.httpReq('PUT', HttpUtils.url(fname, __FORCE_GET), null,
+                function (status, text) {
+                    //there was a problem
+                    if (!utils.isHttpSuccessCode(status)) {
+                        //let resp = JSON.parse(text);
+                        WindowManagement.openDialog(_ERROR, JSON.stringify(text));
+                    }
+
+                });
+    };
+
+    /**
+     * Compile the current model to a Concrete Syntax Metamodel
+     */
+    this.compileToCSMM = function (fname) {
+        if (!__isIconMetamodel(fname))
+            WindowManagement.openDialog(
+                _ERROR,
+                'invalid extension... icon definition metamodels are "*Icons.metamodel" files');
+        else
+            HttpUtils.httpReq('PUT', HttpUtils.url(fname, __FORCE_GET), null,
+                function (status, text) {
+                    //there was a problem
+                    if (!utils.isHttpSuccessCode(status)) {
+                        let resp = text;
+                        if (!(resp.startsWith("500"))) {
+                            resp = JSON.parse(text);
+                        }
+
+                        if (resp["code"] && resp["code"].includes("ENOENT")) {
+                            let msg = "ERROR: Corresponding metamodel could not be found in same directory!";
+                            WindowManagement.openDialog(_ERROR, msg);
+                        } else {
+                            WindowManagement.openDialog(_ERROR, JSON.stringify(text));
+                        }
+                    }
+
+                });
+    };
 	
 	/**
 	 * Compiles the current model to an Icon Pattern Metamodel

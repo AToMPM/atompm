@@ -109,6 +109,8 @@ HttpUtils = function(){
 		span.attr("class", 'fileb_icon');
 //		img.attr("class", 'clickable');
 		txt.css("padding", '5px');
+
+		txt.attr('id', fname.replace("/", ""));
 		
 		span.append(img);
 		span.append(txt);
@@ -135,6 +137,7 @@ HttpUtils = function(){
 		txt.attr("contentEditable", true);
 		// JQuery does not support HTML5 oninput
 		txt.keyup( oninput );
+		txt.attr('id', 'new_file');
 		span.append(img);
 		span.append(txt);
 		return span;

@@ -235,8 +235,9 @@ The events that can trigger are:
 * **post-disconnect**, which triggers just after a link between two instances is deleted
 * **post-delete**, which triggers just after an instance is deleted
 * **post-edit**, which triggers just after an instance is edited
+* **verify**, which triggers when the user presses the *verify* button on the *MainMenu* toolbar
 
-.. note:: A constraint without a trigger is evaluated when the user presses the *verify* button on the *MainMenu* toolbar.
+.. note:: A constraint/action with no defined triggers will execute on the *verify* event. These constraints/actions should be updated to select the event explicitly.
 
 .. _action-library:
 

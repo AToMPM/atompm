@@ -26,7 +26,8 @@ class FileBrowser{
                     fileb =
                         FileBrowser.getFileBrowser(fnames, false, manualInput, __getRecentDir(startDir));
 
-                new_folder_b.html('new folder')
+                new_folder_b.attr('id', 'new_folder')
+                    .html('new folder')
                     .click(function (ev) {
                         var folder_name = prompt("please fill in a name for the folder");
                         if (folder_name != null) {
@@ -367,6 +368,7 @@ class FileBrowser{
                     subfolders.forEach(function (subfolder) {
                         var navbutton = $('<button>');
                         navbutton.html(subfolder);
+                        navbutton.attr('id', 'navbar_' + subfolder);
                         navbutton.click(navbuttononclick);
                         navdiv.append(navbutton);
                     });
