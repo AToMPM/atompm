@@ -17,6 +17,10 @@ function get_assoc_div(num) {
     return get_element_div("AssociationLink", num) + " > text:nth-child(1)";
 }
 
+function fix_selector(name) {
+    return name.replace(".", "\\.");
+}
+
 function create_class(client, x, y, i, element_type) {
 
     let class_div = "";
@@ -72,7 +76,7 @@ function create_assoc(client, start_div, end_div, relation_div, offset) {
 
 }
 
-function move_element(client, from_div, to_div, from_offset, to_offset){
+function move_element(client, from_div, to_div, from_offset, to_offset) {
 
     this.click_off(client);
     this.move_to_element_ratio(client, from_div, from_offset[0], from_offset[1]);
@@ -91,13 +95,13 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
         element_div = this.get_class_div(num);
     }
 
-    if (div_suffix != undefined){
+    if (div_suffix != undefined) {
         element_div += div_suffix;
     }
 
     this.click_off(client);
 
-    if (offset == undefined){
+    if (offset == undefined) {
         offset = [50, 50];
     }
 
@@ -162,7 +166,7 @@ function load_model(client, folder_name, model_name) {
     let folder_name_div = "#" + folder_name;
     client.click(folder_name_div);
 
-    client.click("#" + model_name)
+    client.click("#" + fix_selector(model_name))
         .pause(200)
         .click("#dialog_btn");
 
@@ -223,6 +227,8 @@ function compile_model(client, compile_type, folder_name, model_name) {
         button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToCSMM";
     } else if (button_name == "pattern") {
         button = "#\\2f Toolbars\\2f CompileMenu\\2f CompileMenu\\2e buttons\\2e model\\2f compileToPatternMM";
+    } else if (button_name == "transform") {
+        button = "#\\2f Toolbars\\2f TransformationController\\2f TransformationController\\2e buttons\\2e model\\2f load";
     }
 
     client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
@@ -241,12 +247,12 @@ function compile_model(client, compile_type, folder_name, model_name) {
     });
 
     let new_file_text = "#new_file";
-    let model_div = "#" + model_name.replace(".", "\\.");
+    let model_div = "#" + fix_selector(model_name);
     client.element('css selector', model_div, function (result) {
 
             if (result.status == -1) {
                 //don't create new file with pattern compilation
-                if (button_name == "pattern") {
+                if (button_name == "pattern" || button_name == "transform") {
                     client.assert.ok(false, "File found: " + model_name);
                 }
 

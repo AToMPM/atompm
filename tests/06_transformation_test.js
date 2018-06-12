@@ -20,7 +20,7 @@ module.exports = {
         test_utils.login(client);
     },
 
-    'Compile Pattern MM' : function (client) {
+    'Compile Pattern MM': function (client) {
 
         let folder_name = "autotest";
         let model_name = "autotest.metamodel";
@@ -121,7 +121,7 @@ module.exports = {
         let LHS_div = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2f LHSIcon\\2f ";
         ele_map["LHS"] = model_building_utils.create_class(client, 150, 200, 0, LHS_div);
 
-         client.waitForElementPresent(RHS_btn, 2000, "RHS button").click(RHS_btn);
+        client.waitForElementPresent(RHS_btn, 2000, "RHS button").click(RHS_btn);
         let RHS_div = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2f RHSIcon\\2f ";
         ele_map["RHS"] = model_building_utils.create_class(client, 650, 200, 1, RHS_div);
 
@@ -160,7 +160,7 @@ module.exports = {
         let LHS_div = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2f LHSIcon\\2f ";
         ele_map["LHS"] = model_building_utils.create_class(client, 150, 200, 0, LHS_div);
 
-         client.waitForElementPresent(RHS_btn, 2000, "RHS button").click(RHS_btn);
+        client.waitForElementPresent(RHS_btn, 2000, "RHS button").click(RHS_btn);
         let RHS_div = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2f RHSIcon\\2f ";
         ele_map["RHS"] = model_building_utils.create_class(client, 650, 200, 1, RHS_div);
 
@@ -197,11 +197,11 @@ module.exports = {
         //BUILD ASSOCS
         client.pause(300);
         model_building_utils.create_assoc(client,
-            ele_map["A_lhs"]  + " > text:nth-child(1)", ele_map["B_lhs"]  + " > text:nth-child(1)", "", 0);
+            ele_map["A_lhs"] + " > text:nth-child(1)", ele_map["B_lhs"] + " > text:nth-child(1)", "", 0);
 
         client.pause(300);
         model_building_utils.create_assoc(client,
-            ele_map["A_rhs"]  + " > text:nth-child(1)", ele_map["B_rhs"]  + " > text:nth-child(1)", "", 0);
+            ele_map["A_rhs"] + " > text:nth-child(1)", ele_map["B_rhs"] + " > text:nth-child(1)", "", 0);
 
         let test_field = "#tr_test > td:nth-child(2) > textarea";
         let attrs = {};
@@ -211,108 +211,32 @@ module.exports = {
         model_building_utils.save_model(client, "autotest", "R_2_ARule.model");
     },
 
-    'Create Rule 1': function (client) {
+    'Execute Transformation': function (client) {
+        model_building_utils.load_model(client, "autotest", "autotest_instance.model");
 
-        test_utils.load_toolbar(client, rule_toolbars);
+        model_building_utils.compile_model(client, "transform", "autotest", "T_autotest.model");
 
-        // BUILD LHS AND RHS
-        let LHS_btn = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2e metamodel\\2f LHSIcon";
-        let RHS_btn = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2e metamodel\\2f RHSIcon";
+        let run_button = "#\\2f Toolbars\\2f TransformationController\\2f TransformationController\\2e buttons\\2e model\\2f play";
 
-        let ele_map = {};
+        client.click(run_button);
 
-        client.waitForElementPresent(LHS_btn, 2000, "LHS button").click(LHS_btn);
-        let LHS_div = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2f LHSIcon\\2f ";
-        ele_map["LHS"] = model_building_utils.create_class(client, 150, 200, 0, LHS_div);
+        let created_D_1 = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2f ClassDIcon\\2f 15\\2e instance";
+        let created_D_2 = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2f ClassDIcon\\2f 15\\2e instance";
+        client.waitForElementPresent(created_D_1, 5000, "First D element created");
+        client.waitForElementPresent(created_D_2, 5000, "Second D element created");
 
-         client.waitForElementPresent(RHS_btn, 2000, "RHS button").click(RHS_btn);
-        let RHS_div = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2f RHSIcon\\2f ";
-        ele_map["RHS"] = model_building_utils.create_class(client, 650, 200, 1, RHS_div);
+        //TODO:Test for A element's attribute
 
-        model_building_utils.click_off(client);
+        //CHECK CONSTRAINT
+        let verify_btn = "#\\/Toolbars\\/MainMenu\\/MainMenu\\.buttons\\.model\\/validateM";
+        let dialog_btn = "#dialog_btn";
 
-        //BUILD ELEMENTS INSIDE
-        let c_btn = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e pattern\\2e metamodel\\2f __pClassCIcon";
-        let d_btn = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e pattern\\2e metamodel\\2f __pClassDIcon";
+        client.pause(500);
 
-        client.waitForElementPresent(c_btn, 2000, "C button").click(c_btn);
-        let c_div = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e pattern\\2f __pClassCIcon\\2f ";
-        ele_map["C"] = model_building_utils.create_class(client, 50, 200, 2, c_div);
-
-        client.waitForElementPresent(d_btn, 2000, "D button").click(d_btn);
-        let d_div = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e pattern\\2f __pClassDIcon\\2f ";
-        ele_map["D"] = model_building_utils.create_class(client, 50, 400, 3, d_div);
-
-        model_building_utils.move_element(client, ele_map["C"] + " > text:nth-child(1)", ele_map["LHS"], [50, 50], [50, 50]);
-        model_building_utils.move_element(client, ele_map["D"] + " > text:nth-child(1)", ele_map["RHS"], [50, 50], [50, 50]);
-
-
-        model_building_utils.save_model(client, "autotest", "R_1_FRule.model");
-    },
-
-    'Create Rule 2': function (client) {
-
-        test_utils.load_toolbar(client, rule_toolbars);
-
-        // BUILD LHS AND RHS
-        let LHS_btn = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2e metamodel\\2f LHSIcon";
-        let RHS_btn = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2e metamodel\\2f RHSIcon";
-
-        let ele_map = {};
-
-        client.waitForElementPresent(LHS_btn, 2000, "LHS button").click(LHS_btn);
-        let LHS_div = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2f LHSIcon\\2f ";
-        ele_map["LHS"] = model_building_utils.create_class(client, 150, 200, 0, LHS_div);
-
-         client.waitForElementPresent(RHS_btn, 2000, "RHS button").click(RHS_btn);
-        let RHS_div = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2f RHSIcon\\2f ";
-        ele_map["RHS"] = model_building_utils.create_class(client, 650, 200, 1, RHS_div);
-
-        model_building_utils.click_off(client);
-
-        //BUILD ELEMENTS INSIDE
-        let a_btn = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e pattern\\2e metamodel\\2f __pClassAIcon";
-        let a_div = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e pattern\\2f __pClassAIcon\\2f ";
-
-        //BUILD A
-        client.waitForElementPresent(a_btn, 2000, "A button").click(a_btn);
-        ele_map["A_lhs"] = model_building_utils.create_class(client, 50, 200, 2, a_div);
-        ele_map["A_rhs"] = model_building_utils.create_class(client, 50, 400, 3, a_div);
-
-        model_building_utils.move_element(client, ele_map["A_lhs"] + " > text:nth-child(1)", ele_map["LHS"], [50, 50], [50, 20]);
-        model_building_utils.move_element(client, ele_map["A_rhs"] + " > text:nth-child(1)", ele_map["RHS"], [50, 50], [50, 20]);
-
-
-        model_building_utils.click_off(client);
-
-        let b_btn = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e pattern\\2e metamodel\\2f __pClassBIcon";
-        let b_div = "#\\2f autotest\\2f autotest\\2e defaultIcons\\2e pattern\\2f __pClassBIcon\\2f ";
-
-        //BUILD B
-        client.waitForElementPresent(b_btn, 2000, "B button").click(b_btn);
-        ele_map["B_lhs"] = model_building_utils.create_class(client, 50, 200, 6, b_div);
-        ele_map["B_rhs"] = model_building_utils.create_class(client, 50, 400, 7, b_div);
-
-        model_building_utils.move_element(client, ele_map["B_lhs"] + " > text:nth-child(1)", ele_map["LHS"], [50, 50], [50, 70]);
-        model_building_utils.move_element(client, ele_map["B_rhs"] + " > text:nth-child(1)", ele_map["RHS"], [50, 50], [50, 70]);
-
-        model_building_utils.click_off(client);
-
-        //BUILD ASSOCS
-        client.pause(300);
-        model_building_utils.create_assoc(client,
-            ele_map["A_lhs"]  + " > text:nth-child(1)", ele_map["B_lhs"]  + " > text:nth-child(1)", "", 0);
-
-        client.pause(300);
-        model_building_utils.create_assoc(client,
-            ele_map["A_rhs"]  + " > text:nth-child(1)", ele_map["B_rhs"]  + " > text:nth-child(1)", "", 0);
-
-        let test_field = "#tr_test > td:nth-child(2) > textarea";
-        let attrs = {};
-        attrs[test_field] = "result = \"bonjour world!\"";
-        model_building_utils.set_attribs(client, 3, attrs, a_div, " > text:nth-child(1)", [5, 5]);
-
-        model_building_utils.save_model(client, "autotest", "R_2_ARule.model");
+        client.waitForElementPresent(verify_btn, 2000, "Find verify button")
+            .click(verify_btn).pause(500)
+            .waitForElementPresent(dialog_btn, 2000, "Constraint violation")
+            .click(dialog_btn);
     },
 
     after: function (client) {
