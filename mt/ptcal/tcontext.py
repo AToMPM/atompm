@@ -3,8 +3,8 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 import random
-from tconstants import TConstants as TC
-from utils import Utilities as utils
+from .tconstants import TConstants as TC
+from .utils import Utilities as utils
 
 
 '''
@@ -45,13 +45,13 @@ class TransformationContext(object) :
 		future reference '''
 	def getRuntimeConfiguration(self) :
 		if self._rconfig == None :
-			mm = '/Formalisms/__Transformations__/Transformation/Transformation/'		
+			mm = '/Formalisms/__Transformations__/Transformation/Transformation/'
 			for id in self.t['nodes'] :
 				if self.t['nodes'][id]['$type'] == mm+'RuntimeConfiguration' :
 					self._rconfig = self.t['nodes'][id]['options']['value']
 			self._rconfig = (self._rconfig or {})
 		return self._rconfig
-			
+
 
 	'''
 		return true if no step has run yet (1st condition), or if the last step's
@@ -59,7 +59,7 @@ class TransformationContext(object) :
 	 	has terminated) feedbackReceived flag is set '''
 	def isLastStepFeedbackReceived(self) :
 		return (not self._expired and self._lastStep == {}) or \
-				 'feedbackReceived' in self._lastStep
+			   'feedbackReceived' in self._lastStep
 
 
 	''' 
@@ -80,20 +80,20 @@ class TransformationContext(object) :
 		a) N/A, b) applicable and succeeded or c) applicable and failed '''
 	def setLastStepApplicationInfo(self,applicationInfo) :
 		raise NotImplementedError('implement in subclass')
-		
+
 	'''
 		set the feedbackReceived flag of the last step to true (i.e., indicate 
 		that all relevant asworker changelogs have been received and handled '''
 	def setLastStepFeedbackReceived(self) :
 		self._lastStep['feedbackReceived'] = True
-	
+
 	'''
 		add 'a' amount of time to total execution time '''
 	def setLastStepExecTime(self,a):
 		raise NotImplementedError('implement in subclass')
 
-	
-			
+
+
 '''
 	holds the execution context of a 'Transformation' construct 
 	
@@ -112,7 +112,7 @@ class ModelTransformationContext(TransformationContext) :
 	def getCurrentStepId(self) :
 		if self._lastStep == {} :
 			assert False, \
-				 "this function shouldn't be called when there is no current step"
+				"this function shouldn't be called when there is no current step"
 		else :
 			return self._lastStep['id']
 
@@ -123,12 +123,12 @@ class ModelTransformationContext(TransformationContext) :
 	def _getInitialStep(self) :
 		for id in self.t['nodes'] :
 			if 'isStart' in self.t['nodes'][id] and \
-				self.t['nodes'][id]['isStart']['value'] :
-					if 'filename' in self.t['nodes'][id] :
-						return {'fname':self.t['nodes'][id]['filename']['value'],
-								  'id':id}
-					else :
-						return {'id':id}
+					self.t['nodes'][id]['isStart']['value'] :
+				if 'filename' in self.t['nodes'][id] :
+					return {'fname':self.t['nodes'][id]['filename']['value'],
+							'id':id}
+				else :
+					return {'id':id}
 
 
 	'''
@@ -157,12 +157,12 @@ class ModelTransformationContext(TransformationContext) :
 			return ns
 		else :
 			mm = '/Formalisms/__Transformations__/Transformation/Transformation/'
-			def f(e) : 
+			def f(e) :
 				return e['src'] == self._lastStep['id'] and \
-						 self.t['nodes'][e['dest']]['$type'] == \
-							mm+'On'+self._lastStep['applicationInfo']
+					   self.t['nodes'][e['dest']]['$type'] == \
+					   mm+'On'+self._lastStep['applicationInfo']
 
-			ne = filter(f,self.t['edges'])
+			ne = list(filter(f,self.t['edges']))
 			if len(ne) == 0 :
 				ai = self._applicationInfo()
 				self._lastStep = {}
@@ -179,9 +179,9 @@ class ModelTransformationContext(TransformationContext) :
 						else :
 							self._lastStep = {'id':e['dest']}
 						return self._lastStep
-				raise ValueError('invalid transformation model, dangling '+\
-									  'On'+self._lastStep['applicationInfo']+' edge')
-		
+				raise ValueError('invalid transformation model, dangling '+ \
+								 'On'+self._lastStep['applicationInfo']+' edge')
+
 
 	'''
 		set the application information of the last step '''
@@ -189,11 +189,11 @@ class ModelTransformationContext(TransformationContext) :
 		if applicationInfo == TC.SUCCEEDED :
 			self._notApplicable = False
 		self._lastStep['applicationInfo'] = applicationInfo
-		
+
 	def setLastStepExecTime(self,a):
 		''' to be implemented '''
 		pass
-				
+
 
 
 
@@ -226,10 +226,10 @@ class ExhaustContext(TransformationContext) :
 		2. if this is an ExhaustRandom, randomly choose a not-N/A step and set
 	  		it as self._lastStep
 		2. if this is an Exhaust, increment self._lastStep
-		3. return self._lastStep '''			
+		3. return self._lastStep '''
 	def nextStep(self) :
 		steps = self.t['nodes'][self._id]['filenames']['value']
-		
+
 		if self._expired == True :
 			raise RuntimeError('can not step in expired mtContext')
 		elif len(steps) == 0 :
@@ -259,7 +259,7 @@ class ExhaustContext(TransformationContext) :
 			   indicates whether a rule was succesfully applied within this 
 				transformation context... we also reset self._NAs to indicate
 				that each step should be run at least once to re-establish its
-				(non-)applicability '''			
+				(non-)applicability '''
 	def setLastStepApplicationInfo(self,applicationInfo) :
 		if applicationInfo == TC.SUCCEEDED :
 			self._notApplicable = False

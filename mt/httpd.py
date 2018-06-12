@@ -2,10 +2,18 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
-import threading, urlparse
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-from SocketServer import ThreadingMixIn
-from mtworker import mtworkerThread
+import sys
+if sys.version_info[0] < 3:
+	import threading, urlparse
+	from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+	from SocketServer import ThreadingMixIn
+	from mtworker import mtworkerThread
+else:
+	import threading
+	import urllib.parse as urlparse
+	from http.server import BaseHTTPRequestHandler, HTTPServer
+	from socketserver import ThreadingMixIn
+	from mtworker import mtworkerThread
 
 
 
@@ -44,11 +52,11 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		#check for valid worker id
 		url   = urlparse.urlparse(self.path)
 		query = urlparse.parse_qs(url[4])
-		if query == '' or 'wid' not in query : 
+		if query == '' or 'wid' not in query :
 			return self._respond(400, 'missing worker id')
 
 		wid = query['wid'][0]
-		if wid not in mtw2msgQueue : 
+		if wid not in mtw2msgQueue :
 			return self._respond(400, 'invalid worker id :: '+wid)
 
 		#retrieve reqdata if any
@@ -59,14 +67,14 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 				reqData = self.rfile.read(dl)
 
 		#setup lock and response objects + forward request to worker
-		self.lock 		 = threading.Condition()	
- 		self._response = {}		 
-  		self._postMessage(
-					wid,
-  					{'method':self.command,
- 					 'uri':self.path,
-  					 'reqData':reqData,
-  					 'resp':self})
+		self.lock 		 = threading.Condition()
+		self._response = {}
+		self._postMessage(
+			wid,
+			{'method':self.command,
+			 'uri':self.path,
+			 'reqData':reqData,
+			 'resp':self})
 
 		#wait on worker's response (necessary completing the execution of a do_*()
 		#causes an empty response to be sent)
@@ -75,10 +83,10 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 			self.lock.wait()
 		self.lock.release()
 		self._respond(
-				self._response['statusCode'],
-				self._response['reason'],
-				self._response['data'],
-				self._response['headers'])
+			self._response['statusCode'],
+			self._response['reason'],
+			self._response['data'],
+			self._response['headers'])
 
 
 
@@ -88,7 +96,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 				worker is currently using msgQueue)
 			2. add msg to it
 			3. release lock and notify worker that a new msg is available '''
-	def _postMessage(self,wid,msg) : 
+	def _postMessage(self,wid,msg) :
 		mtw2lock[wid].acquire()
 		mtw2msgQueue[wid].append(msg)
 		mtw2lock[wid].notify()
@@ -108,17 +116,17 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		if headers == '' :
 			self.send_header('Content-Type','text/plain')
 		else :
-			for h,i in headers.iteritems() :
+			for h,i in headers.items() :
 				self.send_header(h,i)
 		self.end_headers()
 
 		if round(statusCode/100.0) != 2 :
 			if reason != '' :
 				self.wfile.write(reason)
-		else : 
+		else :
 			if data != '' :
 				self.wfile.write(data)
-		
+
 
 
 	'''
@@ -127,9 +135,9 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		self._response['statusCode'] = msg['statusCode']
 
 		for x in ('reason','data','headers') :
-			if x in msg : 
+			if x in msg :
 				self._response[x] = msg[x]
-			else : 
+			else :
 				self._response[x] = ''
 
 
@@ -146,7 +154,7 @@ class HTTPServerThread(threading.Thread) :
 		self.httpd = MultiThreadedHTTPServer(('127.0.0.1', 8125), HTTPRequestHandler)
 		self.httpd.serve_forever()
 		self.httpd.socket.close()
-	
+
 
 	def stop(self) :
 		self.httpd.shutdown()

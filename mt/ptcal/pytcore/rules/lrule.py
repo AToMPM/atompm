@@ -23,7 +23,7 @@ class LRule(Composer):
         self.M = Matcher(condition=LHS, max=max_iterations)
         self.I = Iterator(max_iterations=max_iterations)
         self.inner_rule = inner_rule
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -45,8 +45,8 @@ class LRule(Composer):
                 if self.inner_rule.exception:
                     self.exception = self.inner_rule.exception
                 return packet
-            
-                
+
+
             # Clean the packet: required since there is no Rewriter in a Query
             if  len(packet.match_sets[self.I.condition].matches) == 0:
                 del packet.match_sets[self.I.condition]

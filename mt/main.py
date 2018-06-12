@@ -24,14 +24,14 @@ from ws import WebSocket
 			WebSockets '''
 def main() :
 	logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
-	dummy_ws = WebSocket()	
+	dummy_ws = WebSocket()
 	httpd = HTTPServerThread()
 	httpd.start()
 
 	try :
 		asyncore.loop(1)
 	except KeyboardInterrupt :
-#		print(threading.enumerate())
+		#		print(threading.enumerate())
 		httpd.stop()
 		dummy_ws.close()
 		pass

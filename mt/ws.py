@@ -2,8 +2,17 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
-import re, ___websocket as websocket, threading, json, httplib, logging
+import re, threading, json, logging
 
+import sys
+
+
+if sys.version_info[0] < 3:
+	import httplib as httplib
+	import ___websocket as websocket
+else:
+	import http.client as httplib
+	import ___websocket as websocket
 
 '''
 	a friendly wrapper around python-websockets that doubles as a socketio client
@@ -32,7 +41,7 @@ class WebSocket :
 
 
 	def __init__(self,chlogh=None) :
-		assert chlogh == None or 'onchangelog' in dir(chlogh)		
+		assert chlogh == None or 'onchangelog' in dir(chlogh)
 		self._opened 	 = False
 		self._chlogh 	 = chlogh
 		self._dummy	 	 = (chlogh == None)
@@ -50,14 +59,21 @@ class WebSocket :
 	def connect(self) :
 		conn  = httplib.HTTPConnection('127.0.0.1:8124')
 		conn.request('POST','/socket.io/1/')
-		resp  = conn.getresponse() 
+		resp  = conn.getresponse()
 
 		if resp.status == 200 :
-			hskey = resp.read().split(':')[0]
+			resp = resp.read()
+
+			try: #handle bytes
+				resp = resp.decode()
+			except AttributeError:
+				pass
+
+			hskey = resp.split(':')[0]
 			self._ws = websocket.WebSocket(
-						'ws://127.0.0.1:8124/socket.io/1/websocket/'+hskey,
-						onopen	 = self._onopen,
-						onmessage = self._onmessage)
+				'ws://127.0.0.1:8124/socket.io/1/websocket/'+hskey,
+				onopen	 = self._onopen,
+				onmessage = self._onmessage)
 		else :
 			raise Exception('websocket initialization failed :: '+str(resp.reason))
 
@@ -72,7 +88,7 @@ class WebSocket :
 
 	''' 
 		parse and handle incoming message '''
-	def _onmessage(self,msg) : 
+	def _onmessage(self,msg) :
 		if not self._dummy :
 			logging.debug('## msg recvd '+msg)
 
@@ -96,13 +112,13 @@ class WebSocket :
 				#on POST /changeListener response
 				if msg['statusCode'] == 201 :
 					self.subscribed = True
-				else : 
-					self.subscribed = False				
-			elif self._chlogh and self.subscribed : 
+				else :
+					self.subscribed = False
+			elif self._chlogh and self.subscribed :
 				self._chlogh.onchangelog(msg['data'])
 		else :
 			pass
-	
+
 
 
 	''' 
@@ -118,6 +134,6 @@ class WebSocket :
 		if not self._opened :
 			t = threading.Timer(0.25,self.subscribe,[aswid])
 			t.start()
-		else : 
+		else :
 			self._ws.send(
-					'4:::{"method":"POST","url":"/changeListener?wid='+aswid+'"}')
+				'4:::{"method":"POST","url":"/changeListener?wid='+aswid+'"}')

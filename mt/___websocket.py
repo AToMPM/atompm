@@ -15,7 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 """
 
-import sys, re, urlparse, socket, asyncore
+import sys, re, socket, asyncore
+
+if sys.version_info[0] < 3:
+    import urlparse as urlparse
+else:
+    import urllib.parse as urlparse
 
 class WebSocket(object):
     def __init__(self, url, **kwargs):
@@ -26,7 +31,7 @@ class WebSocket(object):
         self.onmessage = kwargs.pop('onmessage', None)
         self.onerror = kwargs.pop('onerror', None)
         self.onclose = kwargs.pop('onclose', None)
-        if kwargs: raise ValueError('Unexpected argument(s): %s' % ', '.join(kwargs.values()))
+        if kwargs: raise ValueError('Unexpected argument(s): %s' % ', '.join(list(kwargs.values())))
 
         self._dispatcher = _Dispatcher(self)
 
@@ -44,10 +49,10 @@ class WebSocket(object):
             host = p.hostname
         else:
             raise ValueError('URL must be absolute')
-    
+
         if p.fragment:
             raise ValueError('URL must not contain a fragment component')
-    
+
         if p.scheme == 'ws':
             secure = False
             port = p.port or 80
@@ -58,8 +63,8 @@ class WebSocket(object):
         else:
             raise ValueError('Invalid URL scheme')
 
-        resource = p.path or u'/'
-        if p.query: resource += u'?' + p.query
+        resource = p.path or '/'
+        if p.query: resource += '?' + p.query
         return (host, port, resource, secure)
 
     #@classmethod
@@ -86,7 +91,7 @@ class _Dispatcher(asyncore.dispatcher):
         asyncore.dispatcher.__init__(self)
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connect((ws.host, ws.port))
-        
+
         self.ws = ws
         self._read_buffer = ''
         self._write_buffer = ''
@@ -96,7 +101,7 @@ class _Dispatcher(asyncore.dispatcher):
             hostport = '%s:%d' % (self.ws.host, self.ws.port)
         else:
             hostport = self.ws.host
-            
+
         fields = [
             'Upgrade: WebSocket',
             'Connection: Upgrade',
@@ -107,18 +112,18 @@ class _Dispatcher(asyncore.dispatcher):
         ]
         if self.ws.protocol: fields['Sec-WebSocket-Protocol'] = self.ws.protocol
         if self.ws.cookie_jar:
-            cookies = filter(lambda c: _cookie_for_domain(c, _eff_host(self.ws.host)) and \
-                             _cookie_for_path(c, self.ws.resource) and \
-                             not c.is_expired(), self.ws.cookie_jar)
-            
+            cookies = [c for c in self.ws.cookie_jar if _cookie_for_domain(c, _eff_host(self.ws.host)) and \
+                       _cookie_for_path(c, self.ws.resource) and \
+                       not c.is_expired()]
+
             for cookie in cookies:
                 fields.append('Cookie: %s=%s' % (cookie.name, cookie.value))
-        
+
         # key3 = ''.join(map(unichr, (random.randrange(256) for i in xrange(8))))
         self.write(_utf8('GET %s HTTP/1.1\r\n' \
                          '%s\r\n\r\n' % (self.ws.resource,
                                          '\r\n'.join(fields))))
-                                         # key3)))
+        # key3)))
 
     def handl_expt(self):
         self.handle_error()
@@ -151,22 +156,22 @@ class _Dispatcher(asyncore.dispatcher):
 
     def write(self, data):
         self._write_buffer += data # TODO: separate buffer for handshake from data to
-                                   # prevent mix-up when send() is called before
-                                   # handshake is complete?
+        # prevent mix-up when send() is called before
+        # handshake is complete?
 
     def _read_until(self, delimiter, callback):
-		  def lookForAndHandleCompletedFrame():
-			  pos = self._read_buffer.find(delimiter)
-			  if pos >= 0:
-				  pos += len(delimiter)
-				  data = self._read_buffer[:pos]
-				  self._read_buffer = self._read_buffer[pos:]
-				  if data:
-				     callback(data)
-				     lookForAndHandleCompletedFrame()
+        def lookForAndHandleCompletedFrame():
+            pos = self._read_buffer.find(delimiter)
+            if pos >= 0:
+                pos += len(delimiter)
+                data = self._read_buffer[:pos]
+                self._read_buffer = self._read_buffer[pos:]
+                if data:
+                    callback(data)
+                    lookForAndHandleCompletedFrame()
 
-		  self._read_buffer += self.recv(4096)
-		  lookForAndHandleCompletedFrame()
+        self._read_buffer += self.recv(4096)
+        lookForAndHandleCompletedFrame()
 
     def _handle_frame(self, frame):
         assert frame[-1] == '\xff'
@@ -181,8 +186,8 @@ class _Dispatcher(asyncore.dispatcher):
         assert header[-4:] == '\r\n\r\n'
         start_line, fields = _parse_http_header(header)
         if start_line != 'HTTP/1.1 101 Web Socket Protocol Handshake' or \
-           fields.get('Connection', None) != 'Upgrade' or \
-           fields.get('Upgrade', None) != 'WebSocket':
+                fields.get('Connection', None) != 'Upgrade' or \
+                fields.get('Upgrade', None) != 'WebSocket':
             raise WebSocketError('Invalid server handshake')
 
         self._handshake_complete = True
@@ -202,7 +207,7 @@ def _parse_http_header(header):
         start_line = lines[0]
     else:
         start_line = None
-        
+
     return (start_line, dict(map(split_field, lines[1:])))
 
 def _eff_host(host):

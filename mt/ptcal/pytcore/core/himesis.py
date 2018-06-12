@@ -35,11 +35,11 @@ class Himesis(ig.Graph):
     Constants = HConstants
     EDGE_LIST_THRESHOLD = 10**3
 
-    
+
     @staticmethod
     def is_RAM_attribute(attr_name):
         return not attr_name.startswith('$')
-    
+
     def __init__(self, name='', num_nodes=0, edges=[]):
         """
             Creates a typed, attributed, directed, multi-graph.
@@ -58,46 +58,46 @@ class Himesis(ig.Graph):
         self.mmTypeData = {}
         self._guid2index = {}
         self.session = {}
-        
+
     def copy(self):
         cpy = ig.Graph.copy(self)
         cpy._guid2index = copy.deepcopy(self._guid2index)
         ''' hergin :: motif-integration FIX for mmTypeData bug '''
         cpy.mmTypeData = copy.deepcopy(self.mmTypeData)
         cpy.session = copy.deepcopy(self.session)
-        
+
         cpy.name = copy.deepcopy(self.name)
         return cpy
-    
+
     def __copy__(self):
         return self.copy()
-    
+
     def __deepcopy__(self, memo):
         return self.__copy__()
-    
+
     def __str__(self):
         s = super(Himesis, self).__str__()
         return self.name + ' ' + s[s.index('('):] + ' ' + str(self[Himesis.Constants.GUID])
-    
+
     def get_id(self):
         """
             Returns the unique identifier of the graph
         """
         return self[Himesis.Constants.GUID]
-    
+
     def node_iter(self):
         """
             Iterates over the nodes in the graph, by index
         """
-        return xrange(self.vcount())
-    
+        return range(self.vcount())
+
     def edge_iter(self):
         """
             Iterates over the edges in the graph, by index
         """
-        return xrange(self.ecount())
-    
-    def add_node(self, fulltype=None, isConnector=None, newNodeGuid=None):    
+        return range(self.ecount())
+
+    def add_node(self, fulltype=None, isConnector=None, newNodeGuid=None):
         newNodeIndex = self.vcount()
         if newNodeGuid == None :
             newNodeGuid = uuid.uuid4()
@@ -106,16 +106,16 @@ class Himesis(ig.Graph):
         self.vs[newNodeIndex][Himesis.Constants.FULLTYPE] = fulltype
         self.vs[newNodeIndex][Himesis.Constants.CONNECTOR_TYPE] = isConnector
         if fulltype in self.mmTypeData :
-            for attr,val in self.mmTypeData[fulltype].iteritems():
+            for attr,val in self.mmTypeData[fulltype].items():
                 self.vs[newNodeIndex][str(attr)] = val
         self._guid2index[newNodeGuid] = newNodeIndex
         return newNodeIndex
-    
+
     def delete_nodes(self, nodes):
         self.delete_vertices(nodes)
         # Regenerate the lookup because node indices have changed
         self._guid2index = dict((self.vs[node][Himesis.Constants.GUID], node) for node in self.node_iter())
-    
+
     def get_node(self,guid):
         """
             Retrieves the node instance with the specified guid
@@ -123,7 +123,7 @@ class Himesis(ig.Graph):
         """
         if guid in self._guid2index:
             if self._guid2index[guid] >= self.vcount() or \
-                self.vs[self._guid2index[guid]][Himesis.Constants.GUID] != guid :
+                    self.vs[self._guid2index[guid]][Himesis.Constants.GUID] != guid :
                 self._guid2index = dict((self.vs[node][Himesis.Constants.GUID], node) for node in self.node_iter())
             try:
                 return self._guid2index[guid]
@@ -133,7 +133,7 @@ class Himesis(ig.Graph):
         else :
             #TODO: This should be a TransformationLanguageSpecificException
             raise KeyError('Node not found with specified id. Make sure to only create nodes via Himesis.add_node(): ' + str(guid))
-    
+
     def draw(self, visual_style={}, label=None, show_guid=False, show_id=False, debug=False, width=600, height=900):
         """
         Visual graphic rendering of the graph.
@@ -146,7 +146,7 @@ class Himesis(ig.Graph):
             visual_style["layout"] = 'fr'
         if 'margin' not in visual_style:
             visual_style["margin"] = 10
-        
+
         # Set the labels
         if not label:
             if show_guid:
@@ -162,14 +162,14 @@ class Himesis(ig.Graph):
                     if not visual_style["vertex_label"][n]:
                         visual_style["vertex_label"][n] = self.vs[n][Himesis.Constants.FULLTYPE]
                         if debug:
-                            visual_style["vertex_label"][n] = str(n) + ':' + visual_style["vertex_label"][n] 
+                            visual_style["vertex_label"][n] = str(n) + ':' + visual_style["vertex_label"][n]
                     elif debug:
                         visual_style["vertex_label"][n] = str(n) + ':' + visual_style["vertex_label"][n]
             except:
                 raise Exception('%s is not a valid attribute' % label)
-        
+
         return ig.plot(self, bbox=(0, 0, width, height), **visual_style)
-    
+
     def execute(self, *args):
         raise AttributeError('This method is not implemented')
 
@@ -179,7 +179,7 @@ class HimesisPattern(Himesis):
         super(HimesisPattern, self).__init__(name, num_nodes, edges)
         self.nodes_label = {}
         self.nodes_pivot_out = {}
-    
+
     def get_node_with_label(self, label):
         """
             Retrieves the index of the node with the specified label.
@@ -189,7 +189,7 @@ class HimesisPattern(Himesis):
             self.nodes_label = dict([(self.vs[i][Himesis.Constants.MT_LABEL], i) for i in self.node_iter()])
         if label in self.nodes_label:
             return self.nodes_label[label]
-    
+
     def get_pivot_out(self, pivot):
         """
             Retrieves the index of the pivot node
@@ -205,7 +205,7 @@ class HimesisPreConditionPattern(HimesisPattern):
     def __init__(self, name='', num_nodes=0, edges=[]):
         super(HimesisPreConditionPattern, self).__init__(name, num_nodes, edges)
         self.nodes_pivot_in = {}
-    
+
     def get_pivot_in(self, pivot):
         """
             Retrieves the index of the pivot node
@@ -215,7 +215,7 @@ class HimesisPreConditionPattern(HimesisPattern):
             self.nodes_pivot_in = dict([(self.vs[i][Himesis.Constants.MT_PIVOT_IN], i) for i in self.node_iter()])
         if pivot in self.nodes_pivot_in:
             return self.nodes_pivot_in[pivot]
-    
+
     def constraint(self, mtLabel2graphIndexMap, graph):
         """
             If a constraint shall be specified, the corresponding Himesis graph must override this method.
@@ -225,14 +225,14 @@ class HimesisPreConditionPattern(HimesisPattern):
             @param graph: The whole input graph.
         """
         raise NotImplementedError('Use graph[Himesis.Constants.MT_CONSTRAINT]() instead')
-    
+
 
 class HimesisPreConditionPatternLHS(HimesisPreConditionPattern):
     def __init__(self, name='', num_nodes=0, edges=[]):
         super(HimesisPreConditionPatternLHS, self).__init__(name, num_nodes, edges)
         self.NACs = []
         self.bound_start_index = 0  # index of first bound NAC in NACs list
-    
+
     def addNAC(self, nac):
         """
             Appends the NAC to this LHS pattern
@@ -242,7 +242,7 @@ class HimesisPreConditionPatternLHS(HimesisPreConditionPattern):
         if nac.bridge is None:
             nac.bridge = nac.compute_bridge()
         self.NACs.append(nac)
-    
+
     def addNACs(self, NACs):
         """
             Stores the list of NACs in decreasing order of their size
@@ -262,23 +262,23 @@ class HimesisPreConditionPatternLHS(HimesisPreConditionPattern):
         unbound.sort(key=lambda nac: nac.vcount(), reverse=True)
         self.NACs = unbound + bound
         self.bound_start_index = len(unbound)
-    
+
     def getUnboundNACs(self):
         return self.NACs[:self.bound_start_index]
-    
+
     def getBoundNACs(self):
         return self.NACs[self.bound_start_index:]
-    
+
     def hasBoundNACs(self):
         return self.bound_start_index < len(self.NACs)
-    
+
 
 class HimesisPreConditionPatternNAC(HimesisPreConditionPattern):
     def __init__(self, LHS=None, name='', num_nodes=0, edges=[]):
         super(HimesisPreConditionPatternNAC, self).__init__(name, num_nodes, edges)
         self.LHS = LHS
         self.bridge_size = 0
-    
+
     def set_bridge_size(self):
         """
             Computes the bridge and stores the number of its nodes.
@@ -286,7 +286,7 @@ class HimesisPreConditionPatternNAC(HimesisPreConditionPattern):
         if self.LHS is None:
             raise Exception('Missing LHS to compute bridge')
         self.bridge_size = self.compute_bridge().vcount()
-       
+
     def compute_bridge(self):
         """
             Creates a HimesisPreConditionPattern defined as the intersection of graph with this instance.
@@ -303,15 +303,15 @@ class HimesisPreConditionPatternNAC(HimesisPreConditionPattern):
             G1, G2 = G2, G1
         # The bridge
         G = HimesisPreConditionPattern()
-        G[Himesis.Constants.GUID] = uuid.uuid4()    
-            
+        G[Himesis.Constants.GUID] = uuid.uuid4()
+
         # We don't need to actually solve the largest common subgraph (LCS) problem
         # because we assume that the nodes are labelled uniquely in each graph
         # and that if a label is in G1 and in G2, then it will be in G
         if len(G1.vs) == 0:
             return G
 
-        Labels2 = G2.vs[Himesis.Constants.MT_LABEL] 
+        Labels2 = G2.vs[Himesis.Constants.MT_LABEL]
         for label in G1.vs[Himesis.Constants.MT_LABEL]:
             if label in Labels2:
                 # Get the corresponding node from G1 
@@ -345,14 +345,14 @@ class HimesisPreConditionPatternNAC(HimesisPreConditionPattern):
                         G.vs[newNodeIndex][Himesis.Constants.GUID] = uuid.uuid4()
                         continue
                     # Ignore non-RAM attributes ('special' and HConstants attributes)
-                    elif not Himesis.is_RAM_attribute(attr): 
+                    elif not Himesis.is_RAM_attribute(attr):
                         continue
                     # Handle normal attribute
                     else :
                         if not v2[attr]:
                             # There is no constraint for this attribute
                             continue
-                                     
+
                         # The attribute constraint code is the conjunction of the LHS constraint
                         # with the NAC constraint for this attribute
                         def get_evalAttrConditions(_attr,_v1,_v2) :
@@ -374,15 +374,15 @@ class HimesisPreConditionPatternNAC(HimesisPreConditionPattern):
                 tgt = tgt[0]
                 G.add_edges([(src.index, tgt.index)])
             elif len(src) == 0 :
-#                raise Exception('Label does not exist :: '+str(src_label))
+                #                raise Exception('Label does not exist :: '+str(src_label))
                 pass
             elif len(tgt) == 0 :
-#                raise Exception('Label does not exist :: '+str(tgt_label))
+                #                raise Exception('Label does not exist :: '+str(tgt_label))
                 pass
             elif len(src) > 1 :
                 raise Exception('Label is not unique :: ' + str(src_label))
             elif len(tgt) > 1 :
-                raise Exception('Label is not unique :: ' + str(tgt_label))        
+                raise Exception('Label is not unique :: ' + str(tgt_label))
         return G
 
 
@@ -398,7 +398,7 @@ class HimesisPostConditionPattern(HimesisPattern):
         The action must be specified in the pattern graph and not the input graph.
         """
         raise NotImplementedError('Use graph[Himesis.Constants.MT_ACTION]() instead')
-    
+
     # This method implements the rewriting part of the rule.
     '''    
         NOTE 
@@ -432,7 +432,7 @@ class HimesisPostConditionPattern(HimesisPattern):
         for mm in self[Himesis.Constants.MISSING_METAMODELS]() :
             packet.deltas.append({'op':'LOADMM','name':mm})
 
-    
+
         # Set the attributes of graph.vs[graphNodeIndex] to match those of self.vs[rhsNodeIndex]
         def set_attributes(rhsNodeIndex, graphNodeIndex, newNode, pLabel2graphIndexMap) :
             changedSomething = False
@@ -450,16 +450,16 @@ class HimesisPostConditionPattern(HimesisPattern):
                         if oldVal != newVal :
                             graph.vs[graphNodeIndex][attrName] = newVal
                             packet.deltas.append(
-                                    {'op':'CHATTR',
-                                     'guid':graph.vs[graphNodeIndex][Himesis.Constants.GUID],
-                                     'attr':attrName,
-                                     'old_val':oldVal,
-                                     'new_val':newVal})
+                                {'op':'CHATTR',
+                                 'guid':graph.vs[graphNodeIndex][Himesis.Constants.GUID],
+                                 'attr':attrName,
+                                 'old_val':oldVal,
+                                 'new_val':newVal})
                             changedSomething = True
-                    except Exception, e :
+                    except Exception as e :
                         raise Exception("An error has occurred while computing the value of the attribute '%s' :: %s" % (attrName, e))
             return changedSomething
-        
+
         # Build a dictionary {label: node index} mapping each label of the pattern to a node in the graph to rewrite.
         # Because of the uniqueness property of labels in a rule, we can store all LHS labels
         # and subsequently add the labels corresponding to the nodes to be created.
@@ -469,7 +469,7 @@ class HimesisPostConditionPattern(HimesisPattern):
         LHS_labels = self.pre_labels
         for label in LHS_labels:
             rhsNodeIndex = self.get_node_with_label(label)
-            if rhsNodeIndex is None: 
+            if rhsNodeIndex is None:
                 continue        # not in the interface graph (LHS n RHS)
             if set_attributes(rhsNodeIndex, labels[label], False, labels) :
                 graph.vs[labels[label]][Himesis.Constants.MT_DIRTY] = True
@@ -488,7 +488,7 @@ class HimesisPostConditionPattern(HimesisPattern):
                     return 1
                 return -1
             RHS_labels.sort(nonConnectorsFirst)
-            neighborhood = map(lambda l: graph.vs[labels[l]].attributes(), LHS_labels)
+            neighborhood = [graph.vs[labels[l]].attributes() for l in LHS_labels]
 
         new_labels = []
         for label in RHS_labels:
@@ -496,12 +496,12 @@ class HimesisPostConditionPattern(HimesisPattern):
             if label not in LHS_labels:
                 new_labels += [label]
                 newNodeIndex = graph.add_node(
-                                self.vs[rhsNodeIndex][Himesis.Constants.FULLTYPE],
-                                self.vs[rhsNodeIndex][Himesis.Constants.CONNECTOR_TYPE])
+                    self.vs[rhsNodeIndex][Himesis.Constants.FULLTYPE],
+                    self.vs[rhsNodeIndex][Himesis.Constants.CONNECTOR_TYPE])
                 packet.deltas.append(
-                        {'op':'MKNODE',
-                         'neighborhood':neighborhood,
-                         'guid':graph.vs[newNodeIndex][Himesis.Constants.GUID]})
+                    {'op':'MKNODE',
+                     'neighborhood':neighborhood,
+                     'guid':graph.vs[newNodeIndex][Himesis.Constants.GUID]})
                 labels[label] = newNodeIndex
                 set_attributes(rhsNodeIndex, newNodeIndex, True, labels)
 
@@ -509,15 +509,15 @@ class HimesisPostConditionPattern(HimesisPattern):
         visited_edges = []
         for label in sorted(new_labels):
             for edge in self.es.select(lambda e: (e.index not in visited_edges and
-                      (label == self.vs[e.source][Himesis.Constants.MT_LABEL] or
-                       label == self.vs[e.target][Himesis.Constants.MT_LABEL]))):
+                                                  (label == self.vs[e.source][Himesis.Constants.MT_LABEL] or
+                                                   label == self.vs[e.target][Himesis.Constants.MT_LABEL]))):
                 src_label = self.vs[edge.source][Himesis.Constants.MT_LABEL]
                 tgt_label = self.vs[edge.target][Himesis.Constants.MT_LABEL]
                 graph.add_edges([(labels[src_label], labels[tgt_label])])
                 packet.deltas.append(
-                        {'op':'MKEDGE',                        
-                         'guid1':graph.vs[labels[src_label]][Himesis.Constants.GUID],
-                         'guid2':graph.vs[labels[tgt_label]][Himesis.Constants.GUID]})
+                    {'op':'MKEDGE',
+                     'guid1':graph.vs[labels[src_label]][Himesis.Constants.GUID],
+                     'guid2':graph.vs[labels[tgt_label]][Himesis.Constants.GUID]})
                 visited_edges.append(edge.index)
 
         # Set the output pivots
@@ -531,7 +531,7 @@ class HimesisPostConditionPattern(HimesisPattern):
         # Perform the post-action
         try:
             packet.deltas.extend(self[Himesis.Constants.MT_ACTION](labels, graph))
-        except Exception, e:
+        except Exception as e:
             raise Exception('An error has occurred while applying the post-action', e)
 
         # Delete nodes (automatically deletes adjacent edges)
@@ -546,17 +546,17 @@ class HimesisPostConditionPattern(HimesisPattern):
                     found = False
                     for rmedge in rmedges :
                         if rmedge['guid1'] == graph.vs[edge.source][Himesis.Constants.GUID] and \
-                            rmedge['guid2'] == graph.vs[edge.target][Himesis.Constants.GUID] :
+                                rmedge['guid2'] == graph.vs[edge.target][Himesis.Constants.GUID] :
                             found = True
                             break
-                    if not found :                        
+                    if not found :
                         rmedges.append({'op':'RMEDGE',
                                         'guid1':graph.vs[edge.source][Himesis.Constants.GUID],
                                         'guid2':graph.vs[edge.target][Himesis.Constants.GUID]})
         if len(labels_to_delete) > 0 :
             packet.deltas = rmedges + rmnodes + packet.deltas
             graph.delete_nodes(labels_to_delete)
-            
+
             ''' hergin :: motif-integration start :: remove the deleted nodes from pivots list '''
             for uuid in packet.global_pivots:
                 deleted=False

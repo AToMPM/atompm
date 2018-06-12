@@ -3,8 +3,8 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 import copy, subprocess, traceback, os
-from pytcore.core.himesis import HConstants as HC
-from utils import Utilities as utils
+from .pytcore.core.himesis import HConstants as HC
+from .utils import Utilities as utils
 
 '''
     implements the DesignerAPI functions used in pattern/attribute constraints 
@@ -22,18 +22,18 @@ from utils import Utilities as utils
                 . 'session_*()' functions provide a clean and efficient way to 
                   remember information across rules
                 . the 'isConnectionType()' function '''
-class DesignerAPI :    
+class DesignerAPI :
     def __init__(self,username,aswid,mtwid) :
         self._username = username
         self._aswid        = aswid
         self._mtwid        = mtwid
-        
+
     def _aswPrintReq(self,msg):
-        utils.httpReq(    'PUT', 
-                        '127.0.0.1:8124', 
-                        '/GET/console?wid='+self._aswid, 
-                        {'text':msg})
-    
+        utils.httpReq(    'PUT',
+                          '127.0.0.1:8124',
+                          '/GET/console?wid='+self._aswid,
+                          {'text':msg})
+
     def _printToDevCon(self,msg):
         self._aswPrintReq(msg)
 
@@ -71,12 +71,12 @@ class DesignerAPI :
         self._attr       = attr
         self._journal     = journal
 
-        matched = self._pl2gi.values()
+        matched = list(self._pl2gi.values())
         for v in self._graph.vs :
             if v.index not in matched :
                 self._pl2gi['$atompmId:'+str(v['$atompmId'])] = v.index
-            
-            
+
+
     '''
         wrapper around raise()... to be properly reported to the client, 
         exceptions can not simply be raised... this would just cause them to be
@@ -94,20 +94,20 @@ class DesignerAPI :
     def _getAttr(self,attr=None,pLabel=None) :
         if pLabel == None :
             if self._type.startswith('pattern') :
-                self.__raise(\
+                self.__raise( \
                     'getAttr() requires a __pLabel in pattern conditions/actions')
             pLabel = self._pLabel
         elif not self._type.startswith('pattern') :
-            self.__raise(\
+            self.__raise( \
                 'getAttr() only accepts a __pLabel in pattern conditions/actions')
         elif pLabel not in self._pl2gi :
-            self.__raise(\
-                'invalid getAttr() __pLabel :: '+str(pLabel)+' (either no node '+\
+            self.__raise( \
+                'invalid getAttr() __pLabel :: '+str(pLabel)+' (either no node '+ \
                 'with that __pLabel exists, or none is matched yet)')
         if attr == None :
             if not self._type.startswith('attr') :
-                self.__raise(\
-                    'getAttr() can only be called without parameters'+\
+                self.__raise( \
+                    'getAttr() can only be called without parameters'+ \
                     'in attribute conditions/actions')
             attr = self._attr
 
@@ -115,20 +115,20 @@ class DesignerAPI :
         if attr not in n.attribute_names() :
             self.__raise('invalid getAttr() attribute :: '+str(attr))
         return copy.deepcopy(n[attr])
-    
-    
+
+
     def _getAttrNames(self,pLabel=None):
         if pLabel == None :
             if self._type.startswith('pattern') :
-                self.__raise(\
+                self.__raise( \
                     'getAttrNames() requires a __pLabel in pattern conditions/actions')
-            pLabel = self._pLabel        
+            pLabel = self._pLabel
         elif not self._type.startswith('pattern') :
-            self.__raise(\
+            self.__raise( \
                 'getAttrNames() only accepts a __pLabel in pattern conditions/actions')
         elif pLabel not in self._pl2gi :
-            self.__raise(\
-                'invalid getAttr() __pLabel :: '+str(pLabel)+' (either no node '+\
+            self.__raise( \
+                'invalid getAttr() __pLabel :: '+str(pLabel)+' (either no node '+ \
                 'with that __pLabel exists, or none is matched yet)')
 
         n = self._graph.vs[self._pl2gi[pLabel]]
@@ -138,18 +138,18 @@ class DesignerAPI :
     def _hasAttr(self,attr=None,pLabel=None) :
         if pLabel == None :
             if self._type.startswith('pattern') :
-                self.__raise(\
+                self.__raise( \
                     'hasAttr() requires a __pLabel in pattern conditions/actions')
             pLabel = self._pLabel
         elif not self._type.startswith('pattern') :
-            self.__raise(\
+            self.__raise( \
                 'hasAttr() only accepts a __pLabel in pattern conditions/actions')
         elif pLabel not in self._pl2gi :
-            self.__raise(\
-                'invalid hasAttr() __pLabel :: '+str(pLabel)+' (either no node '+\
+            self.__raise( \
+                'invalid hasAttr() __pLabel :: '+str(pLabel)+' (either no node '+ \
                 'with that __pLabel exists, or none is matched yet)')
         if attr == None :
-            self.__raise(\
+            self.__raise( \
                 'hasAttr() can not be called without an attribute parameter')
 
         n = self._graph.vs[self._pl2gi[pLabel]]
@@ -163,8 +163,8 @@ class DesignerAPI :
         elif pLabel == None :
             self.__raise('setAttr() requires a valid __pLabel')
         elif pLabel not in self._pl2gi :
-            self.__raise(\
-                'invalid setAttr() __pLabel :: '+str(pLabel)+' (either no node '+\
+            self.__raise( \
+                'invalid setAttr() __pLabel :: '+str(pLabel)+' (either no node '+ \
                 'with that __pLabel exists, or none is matched yet)')
 
         n = self._graph.vs[self._pl2gi[pLabel]]
@@ -174,18 +174,18 @@ class DesignerAPI :
         if oldVal != val :
             n[attr] = val
             self._journal.append(
-                                {'op':'CHATTR',
-                                   'guid':n[HC.GUID],
-                                 'attr':attr,
-                                 'old_val':oldVal,
-                                 'new_val':val})
+                {'op':'CHATTR',
+                 'guid':n[HC.GUID],
+                 'attr':attr,
+                 'old_val':oldVal,
+                 'new_val':val})
             n[HC.MT_DIRTY] = True
 
 
 
     def _getAllNodes(self,fulltypes=None) :
         if not self._type.startswith('pattern') :
-            self.__raise(\
+            self.__raise( \
                 'getAllNodes() can only be used in pattern conditions/actions')
         elif fulltypes != None and fulltypes.__class__ != [].__class__ :
             self.__raise('invalid getAllNodes() fulltypes array :: '+fulltypes)
@@ -203,27 +203,27 @@ class DesignerAPI :
 
     def _getNeighbors(self,dir,type,pLabel) :
         if not self._type.startswith('pattern') :
-            self.__raise(\
+            self.__raise( \
                 'getNeighbors() can only be used in pattern conditions/actions')
         elif pLabel == None :
             self.__raise('getNeighbors() requires a valid __pLabel')
         elif pLabel not in self._pl2gi :
-            self.__raise(\
-                'invalid getNeighbors() __pLabel :: '+str(pLabel)+' (no node '+\
+            self.__raise( \
+                'invalid getNeighbors() __pLabel :: '+str(pLabel)+' (no node '+ \
                 'with that __pLabel exists)')
 
         pLabels = set()
         if len(self._graph.es) > 0 :
-            gi2pl = dict((v, k) for (k, v) in self._pl2gi.items())
+            gi2pl = dict((v, k) for (k, v) in list(self._pl2gi.items()))
             idx   = self._pl2gi[pLabel]
             for e in self._graph.get_edgelist() :
                 if e[0] == idx and \
-                    (dir == '>' or dir == '*' or dir == "out") and \
-                    (type == '*' or self._graph.vs[e[1]][HC.FULLTYPE] == type) :
+                        (dir == '>' or dir == '*' or dir == "out") and \
+                        (type == '*' or self._graph.vs[e[1]][HC.FULLTYPE] == type) :
                     pLabels.add(gi2pl[e[1]])
                 elif e[1] == idx and \
-                      (dir == '<' or dir == '*' or dir == "in") and \
-                      (type == '*' or self._graph.vs[e[0]][HC.FULLTYPE] == type) :
+                        (dir == '<' or dir == '*' or dir == "in") and \
+                        (type == '*' or self._graph.vs[e[0]][HC.FULLTYPE] == type) :
                     pLabels.add(gi2pl[e[0]])
         return list(pLabels)
 
@@ -231,13 +231,13 @@ class DesignerAPI :
 
     def _isConnectionType(self,pLabel) :
         if not self._type.startswith('pattern') :
-            self.__raise(\
+            self.__raise( \
                 'isConnectionType() can only be used in pattern conditions/actions')
         elif pLabel == None :
             self.__raise('isConnectionType() requires a valid __pLabel')
         elif pLabel not in self._pl2gi :
-            self.__raise(\
-                'invalid isConnectionType() __pLabel :: '+str(pLabel)+' (no node '+\
+            self.__raise( \
+                'invalid isConnectionType() __pLabel :: '+str(pLabel)+' (no node '+ \
                 'with that __pLabel exists)')
 
         return self._graph.vs[self._pl2gi[pLabel]][HC.CONNECTOR_TYPE]
@@ -253,7 +253,7 @@ class DesignerAPI :
 
     def _session_put(self,key,val) :
         if not self._type.endswith('Action') :
-            self.__raise(\
+            self.__raise( \
                 'session_put() can only be used in attribute and pattern actions')
 
         self._graph.session[key] = val
@@ -262,24 +262,24 @@ class DesignerAPI :
 
     def _pauseTransformation(self):
         self._httpReq("PUT", '127.0.0.1:8125', '/execmode?wid='+self._mtwid, {'mode':'pause'})
-        
+
     def _stopTransformation(self):
         self._httpReq("PUT", '127.0.0.1:8125', '/execmode?wid='+self._mtwid, {'mode':'stop'})
-        
+
     def _resumeTransformation(self):
         self._httpReq("PUT", '127.0.0.1:8125', '/execmode?wid='+self._mtwid, {'mode':'play'})
 
     def _httpReq(self,method,host,uri,data) :
         if host == None :
             return utils.httpReq(
-                        method,
-                        '127.0.0.1:8124',
-                        uri+'?wid='+self._aswid,
-                        data)
-        else : 
+                method,
+                '127.0.0.1:8124',
+                uri+'?wid='+self._aswid,
+                data)
+        else :
             return utils.httpReq(method,host,uri,data)
 
-        
+
 
     def _print(self,str) :
         print(str)
@@ -289,7 +289,7 @@ class DesignerAPI :
     def _sys_call(self,args) :
         try :
             return subprocess.call(args)
-        except OSError as ex : 
+        except OSError as ex :
             self.__raise('system call crashed on :: '+ex.strerror)
 
 
@@ -297,7 +297,7 @@ class DesignerAPI :
     def _sys_mkdir(self,path) :
         try :
             return os.makedirs('./users/'+self._username+'/'+path)
-        except OSError as ex : 
+        except OSError as ex :
             if ex.errno != 17 :
                 #ignore directory already exists error
                 self.__raise('directory creation failed :: '+ex.strerror)

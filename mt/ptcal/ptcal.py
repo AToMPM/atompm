@@ -2,25 +2,36 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
-import re, json, uuid, cPickle as pickle, threading, itertools, traceback, logging
+import re, json, uuid, threading, itertools, traceback, logging, sys
+
+if sys.version_info[0] < 3:
+    import cPickle as pickle
+    import StringIO as StringIO
+    from Queue import *
+    from _abcoll import Iterable
+else:
+    import pickle as pickle
+    import io as StringIO
+    from queue import *
+
 from random import Random
-from utils import Utilities as utils
-from tcontext import ModelTransformationContext, ExhaustContext
-from tconstants import TConstants as TC
-from compiler import ModelAndRuleCompiler
-from pytcore.core.himesis import HConstants as HC
-from pytcore.rules.ndarule import NDARule
-from pytcore.tcore.messages import Packet
-from accurate_time import time as clock
-from accurate_time import set_start_time
+from .utils import Utilities as utils
+from .tcontext import ModelTransformationContext, ExhaustContext
+from .tconstants import TConstants as TC
+from .compiler import ModelAndRuleCompiler
+from .pytcore.core.himesis import HConstants as HC
+from .pytcore.rules.ndarule import NDARule
+from .pytcore.tcore.messages import Packet
+from .accurate_time import time as clock
+from .accurate_time import set_start_time
 set_start_time()
 
-import cProfile, pstats, StringIO
+import cProfile, pstats
 
 ''' hergin :: motif-integration start '''
-from motifcontext import MotifContext
-from tcorecontext import TCoreContext
-from pytcore.tcore.messages import Pivots
+from .motifcontext import MotifContext
+from .tcorecontext import TCoreContext
+from .pytcore.tcore.messages import Pivots
 ''' hergin :: motif-integration end '''
 
 import igraph as ig
@@ -28,12 +39,12 @@ import igraph as ig
 import datetime
 from random import *
 from threading import *
-from Queue import *
-from barrier import *
-from synchgraph import *
+
+from .barrier import *
+from .synchgraph import *
 from itertools import *
 #from petrinet import *
-from _abcoll import Iterable
+
 from pprint import isreadable
 from math import *
 
@@ -76,7 +87,7 @@ class PyTCoreAbstractionLayer :
         self.packet                        = None
         self.globalDeltas                  = []
         self.incUpdates                     = True
-        self.sendDeltas                    = True 
+        self.sendDeltas                    = True
         ''' hergin :: motif-integration end '''
         self._mtContexts                   = []
         self._transfData                   = {}
@@ -112,19 +123,19 @@ class PyTCoreAbstractionLayer :
         self.loadedModel=False
         #Enactment, set of formalisms we load automatically to do the cleanups.
         self._loadedMMs = set()
-        
+
     def processQuery(self,query):
         result = ""
         query = query['query'].replace('"',"'")
         qValue = query.split('(')[0].strip()
-        
+
         if qValue == "getCount":
             typ = query.split("'")[1].strip()
             def f(e):
                 return e['$ft__'].endswith(typ)
             result = "Number of '" + typ +"' in the resulting graph: " + str(len(filter(f,self.packet.graph.vs)))
             # I tried to use self.packet.graph.vs.select(tokens_eq=3) but the attribute names starting with $ didnt let me
-        
+
         elif qValue == "toggleSendDelta":
             self.sendDeltas = not self.sendDeltas
             if self.sendDeltas:
@@ -160,9 +171,9 @@ class PyTCoreAbstractionLayer :
                 self._handleChangelogs()
                 return self._mtContexts[-1].isLastStepFeedbackReceived()
             utils.doWhen(
-                         condition,
-                         TC.WAIT_ON_CHLOG_DELAY,
-                         callback)
+                condition,
+                TC.WAIT_ON_CHLOG_DELAY,
+                callback)
         else:
             callback()
 
@@ -183,68 +194,68 @@ class PyTCoreAbstractionLayer :
         TBI: performance would benefit greatly from caches that map atompm ids to
               GUIDs '''
     def _handleChangelogs(self) :
-        
+
         '''
             handle a single changelog '''
         def _handleChangelog(changelog) :
             def eq(a,b) : return str(a) == str(b)
 
             for c in changelog :
-                if c['op'] == 'MKEDGE' : 
+                if c['op'] == 'MKEDGE' :
                     node1 = \
                         self._M.vs.select(lambda v : eq(v['$atompmId'],c['id1']))[0]
                     node2 = \
                         self._M.vs.select(lambda v : eq(v['$atompmId'],c['id2']))[0]
                     self._M.add_edges([(node1.index, node2.index)])
-                
-                elif c['op'] == 'RMEDGE' : 
+
+                elif c['op'] == 'RMEDGE' :
                     pass
-    
+
                 elif c['op'] == 'MKNODE' :
                     self._compiler.addNode(self._M, json.loads(c['node']), c['id'])
-    
+
                 elif c['op'] == 'RMNODE' :
                     node = \
                         self._M.vs.select(lambda v : eq(v['$atompmId'],c['id']))[0]
-                    self._M.delete_nodes([node.index]) 
-    
-                elif c['op'] == 'CHATTR' : 
+                    self._M.delete_nodes([node.index])
+
+                elif c['op'] == 'CHATTR' :
                     node = \
                         self._M.vs.select(lambda v : eq(v['$atompmId'],c['id']))[0]
                     self._M.vs[node.index][c['attr']] = c['new_val']
-                    
-                elif c['op'] == 'LOADMM' : 
+
+                elif c['op'] == 'LOADMM' :
                     self._compiler.parseMetamodel(
-                            c['name'],
-                            utils.fread(
-                                '/users/%s/%s.metamodel'%(self.username,c['name'])),
-                            loadMM=True)
-    
-                elif c['op'] == 'DUMPMM' : 
+                        c['name'],
+                        utils.fread(
+                            '/users/%s/%s.metamodel'%(self.username,c['name'])),
+                        loadMM=True)
+
+                elif c['op'] == 'DUMPMM' :
                     self._compiler.unloadMetamodel(c['name'])
-    
-                elif c['op'] == 'RESETM' : 
+
+                elif c['op'] == 'RESETM' :
                     self._M = self._compiler.compileModel(c['new_model'])
                     self._M.mmTypeData = self._compiler.getMMTypeData()
-    
-                elif c['op'] == 'SYSOUT' : 
+
+                elif c['op'] == 'SYSOUT' :
                     ''' hergin :: motif-integration :: modify :: added startsWith functions '''
                     if c['text'].startswith(TC.RULE_SUCCESS_MSG) or \
-                        c['text'].startswith(TC.RULE_NOT_APPLICABLE_MSG) or \
-                        c['text'].startswith(TC.RULE_FAILURE_MSG) or \
-                        c['text'].startswith(TC.TRANSFORMATION_DONE) or \
-                        c['text'].startswith(TC.REMOTE_APPLICATION_FAILURE) :
+                            c['text'].startswith(TC.RULE_NOT_APPLICABLE_MSG) or \
+                            c['text'].startswith(TC.RULE_FAILURE_MSG) or \
+                            c['text'].startswith(TC.TRANSFORMATION_DONE) or \
+                            c['text'].startswith(TC.REMOTE_APPLICATION_FAILURE) :
                         self._mtContexts[-1].setLastStepFeedbackReceived()
 
 
         self._lock.acquire()
         self._changelogs.sort(key=lambda c : utils.sn2int(c['sequence#']))
         if len(self._changelogs) == 0 or \
-            self._aswNextSequenceNumber == None or \
-            utils.sn2int(self._changelogs[0]['sequence#']) > \
+                self._aswNextSequenceNumber == None or \
+                utils.sn2int(self._changelogs[0]['sequence#']) > \
                 utils.sn2int(self._aswNextSequenceNumber) :
             self._lock.release()
-        else : 
+        else :
             sn = self._changelogs[0]['sequence#']
             if utils.sn2int(sn) < utils.sn2int(self._aswNextSequenceNumber) :
                 raise ValueError('invalid changelog sequence# :: '+sn)
@@ -252,10 +263,10 @@ class PyTCoreAbstractionLayer :
                 logging.debug('++ ('+sn+') '+str(self._changelogs[0]['changelog']))
                 _handleChangelog(self._changelogs.pop(0)['changelog'])
                 self._aswNextSequenceNumber = \
-                            utils.incrementSequenceNumber(self._aswNextSequenceNumber)
+                    utils.incrementSequenceNumber(self._aswNextSequenceNumber)
                 self._lock.release()
                 self._handleChangelogs()
-    
+
 
 
     '''
@@ -273,10 +284,10 @@ class PyTCoreAbstractionLayer :
     def loadModel(self,m,mms,sn) :
         assert self._M == None, 'ptcal.loadModel() should only be called once'
         self._compiler = ModelAndRuleCompiler(
-                                self.username,
-                                self._aswCommTools['wid'],
-                                self.defaultDCL,
-                                self._mtwid)
+            self.username,
+            self._aswCommTools['wid'],
+            self.defaultDCL,
+            self._mtwid)
         self._M = self._compiler.compileModel(m,mmsData=mms)
         self._M.mmTypeData = self._compiler.getMMTypeData()
         ''' hergin :: motif-integration start '''
@@ -285,10 +296,9 @@ class PyTCoreAbstractionLayer :
         self._aswNextSequenceNumber = utils.incrementSequenceNumber(sn)
         self._lock.acquire()
         self._changelogs = \
-            filter(lambda c : utils.sn2int(sn) < utils.sn2int(c['sequence#']), 
-                     self._changelogs)
+            [c for c in self._changelogs if utils.sn2int(sn) < utils.sn2int(c['sequence#'])]
         self._lock.release()
-        
+
     '''
         load a PN model (and its metamodels)
 
@@ -313,16 +323,15 @@ class PyTCoreAbstractionLayer :
         self._aswNextSequenceNumber = utils.incrementSequenceNumber(sn)
         self._lock.acquire()
         self._changelogs = \
-            filter(lambda c : utils.sn2int(sn) < utils.sn2int(c['sequence#']), 
-                     self._changelogs)
+            [c for c in self._changelogs if utils.sn2int(sn) < utils.sn2int(c['sequence#'])]
         self._lock.release()
-        
-    
+
+
 
     ''' setup internal state to reflect given runtime configuration '''
     def _loadRuntimeConfiguration(self,rc) :
         if 'looseSubtypingMM' in rc :
-            self._compiler.RC__looseSubtypingMM = rc['looseSubtypingMM'] 
+            self._compiler.RC__looseSubtypingMM = rc['looseSubtypingMM']
 
 
 
@@ -334,14 +343,14 @@ class PyTCoreAbstractionLayer :
         if fname not in self._transfData :
             self._transfData[fname] = \
                 utils.fread('/users/%s/%s'%(self.username,fname))
-                
+
         ''' hergin :: motif-integration start '''
         if TC.MOTIFMM in self._transfData[fname]['metamodels']:
             self._mtContexts.append(MotifContext(fname,self))
         elif TC.TCOREMM in self._transfData[fname]['metamodels']:
             self._mtContexts.append(TCoreContext(fname,self))
         elif TC.TRANSFMM in self._transfData[fname]['metamodels']:
-            self._mtContexts.append(ModelTransformationContext(self._transfData[fname],fname))    
+            self._mtContexts.append(ModelTransformationContext(self._transfData[fname],fname))
         ''' hergin :: motif-integration end '''
 
 
@@ -413,13 +422,13 @@ class PyTCoreAbstractionLayer :
         
         NOTE:: in step 4c), while in debug mode, we highlight transformations, 
                  exhausts and rules before recursing on them or returning them,
-                 respectively ''' 
+                 respectively '''
     def _nextRule(self) :
         mtc = self._mtContexts[-1]
         self._loadRuntimeConfiguration(mtc.getRuntimeConfiguration())
 
         if self._debugOn and not mtc.isTransformationUnderWay() and \
-            (type(mtc) == MotifContext or type(mtc) == TCoreContext) : # hergin :: motif-integration modify
+                (type(mtc) == MotifContext or type(mtc) == TCoreContext) : # hergin :: motif-integration modify
             _execmode = self._execmode
             self._execmode = 'PAUSE'
             self._aswPrintReq(TC.DEBUGGING_HALT)
@@ -428,8 +437,8 @@ class PyTCoreAbstractionLayer :
             if self._execmode == 'STOPPING' :
                 return {'$err':'transformation stopped during debugging pause'}
             elif self._execmode == 'PAUSE' or \
-                  self._execmode == 'PLAY'  or \
-                  self._execmode == 'STEP' :
+                    self._execmode == 'PLAY'  or \
+                    self._execmode == 'STEP' :
                 self._execmode = _execmode
         self.bdapiQueue = Queue()
         ns = mtc.nextStep()
@@ -452,38 +461,38 @@ class PyTCoreAbstractionLayer :
                     if id(_mtc) in self._mtContexts2debugClients :
                         debugClient = self._mtContexts2debugClients[id(_mtc)]
                         self._requestNodeHighlight(
-                                debugClient['host'], 
-                                debugClient['aswid'], 
-                                _mtc.getCurrentStepId())
-                        break               
+                            debugClient['host'],
+                            debugClient['aswid'],
+                            _mtc.getCurrentStepId())
+                        break
 
             if 'id' in ns :
                 fulltype = mtc.t['nodes'][ns['id']]['$type']
-                
+
                 ''' hergin :: motif-integration start '''
                 if fulltype == mtc.metamodel+"/CRule":
                     if self._debugOn :
                         highlightUpcomingStep()
-                    
+
                     self._loadTransform(ns['rule'])
-                    
+
                     return self._nextRule()
-                    
-                elif fulltype.startswith(TC.TCOREMM) or\
+
+                elif fulltype.startswith(TC.TCOREMM) or \
                         fulltype.startswith(TC.MOTIFMM):
                     if self._debugOn :
                         highlightUpcomingStep()
-                        
+
                     return ns
                     ''' hergin :: motif-integration end '''
-                
+
                 elif fulltype == TC.TRANSFMM+'/Rule' :
                     if self._debugOn :
                         highlightUpcomingStep()
 
                     return {'fname':ns['fname'],
-                              'cr':self._compiler.compileRule(None,ns['fname'])}
-                
+                            'cr':self._compiler.compileRule(None,ns['fname'])}
+
                 #Enactment OpenModel blob, pathToFormalism is present is MM, but not used here,
                 #for functionality of opening window with formalisms is in WriteModel.
                 #pathToFormalism should be removed from MM for OpenModel (was not removed due to 
@@ -517,12 +526,12 @@ class PyTCoreAbstractionLayer :
                     self._mtContexts.append( ExhaustContext(mtc.t,ns['id'],self._randomGen) )
                     return self._nextRule()
             else :
-                
+
                 ''' hergin :: motif-integration start '''
                 if 'trafoResult' in ns:
                     return ns;
                     ''' hergin :: motif-integration end '''
-                
+
                 contents = utils.fread('/users/%s/%s'%(self.username,ns['fname']))
 
                 if self._debugOn :
@@ -530,20 +539,20 @@ class PyTCoreAbstractionLayer :
 
                 if TC.RULEMM in contents['metamodels'] :
                     return {'fname':ns['fname'],
-                              'cr':self._compiler.compileRule(contents,ns['fname'])}
+                            'cr':self._compiler.compileRule(contents,ns['fname'])}
 
                 elif TC.TRANSFMM in contents['metamodels'] :
                     self._transfData[ns['fname']] = contents
                     self._loadTransform(ns['fname'])
                     return self._nextRule()
 
-                raise ValueError(\
-                            'file does not contain valid rule or transformation '+\
-                            'model :: '+ns['fname'])
-        
+                raise ValueError( \
+                    'file does not contain valid rule or transformation '+ \
+                    'model :: '+ns['fname'])
+
 
     ''' Enactment do OpenModel magic
-    ''' 
+    '''
     def runOpenModelRule(self, fname="",formalism=""):
         unload = ""
         if not fname:
@@ -552,11 +561,11 @@ class PyTCoreAbstractionLayer :
             if not formalism:
                 self._aswPrintReq('auto loading model :: '+fname)
                 try:
-                    with open(os.getcwd()+'/users/'+self.username+fname) as f: 
+                    with open(os.getcwd()+'/users/'+self.username+fname) as f:
                         pass
                 except IOError as e:
                     self._aswPrintReq('failed opening a file :: '+fname)
-                    return (None,TC.FAILED) 
+                    return (None,TC.FAILED)
                 if not self.loadedModel:
                     method = '_loadModelForTransform'
                     if len(self._loadedMMs) == 0:
@@ -567,15 +576,15 @@ class PyTCoreAbstractionLayer :
                 else:
                     method = '_appendModelForTransform'
                 resp = self._aswCommTools['httpReq'](
-                'PUT',
-                '/GET/console',
-                {'text':'CLIENT_BDAPI :: '+
-                    '{"func":"'+method+'",'+
-                    ' "args":'+
-                        '{"fname":"'+fname+'",'+
-                        '"unload":"'+unload+'",'+
-                        ' "callback-url":"/__mt/bdapiresp?wid='+
-                                self._aswCommTools['wid']+'"}}'})
+                    'PUT',
+                    '/GET/console',
+                    {'text':'CLIENT_BDAPI :: '+
+                            '{"func":"'+method+'",'+
+                            ' "args":'+
+                            '{"fname":"'+fname+'",'+
+                            '"unload":"'+unload+'",'+
+                            ' "callback-url":"/__mt/bdapiresp?wid='+
+                            self._aswCommTools['wid']+'"}}'})
                 resp = self.bdapiQueue.get(block=True,timeout=5000)
                 if not resp['resp'] == 'ok':
                     return (None,TC.FAILED)
@@ -587,27 +596,27 @@ class PyTCoreAbstractionLayer :
             #this functionality is in WriteMOdel.       
             else:
                 pass
-#               Keep for now....
-#               self._aswPrintReq('pausing transform')
-#               self._execmode = 'PAUSE'
-#               self._aswPrintReq('opening new window for manual step:: '+fname)
-#               try:
-#                   with open(os.getcwd()+'/users/'+self.username+fname) as f: 
-#                       exists = 'true'
-#               except IOError as e:
-#                       exists = 'false'
-#               resp = self._aswCommTools['httpReq'](
-#               'PUT',
-#               '/GET/console',
-#               {'text':'CLIENT_BDAPI :: '+
-#                   '{"func":"_createEmptyModelInNewWindow",'+
-#                   ' "args":'+
-#                       '{"fname":"'+fname+'","exists":"'+exists+'",'+'"formalism":"'+formalism+'",'
-#                       ' "callback-url":"/__mt/bdapiresp?wid='+
-#                               self._aswCommTools['wid']+'"}}'})
-#               self.loadedModel = False
-#               return (None,TC.SUCCEEDED)
-    
+    #               Keep for now....
+    #               self._aswPrintReq('pausing transform')
+    #               self._execmode = 'PAUSE'
+    #               self._aswPrintReq('opening new window for manual step:: '+fname)
+    #               try:
+    #                   with open(os.getcwd()+'/users/'+self.username+fname) as f:
+    #                       exists = 'true'
+    #               except IOError as e:
+    #                       exists = 'false'
+    #               resp = self._aswCommTools['httpReq'](
+    #               'PUT',
+    #               '/GET/console',
+    #               {'text':'CLIENT_BDAPI :: '+
+    #                   '{"func":"_createEmptyModelInNewWindow",'+
+    #                   ' "args":'+
+    #                       '{"fname":"'+fname+'","exists":"'+exists+'",'+'"formalism":"'+formalism+'",'
+    #                       ' "callback-url":"/__mt/bdapiresp?wid='+
+    #                               self._aswCommTools['wid']+'"}}'})
+    #               self.loadedModel = False
+    #               return (None,TC.SUCCEEDED)
+
     ''' Enactment do WriteModel magic
     '''
     def runWriteModelRule(self,fname="",formalism=""):
@@ -623,14 +632,14 @@ class PyTCoreAbstractionLayer :
             if not formalism:
                 self._aswPrintReq('auto saving model :: '+fname)
                 resp = self._aswCommTools['httpReq'](
-                'PUT',
-                '/GET/console',
-                {'text':'CLIENT_BDAPI :: '+
-                    '{"func":"_writeModelAfterTransform",'+
-                    ' "args":'+
-                        '{"fname":"'+fname+'",'+
-                        ' "callback-url":"/__mt/bdapiresp?wid='+
-                                self._aswCommTools['wid']+'"}}'})
+                    'PUT',
+                    '/GET/console',
+                    {'text':'CLIENT_BDAPI :: '+
+                            '{"func":"_writeModelAfterTransform",'+
+                            ' "args":'+
+                            '{"fname":"'+fname+'",'+
+                            ' "callback-url":"/__mt/bdapiresp?wid='+
+                            self._aswCommTools['wid']+'"}}'})
                 #Need to wait for the model to load.
                 resp = self.bdapiQueue.get(block=True,timeout=5000)
                 if resp['resp'] == 'ok':
@@ -644,25 +653,25 @@ class PyTCoreAbstractionLayer :
                 self._execmode = 'PAUSE'
                 self._aswPrintReq('opening new window for manual step:: '+fname)
                 try:
-                    with open(os.getcwd()+'/users/'+self.username+fname) as f: 
+                    with open(os.getcwd()+'/users/'+self.username+fname) as f:
                         #open existing model
                         exists = 'true'
                 except IOError as e:
-                        #or save model with the fname provided
-                        exists = 'false'
+                    #or save model with the fname provided
+                    exists = 'false'
                 resp = self._aswCommTools['httpReq'](
-                'PUT',
-                '/GET/console',
-                {'text':'CLIENT_BDAPI :: '+
-                    '{"func":"_createEmptyModelInNewWindow",'+
-                    ' "args":'+
-                        '{"fname":"'+fname+'","exists":"'+exists+'",'+'"formalism":"'+formalism+'",'
-                        ' "callback-url":"/__mt/bdapiresp?wid='+
-                                self._aswCommTools['wid']+'"}}'})
+                    'PUT',
+                    '/GET/console',
+                    {'text':'CLIENT_BDAPI :: '+
+                            '{"func":"_createEmptyModelInNewWindow",'+
+                            ' "args":'+
+                            '{"fname":"'+fname+'","exists":"'+exists+'",'+'"formalism":"'+formalism+'",'
+                                                                                                    ' "callback-url":"/__mt/bdapiresp?wid='+
+                            self._aswCommTools['wid']+'"}}'})
                 self.loadedModel = False
                 return (None,TC.SUCCEEDED)
-            
-            
+
+
     '''
         synchronously save 1 changelog into self._changelogs '''
     def onchangelog(self,c) :
@@ -677,7 +686,7 @@ class PyTCoreAbstractionLayer :
         preventing _play()'s next call to _step(), if any) '''
     def pause(self) :
         self._execmode = 'PAUSE'
-        
+
         if not self.incUpdates:
             req = self.buildEditHttpReq(self.globalDeltas)
             self.globalDeltas = []
@@ -707,25 +716,25 @@ class PyTCoreAbstractionLayer :
             3. schedule a recursive call to _play() in TC.INTER_RULE_DELAY 
                 seconds '''
     def play(self) :
-	
+
         self.start_time = clock()
         if self._execmode == 'STOPPED':
             self._randomGen = Random(0)
         if self._execmode != 'PLAY' :
             self._execmode = 'PLAY'
             if not self._stopDebugProgrammedBreak() :
-                self._play()        
+                self._play()
     def _play(self) :
         if self.incUpdates:
             self._doWhenLastStepFeedbackReceived(
-                    lambda : self._execmode == 'PLAY' and \
-                                self._step() and \
-                                utils.setTimeout(TC.INTER_RULE_DELAY,self._play))
+                lambda : self._execmode == 'PLAY' and \
+                         self._step() and \
+                         utils.setTimeout(TC.INTER_RULE_DELAY,self._play))
         else:
             self._doWhenLastStepFeedbackReceived(
-                    lambda : self._execmode == 'PLAY' and \
-                                self._step() and \
-                                self._play())
+                lambda : self._execmode == 'PLAY' and \
+                         self._step() and \
+                         self._play())
 
 
 
@@ -737,8 +746,8 @@ class PyTCoreAbstractionLayer :
         for mtc in reversed(self._mtContexts) :
             if hasattr(mtc,'fname') and mtc.fname == clientInfo['fname'] :
                 self._mtContexts2debugClients[id(mtc)] = clientInfo
-            
-            
+
+
 
     ''' 
         request a new atompm client via the client backdoor API... the new client
@@ -747,34 +756,34 @@ class PyTCoreAbstractionLayer :
         url '''
     def _requestClientDebugWindow(self,fname) :
         return self._aswCommTools['httpReq'](
-                'PUT',
-                '/GET/console',
-                {'text':'CLIENT_BDAPI :: '+
+            'PUT',
+            '/GET/console',
+            {'text':'CLIENT_BDAPI :: '+
                     '{"func":"_loadModelInNewWindow",'+
                     ' "args":'+
-                        '{"fname":"'+fname+'",'+
-                        ' "callback-url":"/__mt/debugClient?wid='+
-                                self._aswCommTools['wid']+'"}}'})
+                    '{"fname":"'+fname+'",'+
+                    ' "callback-url":"/__mt/debugClient?wid='+
+                    self._aswCommTools['wid']+'"}}'})
 
 
 
     '''
         request that the specified node from the specified atompm instance be 
-        highlighted '''         
+        highlighted '''
     def _requestNodeHighlight(self,host,aswid,asid,timeout=5000) :
         return utils.httpReq(
-                'PUT',
-                host,
-                '/GET/console?wid='+aswid,
-                {'text':'CLIENT_BDAPI :: '+
+            'PUT',
+            host,
+            '/GET/console?wid='+aswid,
+            {'text':'CLIENT_BDAPI :: '+
                     '{"func":"_highlight",'+
                     ' "args":'+
-                        '{"asid":"'+asid+'",'+
-                        ' "timeout":'+str(timeout)+'}}'})
+                    '{"asid":"'+asid+'",'+
+                    ' "timeout":'+str(timeout)+'}}'})
 
     ''' hergin :: motif-integration :: START :: put this to outside of step function '''
     ''' also added self '''
-    
+
     '''
         go through a rule's deltas and (1) produce a batchEdit request, and 
         (2) undo them
@@ -814,41 +823,39 @@ class PyTCoreAbstractionLayer :
 
         for d in deltas :
             if d['op'] == 'RMNODE' :
-                reqs.append({\
-                        'method':'DELETE',
-                        'uri':d['attrs'][HC.FULLTYPE]+'/'+\
-                                d['attrs']['$atompmId']+'.instance'})
+                reqs.append({ \
+                    'method':'DELETE',
+                    'uri':d['attrs'][HC.FULLTYPE]+'/'+ \
+                          d['attrs']['$atompmId']+'.instance'})
 
             elif d['op'] == 'MKNODE' :
                 mknodes[d['guid']] = len(reqs)
                 node = self._M.vs[self._M.get_node(d['guid'])]
                 if neighborhood == None :
-                    neighborhood = map(
-                        lambda n: n[HC.FULLTYPE]+'/'+n['$atompmId']+'.instance',
-                        d['neighborhood'])
+                    neighborhood = neighborhood = [n[HC.FULLTYPE]+'/'+n['$atompmId']+'.instance' for n in d['neighborhood']]
                 if node[HC.CONNECTOR_TYPE] :
-                    reqs.append({\
-                            'method':'POST',
-                            'uri':node[HC.FULLTYPE]+'.type',
-                            'reqData':
-                                {'src':None,
-                                 'dest':None,
-                                 'hitchhiker':
-                                    {'segments':None,
-                                     'asSrc':None,
-                                     'asDest':None,
-                                     'neighborhood':neighborhood}}})    
+                    reqs.append({ \
+                        'method':'POST',
+                        'uri':node[HC.FULLTYPE]+'.type',
+                        'reqData':
+                            {'src':None,
+                             'dest':None,
+                             'hitchhiker':
+                                 {'segments':None,
+                                  'asSrc':None,
+                                  'asDest':None,
+                                  'neighborhood':neighborhood}}})
                 else :
-                    reqs.append({\
-                            'method':'POST',
-                            'uri':node[HC.FULLTYPE]+'.type',
-                            'reqData':{'hitchhiker':{'neighborhood':neighborhood}}})
+                    reqs.append({ \
+                        'method':'POST',
+                        'uri':node[HC.FULLTYPE]+'.type',
+                        'reqData':{'hitchhiker':{'neighborhood':neighborhood}}})
 
             elif d['op'] == 'RMEDGE' :
                 pass
 
             elif d['op'] == 'MKEDGE' :
-                def isConnectorMKNODE(req): 
+                def isConnectorMKNODE(req):
                     return 'dest' in req['reqData']
 
                 if d['guid1'] in mknodes :
@@ -857,7 +864,7 @@ class PyTCoreAbstractionLayer :
                         node2 = self._M.vs[self._M.get_node(d['guid2'])]
                         id      = atompmInstanceId(node2)
                         req['reqData']['dest'] = \
-                        req['reqData']['hitchhiker']['asDest'] = \
+                            req['reqData']['hitchhiker']['asDest'] = \
                             node2[HC.FULLTYPE]+'/'+id+'.instance'
 
                 if d['guid2'] in mknodes :
@@ -866,42 +873,42 @@ class PyTCoreAbstractionLayer :
                         node1 = self._M.vs[self._M.get_node(d['guid1'])]
                         id      = atompmInstanceId(node1)
                         req['reqData']['src'] = \
-                        req['reqData']['hitchhiker']['asSrc'] = \
+                            req['reqData']['hitchhiker']['asSrc'] = \
                             node1[HC.FULLTYPE]+'/'+id+'.instance'
-                    
+
             elif d['op'] == 'CHATTR' :
-                node = self._M.vs[self._M.get_node(d['guid'])]              
+                node = self._M.vs[self._M.get_node(d['guid'])]
                 id   = atompmInstanceId(node)
-                reqs.append({\
-                        'method':'PUT',
-                        'uri':node[HC.FULLTYPE]+'/'+id+'.instance',
-                        'reqData':{'changes':{d['attr']:d['new_val']}}})
+                reqs.append({ \
+                    'method':'PUT',
+                    'uri':node[HC.FULLTYPE]+'/'+id+'.instance',
+                    'reqData':{'changes':{d['attr']:d['new_val']}}})
 
             elif d['op'] == 'LOADMM' :
-                reqs.append({\
+                reqs.append({ \
                     'method':'PUT',
                     'uri':'/current.metamodels',
                     'reqData':
                         {'mm':'/%s%s.metamodel'%(self.username,d['name'])}})
-        if self.incUpdates:        
+        if self.incUpdates:
             for d in reversed(deltas) :
                 if d['op'] == 'RMNODE' :
                     newNodeIndex = self._M.add_node(newNodeGuid=d['attrs'][HC.GUID])
-                    for attr,val in d['attrs'].iteritems() :
+                    for attr,val in d['attrs'].items() :
                         self._M.vs[newNodeIndex][attr] = val
 
                 elif d['op'] == 'MKNODE' :
-                    node = self._M.vs[self._M.get_node(d['guid'])]              
+                    node = self._M.vs[self._M.get_node(d['guid'])]
                     self._M.delete_nodes([node.index])
 
                 elif d['op'] == 'RMEDGE' :
-                    node1 = self._M.vs[self._M.get_node(d['guid1'])]                
-                    node2 = self._M.vs[self._M.get_node(d['guid2'])]                
+                    node1 = self._M.vs[self._M.get_node(d['guid1'])]
+                    node2 = self._M.vs[self._M.get_node(d['guid2'])]
                     self._M.add_edges([(node1.index, node2.index)])
 
                 elif d['op'] == 'MKEDGE' :
                     pass
-                    
+
                 elif d['op'] == 'CHATTR' :
                     node = self._M.vs[self._M.get_node(d['guid'])]
                     node[d['attr']] = d['old_val']
@@ -972,23 +979,23 @@ class PyTCoreAbstractionLayer :
         NOTE: this function assumes that feedback for the last step has already
                 been received '''
     def step(self) :
-        if not hasattr(self, 'start_time'):         
+        if not hasattr(self, 'start_time'):
             self.start_time = clock()
         if self._execmode == 'PLAY' :
             pass
-        else : 
+        else :
             if self._execmode == 'STOPPED':
                 self._randomGen = Random(0)
             self._execmode = 'STEP'
             if not self._stopDebugProgrammedBreak() :
                 self._doWhenLastStepFeedbackReceived(self._step)
-    def _step(self) :       
+    def _step(self) :
 
 
         '''
             run the specified rule and return a tuple describing its execution '''
         def runRule(r) :
-            
+
             ''' hergin :: motif-integration start '''
             #self._aswPrintReq('launching rule :: '+r['fname'])
             #ar = NDARule(r['cr']['lhs'],r['cr']['rhs'],rng=self._randomGen)
@@ -997,31 +1004,31 @@ class PyTCoreAbstractionLayer :
                 ar = r['rule']
             else:
                 ar = NDARule(r['cr']['lhs'],r['cr']['rhs'],rng=self._randomGen,sendAndApplyDeltaFunc=self.sendAndApplyDelta)
-            
+
             if mtc.nextInput == "packetIn":
                 startTime=clock()
-                
+
                 self.packet = ar.packet_in(self.packet)
-                
+
                 mtc.setLastStepExecTime(clock()-startTime)
-                
+
             elif mtc.nextInput == "nextIn":
                 startTime=clock()
                 self.packet = ar.next_in(self.packet)
                 mtc.setLastStepExecTime(clock()-startTime)
-                
+
             elif mtc.nextInput == "cancelIn":
                 startTime=clock()
                 self.packet = ar.cancelIn(self.packet)
                 mtc.setLastStepExecTime(clock()-startTime)
-                
+
             elif mtc.nextInput == "successIn":
                 startTime=clock()
                 self.packet = ar.success_in(self.packet)
                 mtc.setLastStepExecTime(clock()-startTime)
-                
+
             ''' hergin :: motif-integration end '''
-            
+
             if ar.is_success :
                 return (self.packet.deltas,TC.SUCCEEDED)
             elif not ar.is_success :
@@ -1037,11 +1044,11 @@ class PyTCoreAbstractionLayer :
             nr = self._nextRule()
         except Exception :
             nr = {'$err':traceback.format_exc()}
-            
+
         ''' hergin :: motif-integration start TRAFO RESULT: in case of a CRule_end, pop it from context and continue the rest '''
         while 'trafoResult' in nr:
             if len(self._mtContexts)==1:
-                
+
                 if not self.incUpdates and self.sendDeltas:
                     ''' hergin TO BE MODIFIED - release mode will change '''
                     req = self.buildEditHttpReq(self.globalDeltas)
@@ -1052,7 +1059,7 @@ class PyTCoreAbstractionLayer :
                         self._aswPrintReq(TC.REMOTE_APPLICATION_FAILURE + resp['reason'])
                         return
                     self._handleChangelogs()
-                
+
                 self._aswPrintReq(TC.TRANSFORMATION_DONE+nr['trafoResult']+" in "+str(self._mtContexts[-1].totalExecutionTime/1000.0)+" seconds, in total "+str((clock()-self.start_time)/1000.0))
                 self.stop()
                 return
@@ -1085,7 +1092,7 @@ class PyTCoreAbstractionLayer :
                 self._mtContexts[-1].setLastStepApplicationInfo(ai)
                 self._mtContexts[-1].setLastStepFeedbackReceived()
                 return True
-            else:   
+            else:
                 (res,ai) = runRule(nr)
             self._mtContexts[-1].setLastStepApplicationInfo(ai)
 
@@ -1133,7 +1140,7 @@ class PyTCoreAbstractionLayer :
     def isStopped(self)  :  return self._execmode == 'STOPPED'
     def isStopping(self) :  return self._execmode == 'STOPPING'
     def stop(self) :
-    
+
         if not self.incUpdates:
             req = self.buildEditHttpReq(self.globalDeltas)
             self.globalDeltas = []
@@ -1143,17 +1150,17 @@ class PyTCoreAbstractionLayer :
                 self._aswPrintReq(TC.REMOTE_APPLICATION_FAILURE + resp['reason'])
                 return
             self._handleChangelogs()
-    
+
         self._execmode = 'STOPPING'
         #Used for enactment, prevents open being append.
         self.loadedModel = False
-        if not self._stopDebugProgrammedBreak() :   
+        if not self._stopDebugProgrammedBreak() :
             self._doWhenLastStepFeedbackReceived(self._stop)
     def _stop(self) :
         self._mtContexts = []
         for fname in self._userTransfs :
             self._loadTransform(fname)
-        self._mtContexts2debugClients = {}      
+        self._mtContexts2debugClients = {}
         self._aswPrintReq(TC.TRANSFORMATION_STOPPED)
         self._execmode = 'STOPPED'
 
@@ -1201,7 +1208,7 @@ class PyTCoreAbstractionLayer :
                 ii.  pressing "play", "step" or "stop"
             
         . before running a rule, it or its enclosing ExhaustContext's associated
-            atompm node is highlighted ''' 
+            atompm node is highlighted '''
     def toggleDebugMode(self) :
         self._debugOn = not self._debugOn
 

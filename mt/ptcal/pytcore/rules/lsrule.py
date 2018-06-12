@@ -3,7 +3,7 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.infinity import INFINITY
-from lrule import LRule
+from .lrule import LRule
 from ..tcore.rewriter import Rewriter
 from ..tcore.resolver import Resolver
 
@@ -24,7 +24,7 @@ class LSRule(LRule):
         super(LSRule, self).__init__(LHS, inner_rule, max_iterations)
         self.W = Rewriter(condition=RHS,sendAndApplyDeltaFunc=sendAndApplyDeltaFunc)
         self.outer_first = outer_first
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -38,7 +38,7 @@ class LSRule(LRule):
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         while True:
             if self.outer_first:
                 # Rewrite
@@ -46,13 +46,13 @@ class LSRule(LRule):
                 if not self.W.is_success:
                     self.exception = self.W.exception
                     return packet
-                
+
             # Apply the inner rule
             packet = self.inner_rule.packet_in(packet)
             if not self.inner_rule.is_success:
                 self.exception = self.inner_rule.exception
                 return packet
-            
+
             if not self.outer_first:
                 # Rewrite
                 packet = self.W.packet_in(packet)
@@ -96,7 +96,7 @@ class LSRule_r(LSRule):
         super(LSRule_r, self).__init__()
         self.R = Resolver(external_matches_only=external_matches_only,
                           custom_resolution=custom_resolution)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
