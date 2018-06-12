@@ -521,7 +521,12 @@ class ModelAndRuleCompiler :
             fulltype = mm+'/'+type
             self._mmTypeData[fulltype] = {}
             for attr in mmData['types'][type] :
-                self._mmTypeData[fulltype][attr['name']] = attr['default']                
+
+                # if there is no default, provide an empty string
+                try:
+                    self._mmTypeData[fulltype][attr['name']] = attr['default']
+                except KeyError:
+                    self._mmTypeData[fulltype][attr['name']] = ""
 
 
     '''

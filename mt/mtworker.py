@@ -187,7 +187,7 @@ class mtworkerThread(threading.Thread) :
 				self._postMessage(
 						msg['resp'],
 						{'statusCode':500,
-  						 'reason':str(e)})
+  						 'reason':"Error in model transformation worker: " + str(e)})
 				
 		elif msg['method'] == 'PUT' and re.match('/query.transform',msg['uri']):
 			try :
