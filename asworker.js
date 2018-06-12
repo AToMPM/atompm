@@ -139,14 +139,20 @@ module.exports = {
 			}
 
 
-
-			_do.chain(actions)(
-					function() 
-					{
-						__postMessage({'statusCode':200, 'respIndex':resp});
-					},
-					function(err) 	{__postInternalErrorMsg(resp,err);}
-			);
+            _do.chain(actions)(
+                function () {
+                    __postMessage({'statusCode': 200, 'respIndex': resp});
+                },
+                function (err) {
+                    if (err.includes("ECONNREFUSED")) {
+                        let msg = "could not connect to model transformation worker!\n" +
+                            "please ensure the worker is running!";
+                        __postInternalErrorMsg(resp, msg);
+                    } else {
+                        __postInternalErrorMsg(resp, err);
+                    }
+                }
+            );
 		},
 
 		
