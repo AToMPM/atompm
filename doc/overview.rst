@@ -147,7 +147,7 @@ When in the **SOMETHING SELECTED** state (*i.e.*, when one or more entity is sel
 +--------------------------------------+-----------------------------------------------------------------------------+
 | Delete selection                     | Press DELETE. Enters the **DEFAULT** state.                                 |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Edit first entity in selection       | Click INSERT, or click COMMAND (this will display the attribute editor.     |
+| Edit first entity in selection       | Click INSERT, or click COMMAND (this will display the attribute editor).     |
 +--------------------------------------+-----------------------------------------------------------------------------+
 | Change the geometry of the selection | Click CTRL. Enters the **GEOMETRY EDITING** state.                          |
 +--------------------------------------+-----------------------------------------------------------------------------+
