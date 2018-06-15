@@ -28,7 +28,7 @@ function load_model(client, fnames) {
             }, [name], null
         );
 
-        client.pause(300);
+        client.pause(500);
 
         client.element('css selector', '#dialog_btn', function (result) {
             if (result.status != -1) {
