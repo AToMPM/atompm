@@ -293,6 +293,7 @@ function scroll_geometry_element(client, element, scrollAmount, scrollTimes) {
 
 module.exports = {
     '@disabled': true,
+    canvas,
     get_element_div,
     get_assoc_div,
     get_class_div,
