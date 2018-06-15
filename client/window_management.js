@@ -58,6 +58,55 @@ WindowManagement = function(){
 		__setCanvasScrolling(false);
 	};
 	
+	this.showAboutDialog = function () {
+
+        let create_about = function (status, text) {
+
+            let version = null;
+            let time_at = null;
+
+            if (utils.isHttpSuccessCode(status)) {
+                let resp = JSON.parse(text);
+                version = resp['tag_name'];
+
+                time_at = resp['published_at'];
+                time_at = time_at.split("T")[0];
+            }
+
+            let title = "About AToMPM";
+            let elements = [];
+
+            let website = "<a href= '" + __WEBPAGE__ + "' target='_blank'>Website and Tutorials</a>";
+            elements.push(GUIUtils.getTextSpan(website));
+
+            let doc_website = "<a href= '" + __DOC_WEBPAGE__ + "' target='_blank'>Documentation</a>";
+            elements.push(GUIUtils.getTextSpan(doc_website));
+
+            let curr_version_str = "Current Version: " + __VERSION__;
+            elements.push(GUIUtils.getTextSpan(curr_version_str));
+
+            elements.push(GUIUtils.getTextSpan("\n"));
+
+            if (version != null) {
+                let new_version_str = "Newest Version: " + version;
+                elements.push(GUIUtils.getTextSpan(new_version_str));
+
+                let time_at_str = "Released on: " + time_at;
+                elements.push(GUIUtils.getTextSpan(time_at_str));
+
+            }
+
+            GUIUtils.setupAndShowDialog(
+                elements,
+                null,
+                __ONE_BUTTON,
+                title,
+                null);
+        };
+
+        HttpUtils.httpReq("GET", "https://api.github.com/repos/AToMPM/atompm/releases/latest", null, create_about);
+	};
+	
 	//Todo: Shred this function into smaller functions, as this should
 	// really just amount to a switch statement
 	//TBI: complete comments about each dialog (copy from user's manual)
