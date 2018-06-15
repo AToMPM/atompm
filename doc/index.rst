@@ -1,5 +1,5 @@
 .. AToMPM documentation master file, created by
-   sphinx-quickstart on Thu Sep 15 10:35:57 2016.
+   sphinx-quickstart on Thu Jun 14 20:29:33 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -9,7 +9,12 @@ This documentation serves to introduce AToMPM to the two main user groups: langu
 
 Contents
 --------
-    
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
 +--------------------------------------------------------------------------------+------------------------------------------------+
 | .. toctree::                                                                   |                                                |
 |   :maxdepth: 3                                                                 |                                                |

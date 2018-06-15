@@ -37,7 +37,7 @@ To open a Workflow, press the fifth button of the *MainMenu* toolbar :ref:`overv
 .. image:: img/templates.png
 
 Setting the run-time parameters
----------------------------
+---------------------------------
 
 A prerequisite to execute a workflow is to set the run-time parameters. To do this, the user pushes the *LoadParameters* button, the first button on the *Workflow* toolbar . This creates an instance of the parameter object and pops up a dialog prompting for all required parameters. Write these parameters and push the ok button.
 
@@ -58,7 +58,7 @@ Dependency
 Workflow parameters are specified once per workflow; however, run-time parameters must be manually specified each time the workflow is executed. Therefore, a *Dependency* link can be specified between different tasks that share the same run-time parameters.
 
 
-A dependency link specifies which attribute from the target task gets its value from an attribute in the source task. For example, the location of the *SaveModel task is the same as the location of the \texttt{OpenModel}when saving a model we just opened and modified.
+A dependency link specifies which attribute from the target task gets its value from an attribute in the source task. For example, the location of the *SaveModel* task is the same as the location of the \texttt{OpenModel} when saving a model we just opened and modified.
 
 
 Example Workflow for Creating a DSL

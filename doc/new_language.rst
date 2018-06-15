@@ -327,7 +327,7 @@ There are two "main" classes: **Icon** and **Link**. The first is a container fo
 #. *Path*
     * *segments* defines the segments of the path -- this allows for arbitrary shapes using the `SVG Paths <https://www.w3.org/TR/SVG/paths.html>`_ syntax.
 #. *Image*
-    * *src* specifies where the image can be found. This is a path relative to your user folder. It is recommended to put your images in your formalism folder (for example */Formalisms/<FormalismName>/images/).
+    * *src* specifies where the image can be found. This is a path relative to your user folder. It is recommended to put your images in your formalism folder (for example */Formalisms/<FormalismName>/images/*).
     * *width* defines the width of the image (in pixels).
     * *height* defines the width of the image (in pixels).
     
