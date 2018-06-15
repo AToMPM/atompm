@@ -18,9 +18,9 @@ function load_model(client, fnames) {
 
     client.waitForElementPresent(model_building_utils.canvas, 2000, "Canvas loaded");
 
+    client.pause(500);
+    
     for (const name of fnames) {
-
-        client.pause(300);
 
         client.execute(
             function (fname) {
@@ -28,7 +28,7 @@ function load_model(client, fnames) {
             }, [name], null
         );
 
-        client.pause(500);
+        client.pause(1000);
 
         client.element('css selector', '#dialog_btn', function (result) {
             if (result.status != -1) {
