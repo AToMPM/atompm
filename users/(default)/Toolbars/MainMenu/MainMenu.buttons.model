@@ -2430,7 +2430,7 @@
 							"2": {
 								"textContent": {
 									"type": "string",
-									"value": "userguide"
+									"value": "about"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -2910,15 +2910,15 @@
 			"13": {
 				"name": {
 					"type": "string",
-					"value": "userguide"
+					"value": "about"
 				},
 				"tooltip": {
 					"type": "string",
-					"value": "open the user's manual"
+					"value": "about AToMPM"
 				},
 				"code": {
 					"type": "code",
-					"value": "window.open('https://msdl.uantwerpen.be/documentation/AToMPM/', '_blank')"
+					"value": "showAboutDialog();"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},

@@ -52,7 +52,7 @@ All button toolbar models can be found under the */Toolbars/* user folder. A but
 #. Paste the copied elements on the canvas (copy/paste also works across AToMPM tabs).
 #. Verify whether the constraints of the current model are satisfied.
 #. Show or hide entities of a particular formalism (but do not remove them from the model).
-#. Open the manual.
+#. Display information about AToMPM, such as the current version, website, and documentation.
 
 Most of these actions are intuitive. Others are explained in more detail in the next sections.
     
