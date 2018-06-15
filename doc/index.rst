@@ -2,6 +2,7 @@ AToMPM Documentation
 ====================
 This documentation serves to introduce AToMPM to the two main user groups: language developers and language users. AToMPM ("A Tool for Multi-Paradigm Modelling") is a (meta)modelling workbench, which allows language developers to create visual domain-specific languages, and domain experts to use these languages. A language is defined by its *abstract syntax* in a metamodel, its *concrete syntax(es)*, which define(s) how each abstract syntax element is visualized, and its *semantics definition(s)*, either operational (a simulator) or translational (by mapping onto a known semantic domain). AToMPM supports model transformations to model semantics.
 
+AToMPM Website: https://atompm.github.io/
 
 Contents
 --------
@@ -9,7 +10,7 @@ Contents
 .. toctree::
     :maxdepth: 3
 
-    Installation <installation>
+    Installation and Usage <installation>
     Overview <overview>
     Creating a Modelling Language <new_language>
     Using a Modelling Language <using_language>
