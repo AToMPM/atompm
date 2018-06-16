@@ -105,10 +105,10 @@ Associations
 ^^^^^^^^^^^^
 Associations connect classes. In models created in the language, they are instantiated as links between objects. Associations are the only way to refer from one object to another object (attributes can only be of primitive types!). There are two types of associations, which result in different behaviour when using the language:
 
-* **Visual** associations are instantiated by right-clicking on the source object, dragging acrsoss the canvas, and releasing on the target object. This results in a visual link between the two objects.
+* **Visual** associations are instantiated by right-clicking on the source object, dragging across the canvas, and releasing on the target object. This results in a visual link between the two objects.
 * **Containment** associations are instantiated by dragging the source object on top of the target object, and releasing. This will automatically instantiate the containment association.
 
-An *Association* in the abstract syntax definition is itself visual association. It is created by right-clicking a source class, and releasing on the target class. The definition of the *TimedTransition* association can be seen below:
+An *Association* in the abstract syntax definition is itself a visual association. It is created by right-clicking a source class, and releasing on the target class. The definition of the *TimedTransition* association can be seen below:
 
 .. image:: img/timed_transition.png
 
@@ -301,7 +301,7 @@ There are two "main" classes: **Icon** and **Link**. The first is a container fo
 
 .. image:: img/trafficlights_cs.png
 
-.. warning:: Naming is very important. The *typename* attribute of an icon needs to be *<class-name>*Icon, where *<class-name>* is the name of the class, and the *typename* attribute of a link needs to be *<association-name>*Link, where *<association-name>* is the name of the association.
+.. warning:: Naming is very important. The *typename* attribute of an icon needs to be the name of the class followed by the suffix *Icon*, and the *typename* attribute of a link needs to be the name of the association followed by the suffix *Link*. For example, *StateIcon* and *TimedTransitionLink*.
 
 .. note:: For Icons, place its contents as close as possible to the top-left corner. This ensures that the icon is instantiated as close as possible to the mouse position.
 
@@ -338,6 +338,8 @@ Mappers and Parsers
 All visual elements have a number of attributes that change its appearance. For example, a circle has a radius that can be changed to resize it. But, you might want to make the values of concrete syntax attributes depend on the values of abstract syntax attributes, and vice versa, make the values of abstract syntax attributes depend on the value of concrete syntax attributes.
 
 For example, a class might have a "name" attribute. It makes sense to include a *Text* instance in the icon definition for that class, but normally, the text content is fixed. Mappers make it possible to map the content of the name on the content of the text visual element. Converesely, let's say we want to access the position of an element in abstract syntax. Normally, the position attribute is only a concrete syntax attribute. Parsers make it possible to parse the content of the position attribute and change the abstract syntax attribute.
+
+The actions available in the parser and mapper are found in the :ref:`action-library`.
 
 For the *TrafficLights* attribute, the icon of the *State* class consists of a circle and a text, which should display the name of the state. The definition of the text element is as follows:
 
