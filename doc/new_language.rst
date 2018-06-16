@@ -105,10 +105,10 @@ Associations
 ^^^^^^^^^^^^
 Associations connect classes. In models created in the language, they are instantiated as links between objects. Associations are the only way to refer from one object to another object (attributes can only be of primitive types!). There are two types of associations, which result in different behaviour when using the language:
 
-* **Visual** associations are instantiated by right-clicking on the source object, dragging acrsoss the canvas, and releasing on the target object. This results in a visual link between the two objects.
+* **Visual** associations are instantiated by right-clicking on the source object, dragging across the canvas, and releasing on the target object. This results in a visual link between the two objects.
 * **Containment** associations are instantiated by dragging the source object on top of the target object, and releasing. This will automatically instantiate the containment association.
 
-An *Association* in the abstract syntax definition is itself visual association. It is created by right-clicking a source class, and releasing on the target class. The definition of the *TimedTransition* association can be seen below:
+An *Association* in the abstract syntax definition is itself a visual association. It is created by right-clicking a source class, and releasing on the target class. The definition of the *TimedTransition* association can be seen below:
 
 .. image:: img/timed_transition.png
 
