@@ -22,6 +22,10 @@ To install AToMPM, follow these steps:
 
 ## Usage
 
+The commands below are for starting the ATOMPM server. Note that the default port is 8124.
+
+Once started, the server can be connected to by accessing http://localhost:8124/atompm in either the Firefox or Chrome browsers.
+
 ### Windows
 To run AToMPM on Windows, execute the `run.bat` script inside of the main AToMPM folder.
 

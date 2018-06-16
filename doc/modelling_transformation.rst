@@ -32,11 +32,11 @@ A formalism created with the "new formalism" button on the *MainMenu* toolbar (s
 
 If you want to initialize a new schedule, use the fourth button on the *TransformationEditor* toolbar. This will present you with a file browser, which allows you to choose a location and a name for the schedule. The schedule will automatically open in a new AToMPM instance.
 
-.. note:: A schedule's name has to start with the T\_ prefix!
+.. warning:: A schedule's name has to start with the T\_ prefix!
 
 If you want to initialize a new rule, use the fifth button on the *TransformationEditor* toolbar. This will present you with a file browser, which allows you to choose a location and a name for the rule. The rule will automatically open in a new AToMPM instance.
 
-.. note:: A rule's name has to start with the R\_ prefix!
+.. warning:: A rule's name has to start with the R\_ prefix!
 
 .. _the-rule-language:
 

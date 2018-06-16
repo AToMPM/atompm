@@ -17,6 +17,7 @@ Contents
     Modelling a Model Transformation <modelling_transformation>
     Executing a Model Transformation <executing_transformation>
     Workflows <workflows>
+    Creating Buttons and Plugins <creating_buttons_and_plugins>
     Troubleshooting <troubleshooting>
 
 
