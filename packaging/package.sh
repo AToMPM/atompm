@@ -109,6 +109,8 @@ function add_atompm () {
     rm -rf .git
     
     npm install --production
+    
+    cd ../..
 }
 
 
@@ -142,7 +144,7 @@ if [ ! -d ./atompm-portable/platform/GoogleChromePortable ]; then
     get_chrome
 fi
 
-#add_atompm
+add_atompm
 add_batch_scripts
 add_manual
 
