@@ -462,18 +462,34 @@ GUIUtils = function(){
             if (event.key == "Tab") {
 
                 try {
-                    let table_row = event.target.parentElement.parentElement;
-                    let nextEle = table_row.nextElementSibling;
+                    if (title.startsWith("edit")) {
+                        let table_row = event.target.parentElement.parentElement;
+                        let nextEle = table_row.nextElementSibling;
 
-                    // at end, so select first element
-                    if (nextEle == null) {
-                        nextEle = table_row.parentElement.firstElementChild;
+                        // at end, so select first element
+                        if (nextEle == null) {
+                            nextEle = table_row.parentElement.firstElementChild;
+                        }
+
+                        //get the actual text field
+                        let nextField = nextEle.children[1].children[0];
+                        nextField.focus();
+                    } else if (title.startsWith("Parameters")) { //try to tab through workflow parameters
+                        let element = event.target;
+
+                        //get the next element
+                        //skips the <br>s and labels
+                        let nextEle = element.nextElementSibling.nextElementSibling
+                            .nextElementSibling.nextElementSibling;
+
+                        //cycle back around to the top
+                        if (nextEle.nodeName == "BUTTON") {
+                            nextEle = nextEle.parentElement.children[3];
+                        }
+                        nextEle.focus();
                     }
 
-                    //get the actual text field
-                    let nextField = nextEle.children[1].children[0];
-                    nextField.focus();
-                } catch (err) {
+                } catch (err) { //catch errors if something was unexpected
                     console.debug("Tab event failed: " + err);
                 }
 
