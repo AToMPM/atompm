@@ -603,8 +603,13 @@ WindowManagement = function(){
 			 completion */
 	this.spawnClient = function (fname,callbackURL)
 	{
-		var c 		= window.open(window.location.href, '_blank'),
-		onspawn = 
+		let c 		= window.open(window.location.href, '_blank');
+
+		if (c == undefined){
+			WindowManagement.openDialog(_ERROR, "Failed to open new window. Are pop-ups blocked?");
+			return;
+		}
+			let onspawn =
 			 function()
 			 {
 				 if( (fname || callbackURL)	 &&
@@ -638,8 +643,15 @@ WindowManagement = function(){
 		the instance*/	
 	this.spawnClientOption = function (fname,tbname,option,trafo,msg)
 	{
-		var c 		= window.open(window.location.href, '_blank'),
-		onspawn = 
+        let c = window.open(window.location.href, '_blank');
+
+        if (c == undefined) {
+            WindowManagement.openDialog(_ERROR, "Failed to open new window. Are pop-ups blocked?\n" +
+                "Please reload the workflow model after allowing pop-ups.");
+            return;
+        }
+
+		let onspawn =
 			 function()
 			 {
 				if( (fname|| tbname)	 &&
@@ -656,13 +668,13 @@ WindowManagement = function(){
 				if (trafo == undefined){
 					trafo = option;
 				}
-				if( tbname ){
-						toolbars = tbname.split(",");
-						for ( var n in toolbars){
-							c._loadToolbar(toolbars[n]);
-						}						
-				}				
-				if( fname ){
+                 if (tbname) {
+                     let toolbars = tbname.split(",");
+                     for (let toolbar of toolbars) {
+                         c._loadToolbar(toolbar);
+                     }
+                 }
+                 if( fname ){
 						c.__saveas = fname;
 						if( option.length > 2 ){
 							c._loadModel(fname);
