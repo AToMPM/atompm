@@ -151,7 +151,8 @@ function __httpReq(method,url,data,port)
 				 if( data != undefined )
 				 {
 					 data = _utils.jsons(data);
-					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length};
+					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length,
+					 'Access-Control-Allow-Origin': '*'};
 				 }
 
 				 var request = 
