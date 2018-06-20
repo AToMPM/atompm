@@ -309,27 +309,21 @@ GUIUtils = function(){
 				
 				return true;
 			}
-            // https://media.giphy.com/media/12XMGIWtrHBl5e/giphy.gif
-			else if( event.keyCode == KEY_ENTER )
-			{
-                if (rows > 1) {
-                    // only for multi-line input fields
-                    var cursorPos = event.target.selectionStart;
-                    input.val( 
-                            input.val().substring(0,cursorPos)+'\r\n'+
-                            input.val().substring(cursorPos));
-                    input.get(0).setSelectionRange(cursorPos+1,cursorPos+1);
+
+            else if (event.keyCode == KEY_ENTER) {
+                //for single row fields, don't create a new line
+                if (rows == 1) {
+                    event.preventDefault();
                 }
-				event.stopPropagation();
-                event.preventDefault();
-				return true;
-			}
+            }
 		});
-        input.keyup( function (event) {
-			if( event.keyCode == KEY_ENTER )
-			{
-				event.stopPropagation();
-                event.preventDefault();
+        input.keyup(function (event) {
+            if (event.keyCode == KEY_ENTER) {
+                //don't send the enter key for multi-line fields
+                //this closes the window
+                if (rows > 1) {
+                    event.stopPropagation();
+                }
             }
         });
 		return input;
@@ -462,8 +456,48 @@ GUIUtils = function(){
 			dialog.append(cancel);
 		}
 
-		BehaviorManager.setActiveBehaviourStatechart(__SC_DIALOG);
-		BehaviorManager.handleUserEvent(__EVENT_SHOW_DIALOG);
+        dialog.keydown(function (event) {
+
+            //tab through the fields
+            if (event.key == "Tab") {
+
+                try {
+                    if (title.startsWith("edit")) {
+                        let table_row = event.target.parentElement.parentElement;
+                        let nextEle = table_row.nextElementSibling;
+
+                        // at end, so select first element
+                        if (nextEle == null) {
+                            nextEle = table_row.parentElement.firstElementChild;
+                        }
+
+                        //get the actual text field
+                        let nextField = nextEle.children[1].children[0];
+                        nextField.focus();
+                    } else if (title.startsWith("Parameters")) { //try to tab through workflow parameters
+                        let element = event.target;
+
+                        //get the next element
+                        //skips the <br>s and labels
+                        let nextEle = element.nextElementSibling.nextElementSibling
+                            .nextElementSibling.nextElementSibling;
+
+                        //cycle back around to the top
+                        if (nextEle.nodeName == "BUTTON") {
+                            nextEle = nextEle.parentElement.children[3];
+                        }
+                        nextEle.focus();
+                    }
+
+                } catch (err) { //catch errors if something was unexpected
+                    console.debug("Tab event failed: " + err);
+                }
+
+            }
+        });
+
+        BehaviorManager.setActiveBehaviourStatechart(__SC_DIALOG);
+        BehaviorManager.handleUserEvent(__EVENT_SHOW_DIALOG);
 	};
 	
 	/* 
