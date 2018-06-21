@@ -1,6 +1,12 @@
 
+#Steps when making a new release:
 
-version=v0.8.0-rc
+#1. Create a new release on GitHub
+#2. The tag should be something like v0.8.0
+#3. Run this script, which will download the latest tagged version
+#   and package everything
+#4. Upload the package .zip to the release on GitHub
+
 
 nodejs_zip_url="https://nodejs.org/dist/v8.11.3/node-v8.11.3-win-x64.zip"
 
@@ -11,6 +17,10 @@ igraph_whl_url="https://github.com/AToMPM/atompm/releases/download/v0.7.0/python
 chrome_url="https://newcontinuum.dl.sourceforge.net/project/portableapps/Google%20Chrome%20Portable/GoogleChromePortable_67.0.3396.87_online.paf.exe"
 
 manual_url="https://media.readthedocs.org/pdf/atompm/latest/atompm.pdf"
+
+version=$(curl --silent "https://api.github.com/repos/AToMPM/atompm/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+
+echo "Packaging version: $version"
 
 #echo $nodejs_zip_url
 #echo $portable_python_url
@@ -103,7 +113,7 @@ function add_atompm () {
     
     rm -rf atompm-portable/atompm
     cd atompm-portable
-    git clone https://github.com/AToMPM/atompm.git
+    git clone --depth 1 https://github.com/AToMPM/atompm.git
     cd atompm
     git checkout $version
     rm -rf .git
