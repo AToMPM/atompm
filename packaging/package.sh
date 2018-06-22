@@ -1,11 +1,17 @@
 
 #Steps when making a new release:
 
-#1. Create a new release on GitHub
-#2. The tag should be something like v0.8.0
-#3. Run this script, which will download the latest tagged version
+#0. Update CHANGES.MD
+#1. Update version number:
+#   i. In AToMPM - client/constants.js
+#   ii. In documentation - doc/config.py
+#   iii. In Node - package.json
+#2. Create a new release on GitHub
+#3. The tag should be something like v0.8.0
+#4. Run this script, which will download the latest tagged version
 #   and package everything
-#4. Upload the package .zip to the release on GitHub
+#5. Upload the package .zip to the release on GitHub
+#6. Publish to npm repo
 
 
 nodejs_zip_url="https://nodejs.org/dist/v8.11.3/node-v8.11.3-win-x64.zip"
