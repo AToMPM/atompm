@@ -15,7 +15,7 @@ When first opening the user interface at http://localhost:8124/atompm (or a remo
 Click the *create one now* link, which will allow you to create a new account with a user name and password. Fill out the form and click *Create new account*.
 
 .. image:: img/create_new_account.png
-    :scale: 50
+    :scale: 80
     :align: center
 
 AToMPM will initialize the account (by creating a user folder under the `users/` folder) and switch to the main user interface view. When you revisit the AToMPM webpage or create a new AToMPM instance, the tool will remember your username and password and automatically log you in. You can log out by clicking the *logout* link at the top right of the user interface.
