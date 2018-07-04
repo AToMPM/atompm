@@ -141,6 +141,7 @@ class ModelVerseConnector {
                 let callback = function (status, resp) {
                     if (utils.isHttpSuccessCode(status)) {
                         console.log("get_output Resolve: " + resp);
+
                         resolve(resp);
                     } else {
                         console.log("get_output reject: " + resp);
@@ -193,7 +194,6 @@ class ModelVerseConnector {
             })
             .catch(
                 function () {
-
                     WindowManagement.openDialog(_ERROR, 'failed to login to the ModelVerse!');
                     ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
                 }
@@ -272,6 +272,7 @@ class ModelVerseConnector {
             });
         }
 
+
         let startDir = "/";
         let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, false, __getRecentDir(startDir));
         let feedback = GUIUtils.getTextSpan('', "feedback");
@@ -318,17 +319,20 @@ class ModelVerseConnector {
         ModelVerseConnector.curr_model = filename;
 
         //get AS for model
+
         let model_types = {
             "data": utils.jsons(["model_types", model_name])
         };
 
         let model_modify = {
             "data": utils.jsons(["model_modify", model_name, metamodel])
+
         };
 
         let model_dump = {
             "data": utils.jsons(["JSON"])
         };
+
 
 
         // this.send_command(model_types).then(this.get_output)
@@ -376,6 +380,7 @@ class ModelVerseConnector {
                 function (err) {
                     console.log("Error with model render!");
                     console.log(err);
+
                     ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
                 }
             );
@@ -383,6 +388,7 @@ class ModelVerseConnector {
     }
 
     /*********END WRAPPER FUNCTIONS**********/
+
 
     static get_render_mm(){
         let mm = "include \"primitives.alh\"\n" +
@@ -650,4 +656,5 @@ class ModelVerseConnector {
 
         return trans;
     }
+
 }
