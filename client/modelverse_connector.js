@@ -35,12 +35,14 @@ class ModelVerseConnector {
         set_colour(colours[status]);
     }
 
-     static load_MV_model(data) {
+     static load_MV_model(AS, CS) {
         return new Promise(
             function (resolve, reject) {
 
-                data = data.replace("Success: ", "");
-                data = eval(JSON.parse(data));
+                console.log("Load MV Model");
+                console.log(AS);
+                console.log(CS);
+
                 let metamodel = "Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons.metamodel";
 
 
@@ -55,8 +57,8 @@ class ModelVerseConnector {
                 let model_associations = [];
 
                 let class_types = ["class", "Class", "SimpleAttribute"];
-                for (let i in data) {
-                    let obj = data[i];
+                for (let i in AS) {
+                    let obj = AS[i];
                      console.log(obj);
 
                     if (class_types.includes(obj["__type"])) {
@@ -69,11 +71,22 @@ class ModelVerseConnector {
                     // else:
                     //     print(k)
 
-
-
-
-
                 }
+
+
+                let class_locs = {};
+
+                for (const cs_ele of CS){
+                    if (!(cs_ele["__type"] == "Group")){
+                        continue;
+                    }
+
+                    let asid = cs_ele["__asid"];
+                    let pos = [cs_ele["x"], cs_ele["y"]];
+
+                    class_locs[asid] = pos;
+                }
+
 
                 __typeToCreate = class_type;
                 for (const id of model_classes){
@@ -87,7 +100,13 @@ class ModelVerseConnector {
                         DataUtils.update(uri, changes);
                     };
 
-                    DataUtils.create(100, 100, updateClass);
+                    let pos = class_locs[id];
+                    if (pos == undefined || pos == null){
+                        pos = [100, 100];
+                    }
+
+                    let vert_offset = 200;
+                    DataUtils.create(pos[0], pos[1] + vert_offset, updateClass);
                 }
 
                 resolve();
@@ -318,8 +337,33 @@ class ModelVerseConnector {
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
         ModelVerseConnector.curr_model = filename;
 
-        //get AS for model
 
+
+
+
+
+        //get CS for model
+        let SCD = "formalisms/SimpleClassDiagrams";
+        let MM_render = "formalisms/SCD_graphical";
+        let render_trans_model = "models/render_SCD";
+        let render_MM = this.get_render_mm();
+        let render_trans_code = this.get_render_trans();
+        let render_model_add = {
+            'data': encodeURIComponent(utils.jsons(["model_add", SCD, MM_render, render_MM]))};
+
+        let transformation_between = {
+            'data' : encodeURIComponent(utils.jsons(["transformation_add_AL", "rendered", MM_render, "abstract", SCD, "", "rendered", MM_render, "", render_trans_model]))
+        };
+
+        let transformation_data = {
+            'data' : encodeURIComponent(utils.jsons(["transformation_add_AL", render_trans_code]))
+        };
+
+        let model_rendered = {
+            'data' : encodeURIComponent(utils.jsons(["model_render", model_name, render_trans_model, "models/rendered_model"]))
+        };
+
+        //get AS for model
         let model_types = {
             "data": utils.jsons(["model_types", model_name])
         };
@@ -333,57 +377,54 @@ class ModelVerseConnector {
             "data": utils.jsons(["JSON"])
         };
 
+        let model_CS = null;
 
-
-        // this.send_command(model_types).then(this.get_output)
-        //     .then(function(data){
-        //         console.log("model_types");
-        //         console.log(data);
-        //     })
-        //     .then(this.send_command(model_modify)).then(this.get_output)
-        //     .then(function(data){
-        //         console.log("model_modify");
-        //         console.log(data);
-        //     })
-        //     .then(this.send_command(model_dump)).then(this.get_output)
-        //     .then(ModelVerseConnector.load_MV_model)
-        //     .then(function () {
-        //         ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
-        //     })
-        //     .catch(
-        //         function (err) {
-        //             console.log("Error with model dump!");
-        //             console.log(err);
-        //             ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
-        //         }
-        //     );
-
-        let SCD = "formalisms/SimpleClassDiagrams";
-        let MM_render = "formalisms/SCD_graphical";
-        let render_MM = this.get_render_mm();
-        let render_trans = this.get_render_trans();
-        let render_model_add = {
-            'data': encodeURIComponent(utils.jsons(["model_add", SCD, MM_render, render_MM]))};
-
-        let transformation_between = {
-            'data' : utils.jsons(["transformation_add_AL", {"rendered": "formalisms/SCD_graphical", "abstract": "formalisms/SimpleClassDiagrams"}, {"rendered": "formalisms/SCD_graphical"}, "models/render_SCD"])
-        };
-
-        //get CS for model
+        //CS COMMANDS
+        //TODO: only need to add models if not present
         this.send_command(render_model_add).then(this.get_output)
-            // .then(this.send_command(transformation_between)).then(this.get_output)
-            // .then(function(data){
-            //     console.log("transformation_between");
-            //     console.log(data);
-            // })
+            .then(this.send_command(transformation_between)).then(this.get_output)
+            .then(this.send_command({})).then(this.get_output)
+            .then(this.send_command(transformation_data)).then(this.get_output)
+            .then(this.send_command(model_rendered)).then(this.get_output)
+
+            .then(function(data){
+                data = data.replace("Success: ", "");
+                model_CS = eval(JSON.parse(data));
+            })
+
+            //AS COMMANDS
+
+            .then(this.send_command(model_types)).then(this.get_output)
+            .then(function(data){
+                console.log("model_types");
+                console.log(data);
+            })
+            .then(this.send_command(model_modify)).then(this.get_output)
+            .then(function(data){
+                console.log("model_modify");
+                console.log(data);
+            })
+            .then(this.send_command(model_dump)).then(this.get_output)
+            .then(function(data){
+                data = data.replace("Success: ", "");
+                let AS = eval(JSON.parse(data));
+                ModelVerseConnector.load_MV_model(AS, model_CS)
+            })
+            .then(function () {
+                ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
+            })
             .catch(
                 function (err) {
-                    console.log("Error with model render!");
+                    console.log("Error with model loading!");
                     console.log(err);
 
                     ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
                 }
             );
+
+
+
+
 
     }
 
