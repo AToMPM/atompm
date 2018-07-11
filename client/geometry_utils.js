@@ -513,6 +513,8 @@ GeometryUtils = function(){
 	
 					if( ! __isConnectionType(it) )
 					{
+						let inLinkUris = __icons[it]['edgesIn'].map(__edgeId2linkuri);
+						let outLinkUris = __icons[it]['edgesOut'].map(__edgeId2linkuri);
 						/* have edge ends out follow */
 						__icons[it]['edgesOut'].forEach(
 							function(edgeId)
@@ -521,7 +523,8 @@ GeometryUtils = function(){
 								if( __isSelected(linkuri) )
 									return;
 
-								let newEdgeChanges = moveEdges(edgeId, T, true);
+								let isLooping = inLinkUris.includes(linkuri);
+								let newEdgeChanges = moveEdges(edgeId, T, true, isLooping);
 										 
 								connectedEdgesChanges[linkuri] = 
 									(connectedEdgesChanges[linkuri] || {});
@@ -535,8 +538,9 @@ GeometryUtils = function(){
 								var linkuri = __edgeId2linkuri(edgeId);
 								if( __isSelected(linkuri) )
 									return;
-				
-								let newEdgeChanges = moveEdges(edgeId, T, false);
+
+								let isLooping = outLinkUris.includes(linkuri);
+								let newEdgeChanges = moveEdges(edgeId, T, false, isLooping);
 
 								connectedEdgesChanges[linkuri] =
 									(connectedEdgesChanges[linkuri] || {});
@@ -629,10 +633,9 @@ GeometryUtils = function(){
      * If the edge is only comprised of three points
      * (the point on the icon, the central point, and the connected node's point)
      * then move the central point
-     * TODO: Fix looping edges
      * TODO: Move association text
      */
-    this.moveEdges = function (edgeId, T, isOutDir) {
+    this.moveEdges = function (edgeId, T, isOutDir, isLooping) {
 
         let segments = __edges[edgeId]['segments'];
         let points = segments.match(/([\d\.]*,[\d\.]*)/g);
@@ -657,7 +660,10 @@ GeometryUtils = function(){
         // if there are exactly two points in this edge,
         // move the middle control point as well
         // by updating the other edge in the association
-        if (points.length == 2) {
+        //
+        //don't do this if it's a looping edge
+        //as it will overwrite the changes
+        if (points.length == 2 && !isLooping) {
             let connectionPartici = __getConnectionParticipants(edgeId);
             let otherEdge = isOutDir ? connectionPartici[2] : connectionPartici[1];
 
