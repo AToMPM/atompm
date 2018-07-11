@@ -55,21 +55,25 @@ class ModelVerseConnector {
 
                 let model_classes = [];
                 let model_associations = [];
+                let model_inheris = [];
+                let model_attribs = [];
 
-                let class_types = ["class", "Class", "SimpleAttribute"];
                 for (let i in AS) {
                     let obj = AS[i];
-                     console.log(obj);
+                    let obj_type = obj["__type"];
 
-                    if (class_types.includes(obj["__type"])) {
-
+                    if (obj_type == "Class") {
                         model_classes.push(obj["__id"]);
+
+                    }else if (obj_type == "Association"){
+                        model_associations.push([obj["__source"], obj["__target"], obj["__id"]]);
+
+                    }else if (obj_type == "Inheritance"){
+                        model_inheris.push([obj["__source"], obj["__target"]]);
+
+                    }else if (obj_type == "AttributeLink") {
+                        model_attribs.push([obj["__source"], obj["__target"], obj["name"]]);
                     }
-                    // elif "__source" in k and "__target" in k:
-                    //     print(k)
-                    //     self.associations.append((k["__source"], k["__target"], k["id"], k["type"]))
-                    // else:
-                    //     print(k)
 
                 }
 
@@ -87,18 +91,26 @@ class ModelVerseConnector {
                     class_locs[asid] = pos;
                 }
 
+                let ele_ids = {};
+
+                let update_promises = [];
 
                 __typeToCreate = class_type;
                 for (const id of model_classes){
 
-                    let updateClass = function(status, resp){
+                    let updateClass =
 
-                        let data = JSON.parse(resp);
+                        function(status, resp){
 
-                        let uri = class_type + "/" + data["data"] + ".instance";
-                        let changes = {"name": id};
-                        DataUtils.update(uri, changes);
-                    };
+                            let data = JSON.parse(resp);
+
+                            let uri = class_type + "/" + data["data"] + ".instance";
+                            ele_ids[id] = uri;
+
+                            let changes = {"name": id};
+                            DataUtils.update(uri, changes);
+                        };
+
 
                     let pos = class_locs[id];
                     if (pos == undefined || pos == null){
@@ -107,6 +119,33 @@ class ModelVerseConnector {
 
                     let vert_offset = 200;
                     DataUtils.create(pos[0], pos[1] + vert_offset, updateClass);
+
+                }
+
+                Promise.all(update_promises);
+
+                for (const inheri of model_inheris){
+                    let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/InheritanceLink.type";
+
+                    let source = ele_ids[inheri[0]];
+                    let target = ele_ids[inheri[1]];
+
+                    let pathCenter = {
+                        alpha : 170.64401727550313,
+                        x : 826.5,
+                        y : 419
+                    };
+
+                    let segments = ["M608,455L826.5,419","M826.5739502659386,418.9878159744906L1044.99939632373,383.0000994615366"];
+
+                    HttpUtils.httpReq(
+                         'POST',
+                         HttpUtils.url(connectionType,__NO_USERNAME),
+                         {'src':source,
+                          'dest':target,
+                          'pos':[pathCenter.x,pathCenter.y],
+                          'segments':segments});
+
                 }
 
                 resolve();
