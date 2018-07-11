@@ -520,17 +520,12 @@ GeometryUtils = function(){
 								var linkuri = __edgeId2linkuri(edgeId);
 								if( __isSelected(linkuri) )
 									return;
-					
-								var segments = __edges[edgeId]['segments'],
-									 points	 = segments.match(/([\d\.]*,[\d\.]*)/g),
-									 xy 		 = utils.head(points).split(','),
-									 newXY 	 = GeometryUtils.transformPoint(xy[0],xy[1],T);
+
+								let newEdgeChanges = moveEdges(edgeId, T, true);
 										 
 								connectedEdgesChanges[linkuri] = 
 									(connectedEdgesChanges[linkuri] || {});
-								points.splice(0,1,newXY.join(','));
-								connectedEdgesChanges[linkuri][edgeId] = 
-									'M'+points.join('L');
+								connectedEdgesChanges[linkuri] = utils.mergeDicts([connectedEdgesChanges[linkuri], newEdgeChanges]);
 							});
 	
 						/* have edge ends in follow */
@@ -541,15 +536,11 @@ GeometryUtils = function(){
 								if( __isSelected(linkuri) )
 									return;
 				
-								var segments = __edges[edgeId]['segments'],
-									 points	 = segments.match(/([\d\.]*,[\d\.]*)/g),
-									 xy 		 = utils.tail(points).split(','),
-									 newXY 	 = GeometryUtils.transformPoint(xy[0],xy[1],T);
-								connectedEdgesChanges[linkuri] = 
+								let newEdgeChanges = moveEdges(edgeId, T, false);
+
+								connectedEdgesChanges[linkuri] =
 									(connectedEdgesChanges[linkuri] || {});
-								points.splice(points.length-1,1,newXY.join(','));
-								connectedEdgesChanges[linkuri][edgeId] = 
-									'M'+points.join('L');
+								connectedEdgesChanges[linkuri] = utils.mergeDicts([connectedEdgesChanges[linkuri], newEdgeChanges]);
 							});
 					}
 					else
@@ -632,6 +623,73 @@ GeometryUtils = function(){
 					insertRequests));
 		}
 	};
+
+    /**
+     * Moves the points for this edge using the transformation T
+     * If the edge is only comprised of three points
+     * (the point on the icon, the central point, and the connected node's point)
+     * then move the central point
+     * TODO: Fix looping edges
+     * TODO: Move association text
+     */
+    this.moveEdges = function (edgeId, T, isOutDir) {
+
+        let segments = __edges[edgeId]['segments'];
+        let points = segments.match(/([\d\.]*,[\d\.]*)/g);
+
+        let xy = null;
+        let newXY = null;
+
+        //update the point connected to the icon
+        if (isOutDir) {
+            xy = utils.head(points).split(',');
+            newXY = GeometryUtils.transformPoint(xy[0], xy[1], T);
+            points.splice(0, 1, newXY.join(','));
+        } else {
+            xy = utils.tail(points).split(',');
+            newXY = GeometryUtils.transformPoint(xy[0], xy[1], T);
+            points.splice(points.length - 1, 1, newXY.join(','));
+        }
+
+        //dict to hold edge updates
+        let edgeDict = {};
+
+        // if there are exactly two points in this edge,
+        // move the middle control point as well
+        // by updating the other edge in the association
+        if (points.length == 2) {
+            let connectionPartici = __getConnectionParticipants(edgeId);
+            let otherEdge = isOutDir ? connectionPartici[2] : connectionPartici[1];
+
+            let otherSegments = __edges[otherEdge]['segments'];
+            let otherPoints = otherSegments.match(/([\d\.]*,[\d\.]*)/g);
+
+            //get the other edge's point which is not the center point
+            let otherxy = isOutDir ? otherPoints[1] : otherPoints[otherPoints.length - 2];
+            otherxy = otherxy.split(",");
+
+            let xCentrePoint = (parseFloat(newXY[0]) + parseFloat(otherxy[0])) / 2;
+            let yCentrePoint = (parseFloat(newXY[1]) + parseFloat(otherxy[1])) / 2;
+
+            let centrePointStr = xCentrePoint + "," + yCentrePoint;
+
+            if (isOutDir) {
+                points.splice(points.length - 1, 1, centrePointStr);
+                otherPoints.splice(0, 1, centrePointStr);
+            } else {
+                points.splice(0, 1, centrePointStr);
+                otherPoints.splice(otherPoints.length - 1, 1, centrePointStr);
+            }
+
+            let newOtherEdge = 'M' + otherPoints.join('L');
+            edgeDict[otherEdge] = newOtherEdge;
+        }
+
+        let newEdge = 'M' + points.join('L');
+        edgeDict[edgeId] = newEdge;
+
+        return edgeDict;
+    };
 	
 	/**
 	 * Apply the specified transformation to the given point and return
