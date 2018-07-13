@@ -509,48 +509,61 @@ GeometryUtils = function(){
 		  						 offsetTy + parseFloat(icon.getAttr('__y'))];
 					}
 	 				uris2changes[it] = changes;
-	
-	
-					if( ! __isConnectionType(it) )
-					{
-						/* have edge ends out follow */
-						__icons[it]['edgesOut'].forEach(
-							function(edgeId)
-							{
-								var linkuri = __edgeId2linkuri(edgeId);
-								if( __isSelected(linkuri) )
-									return;
-					
-								var segments = __edges[edgeId]['segments'],
-									 points	 = segments.match(/([\d\.]*,[\d\.]*)/g),
-									 xy 		 = utils.head(points).split(','),
-									 newXY 	 = GeometryUtils.transformPoint(xy[0],xy[1],T);
-										 
-								connectedEdgesChanges[linkuri] = 
-									(connectedEdgesChanges[linkuri] || {});
-								points.splice(0,1,newXY.join(','));
-								connectedEdgesChanges[linkuri][edgeId] = 
-									'M'+points.join('L');
-							});
-	
-						/* have edge ends in follow */
-						__icons[it]['edgesIn'].forEach(
-							function(edgeId)
-							{
-								var linkuri = __edgeId2linkuri(edgeId);
-								if( __isSelected(linkuri) )
-									return;
-				
-								var segments = __edges[edgeId]['segments'],
-									 points	 = segments.match(/([\d\.]*,[\d\.]*)/g),
-									 xy 		 = utils.tail(points).split(','),
-									 newXY 	 = GeometryUtils.transformPoint(xy[0],xy[1],T);
-								connectedEdgesChanges[linkuri] = 
-									(connectedEdgesChanges[linkuri] || {});
-								points.splice(points.length-1,1,newXY.join(','));
-								connectedEdgesChanges[linkuri][edgeId] = 
-									'M'+points.join('L');
-							});
+
+
+                    if (!__isConnectionType(it)) {
+                        let inLinkUris = __icons[it]['edgesIn'].map(__edgeId2linkuri);
+                        let outLinkUris = __icons[it]['edgesOut'].map(__edgeId2linkuri);
+                        /* have edge ends out follow */
+                        __icons[it]['edgesOut'].forEach(
+                            function (edgeId) {
+                                let linkuri = __edgeId2linkuri(edgeId);
+                                if (__isSelected(linkuri))
+                                    return;
+
+                                let isLooping = inLinkUris.includes(linkuri);
+                                let changes = moveEdges(edgeId, T, true, isLooping);
+                                let newEdgeChanges = changes[0];
+                                let centrePoint = changes[1];
+
+                                connectedEdgesChanges[linkuri] =
+                                    (connectedEdgesChanges[linkuri] || {});
+                                connectedEdgesChanges[linkuri] = utils.mergeDicts([connectedEdgesChanges[linkuri], newEdgeChanges]);
+
+                                //move the assoc text if the central point changed
+                                if (centrePoint != null) {
+                                    if (uris2changes[__edgeId2linkuri(edgeId)] == null) {
+                                        uris2changes[__edgeId2linkuri(edgeId)] = {};
+                                    }
+                                    uris2changes[__edgeId2linkuri(edgeId)]['position'] = centrePoint;
+                                }
+
+                            });
+
+                        /* have edge ends in follow */
+                        __icons[it]['edgesIn'].forEach(
+                            function (edgeId) {
+                                let linkuri = __edgeId2linkuri(edgeId);
+                                if (__isSelected(linkuri))
+                                    return;
+
+                                let isLooping = outLinkUris.includes(linkuri);
+                                let changes = moveEdges(edgeId, T, false, isLooping);
+                                let newEdgeChanges = changes[0];
+                                let centrePoint = changes[1];
+
+                                connectedEdgesChanges[linkuri] =
+                                    (connectedEdgesChanges[linkuri] || {});
+                                connectedEdgesChanges[linkuri] = utils.mergeDicts([connectedEdgesChanges[linkuri], newEdgeChanges]);
+
+                                //move the assoc text if the central point changed
+                                if (centrePoint != null) {
+                                    if (uris2changes[__edgeId2linkuri(edgeId)] == null) {
+                                        uris2changes[__edgeId2linkuri(edgeId)] = {};
+                                    }
+                                    uris2changes[__edgeId2linkuri(edgeId)]['position'] = centrePoint;
+                                }
+                            });
 					}
 					else
 					{
@@ -632,6 +645,80 @@ GeometryUtils = function(){
 					insertRequests));
 		}
 	};
+
+    /**
+     * Moves the points for this edge using the transformation T
+     * If the edge is only comprised of three points
+     * (the point on the icon, the central point, and the connected node's point)
+     * then move the central point
+	 * Returns the changes to be made to the edges, and the central point if calculated
+     */
+    this.moveEdges = function (edgeId, T, isOutDir, isLooping) {
+
+        let segments = __edges[edgeId]['segments'];
+        let points = segments.match(/([\d\.]*,[\d\.]*)/g);
+
+        let xy = null;
+        let newXY = null;
+
+        //update the point connected to the icon
+        if (isOutDir) {
+            xy = utils.head(points).split(',');
+            newXY = GeometryUtils.transformPoint(xy[0], xy[1], T);
+            points.splice(0, 1, newXY.join(','));
+        } else {
+            xy = utils.tail(points).split(',');
+            newXY = GeometryUtils.transformPoint(xy[0], xy[1], T);
+            points.splice(points.length - 1, 1, newXY.join(','));
+        }
+
+        //dict to hold edge updates
+        let edgeDict = {};
+
+        // the centre point if the association text should be moved
+        let centrePoint = null;
+
+        // if there are exactly two points in this edge,
+        // move the middle control point as well
+        // by updating the other edge in the association
+        //
+        //don't do this if it's a looping edge
+        //as it will overwrite the changes
+        if (points.length == 2 && !isLooping) {
+            let connectionPartici = __getConnectionParticipants(edgeId);
+            let otherEdge = isOutDir ? connectionPartici[2] : connectionPartici[1];
+
+            let otherSegments = __edges[otherEdge]['segments'];
+            let otherPoints = otherSegments.match(/([\d\.]*,[\d\.]*)/g);
+
+            //get the other edge's point which is not the center point
+            let otherxy = isOutDir ? otherPoints[1] : otherPoints[otherPoints.length - 2];
+            otherxy = otherxy.split(",");
+
+            let xCentrePoint = (parseFloat(newXY[0]) + parseFloat(otherxy[0])) / 2;
+            let yCentrePoint = (parseFloat(newXY[1]) + parseFloat(otherxy[1])) / 2;
+
+            let centrePointStr = xCentrePoint + "," + yCentrePoint;
+
+            if (isOutDir) {
+                points.splice(points.length - 1, 1, centrePointStr);
+                otherPoints.splice(0, 1, centrePointStr);
+            } else {
+                points.splice(0, 1, centrePointStr);
+                otherPoints.splice(otherPoints.length - 1, 1, centrePointStr);
+            }
+
+            let newOtherEdge = 'M' + otherPoints.join('L');
+            edgeDict[otherEdge] = newOtherEdge;
+
+            centrePoint = [xCentrePoint, yCentrePoint];
+        }
+
+        let newEdge = 'M' + points.join('L');
+        edgeDict[edgeId] = newEdge;
+
+        return [edgeDict, centrePoint];
+    };
 	
 	/**
 	 * Apply the specified transformation to the given point and return
