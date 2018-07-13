@@ -1022,11 +1022,12 @@ function __relativizeURL(url)
 
 
 /* returns the csuri of the icon that contains the specified VisualObject */
-function __vobj2uri(vobj)
-{
-	if( vobj != document.body )
-		return vobj.parentNode.getAttribute('__csuri') ||
-				 __vobj2uri(vobj.parentNode);
+function __vobj2uri(vobj) {
+    if (vobj != document.body) {
+        return vobj.parentNode.getAttribute('__csuri') ||
+            vobj.parentNode.getAttribute('__linkuri') ||
+            __vobj2uri(vobj.parentNode);
+    }
 }
 
 function __getRecentDir(name) {
