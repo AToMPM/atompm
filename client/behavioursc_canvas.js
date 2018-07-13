@@ -18,19 +18,19 @@ __canvasBehaviourStatechart = {
 			function(event)
 			{
 				GUIUtils.disableDock();
-				__initCanvasSelectionOverlay(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+				__initCanvasSelectionOverlay(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 			},
 		3:
 			function(event)	
 			{
 				GUIUtils.disableDock();
-				GeometryUtils.initSelectionTransformationPreviewOverlay(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+				GeometryUtils.initSelectionTransformationPreviewOverlay(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 			},
 		4:
 			function(event)	
 			{
 				GUIUtils.disableDock();
-				ConnectionUtils.initConnectionPath(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY),event.target);
+				ConnectionUtils.initConnectionPath(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event),event.target);
 			},
 		6:
 			function(event)	
@@ -92,7 +92,7 @@ __canvasBehaviourStatechart = {
 			if( this.__currentState == this.__STATE_IDLE )
 			{
 				if( name == __EVENT_RIGHT_RELEASE_CANVAS )
-					DataUtils.create(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+					DataUtils.create(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 			
 				else if( name == __EVENT_LEFT_PRESS_CANVAS )
 					this.__T(this.__STATE_CANVAS_SELECTING,event);
@@ -151,7 +151,7 @@ __canvasBehaviourStatechart = {
 			else if( this.__currentState == this.__STATE_CANVAS_SELECTING )
 			{
 				if( name == __EVENT_MOUSE_MOVE ){
-					__updateCanvasSelectionOverlay(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+					__updateCanvasSelectionOverlay(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 				}
 				
 				else if( name == __EVENT_LEFT_RELEASE_CANVAS ||
@@ -266,7 +266,7 @@ __canvasBehaviourStatechart = {
 			else if( this.__currentState == this.__STATE_DRAGGING_SELECTION )
 			{
 				if( name == __EVENT_MOUSE_MOVE )
-					GeometryUtils.previewSelectionTranslation(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+					GeometryUtils.previewSelectionTranslation(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 				
 				else if( name == __EVENT_KEYUP_ESC )
 				{
@@ -315,7 +315,7 @@ __canvasBehaviourStatechart = {
 			else if( this.__currentState == this.__STATE_DRAWING_EDGE )
 			{
 				if( name == __EVENT_MOUSE_MOVE ){
-					ConnectionUtils.updateConnectionSegment(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+					ConnectionUtils.updateConnectionSegment(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 				}
 				else if( name == __EVENT_KEYUP_ESC ||
 							name == __EVENT_RIGHT_RELEASE_CANVAS )
@@ -378,9 +378,9 @@ __canvasBehaviourStatechart = {
 				else if( name == __EVENT_MIDDLE_RELEASE_CTRL_POINT )
 					ConnectionUtils.deleteControlPoint(event.target);
 		
-				else if( name == __EVENT_RIGHT_RELEASE_CTRL_POINT )
-					ConnectionUtils.addControlPoint(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY),event.target);
-						
+				else if( name == __EVENT_RIGHT_RELEASE_CTRL_POINT ) {
+                    ConnectionUtils.addControlPoint(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event), event.target);
+				}
 				else if( name == __EVENT_KEYUP_TAB )
 					ConnectionUtils.snapControlPoint();
 		
@@ -404,9 +404,9 @@ __canvasBehaviourStatechart = {
 
 			else if( this.__currentState == this.__STATE_DRAGGING_CONNECTION_PATH_CTRL_POINT )
 			{
-				if( name == __EVENT_MOUSE_MOVE )
-					ConnectionUtils.previewControlPointTranslation(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
-		
+				if( name == __EVENT_MOUSE_MOVE ) {
+                    ConnectionUtils.previewControlPointTranslation(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
+				}
 				else if( name == __EVENT_LEFT_RELEASE_CTRL_POINT )
 				{
 					ConnectionUtils.updateConnectionPath();

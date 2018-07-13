@@ -15,15 +15,25 @@ GUIUtils = function(){
 	/**
 	 * Converts from page centric X coordinates to canvas centric X coordinates
 	 */
-	this.convertToCanvasX = function(pageX){
-		return pageX + $('#div_container').scrollLeft() - $('#contentDiv').offset().left;
+	this.convertToCanvasX = function(event){
+
+		//experimental property
+		return event.offsetX;
+
+		//breaks when page is scrolled
+		//return event.pageX + $('#div_container').scrollLeft() - $('#contentDiv').offset().left;
 	};
 
 	/**
 	 * Converts from page centric Y coordinates to canvas centric Y coordinates
-	 */	
-	this.convertToCanvasY = function(pageY){
-		return pageY + $('#div_container').scrollTop() - $('#contentDiv').offset().top;
+	 */
+	this.convertToCanvasY = function(event){
+
+		//experimental property
+		return event.offsetY;
+
+		//breaks when page is scrolled
+		//return event.pageY + $('#div_container').scrollTop() - $('#contentDiv').offset().top;
 	};
 	
 	/**
