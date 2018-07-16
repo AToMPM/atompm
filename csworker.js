@@ -318,76 +318,73 @@ module.exports = {
 										[{'op':step['op'],'id1':csid1,'id2':csid2}]);
 									return __successContinuable();
 								});
-		
-						/* create appropriate CS instance and associate it with new AS
-							instance (remember the association in __asid2csid to 
-							optimize future operations) */
-						else if( step['op'] == 'MKNODE' )
-							actions.push(
-								function()
-								{
-									manageHitchhiker(step['id']);
-	
-									var asid 	  	= step['id'],
-	  									 node   		= _utils.jsonp(step['node']),
-										 isLink		= ('segments' in hitchhiker),
-										 fullastype	= node['$type'],
-										 fullcstype = self.__astype_to_cstype(
-											 							fullastype,
-																		isLink),				
-										 asuri 		= fullastype+'/'+asid+'.instance';
-										 attrs		= {'$asuri':asuri};
 
-									if( 'pos' in hitchhiker )
-										attrs['position'] = hitchhiker['pos'];
-									else if( 'neighborhood' in hitchhiker )
-									{
-										var nc = self.__nodesCenter(
-															hitchhiker['neighborhood']);
-										attrs['position'] = 
-											[(nc[0] || 200), (nc[1] || 200)];
-									}
-									else if( 'clone' in hitchhiker )
-										attrs = _utils.mergeDicts(
-														[attrs,hitchhiker['clone']]);
-									else
-										attrs['position'] = [200,200];
+                        /* create appropriate CS instance and associate it with new AS
+                            instance (remember the association in __asid2csid to
+                            optimize future operations) */
+                        else if (step['op'] == 'MKNODE') {
+                            actions.push(
+                                function () {
+                                    manageHitchhiker(step['id']);
 
-									var res  = _mmmk.create(fullcstype,attrs),
-										 csid	= res['id'];
-				 					self.__asid2csid[asid] = csid;
-				 					cschangelogs.push(res['changelog']);
-	
-									if( isLink )
-									{
-										var s 		 = {},
-											 src		 = 
-												 hitchhiker['src'] ||
-												 self.__asuri_to_csuri(hitchhiker['asSrc']),
-											 dest		 = 
-												 hitchhiker['dest'] ||
-												 self.__asuri_to_csuri(hitchhiker['asDest']),
-											 segments = 
-												 hitchhiker['segments'] ||
-												 self.__defaultSegments(src,dest);
-										s[ src+'--'+__id_to_uri(csid) ]  = segments[0];
-										s[ __id_to_uri(csid)+'--'+dest ] = segments[1];
-	
-										cschangelogs.push( 
-											_mmmk.update(
-												csid,
-												{'$segments':s})['changelog'],
-										  	self.__positionLinkDecorators(csid));
-									}
-	
-									return self.__regenIcon(csid);
-								},
-								function(riChangelog)
-								{
-									cschangelogs.push(riChangelog);
-									return __successContinuable();
-								});
-	
+                                    let asid = step['id'],
+                                        node = _utils.jsonp(step['node']),
+                                        isLink = ('segments' in hitchhiker),
+                                        fullastype = node['$type'],
+                                        fullcstype = self.__astype_to_cstype(
+                                            fullastype,
+                                            isLink),
+                                        asuri = fullastype + '/' + asid + '.instance',
+                                        attrs = {'$asuri': asuri};
+
+                                    if ('pos' in hitchhiker)
+                                        attrs['position'] = hitchhiker['pos'];
+                                    else if ('neighborhood' in hitchhiker) {
+                                        let nc = self.__nodesCenter(
+                                            hitchhiker['neighborhood']);
+                                        attrs['position'] =
+                                            [(nc[0] || 200), (nc[1] || 200)];
+                                    }
+                                    else if ('clone' in hitchhiker)
+                                        attrs = _utils.mergeDicts(
+                                            [attrs, hitchhiker['clone']]);
+                                    else
+                                        attrs['position'] = [200, 200];
+
+                                    let res = _mmmk.create(fullcstype, attrs),
+                                        csid = res['id'];
+
+                                    self.__asid2csid[asid] = csid;
+                                    cschangelogs.push(res['changelog']);
+
+                                    if (isLink) {
+                                        let s = {},
+                                            src =
+                                                hitchhiker['src'] ||
+                                                self.__asuri_to_csuri(hitchhiker['asSrc']),
+                                            dest =
+                                                hitchhiker['dest'] ||
+                                                self.__asuri_to_csuri(hitchhiker['asDest']),
+                                            segments =
+                                                hitchhiker['segments'] ||
+                                                self.__defaultSegments(src, dest);
+                                        s[src + '--' + __id_to_uri(csid)] = segments[0];
+                                        s[__id_to_uri(csid) + '--' + dest] = segments[1];
+
+                                        cschangelogs.push(
+                                            _mmmk.update(
+                                                csid,
+                                                {'$segments': s})['changelog'],
+                                            self.__positionLinkDecorators(csid));
+                                    }
+
+                                    return self.__regenIcon(csid);
+                                },
+                                function (riChangelog) {
+                                    cschangelogs.push(riChangelog);
+                                    return __successContinuable();
+                                });
+                        }
 						/* remove appropriate CS instance... update __asid2csid for it
 						  	to remain consistent */				
 						else if( step['op'] == 'RMNODE' )
@@ -1376,107 +1373,129 @@ module.exports = {
                 );
             }
 		},
-	
 
-	/* INTENT :
- 			create a new instance of specified type (if reqData has 'segments', 
-			'src' and 'dest' fields, type is a connector)
-		IN PRACTICE: 
-			adjust uri (and reqData) and forward to asworker
 
-		1. parse + validate parameters
-		2. setup sync/async action chaining
-			a) construct reqData for asworker.POST *.type
-				i.   handle connector ends if applicable
-				ii.  handle 'pos'... pass as hitchhiker and evaluate the to-be
-					  *Icon's parser within a dummy context where 'position' is set
-					  to 'pos'... see NOTES above for more details on this
-		   b) ask asworker to create an instance of appropriate AS type
-		3. launch chain... return success code or error */
-	'POST *.type' :
-		function(resp,uri,reqData/*pos|clone,[segments,src,dest]*/)
-		{
-			var matches = 
-					uri.match(/((.*)\..*Icons)(\.pattern){0,1}\/((.*)Icon)\.type/) ||
-					uri.match(/((.*)\..*Icons)(\.pattern){0,1}\/((.*)Link)\.type/);
-			if( ! matches )
-				return __postBadReqErrorMsg(
-								resp,
-								'bad uri for Icon/Link type :: '+uri);
+    /* INTENT :
+             create a new instance of specified type (if reqData has
+             'src' and 'dest' fields, type is a connector)
+        IN PRACTICE:
+            adjust uri (and reqData) and forward to asworker
 
-			var asuri   = matches[2]+(matches[3] || '')+'/'+matches[5]+'.type',
-				 csmm		= matches[1]+(matches[3] || ''),
-				 cstype	= matches[4],
-                 types = _utils.jsonp(_mmmk.readMetamodels(csmm))['types'];
-            if (cstype in types) {
-				 var parser	= 
-					 types[cstype].
-					 	filter( 
-							function(attr) 
-							{
-								return attr['name']=='parser';
-							})[0]['default'],
-				 self = this,
-				 actions  = 
-					[__successContinuable(),
-					 function()
-					 {
-						 if( reqData == undefined || 
-							  (pos = reqData['pos']) == undefined )
-							 return __errorContinuable('missing creation parameters');
-
-						 var hitchhiker = {},
-						 	  reqParams	 = {};
-						 if( (segments = reqData['segments']) != undefined &&
-							  (src = reqData['src']) != undefined 				&&
-							  (dest = reqData['dest']) != undefined )
-						 {
-							 if( (src_asuri = self.__csuri_to_asuri(src))['$err'] )
-								 return __errorContinuable(src_asuri['$err']);
-							 if( (dest_asuri = self.__csuri_to_asuri(dest))['$err'] )
-								 return __errorContinuable(dest_asuri['$err']);
-
-							 hitchhiker = {'segments':segments,
-												'src':src,
-												'dest':dest};
-							 reqParams	= {'src':src_asuri,
-												'dest':dest_asuri};
-						 }
-
-						 hitchhiker['pos'] = pos;
-						 reqParams['attrs'] = 
-								 self.__runParser(
-										 parser,
-										 {'position':pos,
-  										  'orientation':0,
-										  'scale':[1,1]},
-	 									 {});
-
-						 return __successContinuable(
-									 	_utils.mergeDicts(
-											[{'hitchhiker':hitchhiker}, reqParams]) );
-					 },
-					 function(asreqData)
-					 {
-	 					 return __wHttpReq(
-									 'POST',
-									 asuri+'?wid='+self.__aswid,
-									 asreqData);
-					 }];
-
-                 _do.chain(actions)(
-                        function(res) 	
-                        {
-                            __postMessage({'statusCode':202, 'respIndex':resp, 'reason': res});
-                        },
-                        function(err) 	{__postInternalErrorMsg(resp,err);}
-                 );
-            } else {
+        1. parse + validate parameters
+        2. setup sync/async action chaining
+            a) construct reqData for asworker.POST *.type
+                i.   handle connector ends if applicable
+                ii.  handle 'pos'... pass as hitchhiker and evaluate the to-be
+                      *Icon's parser within a dummy context where 'position' is set
+                      to 'pos'... see NOTES above for more details on this
+           b) ask asworker to create an instance of appropriate AS type
+        3. launch chain... return success code or error */
+    'POST *.type':
+        function (resp, uri, reqData/*pos|clone,[segments,src,dest]*/) {
+            let matches =
+                uri.match(/((.*)\..*Icons)(\.pattern){0,1}\/((.*)Icon)\.type/) ||
+                uri.match(/((.*)\..*Icons)(\.pattern){0,1}\/((.*)Link)\.type/);
+            if (!matches)
                 return __postBadReqErrorMsg(
-								resp,
-								'no concrete syntax definition found for '+cstype);
+                    resp,
+                    'bad uri for Icon/Link type :: ' + uri);
+
+            let asuri = matches[2] + (matches[3] || '') + '/' + matches[5] + '.type',
+                csmm = matches[1] + (matches[3] || ''),
+                cstype = matches[4],
+                types = _utils.jsonp(_mmmk.readMetamodels(csmm))['types'];
+
+            if (!(cstype in types)) {
+                return __postBadReqErrorMsg(
+                    resp, 'no concrete syntax definition found for ' + cstype);
             }
-		},
+
+            let parser =
+                    types[cstype].filter(
+                        function (attr) {
+                            return attr['name'] == 'parser';
+                        })[0]['default'],
+                self = this,
+                actions =
+                    [__successContinuable(),
+                        function () {
+                            if (reqData == undefined)
+                                return __errorContinuable('missing creation parameters');
+
+                            let hitchhiker = {},
+                                reqParams = {},
+                                segments = reqData['segments'],
+                                src = reqData['src'],
+                                dest = reqData['dest'],
+                                pos = reqData['pos'];
+
+                            if (src != undefined &&
+                                dest != undefined) {
+
+                                let src_asuri = self.__csuri_to_asuri(src);
+                                if (src_asuri['$err'])
+                                    return __errorContinuable(src_asuri['$err']);
+
+                                let dest_asuri = self.__csuri_to_asuri(dest);
+                                if (dest_asuri['$err'])
+                                    return __errorContinuable(dest_asuri['$err']);
+
+                                if (segments == undefined) {
+                                    segments = self.__defaultSegments(src, dest);
+                                }
+
+                                if (pos == undefined) {
+                                    pos = self.__nodesCenter([src_asuri, dest_asuri]);
+                                }
+
+                                hitchhiker = {
+                                    'segments': segments,
+                                    'src': src,
+                                    'dest': dest
+                                };
+                                reqParams = {
+                                    'src': src_asuri,
+                                    'dest': dest_asuri
+                                };
+
+
+                            }
+
+                            if (pos == undefined)
+                                return __errorContinuable('missing position');
+
+                            hitchhiker['pos'] = pos;
+                            reqParams['attrs'] =
+                                self.__runParser(
+                                    parser,
+                                    {
+                                        'position': pos,
+                                        'orientation': 0,
+                                        'scale': [1, 1]
+                                    },
+                                    {});
+
+                            return __successContinuable(
+                                _utils.mergeDicts(
+                                    [{'hitchhiker': hitchhiker}, reqParams]));
+                        },
+                        function (asreqData) {
+                            return __wHttpReq(
+                                'POST',
+                                asuri + '?wid=' + self.__aswid,
+                                asreqData);
+                        }];
+
+            _do.chain(actions)(
+                function (res) {
+                    __postMessage({'statusCode': 202, 'respIndex': resp, 'reason': res});
+                },
+                function (err) {
+                    __postInternalErrorMsg(resp, err);
+                }
+            );
+
+        },
 
 
 	/* return an AS instance, and optionally also the associated CS instance
