@@ -141,8 +141,6 @@ class ModelVerseConnector {
 
                 Promise.all(map_promises).then(function(){
 
-
-
                     for (const inheri of model_inheris){
                         let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/InheritanceLink.type";
 
@@ -166,7 +164,11 @@ class ModelVerseConnector {
 
                 })
                 .then(function(){
+                    let assoc_create_promises = [];
+
                     for (const assoc of model_associations){
+
+                        assoc_create_promises.push(new Promise(function(resolve, reject){
                         let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/AssociationLink.type";
 
                         let source = ele_ids[assoc[0]];
@@ -174,8 +176,16 @@ class ModelVerseConnector {
 
                         if (source == undefined || target == undefined){
                             console.log("ERROR: Can't create association between " + assoc[0] + " and " + assoc[1]);
-                            continue;
+                            resolve();
                         }
+
+                        let assoc_create_callback = function(status, resp){
+                            let id = JSON.parse(resp)["data"];
+                            let assoc_id = connectionType.replace(".type", "/") + id + ".instance";
+                            ele_ids[assoc[2]] = assoc_id;
+
+                            resolve();
+                        };
 
                         HttpUtils.httpReq(
                              'POST',
@@ -183,10 +193,26 @@ class ModelVerseConnector {
                              {'src':source,
                               'dest':target,
                               'pos':undefined,
-                              'segments':undefined});
+                              'segments':undefined},
+                            assoc_create_callback);
+                        }));
 
                     }
+
+                    Promise.all(assoc_create_promises).then(function(){
+                        for (const assoc of model_associations){
+                            let uri = ele_ids[assoc[2]];
+                            let changes = {"name" : assoc[2]};
+
+                            console.log("Updating " + uri);
+
+                            DataUtils.update(uri, changes);
+                        }
+                    });
+
+
                 });
+
 
                 resolve();
             });
