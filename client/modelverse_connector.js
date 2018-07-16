@@ -51,7 +51,7 @@ class ModelVerseConnector {
                 let model_classes = [];
                 let model_associations = [];
                 let model_inheris = [];
-                let model_attribs = [];
+                let model_attribs = {};
 
                 for (let i in AS) {
                     let obj = AS[i];
@@ -67,7 +67,10 @@ class ModelVerseConnector {
                         model_inheris.push([obj["__source"], obj["__target"]]);
 
                     }else if (obj_type == "AttributeLink") {
-                        model_attribs.push([obj["__source"], obj["__target"], obj["name"]]);
+                        if (model_attribs[obj["__source"]] == undefined){
+                            model_attribs[obj["__source"]] = [];
+                        }
+                        model_attribs[obj["__source"]].push([obj["__target"], obj["__id"]]);
                     }
 
                 }
@@ -105,6 +108,22 @@ class ModelVerseConnector {
                                 ele_ids[id] = uri;
 
                                 let changes = {"name": id};
+
+                                if (model_attribs[id] != undefined){
+                                    let attrib_changes = [];
+
+                                    for (let attrib of model_attribs[id]){
+                                        //console.log(attrib);
+
+                                        let attrib_change = {
+                                            "name": attrib[1],
+                                            "type" : attrib[0]
+                                        };
+                                        attrib_changes.push(attrib_change);
+                                    }
+                                    changes["attributes"] = attrib_changes;
+                                }
+
                                 DataUtils.update(uri, changes);
                                 resolve();
                             };
@@ -120,8 +139,6 @@ class ModelVerseConnector {
                     }));
                 }
 
-                console.log("Waiting for promises");
-                console.log(map_promises);
                 Promise.all(map_promises).then(function(){
 
 
@@ -133,7 +150,7 @@ class ModelVerseConnector {
                         let target = ele_ids[inheri[1]];
 
                         if (source == undefined || target == undefined){
-                            console.log("ERROR: Can't create association between " + inheri[0] + " and " + inheri[1]);
+                            console.log("ERROR: Can't create inheritance between " + inheri[0] + " and " + inheri[1]);
                             continue;
                         }
 
@@ -147,6 +164,28 @@ class ModelVerseConnector {
 
                     }
 
+                })
+                .then(function(){
+                    for (const assoc of model_associations){
+                        let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/AssociationLink.type";
+
+                        let source = ele_ids[assoc[0]];
+                        let target = ele_ids[assoc[1]];
+
+                        if (source == undefined || target == undefined){
+                            console.log("ERROR: Can't create association between " + assoc[0] + " and " + assoc[1]);
+                            continue;
+                        }
+
+                        HttpUtils.httpReq(
+                             'POST',
+                             HttpUtils.url(connectionType,__NO_USERNAME),
+                             {'src':source,
+                              'dest':target,
+                              'pos':undefined,
+                              'segments':undefined});
+
+                    }
                 });
 
                 resolve();
