@@ -88,60 +88,66 @@ class ModelVerseConnector {
 
                 let ele_ids = {};
 
-                let update_promises = [];
 
                 __typeToCreate = class_type;
+
+                let map_promises = [];
                 for (const id of model_classes){
 
-                    let updateClass =
+                    map_promises.push(new Promise(function(resolve, reject){
+                        let updateClass =
 
-                        function(status, resp){
+                            function(status, resp){
 
-                            let data = JSON.parse(resp);
+                                let data = JSON.parse(resp);
 
-                            let uri = class_type + "/" + data["data"] + ".instance";
-                            ele_ids[id] = uri;
+                                let uri = class_type + "/" + data["data"] + ".instance";
+                                ele_ids[id] = uri;
 
-                            let changes = {"name": id};
-                            DataUtils.update(uri, changes);
-                        };
+                                let changes = {"name": id};
+                                DataUtils.update(uri, changes);
+                                resolve();
+                            };
 
 
-                    let pos = class_locs[id];
-                    if (pos == undefined || pos == null){
-                        pos = [100, 100];
+                        let pos = class_locs[id];
+                        if (pos == undefined || pos == null){
+                            pos = [100, 100];
+                        }
+
+                        let vert_offset = 200;
+                        DataUtils.create(pos[0], pos[1] + vert_offset, updateClass);
+                    }));
+                }
+
+                console.log("Waiting for promises");
+                console.log(map_promises);
+                Promise.all(map_promises).then(function(){
+
+
+
+                    for (const inheri of model_inheris){
+                        let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/InheritanceLink.type";
+
+                        let source = ele_ids[inheri[0]];
+                        let target = ele_ids[inheri[1]];
+
+                        if (source == undefined || target == undefined){
+                            console.log("ERROR: Can't create association between " + inheri[0] + " and " + inheri[1]);
+                            continue;
+                        }
+
+                        HttpUtils.httpReq(
+                             'POST',
+                             HttpUtils.url(connectionType,__NO_USERNAME),
+                             {'src':source,
+                              'dest':target,
+                              'pos':undefined,
+                              'segments':undefined});
+
                     }
 
-                    let vert_offset = 200;
-                    DataUtils.create(pos[0], pos[1] + vert_offset, updateClass);
-
-                }
-
-                Promise.all(update_promises);
-
-                for (const inheri of model_inheris){
-                    let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/InheritanceLink.type";
-
-                    let source = ele_ids[inheri[0]];
-                    let target = ele_ids[inheri[1]];
-
-                    let pathCenter = {
-                        alpha : 170.64401727550313,
-                        x : 826.5,
-                        y : 419
-                    };
-
-                    let segments = ["M608,455L826.5,419","M826.5739502659386,418.9878159744906L1044.99939632373,383.0000994615366"];
-
-                    HttpUtils.httpReq(
-                         'POST',
-                         HttpUtils.url(connectionType,__NO_USERNAME),
-                         {'src':source,
-                          'dest':target,
-                          'pos':[pathCenter.x,pathCenter.y],
-                          'segments':segments});
-
-                }
+                });
 
                 resolve();
             });
@@ -243,6 +249,7 @@ class ModelVerseConnector {
             .then(() => this.send_command(username_params)).then(this.get_output)
             .then(() => this.send_command(password_params)).then(this.get_output)
             .then(() => this.send_command(quiet_mode_params)).then(this.get_output)
+            .then(this.get_output)
             .then(function () {
                 ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
             })
