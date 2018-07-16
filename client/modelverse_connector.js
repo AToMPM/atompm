@@ -2,7 +2,7 @@ class ModelVerseConnector {
 
 
     constructor(address) {
-        ModelVerseConnector.taskname = this.guid();
+        ModelVerseConnector.taskname = "task_manager";
         ModelVerseConnector.address = (address == undefined) ? "http://127.0.0.1:8001" : address;
 
         ModelVerseConnector.ERROR = 0;
@@ -12,11 +12,6 @@ class ModelVerseConnector {
         ModelVerseConnector.curr_model = null;
     }
 
-    guid() {
-        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-        )
-    }
 
     static set_status(status) {
 
@@ -226,10 +221,6 @@ class ModelVerseConnector {
         let username = username_param || "admin";
         let password = password_param || "admin";
 
-        let init_params = {
-            "value": "\"" + ModelVerseConnector.taskname + "\"",
-            "taskname": 'task_manager'
-        };
 
         let username_params = {
             "value": "\"" + username + "\""
@@ -243,10 +234,15 @@ class ModelVerseConnector {
             "value": "\"quiet\""
         };
 
-        this.send_command(init_params).then(this.get_output)
-            .then(this.send_command(username_params)).then(this.get_output)
-            .then(this.send_command(password_params)).then(this.get_output)
-            .then(this.send_command(quiet_mode_params)).then(this.get_output)
+        this.get_output().then(
+            function(data){
+                data = data.replace(/"/g, "");
+                ModelVerseConnector.taskname = data;
+            }
+        )
+            .then(() => this.send_command(username_params)).then(this.get_output)
+            .then(() => this.send_command(password_params)).then(this.get_output)
+            .then(() => this.send_command(quiet_mode_params)).then(this.get_output)
             .then(function () {
                 ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
             })
