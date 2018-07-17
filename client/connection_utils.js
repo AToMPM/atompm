@@ -200,18 +200,64 @@ ConnectionUtils = function(){
 		connectionPathEditingOverlay = {};
 		currentControlPoint = undefined;
 	};
-	
-	/**
-	 * Moves the control point and its overlay to the specified coordinates
-	 */
-	this.previewControlPointTranslation = function(x,y){
-		var _x = parseInt( currentControlPoint.node.getAttribute('_x') ),
-			 _y = parseInt( currentControlPoint.node.getAttribute('_y') );
-		currentControlPoint.translate(x-_x,y-_y);
-		currentControlPoint.node.setAttribute('_x',x);
-		currentControlPoint.node.setAttribute('_y',y);
-		ConnectionUtils.updateConnectionPath(true);
-	};
+
+    /**
+     * Moves the control point and its overlay to the specified coordinates
+     */
+    this.previewControlPointTranslation = function (x, y, ctrl_key_down) {
+
+        // if the control key is not down,
+        // restrict control point to within bounding box
+        if (!ctrl_key_down) {
+            let new_points = this.restrictControlPoint(x, y);
+            x = new_points[0];
+            y = new_points[1];
+        }
+
+        let _x = parseInt(currentControlPoint.node.getAttribute('_x')),
+            _y = parseInt(currentControlPoint.node.getAttribute('_y'));
+
+        currentControlPoint.translate(x - _x, y - _y);
+
+        currentControlPoint.node.setAttribute('_x', x);
+        currentControlPoint.node.setAttribute('_y', y);
+        ConnectionUtils.updateConnectionPath(true);
+    };
+
+    /**
+     * Restricts the control point to within an icon's bounding box
+     */
+    this.restrictControlPoint = function (x, y) {
+        let start = currentControlPoint.node.getAttribute("__start");
+        let end = currentControlPoint.node.getAttribute("__end");
+
+        // something went wrong, or we're not an
+		// outside edge, so return the points
+        if (start == undefined && end == undefined) {
+            return [x, y];
+        }
+
+        let icon = __getIcon(start || end).node;
+        let iconX = parseFloat(icon.getAttribute("__x"));
+        let iconY = parseFloat(icon.getAttribute("__y"));
+
+        let bbox = icon.getBBox();
+        let width = parseFloat(bbox["width"]);
+        let height = parseFloat(bbox["height"]);
+
+        if (x < iconX) {
+            x = iconX;
+        } else if (x > iconX + width) {
+            x = iconX + width;
+        }
+
+        if (y < iconY) {
+            y = iconY;
+        } else if (y > iconY + height) {
+            y = iconY + height;
+        }
+        return [Math.round(x), Math.round(y)];
+    };
 	
 	/**
 	 * Show the connection path editing overlay. This shows draggable circles
