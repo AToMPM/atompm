@@ -237,14 +237,18 @@ ConnectionUtils = function(){
             return [x, y];
         }
 
-        let icon = __getIcon(start || end).node;
-        let iconX = parseFloat(icon.getAttribute("__x"));
-        let iconY = parseFloat(icon.getAttribute("__y"));
-
+        //get the bounding box rectangle
+        let icon = __getIcon(start || end);
         let bbox = icon.getBBox();
-        let width = parseFloat(bbox["width"]);
-        let height = parseFloat(bbox["height"]);
 
+        //get the dimensions
+        let iconX = bbox.x;
+        let iconY = bbox.y;
+
+        let width = bbox.width;
+        let height = bbox.height;
+
+        //restrict x and y to within the bounding box
         if (x < iconX) {
             x = iconX;
         } else if (x > iconX + width) {

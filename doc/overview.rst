@@ -226,6 +226,10 @@ When in the **EDGE EDITING** state, |edge_editing|
 | Action                                | Shortcut(s)                                                                 |
 +=======================================+=============================================================================+
 | Move control point                    | Left-press any control point, drag it to desired position and release.      |
+|                                       |                                                                             |
+|                                       | If editing a control point attached to an icon, movement is restricted to   |
+|                                       | within that icon's bounding box. If free movement is desired,               |
+|                                       | hold CTRL while moving the control point.                                   |
 +---------------------------------------+-----------------------------------------------------------------------------+
 | Vertically/Horizontally align control | Left-click any control point and click TAB.                                 |
 | point to previous control point       |                                                                             |
