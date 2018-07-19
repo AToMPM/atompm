@@ -1,3 +1,5 @@
+let model_building_utils = require('./model_building_utils');
+
 function login(client) {
     client.execute(
         function () {
@@ -14,7 +16,12 @@ function login(client) {
 
 function load_model(client, fnames) {
 
+    client.waitForElementPresent(model_building_utils.canvas, 2000, "Canvas loaded");
+
+    client.pause(500);
+    
     for (const name of fnames) {
+
         client.execute(
             function (fname) {
                 _loadModel(fname);
@@ -45,6 +52,8 @@ function load_model(client, fnames) {
 }
 
 function load_toolbar(client, fnames) {
+
+    client.waitForElementPresent(model_building_utils.canvas, 2000, "Canvas loaded");
 
     for (let name of fnames) {
 

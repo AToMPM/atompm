@@ -6,15 +6,17 @@ This section presents an overview of AToMPM's user interface: how to create an a
 
 First Usage
 -----------
-When first opening the user interface at `localhost:8124/atompm`, the user is presented with a login screen.
+When first opening the user interface at http://localhost:8124/atompm (or a remote AToMPM server), the user is presented with a login screen.
 
 .. image:: img/first_login_screen.png
     :scale: 50
+    :align: center
 
 Click the *create one now* link, which will allow you to create a new account with a user name and password. Fill out the form and click *Create new account*.
 
 .. image:: img/create_new_account.png
-    :scale: 50
+    :scale: 80
+    :align: center
 
 AToMPM will initialize the account (by creating a user folder under the `users/` folder) and switch to the main user interface view. When you revisit the AToMPM webpage or create a new AToMPM instance, the tool will remember your username and password and automatically log you in. You can log out by clicking the *logout* link at the top right of the user interface.
 
@@ -25,8 +27,9 @@ When logged in, the AToMPM user interface is initialized with four button toolba
 
 .. image:: img/user_interface.png
     :scale: 50
+    :align: center
 
-The user interface of AToMPM consists of three areas: the *toolbar area*, contained in the *canvas area*, and the *console*. To bring up the console, in Google Chrome press the F12 key. These areas are explained in more details in the next sections.
+The user interface of AToMPM consists of three areas, which are explained in more details in the next sections. First is the *toolbar area* (also termed the *dock*), which contains the button and formalism toolbars. Second is the *canvas area* which displays the elements of the current model. Finally, there is the *console*, which may also appear in a separate window.
 
 Toolbars
 ^^^^^^^^
@@ -34,9 +37,10 @@ There are two types of toolbars that can be loaded: button toolbars consist of a
 
 Button Toolbars
 """""""""""""""
-All button toolbar models can be found under the */Toolbars/* user folder. A button toolbar consists of a number of buttons that, when clicked, execute a particular action. Four button toolbar are loaded by default, explained below.
+All button toolbar models can be found under the */Toolbars/* user folder. A button toolbar consists of a number of buttons that, when clicked, execute a particular action. Four button toolbars are loaded by default, explained below.
 
 .. image:: img/main_toolbar.png
+    :align: center
     
 #. Launch a new AToMPM user interface in a new tab.
 #. (Re-)open a button or formalism toolbar.
@@ -52,11 +56,12 @@ All button toolbar models can be found under the */Toolbars/* user folder. A but
 #. Paste the copied elements on the canvas (copy/paste also works across AToMPM tabs).
 #. Verify whether the constraints of the current model are satisfied.
 #. Show or hide entities of a particular formalism (but do not remove them from the model).
-#. Open the manual.
+#. Display information about AToMPM, such as the current version, website, and documentation.
 
 Most of these actions are intuitive. Others are explained in more detail in the next sections.
     
 .. image:: img/compilation_toolbar.png
+    :align: center
     
 #. Compile the current model (conforming to the *ConcreteSyntax* formalism) to a formalism toolbar.
 #. Compile the current model (conforming to the *SimpleClassDiagram* formalism) to a metamodel.
@@ -65,6 +70,7 @@ Most of these actions are intuitive. Others are explained in more detail in the 
 More information on these buttons can be found in :ref:`creating-a-modelling-language` and :ref:`modelling-a-model-transformation`.
     
 .. image:: img/transformation_controller.png
+    :align: center
     
 #. Load a transformation.
 #. Run the currently loaded transformation until the end.
@@ -76,6 +82,7 @@ More information on these buttons can be found in :ref:`creating-a-modelling-lan
 More information on these buttons can be found in :ref:`executing-a-model-transformation`.
     
 .. image:: img/transformation_editor.png
+    :align: center
     
 #. Open a rule model.
 #. Open a transformation model.
@@ -94,6 +101,7 @@ Loading a formalism toolbar allows you to create elements on the canvas conformi
 As an example, we show the formalism toolbar of the *TrafficLight* language, which is used throughout the readme as an example.
 
 .. image:: img/trafficlight_toolbar.png
+    :align: center
 
 Each button of a formalism toolbar corresponds to an icon in the concrete syntax definition of the formalism. Links are not shown. Clicking a button will select that particular type to be instantiated. Right-clicking on the canvas instantiates the icon on the canvas. More information on how to use a formalism toolbar to model can be found in :ref:`using-a-modelling-language`.
 
@@ -129,10 +137,19 @@ When in the **DEFAULT** state,
 |                                 | display the attribute editor).                                              |
 +---------------------------------+-----------------------------------------------------------------------------+
 
-When in the **SOMETHING SELECTED** state (*i.e.*, when one or more entity is selected), |something_selected|
+The attribute editor is shown in the image below. In the editor, TAB changes focus to the next text entry. The ENTER key will accept the changes and close the editor window in most cases. However, pressing ENTER in a multi-line text area will produce a newline within the text.
 
-.. |something_selected| image:: img/something_selected.png
+.. image:: img/attrib_editor.png
     :class: inline-image
+    :align: center
+
+
+When in the **SOMETHING SELECTED** state (*i.e.*, when one or more entity is selected).
+
+.. image:: img/something_selected.png
+    :class: inline-image
+    :align: center
+    
 
 .. rst-class:: table-with-borders
 
@@ -147,19 +164,20 @@ When in the **SOMETHING SELECTED** state (*i.e.*, when one or more entity is sel
 +--------------------------------------+-----------------------------------------------------------------------------+
 | Delete selection                     | Press DELETE. Enters the **DEFAULT** state.                                 |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Edit first entity in selection       | Click INSERT, or click COMMAND (this will display the attribute editor.     |
+| Edit first entity in selection       | Press INSERT, or click COMMAND (this will display the attribute editor).    |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Change the geometry of the selection | Click CTRL. Enters the **GEOMETRY EDITING** state.                          |
+| Change the geometry of the selection | Press CTRL. Enters the **GEOMETRY EDITING** state.                          |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Edit the selected edge               | Click SHIFT. Enters the **EDGE EDITING** state.                             |
+| Edit the selected edge               | Press SHIFT. Enters the **EDGE EDITING** state.                             |
 +--------------------------------------+-----------------------------------------------------------------------------+
-| Snap selection to nearest grid point | Click TAB. Enters the **DEFAULT** state.                                    |
+| Snap selection to nearest grid point | Press TAB. Enters the **DEFAULT** state.                                    |
 +--------------------------------------+-----------------------------------------------------------------------------+
 
-When in the **DRAGGING SELECTION** state (*i.e.*, when left-dragging one or more selected entity), |dragging_selection|
+When in the **DRAGGING SELECTION** state (*i.e.*, when left-dragging one or more selected entity),
 
-.. |dragging_selection| image:: img/dragging_selection.png
+.. image:: img/dragging_selection.png
     :class: inline-image
+    :align: center
 
 .. rst-class:: table-with-borders
 
@@ -176,10 +194,11 @@ When in the **DRAGGING SELECTION** state (*i.e.*, when left-dragging one or more
 | Cancel motion                        | Click ESC. Enters the **DEFAULT** state.                                    |
 +--------------------------------------+-----------------------------------------------------------------------------+
 
-When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source to target entities), |drawing_edge|
+When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source to target entities),
 
-.. |drawing_edge| image:: img/drawing_edge.png
+.. image:: img/drawing_edge.png
     :class: inline-image
+    :align: center
 
 .. rst-class:: table-with-borders
 
@@ -195,10 +214,11 @@ When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source
 | Cancel current edge                   | Left-release anywhere on the Canvas. Enters the **DEFAULT** state.          |
 +---------------------------------------+-----------------------------------------------------------------------------+
 
-When in the **EDGE EDITING** state, |edge_editing|
+When in the **EDGE EDITING** state,
 
-.. |edge_editing| image:: img/edge_editing.png
+.. image:: img/edge_editing.png
     :class: inline-image
+    :align: center
 
 .. rst-class:: table-with-borders
 
@@ -219,10 +239,11 @@ When in the **EDGE EDITING** state, |edge_editing|
 |                                       | **DEFAULT** state.                                                          |
 +---------------------------------------+-----------------------------------------------------------------------------+
 
-When in the **GEOMETRY EDITING** state, |geometry_editing|
+When in the **GEOMETRY EDITING** state,
 
-.. |geometry_editing| image:: img/geometry_editing.png
+.. image:: img/geometry_editing.png
     :class: inline-image
+    :align: center
 
 .. rst-class:: table-with-borders
 
@@ -253,3 +274,41 @@ Console
 The developer console (press F12 in Chrome/Firefox) contains many useful debugging messages. Especially when :ref:`executing-a-model-transformation`, the console contains useful information on which rules were executed and whether they failed or succeeded.
     
 .. image:: img/console.png
+    :align: center
+
+Collaboration
+^^^^^^^^^^^^^
+
+AToMPM supports two modes of real-time distributed collaboration, namely, *screenshare* and *modelshare*. In the former, all collaborating developers share the same concrete and abstract syntax. This implies that if one developer moves an entity or cycles to another concrete syntax representation, the change will be replicated for all collaborators. In contrast, in the latter mode, only abstract syntax is shared. This means that all collaborators can have distinct concrete syntax representations and distinct layouts (provided layout and abstract syntax are not intricately related), and are only affected by others' abstract syntax changes (e.g., modifying abstract attribute values).
+
+.. _userprefs:
+
+Tweaking Default Settings
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+Several parameters can be tweaked for a more personalized user experience. Their meaning, range of possible values and defaults are detailed below:
+
++---------------------------------------+-----------------------------------------------------------------------------+-----------------------------+---------+
+| Preference Key                        | Meaning                                                                     | Type                        | Default |
++=======================================+=============================================================================+=============================+=========+
+| *autosave-delay*                      | The number of seconds between current model backups,                        | integer                     | 15      |
+|                                       | or -1 to disable time-intervalled backups.                                  |                             |         |
++---------------------------------------+-----------------------------------------------------------------------------+-----------------------------+---------+
+| *autosave-mode*                       | When set to \textit{overwrite}, automatic saving overwrites the             | ENUM(overwrite, backup)     | backup  |
+|                                       | current model on disk (i.e., has the same effect as if you'd clicked        |                             |         |
+|                                       | the save button from the MainMenu toolbar). When set to *backup*,           |                             |         |
+|                                       | automatic saving saves the current model into a temporary file and          |                             |         |
+|                                       | does \emph{not} overwrite the current model on disk.                        |                             |         |
++---------------------------------------+-----------------------------------------------------------------------------+-----------------------------+---------+
+| *confirm-exit*                        | When set to \textit{true}, exiting or logging out while the current model   | boolean                     | true    |
+|                                       | contains unsaved changes pops up a warning.                                 |                             |         |
++---------------------------------------+-----------------------------------------------------------------------------+-----------------------------+---------+
+| *default-mt-dcl*                      |The default programming language for all code in model transformation rules. |  ENUM(JAVASCRIPT, PYTHON)   | PYTHON  |
++---------------------------------------+-----------------------------------------------------------------------------+-----------------------------+---------+
+| *autoloaded-toolbars*                 | Toolbars to load when starting a new AToMPM client.                         | list of toolbar paths       | []      |
++---------------------------------------+-----------------------------------------------------------------------------+-----------------------------+---------+
+| *autoloaded-model*                    | Model to load when starting a new AToMPM client.                            |  model path                 | ''      |
++---------------------------------------+-----------------------------------------------------------------------------+-----------------------------+---------+
+

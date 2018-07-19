@@ -769,8 +769,8 @@ class PyTCoreAbstractionLayer :
 
     '''
         request that the specified node from the specified atompm instance be 
-        highlighted '''
-    def _requestNodeHighlight(self,host,aswid,asid,timeout=5000) :
+        highlighted '''         
+    def _requestNodeHighlight(self,host,aswid,asid,timeout=1000) :
         return utils.httpReq(
             'PUT',
             host,

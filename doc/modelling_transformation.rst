@@ -32,11 +32,11 @@ A formalism created with the "new formalism" button on the *MainMenu* toolbar (s
 
 If you want to initialize a new schedule, use the fourth button on the *TransformationEditor* toolbar. This will present you with a file browser, which allows you to choose a location and a name for the schedule. The schedule will automatically open in a new AToMPM instance.
 
-.. note:: A schedule's name has to start with the T\_ prefix!
+.. warning:: A schedule's name has to start with the T\_ prefix!
 
 If you want to initialize a new rule, use the fifth button on the *TransformationEditor* toolbar. This will present you with a file browser, which allows you to choose a location and a name for the rule. The rule will automatically open in a new AToMPM instance.
 
-.. note:: A rule's name has to start with the R\_ prefix!
+.. warning:: A rule's name has to start with the R\_ prefix!
 
 .. _the-rule-language:
 
@@ -126,6 +126,8 @@ Action Library
 
 .. note:: The *_id* attribute can either be an abstract syntax identifier, or a *__pLabel* value.
 
+.. note:: The notion of full types is best explained by example: the full type of a SimpleClassDiagram.Class entity is "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/Class".
+
 +----------------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | name                                   | parameters                          | Description                                                                   |
 +========================================+=====================================+===============================================================================+
@@ -142,9 +144,7 @@ Action Library
 +----------------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | getAllNodes(_fulltypes)                | * *_fulltypes*: list<string>        | Return the abstract syntax identifiers of all entities whose types are        |
 |                                        |                                     | contained within the fulltypes array. If it is omitted, return the abstract   |
-|                                        |                                     | syntax identifiers of all entities. The notion of full types is best          |
-|                                        |                                     | explained by example: the full type of a SimpleClassDiagram.Class entity is   |
-|                                        |                                     | "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/Class". |
+|                                        |                                     | syntax identifiers of all entities.                                           |
 +----------------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | getNeighbors(_dir[, _type, _id])       | * *_dir*: string                    | Return neighbours of the given entity, specified via its abstract syntax      |
 |                                        | * *_type*: string                   | identifier or __pLabel. The *_dir* parameter can take on three values: "in"   |
@@ -152,9 +152,7 @@ Action Library
 |                                        |                                     | only outbound neighbours should be returned, "*" implies that neighbours in   |
 |                                        |                                     | either direction should be returned. Finally, the *_type* parameter can be    |
 |                                        |                                     | set to indicate that only neighbours of the given full type should be         |
-|                                        |                                     | returned. The notion of full types is best explained by example: the full     |
-|                                        |                                     | type of a SimpleClassDiagram.Class entity is                                  |
-|                                        |                                     | "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/Class". |
+|                                        |                                     | returned.                                                                     |
 |                                        |                                     | To match any type, use "*".                                                   |
 +----------------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | print(msg)                             | * *msg*: string                     | Print the given string to the console that launched the AToMPM back-end.      |

@@ -5,7 +5,9 @@
 
 /****************************** GLOBAL CONSTANTS ******************************/
 var __WEBPAGE__ = 'https://atompm.github.io/',
-    __VERSION__ = '0.7.0',
+	__RELEASE_LOC__ = "https://api.github.com/repos/AToMPM/atompm/releases/latest",
+	__DOC_WEBPAGE__ = "https://atompm.readthedocs.io",
+    __VERSION__ = '0.8.0',
     __DEFAULT_SAVEAS		 	= '.autosave.model',
 	 __TITLE						= 'AToMPM',
 	 __EXITWARNING				= 'There are unsaved changes. Proceeding will cause'+

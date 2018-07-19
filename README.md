@@ -10,7 +10,9 @@ To install AToMPM, follow these steps:
     * Or visit http://python.org/download/
 * Download and install python-igraph
     * Use the pip package manager (comes with Python)
-    * `pip install python-igraph`
+        * `pip install python-igraph`
+    * For Windows, you may need to install the compiled igraph core
+        * `http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph`
 * Download and install node.js
     * Use a package manager on Linux
     * Or visit https://nodejs.org/en/download/
@@ -20,11 +22,14 @@ To install AToMPM, follow these steps:
 
 ## Usage
 
+The commands below are for starting the ATOMPM server. Note that the default port is 8124.
+
+Once started, the server can be connected to by accessing http://localhost:8124/atompm in either the Firefox or Chrome browsers.
+
 ### Windows
 To run AToMPM on Windows, execute the `run.bat` script inside of the main AToMPM folder.
 
 ### Mac or Linux
-
 * Execute commands in different terminals
     1. Execute `node httpwsd.js` in the main AToMPM folder
     2. Execute `python2 mt\main.py` in the main AToMPM folder
@@ -37,7 +42,7 @@ To run AToMPM on Windows, execute the `run.bat` script inside of the main AToMPM
 
 
 ## Documentation
-Documentation can be found here: https://msdl.uantwerpen.be/documentation/AToMPM/index.html
+Documentation can be found here: https://atompm.readthedocs.io
 
 ## Testing
 To run tests on AToMPM, run `npm test'
