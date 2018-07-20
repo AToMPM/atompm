@@ -1,7 +1,12 @@
 '''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
-import pprint, json, re, math, threading, httplib
+import pprint, json, re, math, threading, sys
+
+if sys.version_info[0] < 3:
+	import httplib as httplib
+else:
+	import http.client as httplib
 
 
 class Utilities :
@@ -10,17 +15,17 @@ class Utilities :
 		do 'callback()' when 'condition' is satisfied, polling every 'delay' 
 		seconds until it is '''
 	@staticmethod
- 	def doWhen(condition, delay, callback) :
-		if	condition() : 
+	def doWhen(condition, delay, callback) :
+		if	condition() :
 			callback()
-		else : 
+		else :
 			t = threading.Timer(delay,Utilities.doWhen,[condition,delay,callback])
 			t.start()
 
 	'''
 		flatten an array of arrays into a single array '''
 	@staticmethod
- 	def flatten(arrays) :
+	def flatten(arrays) :
 		return [item for array in arrays for item in array]
 
 
@@ -29,10 +34,10 @@ class Utilities :
 		parsed contents (or parsed asm, if path describes a *.model file) '''
 	@staticmethod
 	def fread(path,isJson=True,relative=True) :
-		try : 
+		try :
 			if relative :
 				path = './'+path
-				
+
 			f = open(path,'r')
 			contents = f.read()
 			f.close()
@@ -43,7 +48,7 @@ class Utilities :
 					contents = contents['asm']
 
 			return contents
-		except Exception, e :
+		except Exception as e :
 			raise IOError('crashed while reading data :: '+str(e))
 
 
@@ -53,7 +58,7 @@ class Utilities :
 	@staticmethod
 	def getMetamodel(fulltype) :
 		return re.match("(.*)/.*",fulltype).group(1)
-	
+
 
 	'''
 		split a full type of the form '/path/to/metamodel/type' and return 
@@ -89,7 +94,7 @@ class Utilities :
 	def isHttpSuccessCode(statusCode) :
 		return math.floor(statusCode/100.0) == 2
 
-	
+
 	'''
 		pretty-print anything '''
 	@staticmethod
@@ -108,10 +113,10 @@ class Utilities :
 		if len(hg.es) > 0 :
 			print(hg.get_adjacency())
 
-	
+
 	'''
 		same as JavaScript setTimeout... do 'callback()' after 'delay' seconds
-	  	have elapsed '''		
+	  	have elapsed '''
 	@staticmethod
 	def setTimeout(delay, callback, args=[]) :
 		t = threading.Timer(delay,callback,args)

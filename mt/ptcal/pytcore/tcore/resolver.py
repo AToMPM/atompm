@@ -2,8 +2,8 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
-from rule_primitive import RulePrimitive
-from messages import TransformationException
+from .rule_primitive import RulePrimitive
+from .messages import TransformationException
 
 
 class Resolver(RulePrimitive):
@@ -21,7 +21,7 @@ class Resolver(RulePrimitive):
         super(Resolver, self).__init__()
         self.external_matches_only = external_matches_only
         self.custom_resolution = custom_resolution
-    
+
     def packet_in(self, packet):
         '''
             Attempts to merge the packets into a single one, only if all threads had succeeded.
@@ -47,13 +47,13 @@ class Resolver(RulePrimitive):
         # No conflicts are to be reported
         self.is_success = True
         return packet
-    
+
     def _custom_resolution(self, packet, match):
         '''
             Applies the user-defined resolution function
         '''
         return self.custom_resolution(packet)
-    
+
     def _default_resolution(self, packet, match):
         '''
             Attempts to resolve conservatively any conflicts

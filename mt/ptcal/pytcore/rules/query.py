@@ -19,7 +19,7 @@ class Query(Composer):
         super(Query, self).__init__()
         self.M = Matcher(condition=LHS, max=1)
         self.I = Iterator(max_iterations=1)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -39,7 +39,7 @@ class Query(Composer):
         # Output success packet
         self.is_success = True
         return packet
-    
+
 class CQuery2(Composer):
     '''
         Finds a match for the LHS.
@@ -53,7 +53,7 @@ class CQuery2(Composer):
         self.M = Matcher(condition=LHS)
         self.I = Iterator()
         self.innerQuery=innerQuery
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -62,21 +62,21 @@ class CQuery2(Composer):
         if not self.M.is_success:
             self.exception = self.M.exception
             return packet
-        
+
         # Choose the first match
         packet = self.I.packet_in(packet)
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         while True:
-            
+
             packet = self.innerQuery.packet_in(packet)
             if self.innerQuery.is_success:
                 if self.innerQuery.exception:
                     self.exception = self.innerQuery.exception
                     return packet
-            
+
                 # Choose another match
                 packet = self.I.next_in(packet)
                 # No more iterations are left
@@ -90,7 +90,7 @@ class CQuery2(Composer):
             else:
                 self.is_success=True
                 return packet
-            
+
 class CQuery3(Composer):
     '''
         Finds a match for the LHS.
@@ -105,7 +105,7 @@ class CQuery3(Composer):
         self.I = Iterator()
         self.innerQuery=innerQuery
         self.secondInnerQuery=secondInnerQuery
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -114,21 +114,21 @@ class CQuery3(Composer):
         if not self.M.is_success:
             self.exception = self.M.exception
             return packet
-        
+
         # Choose the first match
         packet = self.I.packet_in(packet)
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         while True:
-            
+
             packet = self.innerQuery.packet_in(packet)
             if self.innerQuery.is_success:
                 if self.innerQuery.exception:
                     self.exception = self.innerQuery.exception
                     return packet
-            
+
                 # Choose another match
                 packet = self.I.next_in(packet)
                 # No more iterations are left
@@ -139,7 +139,7 @@ class CQuery3(Composer):
                         self.is_success = False
                     return packet
             else:
-                
+
                 packet = self.secondInnerQuery.packet_in(packet)
                 if self.secondInnerQuery.is_success:
                     if self.secondInnerQuery.exception:

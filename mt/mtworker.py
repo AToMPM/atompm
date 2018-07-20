@@ -47,8 +47,8 @@ class mtworkerThread(threading.Thread) :
 	def __init__(self,mtw2msgQueue,mtw2lock) :
 		threading.Thread.__init__(self)
 		self.wid 				  = str(mtworkerThread.nextID)
-	  	mtworkerThread.nextID  += 1
-		self._msgQueue 		  = [] 	
+		mtworkerThread.nextID  += 1
+		self._msgQueue 		  = []
 		mtw2msgQueue[self.wid] = self._msgQueue
 		self._lock 				  = threading.Condition()
 		mtw2lock[self.wid]	  = self._lock
@@ -81,7 +81,7 @@ class mtworkerThread(threading.Thread) :
 				 thread sleeps while self._msgQueue is empty '''
 	def run(self):
 		while not self._stopped :
-  			self._lock.acquire()
+			self._lock.acquire()
 
 			if len(self._msgQueue) == 0 :
 				self._lock.wait()
@@ -101,68 +101,68 @@ class mtworkerThread(threading.Thread) :
 		TBI:: the use of '127.0.0.1' implies that the atompm server is running on
 	  			the same machine as the transformation engine... '''
 	def _aswHttpReq(self,method,uri,data) :
-		return utils.httpReq( 
-								method, 
-								'127.0.0.1:8124', 
-								uri+'?wid='+self._aswid, 
-								data)
+		return utils.httpReq(
+			method,
+			'127.0.0.1:8124',
+			uri+'?wid='+self._aswid,
+			data)
 
 
 
 	'''
-		handle an incoming message from the server '''	
+		handle an incoming message from the server '''
 	def _onmessage(self,msg):
 		if msg == 'DIE' :
-			return self.stop()		
+			return self.stop()
 
-		logging.debug(self.wid+' >> #'+str(id(msg['resp']))+' '+\
-							msg['method']+' '+msg['uri'])
+		logging.debug(self.wid+' >> #'+str(id(msg['resp']))+' '+ \
+					  msg['method']+' '+msg['uri'])
 
 		if msg['method'] == 'PUT' and re.match('/aswSubscription',msg['uri']) :
 			if self._ws != None :
 				self._postMessage(
-						msg['resp'],
-						{'statusCode':403,
-  						 'reason':'already subscribed to an asworker'})
-			else : 
+					msg['resp'],
+					{'statusCode':403,
+					 'reason':'already subscribed to an asworker'})
+			else :
 				self._aswid = str(json.loads(msg['reqData'])['aswid'])
 				self._ptcal = PyTCoreAbstractionLayer(
-						{'httpReq':self._aswHttpReq, 'wid':self._aswid}, self.wid)
+					{'httpReq':self._aswHttpReq, 'wid':self._aswid}, self.wid)
 				try :
 					self._ws = WebSocket(self._ptcal)
-				except Exception, e :
+				except Exception as e :
 					self._postMessage(
 						msg['resp'],
 						{'statusCode':500,
-  						 'reason':str(e)})
+						 'reason':str(e)})
 
 				self._ws.subscribe(self._aswid)
 				def respond(resp) :
 					if self._ws.subscribed == False :
 						self._ws.close()
 						self._postMessage(
-									resp,
-									{'statusCode':500,
-									 'reason':'subscription to asworker failed'})
+							resp,
+							{'statusCode':500,
+							 'reason':'subscription to asworker failed'})
 					elif self._ws.subscribed == True :
 						self._postMessage(resp,{'statusCode':200})
 					else :
 						t = threading.Timer(0.5,respond,[resp])
 						t.start()
-				respond(msg['resp'])	
+				respond(msg['resp'])
 
 		elif msg['method'] == 'PUT' and re.match('/envvars',msg['uri']) :
 			if self._ptcal.username != None :
 				self._postMessage(
-						msg['resp'],
-						{'statusCode':403,
-						 'reason':'already provided environment variables'})
+					msg['resp'],
+					{'statusCode':403,
+					 'reason':'already provided environment variables'})
 			else :
 				reqData = json.loads(msg['reqData'])
 				self._ptcal.username   = reqData['username']
 				self._ptcal.defaultDCL = reqData['defaultDCL']
 				self._postMessage(msg['resp'],{'statusCode':200})
-				
+
 		elif msg['method'] == 'PUT' and re.match('/current.model',msg['uri']) :
 			m   = json.loads(msg['reqData'])['m']
 			mms = json.loads(msg['reqData'])['mms']
@@ -172,50 +172,50 @@ class mtworkerThread(threading.Thread) :
 
 		elif msg['method'] == 'PUT' and re.match('/current.transform',msg['uri']):
 			try :
-				if not self._ptcal.isStopped() : 
+				if not self._ptcal.isStopped() :
 					self._postMessage(
-							msg['resp'],
-							{'statusCode':403,
-							 'reason':'not allowed to (re)load during '+\
-							 			 'ongoing transformation(s)'})
+						msg['resp'],
+						{'statusCode':403,
+						 'reason':'not allowed to (re)load during '+ \
+								  'ongoing transformation(s)'})
 				else :
 					transfs = json.loads(msg['reqData'])['transfs']
 					transfs.reverse()
 					self._ptcal.loadTransforms(transfs)
 					self._postMessage(msg['resp'],{'statusCode':200})
-			except Exception, e :
+			except Exception as e :
 				self._postMessage(
-						msg['resp'],
-						{'statusCode':500,
-  						 'reason':"Error in model transformation worker: " + str(e)})
-				
+					msg['resp'],
+					{'statusCode':500,
+					 'reason':"Error in model transformation worker: " + str(e)})
+
 		elif msg['method'] == 'PUT' and re.match('/query.transform',msg['uri']):
 			try :
 				self._ptcal.processQuery(json.loads(msg['reqData']))
 				self._postMessage(msg['resp'],{'statusCode':200})
-			except Exception, e :
+			except Exception as e :
 				self._postMessage(
-						msg['resp'],
-						{'statusCode':500,
-  						 'reason':'There\'s something wrong with the query: '+str(e)})
+					msg['resp'],
+					{'statusCode':500,
+					 'reason':'There\'s something wrong with the query: '+str(e)})
 
 		elif msg['method'] == 'PUT' and re.match('^/execmode',msg['uri']) :
 			legalModes = ['play','stop','pause','step']
 			mode = json.loads(msg['reqData'])['mode']
 			if mode in legalModes :
-				if self._ptcal.isStopping() : 
+				if self._ptcal.isStopping() :
 					self._postMessage(
-							msg['resp'],
-							{'statusCode':503,
-							 'reason':'currently processing a STOP request'})
-				else : 
+						msg['resp'],
+						{'statusCode':503,
+						 'reason':'currently processing a STOP request'})
+				else :
 					self._postMessage(msg['resp'],{'statusCode':200})
 					getattr(self._ptcal,mode.lower())()
-			else :	
+			else :
 				self._postMessage(
-						msg['resp'],
-						{'statusCode':400,
-						 'reason':'invalid execution command :: '+mode})
+					msg['resp'],
+					{'statusCode':400,
+					 'reason':'invalid execution command :: '+mode})
 
 		elif msg['method'] == 'POST' and re.match('^/toggledebug',msg['uri']) :
 			self._ptcal.toggleDebugMode()
@@ -230,36 +230,36 @@ class mtworkerThread(threading.Thread) :
 			#self._ptcal.toggleDebugMode()
 			self._ptcal.analyzePN();
 			self._postMessage(msg['resp'],{'statusCode':204})
-		
+
 		#flat reachability analysis
 		elif msg['method'] == 'POST' and re.match('^/PNFull',msg['uri']) :
 			f = json.loads(msg['reqData'])['fname']
 			#self._ptcal.toggleDebugMode()
 			self._ptcal.PNFull(fname=f);
 			self._postMessage(msg['resp'],{'statusCode':204})
-			
+
 		elif msg['method'] == 'POST' and re.match('^/dotPN',msg['uri']) :
 			#self._ptcal.toggleDebugMode()
 			f = json.loads(msg['reqData'])['fname']
 			self._ptcal.PNFull(fname=f,dot=True);
 			self._postMessage(msg['resp'],{'statusCode':204})
-		
+
 		elif msg['method'] == 'POST' and re.match('^/bdapiresp',msg['uri']) :
 			resp = json.loads(msg['reqData'])
 			self._ptcal._queueBDAPI(resp)
 			self._postMessage(msg['resp'],{'statusCode':204})
-			
+
 		else :
 			self._postMessage(msg['resp'],{'statusCode':501})
 
 
 
 	'''
-		post response back to server '''			
+		post response back to server '''
 	def _postMessage(self,resp,msg) :
-		logging.debug(self.wid+' << #'+str(id(resp))+' '+str(msg))		
+		logging.debug(self.wid+' << #'+str(id(resp))+' '+str(msg))
 		resp.lock.acquire()
-		resp.setResponse(msg)		
+		resp.setResponse(msg)
 		resp.lock.notify()
 		resp.lock.release()
 

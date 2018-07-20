@@ -3,13 +3,13 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 import re, json, uuid, itertools
-from dcal import DesignerCodeAbstractionLayer
-from utils import Utilities as utils
-from tconstants import TConstants as TC
-from pytcore.core.himesis import Himesis, HConstants as HC
-from pytcore.core.himesis import HimesisPreConditionPatternLHS
-from pytcore.core.himesis import HimesisPreConditionPatternNAC
-from pytcore.core.himesis import HimesisPostConditionPattern
+from .dcal import DesignerCodeAbstractionLayer
+from .utils import Utilities as utils
+from .tconstants import TConstants as TC
+from .pytcore.core.himesis import Himesis, HConstants as HC
+from .pytcore.core.himesis import HimesisPreConditionPatternLHS
+from .pytcore.core.himesis import HimesisPreConditionPatternNAC
+from .pytcore.core.himesis import HimesisPostConditionPattern
 
 
 ''' 
@@ -37,7 +37,7 @@ class ModelAndRuleCompiler :
         self._username         = username
         self._aswid                 = aswid
         self._defaultDCL        = defaultDCL
-        self._subtypes         = {}        
+        self._subtypes         = {}
         self._connectorTypes    = set()
         self._knownMMs            = set()
         self._loadedMMs        = set()
@@ -48,13 +48,13 @@ class ModelAndRuleCompiler :
 
         self.RC__looseSubtypingMM = None
 
-    
+
     '''
         add a node to himesis graph 'hg' that reflects the contents of asworker
         node 'n' with id 'id' '''
     def addNode(self,hg,n,id) :
         newNodeIndex = \
-                 hg.add_node(n['$type'],n['$type'] in self._connectorTypes)
+            hg.add_node(n['$type'],n['$type'] in self._connectorTypes)
         hg.vs[newNodeIndex]['$atompmId'] = str(id)
         for attr in n :
             attr = str(attr)
@@ -66,8 +66,8 @@ class ModelAndRuleCompiler :
                 hg.vs[newNodeIndex][attr] = n[attr]['value']
         return newNodeIndex
 
-    
-    
+
+
 
     ''' 
         compile an atompm json model into a pytcore himesis graph 
@@ -101,18 +101,18 @@ class ModelAndRuleCompiler :
             for mm in m['metamodels'] :
                 if mm not in self._knownMMs :
                     mmData = utils.fread(
-                                            '/users/%s/%s.metamodel'%(self._username,mm))
+                        '/users/%s/%s.metamodel'%(self._username,mm))
                     self.parseMetamodel(mm,mmData)
-    
+
         hg = himesisBaseClass(name)
         hg[HC.METAMODELS] = set(m['metamodels'])
         hg[HC.MISSING_METAMODELS] = \
             lambda : hg[HC.METAMODELS] - self._loadedMMs
         hg[HC.GUID] = uuid.uuid4()
-        
+
         if himesisBaseClass == Himesis :
             self._loadedMMs = hg[HC.METAMODELS].copy()
-    
+
         if len(m['nodes']) == 0 :
             return hg
 
@@ -122,8 +122,8 @@ class ModelAndRuleCompiler :
 
         for e in m['edges'] :
             hg.add_edges(
-                    [(atompmIds2himesisIndices[str(e['src'])],
-                      atompmIds2himesisIndices[str(e['dest'])])])        
+                [(atompmIds2himesisIndices[str(e['src'])],
+                  atompmIds2himesisIndices[str(e['dest'])])])
 
         return hg
 
@@ -140,7 +140,7 @@ class ModelAndRuleCompiler :
         if fname in self._compiledRules :
             return self._compiledRules[fname]
         elif r == None :
-             r = utils.fread('/users/%s/%s'%(self._username,fname))
+            r = utils.fread('/users/%s/%s'%(self._username,fname))
 
 
         '''
@@ -174,7 +174,7 @@ class ModelAndRuleCompiler :
                 return res
 
             hgs = []
-            for p,pcm in p2pcm.iteritems() :
+            for p,pcm in p2pcm.items() :
                 mms = []
                 for mm in pcm['metamodels'] :
                     if re.search('.pattern$',mm):
@@ -182,7 +182,7 @@ class ModelAndRuleCompiler :
                     elif re.search('.ramified$',mm):
                         mms.append(mm[:-len('.ramified')])
                 pcm['metamodels'] = mms
-                    
+
                 for id in pcm['nodes'] :
                     n = pcm['nodes'][id]
                     matches = re.match('(.*)\.pattern/__p(.*)',n['$type']) or re.match('(.*)\.ramified/__p(.*)',n['$type'])
@@ -204,9 +204,9 @@ class ModelAndRuleCompiler :
                     del n['__pMatchSubtypes']
 
                 hg = self.compileModel(
-                                pcm,
-                                name=fname+'_'+patternType,
-                                himesisBaseClass=himesisBaseClass)
+                    pcm,
+                    name=fname+'_'+patternType,
+                    himesisBaseClass=himesisBaseClass)
 
                 if patternType == 'LHS' or patternType == 'NAC' :
                     wrapAttributeDesignerCode(hg,'attrCondition')
@@ -223,13 +223,13 @@ class ModelAndRuleCompiler :
                     def wrapImportedModelAttribute(val) :
                         return lambda arg1,arg2 : val
                     for v in hg.vs :
-                        for attr,val in v.attributes().iteritems() :
+                        for attr,val in v.attributes().items() :
                             if Himesis.is_RAM_attribute(attr) and val != None :
                                 v[attr] = wrapImportedModelAttribute(val)
                     hg[HC.MT_ACTION] = ''
-                    wrapPatternActionDesignerCode(hg)    
+                    wrapPatternActionDesignerCode(hg)
 
-                hgs.append(hg)            
+                hgs.append(hg)
 
             return hgs
 
@@ -253,7 +253,7 @@ class ModelAndRuleCompiler :
                 if re.search('/RHSImport$',r['nodes'][id]['$type']) :
                     pc[id] = utils.fread(
                         '/users/%s/%s'%(self._username,
-                                             r['nodes'][id]['filename']['value']))
+                                        r['nodes'][id]['filename']['value']))
 
                     for nid in pc[id]['nodes'] :
                         n = pc[id]['nodes'][nid]
@@ -262,9 +262,9 @@ class ModelAndRuleCompiler :
                         matches = re.match('(.*)/(.*)',n['$type'])
                         n['$type'] = matches.group(1)+'.pattern/__p'+matches.group(2)
                     pc[id]['metamodels'] = \
-                        map(lambda mm : mm+'.pattern', pc[id]['metamodels'])
-                    return pc        
-                
+                        [mm + '.pattern' for mm in pc[id]['metamodels']]
+                    return pc
+
 
         ''' 
             return a dict of the form {...,id:contents,...} where 'id' describes a
@@ -290,8 +290,7 @@ class ModelAndRuleCompiler :
                 return getImportedModelAsPatternContents()
 
             def outNeighbors(source) :
-                return map(lambda x: str(x['dest']),
-                              filter(lambda y : y['src'] == source, r['edges']))
+                return [str(x['dest']) for x in [y for y in r['edges'] if y['src'] == source]]
 
             def getConnectedNodes(container,contents) :
                 _contents = set()
@@ -301,10 +300,10 @@ class ModelAndRuleCompiler :
 
                 if len(_contents) == 0 :
                     return contents
-                
+
                 contents = contents | _contents
                 return set(utils.flatten(
-                            map(lambda x: getConnectedNodes(x,contents),_contents)))
+                    [getConnectedNodes(x, contents) for x in _contents]))
 
             pc = {}
             for id in r['nodes'] :
@@ -315,10 +314,7 @@ class ModelAndRuleCompiler :
                 return {}
 
             for p in pc :
-                pc[p] = filter(
-                    lambda x: \
-                        r['nodes'][x]['$type'] != TC.RULEMM+'/PatternContents', \
-                    getConnectedNodes(p,set()))
+                pc[p] = pc[p] = [x for x in getConnectedNodes(p,set()) if r['nodes'][x]['$type'] != TC.RULEMM+'/PatternContents']
 
                 m = {'nodes':{},'edges':[],'metamodels':[]}
                 mms = []
@@ -327,11 +323,10 @@ class ModelAndRuleCompiler :
                     mms.append( utils.getMetamodel(r['nodes'][id]['$type']) )
                 m['metamodels'] = list(set(mms))
                 m['edges'] = \
-                    filter(
-                        lambda e : e['src'] in m['nodes'], r['edges'])
+                    [e for e in r['edges'] if e['src'] in m['nodes']]
                 pc[p] = m
-                
-            return pc         
+
+            return pc
 
 
         ''' 
@@ -339,17 +334,14 @@ class ModelAndRuleCompiler :
             patternContentsModel} have empty or duplicate __pLabels... return    error
               if any '''
         def validateLabels(p2pcm) :
-            for p,pcm in p2pcm.iteritems() :
-                for id in pcm['nodes'] : 
+            for p,pcm in p2pcm.items() :
+                for id in pcm['nodes'] :
                     if '__pLabel' not in pcm['nodes'][id] :
                         return {'$err':'missing __pLabel attribute'}
                     l = pcm['nodes'][id]['__pLabel']['value']
                     if l == '' :
                         return {'$err':'empty __pLabel'}
-                    elif len(
-                            filter(
-                                lambda x: pcm['nodes'][x]['__pLabel']['value'] == l, 
-                                pcm['nodes']) ) > 1 :
+                    elif len([x for x in pcm['nodes'] if pcm['nodes'][x]['__pLabel']['value'] == l]) > 1:
                         return {'$err':'duplicate __pLabel :: '+l}
             return {}
 
@@ -388,16 +380,16 @@ class ModelAndRuleCompiler :
                             attr)
                         return self._dcal.eval(code)
                     except Exception as e :
-                     	if '$err' in ex :
-                        	raise RuntimeError(ex['$err'])
+                        if '$err' in ex :
+                            raise RuntimeError(ex['$err'])
                         else :
-                            raise RuntimeError(\
-                                        'unexpected error encountered while evaluating '+
-                                        type+' :: '+str(e))
+                            raise RuntimeError( \
+                                'unexpected error encountered while evaluating '+
+                                type+' :: '+str(e))
                 return evalAttrCode
 
             for v in hg.vs :
-                for attr,code in v.attributes().iteritems() :
+                for attr,code in v.attributes().items() :
                     if Himesis.is_RAM_attribute(attr) and code != None :
                         v[attr] = wrap(code,v[HC.MT_LABEL],attr)
 
@@ -427,9 +419,9 @@ class ModelAndRuleCompiler :
                         if '$err' in ex :
                             raise RuntimeError(ex['$err'])
                         else :
-                            raise RuntimeError(\
-                                        'unexpected error encountered while evaluating '+
-                                        'pattern action code :: '+str(e))
+                            raise RuntimeError( \
+                                'unexpected error encountered while evaluating '+
+                                'pattern action code :: '+str(e))
                 return evalPatternCode
 
             hg[HC.MT_ACTION] = wrap(hg[HC.MT_ACTION])
@@ -457,9 +449,9 @@ class ModelAndRuleCompiler :
                         if '$err' in ex :
                             raise RuntimeError(ex['$err'])
                         else :
-                            raise RuntimeError(\
-                                        'unexpected error encountered while evaluating '+
-                                        'pattern condition code :: '+str(e))
+                            raise RuntimeError( \
+                                'unexpected error encountered while evaluating '+
+                                'pattern condition code :: '+str(e))
                 return evalPatternCode
 
             hg[HC.MT_CONSTRAINT] = wrap(hg[HC.MT_CONSTRAINT])
@@ -475,7 +467,7 @@ class ModelAndRuleCompiler :
             raise ValueError(fname+' NAC compilation failed on :: '+nacs['$err'])
 
         rhs  = compilePattern('RHS',HimesisPostConditionPattern) or \
-                 compilePattern('RHSImport',HimesisPostConditionPattern)
+               compilePattern('RHSImport',HimesisPostConditionPattern)
         if rhs.__class__ == {}.__class__ :
             raise ValueError(fname+' RHS compilation failed on :: '+rhs['$err'])
 
@@ -483,11 +475,11 @@ class ModelAndRuleCompiler :
         for nac in nacs :
             nac.LHS = lhs[0]
             nac.bridge = nac.compute_bridge()
-            
+
         #lhs[0].NACs = nacs
-        
+
         lhs[0].addNACs(nacs)
-        
+
         ''' hergin :: motif-integration start '''
         ''' check condition for RHS for query rule '''
         if len(rhs)>0:
@@ -496,20 +488,20 @@ class ModelAndRuleCompiler :
                 rhs[0].pre_labels = lhs[0].vs[HC.MT_LABEL]
             else :
                 rhs[0].pre_labels = []
-        
+
             self._compiledRules[fname] = {'lhs':lhs[0],'rhs':rhs[0]}
         else:
             self._compiledRules[fname] = {'lhs':lhs[0]}
         ''' hergin :: motif-integration end '''
         return self._compiledRules[fname]
-    
+
 
 
     '''
         remember the types stored in the 'connectorTypes' property of the passed
           metamodel '''
     def _computeConnectorTypes(self,mm,mmData) :
-        for ct in mmData['connectorTypes'].keys() :
+        for ct in list(mmData['connectorTypes'].keys()) :
             self._connectorTypes.add(mm+'/'+ct)
 
 
@@ -549,30 +541,30 @@ class ModelAndRuleCompiler :
                         >> rule can now match entities from MyDSL '''
     def _computeSubtypes(self,mm,mmData) :
         t2pt     = mmData['types2parentTypes']
-        types    = t2pt.keys()
-        parents  = set(itertools.chain.from_iterable(t2pt.values()))
-        children = filter(lambda t: t2pt[t] != [], types)
+        types = list(t2pt.keys())
+        parents = set(itertools.chain.from_iterable(list(t2pt.values())))
+        children = [t for t in types if t2pt[t] != []]
         for type in types :
             fulltype = mm+'/'+type
             if fulltype not in self._subtypes :
                 self._subtypes[fulltype] = []
             if type in parents :
                 for c in children :
-                    if type in t2pt[c] : 
+                    if type in t2pt[c] :
                         self._subtypes[fulltype].append(mm+'/'+c)
             if self.RC__looseSubtypingMM and \
-                self.RC__looseSubtypingMM+'/'+type in self._subtypes :
+                    self.RC__looseSubtypingMM+'/'+type in self._subtypes :
                 self._subtypes[fulltype].append(self.RC__looseSubtypingMM+'/'+type)
                 self._subtypes[fulltype].extend(
                     self._subtypes[self.RC__looseSubtypingMM+'/'+type])
 
-    
+
     '''
         forget all compiled rules '''
     def forgetCompiledRules(self) :
         self._compiledRules = {}
 
-    
+
 
     '''
           return a reference to self._mmTypeData '''
@@ -613,7 +605,7 @@ class ModelAndRuleCompiler :
         if loadMM :
             self._loadedMMs.add(mm)
 
-                
+
 
     '''
         remove a metamodel from the list of currently loaded (on the asworker) 

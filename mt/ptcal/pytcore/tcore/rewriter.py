@@ -2,12 +2,15 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
-from rule_primitive import RulePrimitive
-from messages import TransformationException
+from .rule_primitive import RulePrimitive
+from .messages import TransformationException
 from ..core.himesis import Himesis
 from ...tconstants import TConstants as TC
 from ...utils import Utilities as utils
 
+import sys
+if sys.version_info[0] >= 3:
+    from functools import reduce
 
 class Rewriter(RulePrimitive):
     '''
@@ -20,15 +23,15 @@ class Rewriter(RulePrimitive):
         '''
         super(Rewriter, self).__init__()
         self.condition = condition
-        
+
         self.sendAndApplyDeltaFunc = sendAndApplyDeltaFunc
-    
+
     def __str__(self):
         s = super(Rewriter, self).__str__()
         s = s.split(' ')
         s.insert(1, '[%s]' % self.condition.name)
         return reduce(lambda x, y: x + ' ' + y, s)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -44,20 +47,20 @@ class Rewriter(RulePrimitive):
             # Apply the transformation on the match
             try:
                 self.condition.execute(packet, mapping)     # Sets dirty nodes as well
-            except Exception, e:
+            except Exception as e:
                 self.is_success = False
                 self.exception = TransformationException(e)
                 self.exception.packet = packet
                 self.exception.transformation_unit = self
                 return packet
-            
+
             # Remove the match
             packet.match_sets[self.condition.pre[Himesis.Constants.GUID]].match2rewrite = None
             if  len(packet.match_sets[self.condition.pre[Himesis.Constants.GUID]].matches) == 0:
                 del packet.match_sets[self.condition.pre[Himesis.Constants.GUID]]
-            
+
             #print self.condition
-            
+
             ''' hergin :: motif-integration :: start '''
             self.sendAndApplyDeltaFunc(packet.deltas)
             ''' hergin :: motif-integration :: end '''
