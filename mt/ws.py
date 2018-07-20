@@ -9,10 +9,10 @@ import sys
 
 if sys.version_info[0] < 3:
 	import httplib as httplib
-	import ___websocket as websocket
+	import websocket._app as websocket
 else:
 	import http.client as httplib
-	import ___websocket as websocket
+	import websocket._app as websocket
 
 '''
 	a friendly wrapper around python-websockets that doubles as a socketio client
@@ -21,7 +21,6 @@ else:
 	_chlogh		a reference to an object that implements onchangelog(), this
   					method is called upon reception of changelogs from the asworker
 				  	we're subscribed to 
-	_dummy		true if this is a 'dummy' websocket... see note in main.py
 	subscribed  describes the current state of our subscription to our asworker
 						None:  don't know yet
 						True:  subscribed
@@ -44,11 +43,15 @@ class WebSocket :
 		assert chlogh == None or 'onchangelog' in dir(chlogh)
 		self._opened 	 = False
 		self._chlogh 	 = chlogh
-		self._dummy	 	 = (chlogh == None)
 		self.subscribed = None
 		self.connect()
 
-
+	def _start_ws(self, hskey):
+		self._ws = websocket.WebSocketApp(
+			'ws://127.0.0.1:8124/socket.io/1/websocket/' + hskey,
+			on_message = self._onmessage,
+			on_open = self._onopen)
+		self._ws.run_forever()
 
 	'''
 		connect to the socketio server
@@ -70,10 +73,11 @@ class WebSocket :
 				pass
 
 			hskey = resp.split(':')[0]
-			self._ws = websocket.WebSocket(
-				'ws://127.0.0.1:8124/socket.io/1/websocket/'+hskey,
-				onopen	 = self._onopen,
-				onmessage = self._onmessage)
+
+			# start the websocket on a different thread as it loops forever
+			thr = threading.Thread(target = self._start_ws, args = (hskey, ))
+			thr.start()
+
 		else :
 			raise Exception('websocket initialization failed :: '+str(resp.reason))
 
@@ -81,16 +85,16 @@ class WebSocket :
 
 	'''
 		close the socket '''
-	def close(self) :
+	def close(self, ws) :
 		self._ws.close()
 
 
 
 	''' 
 		parse and handle incoming message '''
-	def _onmessage(self,msg) :
-		if not self._dummy :
-			logging.debug('## msg recvd '+msg)
+	def _onmessage(self,ws, msg) :
+
+		logging.debug('## msg recvd '+msg)
 
 		msgType = msg[0]
 		if msgType == WebSocket.CONNECT :
@@ -123,7 +127,7 @@ class WebSocket :
 
 	''' 
 		mark socket connection as opened '''
-	def _onopen(self) :
+	def _onopen(self, ws) :
 		self._opened = True
 
 
