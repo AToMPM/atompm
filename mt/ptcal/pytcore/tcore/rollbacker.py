@@ -4,7 +4,7 @@ See COPYING.lesser and README.md in the root of this project for full details'''
 
 #import pickle, os
 from ..util.infinity import INFINITY
-from iterator import Iterator
+from .iterator import Iterator
 from ..tcore.messages import TransformationException
 
 
@@ -21,14 +21,14 @@ class Rollbacker(Iterator):
         '''
         super(Rollbacker, self).__init__(condition, max_iterations)
         self.checkpoints = []   # Stack of file names
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
         try:
             self.establish(packet)
             self.is_success = True
-        except Exception, e:
+        except Exception as e:
             self.is_success = False
             self.exception = TransformationException(e)
             self.exception.packet = packet
@@ -36,7 +36,7 @@ class Rollbacker(Iterator):
         finally:
             self.iterations = 1
             return packet
-    
+
     def next_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -50,7 +50,7 @@ class Rollbacker(Iterator):
                 try:
                     packet.set_state(self.restore())
                     self.is_success = True
-                except Exception, e:
+                except Exception as e:
                     self.is_success = False
                     self.excepion = TransformationException(e)
                     self.exception.packet = packet
@@ -65,31 +65,31 @@ class Rollbacker(Iterator):
                 self.is_success = False
             finally:
                 return packet
-    
+
     def establish(self, packet):
-#        fileName = '%d.tc_state.%d' % (self._id, len(self.checkpoints))
-#        with open(fileName, 'w') as storage:
-#            pickle.dump(packet, storage)
-#        self.checkpoints.append(fileName)
+        #        fileName = '%d.tc_state.%d' % (self._id, len(self.checkpoints))
+        #        with open(fileName, 'w') as storage:
+        #            pickle.dump(packet, storage)
+        #        self.checkpoints.append(fileName)
         self.checkpoints.append(packet.copy_state(self.condition))
-            
-    
+
+
     def restore(self):
-#        with open(self.checkpoints[-1], 'r') as storage:
-#            packet = pickle.load(storage)
-#            return packet
-#        os.remove(self.checkpoints[-1])
+        #        with open(self.checkpoints[-1], 'r') as storage:
+        #            packet = pickle.load(storage)
+        #            return packet
+        #        os.remove(self.checkpoints[-1])
         if len(self.checkpoints) > 0:
             return self.checkpoints.pop()
         raise Exception('There are no checkpoints to restore')
-    
+
     def discard(self):
-#        os.remove(self.checkpoints[-1])
+        #        os.remove(self.checkpoints[-1])
         if len(self.checkpoints) > 0:
             del self.checkpoints[-1]
         raise Exception('There are no checkpoints to discard')
-    
+
     def discard_all(self):
-#        for fn in self.checkpoints:
-#            os.remove(fn)
+        #        for fn in self.checkpoints:
+        #            os.remove(fn)
         self.checkpoints = []

@@ -5,12 +5,13 @@ AToMPM stands for "A Tool for Multi-Paradigm Modeling". It is a research framewo
 ## Installation
 
 To install AToMPM, follow these steps:
-* Download and install the latest Python 2.7.X
+* Download and install the latest Python (2.7.X or 3.X.X)
     * Use a package manager on Linux
     * Or visit http://python.org/download/
 * Download and install python-igraph
     * Use the pip package manager (comes with Python)
         * `pip install python-igraph`
+        * If using Python3: `pip3 install python-igraph`
     * For Windows, you may need to install the compiled igraph core
         * `http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph`
 * Download and install node.js
@@ -32,7 +33,7 @@ To run AToMPM on Windows, execute the `run.bat` script inside of the main AToMPM
 ### Mac or Linux
 * Execute commands in different terminals
     1. Execute `node httpwsd.js` in the main AToMPM folder
-    2. Execute `python2 mt\main.py` in the main AToMPM folder
+    2. Execute `python mt\main.py` in the main AToMPM folder
     3. Open a browser (preferably Chrome) and navigate to http://localhost:8124/atompm
 
 * The above steps are automated by the `run_AToMPM_local.sh` script

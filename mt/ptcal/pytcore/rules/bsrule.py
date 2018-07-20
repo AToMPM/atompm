@@ -4,7 +4,7 @@ See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.infinity import INFINITY
 from ..tcore.composer import Composer
-from brule import BRule
+from .brule import BRule
 
 
 class BSRule(Composer):
@@ -21,11 +21,11 @@ class BSRule(Composer):
         self.brule = BRule(branches)
         self.max_iterations = max_iterations
         self.iterations = 0
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
-        
+
         while self.iterations < self.max_iterations:
             # Re-apply the BRule
             packet = self.brule.packet_in(packet)
@@ -35,5 +35,5 @@ class BSRule(Composer):
             else:
                 self.is_success = True
             self.iterations += 1
-          
+
         return packet

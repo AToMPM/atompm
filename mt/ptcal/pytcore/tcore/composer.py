@@ -2,7 +2,7 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
-from composite_primitive import CompositePrimitive
+from .composite_primitive import CompositePrimitive
 
 
 class Composer(CompositePrimitive):
@@ -16,9 +16,9 @@ class Composer(CompositePrimitive):
             Both packet_in & next_in methods must be overridden to provide meaningful behaviour. 
         '''
         super(Composer, self).__init__()
-    
+
     def packet_in(self, packet):
         return packet
-    
+
     def next_in(self, packet):
         return packet

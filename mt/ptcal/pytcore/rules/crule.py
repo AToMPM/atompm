@@ -12,22 +12,22 @@ class CRule(Composer):
         self._mtContexts.append(motifContext)
         self.cruleEnd = False
         self.packet = None
-    
+
     def packet_in(self, packet):
-        
+
         self.cruleEnd = False
         self._mtContexts[-1]._expired=False
         self._mtContexts[-1]._lastStep={}
-        
+
         self.exception = None
         self.is_success = False
         self.packet = packet
         while not self.cruleEnd:
             result = self._step()
             self.is_success = result if result != None else False
-        
+
         return self.packet
-            
+
 
     def _nextRule(self) :
         mtc = self._mtContexts[-1]
@@ -35,29 +35,29 @@ class CRule(Composer):
         ns = mtc.nextStep()
 
         if 'id' in ns :
-        
+
             fulltype = mtc.t['nodes'][ns['id']]['$type']
-            
+
             if fulltype == mtc.metamodel+"CRule":
-                
+
                 #self._loadTransform(ns['rule'])
-                
+
                 return self._nextRule()
-                
-            elif fulltype.startswith('/Formalisms/__Transformations__/Transformation/T-Core') or\
+
+            elif fulltype.startswith('/Formalisms/__Transformations__/Transformation/T-Core') or \
                     fulltype.startswith('/Formalisms/__Transformations__/Transformation/MoTif'):
-                    
+
                 return ns
 
         elif 'trafoResult' in ns:
             return ns;
-        
-    def _step(self) :       
+
+    def _step(self) :
 
         def runRule(r) :
-            
+
             ar = r['rule']
-            
+
             self.packet = ar.packet_in(self.packet)
 
             if ar.is_success :
@@ -88,7 +88,7 @@ class CRule(Composer):
 
         else :
             (res,ai) = runRule(nr)
-            
+
             self._mtContexts[-1].setLastStepApplicationInfo(ai)
 
             if ai == TC.FAILED :

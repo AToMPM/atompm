@@ -17,11 +17,11 @@ class BRule(Composer):
         '''
         super(BRule, self).__init__()
         self.branches = branches
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
-        remaining_branches = range(len(self.branches))
+        remaining_branches = list(range(len(self.branches)))
         ''' hergin motif-integration ::: clone commented in observance of not need
              report bugs if have '''
         #original = packet.clone()

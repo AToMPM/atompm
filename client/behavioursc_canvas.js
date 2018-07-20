@@ -405,7 +405,7 @@ __canvasBehaviourStatechart = {
 			else if( this.__currentState == this.__STATE_DRAGGING_CONNECTION_PATH_CTRL_POINT )
 			{
 				if( name == __EVENT_MOUSE_MOVE ) {
-                    ConnectionUtils.previewControlPointTranslation(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
+                    ConnectionUtils.previewControlPointTranslation(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event), event.ctrlKey);
 				}
 				else if( name == __EVENT_LEFT_RELEASE_CTRL_POINT )
 				{

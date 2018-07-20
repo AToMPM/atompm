@@ -3,7 +3,7 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.infinity import INFINITY
-from arule import ARule
+from .arule import ARule
 from ..tcore.rollbacker import Rollbacker
 from ..tcore.resolver import Resolver
 
@@ -26,7 +26,7 @@ class XRule(ARule):
         self.M.max = max_iterations
         self.I.max_iterations = max_iterations
         self.B = Rollbacker(condition=LHS, max_iterations=max_iterations)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -64,7 +64,7 @@ class XRule(ARule):
             return packet
         self.is_success = True
         return packet
-    
+
     def next_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -111,7 +111,7 @@ class XRule_r(XRule):
         super(XRule_r, self).__init__(LHS, RHS, max_iterations)
         self.R = Resolver(external_matches_only=external_matches_only,
                           custom_resolution=custom_resolution)
-    
+
     def packet_in(self, packet):
         packet = super(XRule_r, self).packet_in(packet)
         # is_success is True
@@ -125,7 +125,7 @@ class XRule_r(XRule):
         else:
             self.is_success = False
         return packet
-    
+
     def next_in(self, packet):
         packet = super(XRule_r, self).next_in(packet)
         # is_success is True

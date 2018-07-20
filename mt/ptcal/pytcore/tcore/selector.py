@@ -3,8 +3,8 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.seeded_random import Random
-from control_primitive import ControlPrimitive
-from messages import Cancel, TransformationException, NIL_PACKET
+from .control_primitive import ControlPrimitive
+from .messages import Cancel, TransformationException, NIL_PACKET
 
 
 class Selector(ControlPrimitive):
@@ -17,7 +17,7 @@ class Selector(ControlPrimitive):
         '''
         super(Selector, self).__init__()
         self.exclusions = []
-    
+
     def success_in(self, packet):
         '''
             Receives a successful packet
@@ -25,7 +25,7 @@ class Selector(ControlPrimitive):
         self.exception = None
         self.is_success = False
         self.success.append(packet)
-    
+
     def fail_in(self, packet):
         '''
             Receives a failed packet
@@ -33,11 +33,11 @@ class Selector(ControlPrimitive):
         self.exception = None
         self.is_success = False
         self.fail.append(packet)
-    
+
     def reset(self):
         super(Selector, self).reset()
         self.exclusions = []
-    
+
     def select(self):
         '''
             Selects a packet randomly from the success list.
@@ -59,7 +59,7 @@ class Selector(ControlPrimitive):
             self.exception = TransformationException('No packet was received')
             self.exception.packet = NIL_PACKET
             return NIL_PACKET
-    
+
     def cancel(self):
         '''
             Produces a cancel event and resets its state

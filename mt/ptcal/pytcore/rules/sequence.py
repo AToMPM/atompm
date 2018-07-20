@@ -16,7 +16,7 @@ class Sequence(Composer):
         '''
         super(Sequence, self).__init__()
         self.rules = rules
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False

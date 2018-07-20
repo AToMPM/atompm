@@ -22,29 +22,29 @@ class ARule(Composer):
         self.M = Matcher(condition=LHS, max=1)
         self.I = Iterator(max_iterations=1)
         self.W = Rewriter(condition=RHS,sendAndApplyDeltaFunc=sendAndApplyDeltaFunc)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
-        
+
         # Match
         packet = self.M.packet_in(packet)
         if not self.M.is_success:
             self.exception = self.M.exception
             return packet
-        
+
         # Choose the only match
         packet = self.I.packet_in(packet)
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         # Rewrite
         packet = self.W.packet_in(packet)
         if not self.W.is_success:
             self.exception = self.W.exception
             return packet
-        
+
         # Output success packet
         self.is_success = True
         return packet
@@ -65,7 +65,7 @@ class ARule_r(ARule):
         super(ARule_r, self).__init__(LHS, RHS)
         self.R = Resolver(external_matches_only=external_matches_only,
                           custom_resolution=custom_resolution)
-    
+
     def packet_in(self, packet):
         packet = super(ARule_r, self).packet_in(packet)
         # is_success is True

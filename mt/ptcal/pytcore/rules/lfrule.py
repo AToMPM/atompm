@@ -3,7 +3,7 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.infinity import INFINITY
-from lrule import LRule
+from .lrule import LRule
 from ..tcore.rewriter import Rewriter
 from ..tcore.resolver import Resolver
 
@@ -27,7 +27,7 @@ class LFRule(LRule):
         self.outer_first = outer_first
         self.R = Resolver(external_matches_only=external_matches_only,
                           custom_resolution=custom_resolution)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -41,7 +41,7 @@ class LFRule(LRule):
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         while True:
             if self.outer_first:
                 # Rewrite
@@ -50,7 +50,7 @@ class LFRule(LRule):
                     self.exception = self.W.exception
                     return packet
 
-                
+
                 # Resolve any conflicts if necessary
                 ''' hergin :: motif-integration commented '''
                 #packet = self.R.packet_in(packet)
@@ -62,7 +62,7 @@ class LFRule(LRule):
             if not self.inner_rule.is_success:
                 self.exception = self.inner_rule.exception
                 return packet
-            
+
             if not self.outer_first:
                 # Rewrite
                 packet = self.W.packet_in(packet)
@@ -70,7 +70,7 @@ class LFRule(LRule):
                     self.exception = self.W.exception
                     return packet
 
-                
+
                 # Resolve any conflicts if necessary
                 ''' hergin :: motif-integration commented '''
                 #packet = self.R.packet_in(packet)
