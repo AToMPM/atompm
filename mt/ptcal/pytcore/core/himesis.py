@@ -479,15 +479,8 @@ class HimesisPostConditionPattern(HimesisPattern):
             RHS_labels = []
         else :
             RHS_labels = self.vs[Himesis.Constants.MT_LABEL]
-            def nonConnectorsFirst(l1,l2) :
-                c1 = self.vs[ self.get_node_with_label(l1) ][Himesis.Constants.CONNECTOR_TYPE]
-                c2 = self.vs[ self.get_node_with_label(l2) ][Himesis.Constants.CONNECTOR_TYPE]
-                if c1 and c2 :
-                    return 0
-                elif c1 :
-                    return 1
-                return -1
-            RHS_labels.sort(nonConnectorsFirst)
+            # sort non-connectors first
+            RHS_labels.sort(key=lambda x: self.vs[ self.get_node_with_label(x) ][Himesis.Constants.CONNECTOR_TYPE] or False)
             neighborhood = [graph.vs[labels[l]].attributes() for l in LHS_labels]
 
         new_labels = []

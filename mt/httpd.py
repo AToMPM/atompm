@@ -62,7 +62,11 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		#retrieve reqdata if any
 		reqData = None
 		if (self.command == 'PUT' or self.command == 'POST') :
-			dl = int(self.headers.getheader('Content-Length') or 0)
+			if sys.version_info < (3, 0):
+				header = self.headers.getheader('Content-Length')
+			else:
+				header = self.headers.get('Content-Length')
+			dl = int(header or 0)
 			if dl > 0 :
 				reqData = self.rfile.read(dl)
 
@@ -122,9 +126,17 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 
 		if round(statusCode/100.0) != 2 :
 			if reason != '' :
+				if sys.version_info < (3, 0):
+					reason = bytes(reason)
+				else:
+					reason = bytes(reason, 'utf8')
 				self.wfile.write(reason)
 		else :
 			if data != '' :
+				if sys.version_info < (3, 0):
+					data = bytes(data)
+				else:
+					data = bytes(data, 'utf8')
 				self.wfile.write(data)
 
 
