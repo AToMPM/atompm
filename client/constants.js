@@ -7,7 +7,7 @@
 var __WEBPAGE__ = 'https://atompm.github.io/',
 	__RELEASE_LOC__ = "https://api.github.com/repos/AToMPM/atompm/releases/latest",
 	__DOC_WEBPAGE__ = "https://atompm.readthedocs.io",
-    __VERSION__ = '0.8.0',
+    __VERSION__ = '0.8.1',
     __DEFAULT_SAVEAS		 	= '.autosave.model',
 	 __TITLE						= 'AToMPM',
 	 __EXITWARNING				= 'There are unsaved changes. Proceeding will cause'+
