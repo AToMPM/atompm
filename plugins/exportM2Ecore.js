@@ -111,7 +111,7 @@ module.exports = {
                          **/
                         function createRootClass(list) {
                             var node = {};
-                            node.name = reqData['root'];
+                            node.name = reqData['name'] + 'Root';
                             var contain = [];
                             for (var i = 0; i < list.length; i++)
                                 contain.push(createNode(list[i]));
@@ -236,9 +236,10 @@ module.exports = {
                         /**
                          This function will write the header of the file including the
                          name of the root and the URI of the metamodel.
+                         This header is generated when the user doesn't want a dynamic instance.
                          **/
-                        function writeHeader() {
-                            var head = '<?xml version="1.0" encoding="ISO-8859-1"?> \n';
+                        function writeHeaderStatic() {
+                            var head = '<?xml version="1.0" encoding="UTF-8"?> \n';
                             head += '<' + root.name;
                             head += ' xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns="' + reqData['uri'] + '"';
                             if (root.attributes != null)
@@ -247,6 +248,24 @@ module.exports = {
                                 head += '> \n';
                             return head;
                         }
+
+
+                        /**
+            								This function will write the header of the file including the
+            								name of the root and the URI of the metamodel.
+            								This header is generated when the user want a dynamic instance.
+          							**/
+          							function writeHeaderDynamic(){
+          								var head = '<?xml version="1.0" encoding="UTF-8"?> \n';
+          								head += '<' + reqData['name'] + ':' + root.name;
+          								head += ' xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n';
+          								head += 'xmlns:' + reqData['name'] + '="' + reqData['uri'] + '" xsi:schemaLocation="' + reqData['uri'] + ' ' + reqData['nameMM'] + '.ecore"';
+          								if(root.attributes != null)
+          									head += writeAttributes(root, 0);
+          								else
+          									head += '> \n';
+          								return head;
+          							}
 
 
                         /**
@@ -302,7 +321,10 @@ module.exports = {
                          in a string.
                          **/
                         function writeFile() {
-                            file_contents += writeHeader();
+                            if(reqData['type'] == 'Dynamic instance')
+                              file_contents += writeHeaderDynamic();
+                            else
+                              file_contents += writeHeaderStatic();
                             file_contents += writeContained(root.contain, 0);
                             file_contents += '</' + root.name + '>';
                         }
