@@ -7,6 +7,7 @@ from ws import WebSocket
 from ptcal.ptcal import PyTCoreAbstractionLayer
 from ptcal.utils import Utilities as utils
 
+import traceback
 
 '''
 	message handler thread: mtworkers delegate the handling of each message they
@@ -184,6 +185,9 @@ class mtworkerThread(threading.Thread) :
 					self._ptcal.loadTransforms(transfs)
 					self._postMessage(msg['resp'],{'statusCode':200})
 			except Exception as e :
+				print("Exception: " + str(e))
+				traceback.print_exc()
+
 				self._postMessage(
 					msg['resp'],
 					{'statusCode':500,

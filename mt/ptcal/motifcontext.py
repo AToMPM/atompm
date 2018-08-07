@@ -147,7 +147,7 @@ class MotifContext(TransformationContext) :
 							branchID=edge['dest']
 							def f(e) :
 								return e['src'] == branchID
-							branchRuleID=list(filter(f,self.t['edges'])[0]['dest'])
+							branchRuleID=list(filter(f,self.t['edges']))[0]['dest']
 
 							rule = self.ruleIdentifier(self.t['nodes'],branchRuleID)
 
