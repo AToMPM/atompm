@@ -119,8 +119,8 @@ function get_WP() {
     #TODO: Fix this installation
     #wine Scripts/pip3 install python-igraph
     
-    igraph_whl_file=$(basename $igraph_whl_url)
-    echo $igraph_whl_file
+    igraph3_whl_file=$(basename $igraph3_whl_url)
+    echo $igraph3_whl_file
 
     #if [ ! -f $igraph_whl_file ]; then
     #    echo "Downloading $igraph_whl_url" 
@@ -129,7 +129,7 @@ function get_WP() {
 
     #MUST HAVE WHL FILE LOCALLY FOR NOW
     cd ../../../..
-    unzip -o $igraph_whl_file -d atompm-portable/platform/WinPython/python-$python_version/Lib/site-packages/
+    unzip -o $igraph3_whl_file -d atompm-portable/platform/WinPython/python-$python_version/Lib/site-packages/
 }
 
 function get_nodejs() {
