@@ -514,7 +514,8 @@ process.on('message',
 					try 
 					{
 						if( ! p.match(/.*\.js$/) )
-							throw 'invalid plugin filename, see user\'s manual';
+							return;
+							//throw 'invalid plugin filename, see user\'s manual';
 
 						p = p.match(/(.*)\.js$/)[1];
 						_plugins[p] = require('./plugins/' + p);
