@@ -72,7 +72,7 @@ class Utilities :
 		send a synchronous http request '''
 	@staticmethod
 	def httpReq(method,host,uri,data) :
-		headers = {'Content-Type': 'text/plain'}
+		headers = {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'}
 		conn = httplib.HTTPConnection(host)
 		conn.request(method, uri, json.dumps(data), headers)
 		resp = conn.getresponse()
