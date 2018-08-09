@@ -635,16 +635,17 @@ const _siocl = require('socket.io-client');
 			var self = this;
 			return function(callback,errback)
 			{
-				var socket = _siocl.connect('127.0.0.1',{port:8124});	
-				socket.on('connect', 
-					function()	
+				let io = _siocl('http://localhost:8124');
+
+				io.on('connect',
+					function()
 					{
-						socket.emit('message',
+						io.emit('message',
 							{'method':'POST','url':'/changeListener?wid='+aswid});
 					});
-				socket.on('disconnect', 
+				io.on('disconnect',
 					function()	{self.__aswid = undefined;});
-				socket.on('message', 	
+				io.on('message',
 					function(msg)	
 					{
 						/* on POST /changeListener response */
