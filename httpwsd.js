@@ -64,8 +64,7 @@ function __send(socket, statusCode, reason, data, headers)
 	socket.json.emit('message',
 			{'statusCode':statusCode,
 			 'reason':reason,
-			 'headers':(headers || {'Content-Type': 'text/plain',
-			 'Access-Control-Allow-Origin': '*'}),
+			 'headers':(headers || {'Content-Type': 'text/plain'}),
 			 'data':data});
 }
 
@@ -710,15 +709,9 @@ var httpserver = _http.createServer(
 		});
 httpserver.listen(8124);
 
+let wsserver = _sio.listen(httpserver);
 
-
-var wsserver = _sio.listen(httpserver);
-wsserver.configure(
-	function()
-	{
-		wsserver.set('log level',2);
-	});
-wsserver.sockets.on('connection', 
+wsserver.on('connection',
 	function(socket)
 	{
 		/* unregister this socket from the specified worker ... when a worker
