@@ -82,7 +82,6 @@ class WebSocket :
 		data = json.loads(msg)
 
 		if msgType == WebSocket.EVENT :
-
 			if data[0] != 'message' :
 				raise Exception('received unexpected socketio event :: '+str(msg))
 
@@ -102,5 +101,4 @@ class WebSocket :
 			raise Exception('received error from socketio :: ' + str(data))
 		else :
 			pass
-
 
