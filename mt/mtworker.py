@@ -130,14 +130,13 @@ class mtworkerThread(threading.Thread) :
 				self._ptcal = PyTCoreAbstractionLayer(
 					{'httpReq':self._aswHttpReq, 'wid':self._aswid}, self.wid)
 				try :
-					self._ws = WebSocket(self._ptcal)
+					self._ws = WebSocket(self._aswid, self._ptcal)
 				except Exception as e :
 					self._postMessage(
 						msg['resp'],
 						{'statusCode':500,
 						 'reason':str(e)})
 
-				self._ws.subscribe(self._aswid)
 				def respond(resp) :
 					if self._ws.subscribed == False :
 						self._ws.close()
@@ -260,7 +259,7 @@ class mtworkerThread(threading.Thread) :
 	'''
 		post response back to server '''
 	def _postMessage(self,resp,msg) :
-		logging.debug(self.wid+' << #'+str(id(resp))+' '+str(msg))
+		print(self.wid+' << #'+str(id(resp))+' '+str(msg))
 		resp.lock.acquire()
 		resp.setResponse(msg)
 		resp.lock.notify()
