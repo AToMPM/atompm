@@ -6,14 +6,22 @@ See COPYING.lesser and README.md in the root of this project for full details'''
 import igraph as ig
 import datetime
 #import pydot
+
 from threading import *
-from Queue import *
-from barrier import *
 from random import choice
-from sets import *
+from .barrier import *
+
+import sys
+
+if sys.version_info[0] < 3:
+  from Queue import *
+  from sets import *
+else:
+  from queue import *
+
 
 class  PnModule(Thread):
-  
+
   def __init__(self, pnet, que, bar, full=False):
     Thread.__init__(self)
     '''Our graph'''
@@ -33,10 +41,10 @@ class  PnModule(Thread):
     self.full = full
     self.result={}
     self.xxx = 0
-    
+
   def repstr(self,string, length):
     return (string * length)[0:length]
-    
+
   def printMatrix(self,M):
     lenr = len(M[0])
     lenc = len(M)
@@ -57,18 +65,18 @@ class  PnModule(Thread):
       text+='\n'
       j=0
       i+=1
-    print text
-      
+    print(text)
+
   def summary(self):
     ig.summary(self.reachability)
-  
+
   def getKey(self):
-    return self.key  
-    
+    return self.key
+
   def next(self):
     self.ssc += 1
     return self.ssc
-  
+
   def DminPlusMatrix(self):
     i = 0
     j = 0
@@ -91,67 +99,67 @@ class  PnModule(Thread):
           fromweight = int(self.pngraph.es[self.pngraph.get_eid(t.index,p.index)]['weight'])
           self.dplus[i][j] = fromweight
         #print t['name']
-#        if t.index in totrans:
-#          self.dminus[i][j] = 1
-#        elif t.index in fromtrans:
-#          self.dplus[i][j] = 1
-#        else:
-#          pass#row.append(0)
+        #        if t.index in totrans:
+        #          self.dminus[i][j] = 1
+        #        elif t.index in fromtrans:
+        #          self.dplus[i][j] = 1
+        #        else:
+        #          pass#row.append(0)
         self.mx_to_gr_indexTn[t['name']] = j
         self.mx_to_gr_indexT[j] = t.index
         j+=1
       i+=1
       j = 0
-#    self.printMatrix(self.dminus)
-#    self.printMatrix(self.incidence)
-#    self.printMatrix(self.dplus)
-  
+  #    self.printMatrix(self.dminus)
+  #    self.printMatrix(self.incidence)
+  #    self.printMatrix(self.dplus)
+
   #get Strongly connected components, used in modular analysis
   def getSCC(self,M):
     vindex = statePresent(M)
     if not vindex == -1:
       return self.reachability.vs[vindex]['SCC']
-    else: 
+    else:
       return -1
-    
+
   def getSCCvid(self,id):
     P = self.reachability.vs[int(id)]
     return self.reachability.vs[int(id)]['SCC']
 
-  
+
   def statePresent(self, M):
     for v in self.reachability.vs:
       if all(v['M'] == M):
         return v.index
     return -1
-  
+
   #get all enabled transitions for state exploration
   def enabledT(self,M):
     enabled=[]
     for j in range(self.numT):
-      good = True 
-      
+      good = True
+
       tcol = self.dminus[0:self.numP,j] #Ti column over P as rows
       for i in range(self.numP):
         if tcol[i] > 0:
           t = self.mx_to_gr_indexT[j]
           p = self.mx_to_gr_indexP[i]
           weight = int(self.pngraph.es[self.pngraph.get_eid(p,t)]['weight'])
-          if not M[i] >= weight : 
+          if not M[i] >= weight :
             good = False
             break
       if good:
-       # print 'Enabled trans %s'%self.pngraph.vs[self.mx_to_gr_indexT[j]]['name']
+        # print 'Enabled trans %s'%self.pngraph.vs[self.mx_to_gr_indexT[j]]['name']
         enabled.append(j)
     return enabled
-  
+
   #produce new marking
   def fire(self,j,M,fusion=False):
     if fusion:
       empty = []
       empty.append(j)
       return empty
-    else: 
+    else:
       i = 0
       marking = ''
       for value in M:
@@ -169,7 +177,7 @@ class  PnModule(Thread):
         i+=1
       #print 'New marking %s'%marking
       return Mnew
-  
+
   #create reachability graph
   def reachabilityG(self):
     work=[]
@@ -196,12 +204,12 @@ class  PnModule(Thread):
           self.reachability.add_edges([(fromID,idFound)])
           self.reachability.es[self.reachability.get_eid(fromID, idFound)]['T'] = self.pngraph.vs[self.mx_to_gr_indexT[i]]['name']
     self.barrier.wait() #several modules can run in parallel (comes from modular analysis) wait for all to finish.
-  
+
   #mark strong components of a graph
   def SC(self):
     if not 'SCC' in self.reachability.vs.attribute_names():
-          self.reachability.vs[0]['SCC'] = self.next()
-    
+      self.reachability.vs[0]['SCC'] = self.next()
+
     components = self.reachability.clusters(mode=ig.STRONG)
     for i in range(len(components)):
       ssc = self.next()
@@ -211,11 +219,11 @@ class  PnModule(Thread):
         if self.reachability.vs[s]['SCC']>=0:
           pass
         else:
-          self.reachability.vs[s]['SCC'] = ssc 
+          self.reachability.vs[s]['SCC'] = ssc
           changed = True
       if not changed:
         self.ssc -= 1
-  
+
   #Transition fusion sets, modular analysys
   def addToEnabledTF(self,TF,M):
     if not TF in self.TFtoRun:
@@ -223,16 +231,16 @@ class  PnModule(Thread):
     for m in self.TFtoRun[TF]:
       if all(m==M) :
         #print' duplicate'
-        return 
-  
+        return
+
     self.TFtoRun[TF].append(M)
-   # vattr = ''
+  # vattr = ''
   #  j =0 
   #  for id in M:
-    #  vattr += '%s-%s,'%(self.pngraph.vs[self.mx_to_gr_indexP[j]]['name'],int(id))
-   #   j+=1
-    #print 'adding %s to enabled Fusion transitions'%vattr
-    
+  #  vattr += '%s-%s,'%(self.pngraph.vs[self.mx_to_gr_indexP[j]]['name'],int(id))
+  #   j+=1
+  #print 'adding %s to enabled Fusion transitions'%vattr
+
   #for modular analysis
   def explore(self,id):
     work = []
@@ -256,7 +264,7 @@ class  PnModule(Thread):
   def reset(self):
     for p in self.reachability.vs:
       p['visited']= False
-      
+
   def reachabilityModular(self):
     work=[]
     sgwork=[]
@@ -271,7 +279,7 @@ class  PnModule(Thread):
         fromID = self.statePresent(M)
         enabledTs = self.enabledT(M)
         from_M = []
-        for i in enabledTs: 
+        for i in enabledTs:
           if self.pngraph.vs[self.mx_to_gr_indexT[i]]['fusion'] == True: #new
             self.addToEnabledTF(self.pngraph.vs[self.mx_to_gr_indexT[i]]['name'],M) #new
             continue #noted the shared transition continue exploring.
@@ -311,7 +319,7 @@ class  PnModule(Thread):
       for t in ts:
         self.result[t]=[]
         j = self.mx_to_gr_indexTn[t]
-       # Mse = self.reachability.es.select(T_eq=t)
+        # Mse = self.reachability.es.select(T_eq=t)
         from_M = []
         to_M = []
         for M in self.TFtoRun[t]: #loop over synchtransition edges
@@ -320,22 +328,22 @@ class  PnModule(Thread):
           if self.statePresent(Mnew) == -1:
             self.reachability.add_vertices(1) #add this new marking
             newID = self.reachability.vcount()-1 # to the reachability
-            self.reachability.vs[newID]['M'] = Mnew 
+            self.reachability.vs[newID]['M'] = Mnew
             work.append(Mnew)
           from_M.append(self.statePresent(M))
           to_M.append(self.statePresent(Mnew))
-          
+
         self.result[t].append(from_M)
         self.result[t].append(to_M)
       for ftlists in self.result:
         for from_to in self.result[ftlists]:
           for i in range(len(from_to)):
             from_to[i] = '%s-%d'%(self.key,from_to[i])
-            
-            
+
+
       for t in ts:
         del self.TFtoRun[t] #remove processed maybe not yet?
-  
+
   def rnode(self,id,state):
     vattr = ""
     j=0
@@ -347,14 +355,14 @@ class  PnModule(Thread):
       i -=1
       j+=1
     return "<node id=\"%s\"><marking>%s"%(id,vattr)+"</marking></node>\n"
-	
+
   #export reachability graph to xml
   def reachtoxml(self,fname='',key=''):
     header = "<rgraph>\n"
     end = "</rgraph>"
     for v in self.reachability.vs:
       header+=self.rnode(v.index,v['M'])
-    
+
     for e in self.reachability.es:
       header+="<edge source=\"%s\" target=\"%s\"><transition>%s</transition></edge>\n"%(e.source,e.target,e['T'])
     dateTag = datetime.datetime.now().strftime("%Y-%b-%d_%H-%M-%S")
@@ -362,7 +370,7 @@ class  PnModule(Thread):
     header+=end
     f.write(header)
     f.close()
-	  
+
   def graph(self,key,fname='',id=None):
     vattr=''
     eattr = ''
@@ -377,10 +385,10 @@ class  PnModule(Thread):
         vattr +='SCC-%s\n'%v['SCC']
       for value in v['M']:
         if leng == 1:
-          vattr = 'fstate%d'%choice(range(100))
+          vattr = 'fstate%d'%choice(list(range(100)))
         else:
           if int(value) > 0:
-            
+
             vattr += '%s-%s '%(self.pngraph.vs[self.mx_to_gr_indexP[j]]['name'],int(value))
           if not i-1 == 0:
             pass#vattr+=','
@@ -395,10 +403,10 @@ class  PnModule(Thread):
       graph.add_edge(pydot.Edge(nodes[e.source],nodes[e.target],label=e['T']))
     #graph.write_svg('graphs/STATE%s%d%s.svg'%(self.key,choice(range(100)),dateTag))
     if not fname:
-      graph.write_svg('graphs/STATE%s%d%s.svg'%(self.key,choice(range(100)),dateTag))
+      graph.write_svg('graphs/STATE%s%d%s.svg'%(self.key,choice(list(range(100))),dateTag))
     else:
       graph.write_svg('%s.%s.reachability.svg'%(fname,key))
-  
+
   #the thread per module
   def run(self):
     self.reachability = ig.Graph(0,directed=True)
@@ -420,13 +428,13 @@ class  PnModule(Thread):
     self.printMatrix(self.incidence)
     if self.full:
       self.reachabilityG()
-    else:  
+    else:
       self.reachabilityModular()
-  
+
   def reachable(self, state):
     P = zeros(self.numP)
     for ps in state:
-      for key,value in ps.items():
+      for key,value in list(ps.items()):
         index = self.mx_to_gr_indexPn[key]
         P[index] = value
     id = self.statePresent(P)
@@ -434,17 +442,17 @@ class  PnModule(Thread):
       return True
     else:
       return False
-  
+
   def reachableMod(self,state):
     P = zeros(self.numP)
     for ps in state:
-      for key,value in ps.items():
+      for key,value in list(ps.items()):
         index = self.mx_to_gr_indexPn[key]
         P[index] = value
     id = self.statePresent(P)
     components = self.markAncestors(id)
     return Set(components)
-    
+
   def markAncestors(self,id):
     work = []
     result = []
@@ -459,9 +467,9 @@ class  PnModule(Thread):
           work.append(i)
     #self.reset()
     return result
-      
-    
+
+
   def getEnabledTFs(self):
-    return self.TFtoRun.keys()
+    return list(self.TFtoRun.keys())
 
 

@@ -14,8 +14,8 @@ class SeededRandom(random.Random):
             Singleton class: the single instance "INFINITY" stands for infinity.
         '''
         if SeededRandom.__instantiated:
-            raise NotImplementedError, "singleton class already instantiated"
-        
+            raise NotImplementedError("singleton class already instantiated")
+
         SeededRandom.__instantiatiated = True
         random.Random.__init__(self)
         self.seed(seed)

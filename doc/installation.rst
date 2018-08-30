@@ -5,6 +5,7 @@ Installation
 ------------
 
 To install AToMPM, follow these steps:
+
 * Download and install the latest Python 2.7.X
     * Use a package manager on Linux
     * Or visit http://python.org/download/

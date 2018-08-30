@@ -7,22 +7,22 @@ class TConstants :
 	NOT_APPLICABLE = 'NotApplicable'
 	SUCCEEDED 		= 'Success'
 	FAILED			= 'Failure'
-	
+
 	''' hergin :: motif-integration :: start '''
 	EXCEPTION			= 'Exception'
 	RULE_EXCEPTION_MSG				= 'EXCEPTION :: rule exception on '
-	
+
 	MODE_DEBUG = 'debug'
 	MODE_RELEASE = 'release'
-	
+
 	''' hergin :: motif-integration :: end '''
 
 	#inter-rule delay in PLAY mode
 	INTER_RULE_DELAY 		= 0.05
-	
+
 	#the delay between verifications that all changelogs pertaining to the last executed rule have been handled
 	WAIT_ON_CHLOG_DELAY	= 0.02
-	
+
 	#console output for various rule/transformation completion cases
 	RULE_SUCCESS_MSG				= 'rule succeeded'
 	''' hergin :: motif-integration :: modify fail message '''
@@ -36,19 +36,19 @@ class TConstants :
 	#console output for various debugging messages
 	DEBUGGING_ON		= 'transformation debugging has been enabled'
 	DEBUGGING_OFF		= 'transformation debugging has been disabled'
-	DEBUGGING_HALT		= 'WARNING :: popping up transformation debugging window,'+\
-							  ' resume transformation with "play" or "step" buttons'+\
-							  ' from current window'
+	DEBUGGING_HALT		= 'WARNING :: popping up transformation debugging window,'+ \
+							' resume transformation with "play" or "step" buttons'+ \
+							' from current window'
 
 	#supported designer code languages
 	JAVASCRIPT	= 'JAVASCRIPT'
 	PYTHON		= 'PYTHON'
 
 	#metamodel paths
-	RULEMM	= '/Formalisms/__Transformations__/TransformationRule/'+\
-					  'TransformationRule'
+	RULEMM	= '/Formalisms/__Transformations__/TransformationRule/'+ \
+				'TransformationRule'
 	TRANSFMM	= '/Formalisms/__Transformations__/Transformation/Transformation'
-	
+
 	''' hergin :: motif-integration '''
 	MOTIFMM	= '/Formalisms/__Transformations__/Transformation/MoTif'
 	TCOREMM = '/Formalisms/__Transformations__/Transformation/T-Core'

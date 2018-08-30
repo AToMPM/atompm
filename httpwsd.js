@@ -39,7 +39,8 @@ function __respond(response, statusCode, reason, data, headers)
 	response.writeHead(
 			statusCode,
 			JSON.stringify(reason),
-			(headers || {'Content-Type': 'text/plain'}));
+			(headers || {'Content-Type': 'text/plain',
+			'Access-Control-Allow-Origin': '*'}));
 
 	var encoding = 
 		(headers && 
@@ -60,11 +61,11 @@ function __respond(response, statusCode, reason, data, headers)
 /** Syntactic sugar to build and send a socket.io message **/
 function __send(socket, statusCode, reason, data, headers)
 {
-//headers['Access-Control-Allow-Origin'] = 'http://raven10.kicks-ass.net:8080';
 	socket.json.emit('message',
 			{'statusCode':statusCode,
 			 'reason':reason,
-			 'headers':(headers || {'Content-Type': 'text/plain'}),
+			 'headers':(headers || {'Content-Type': 'text/plain',
+			 'Access-Control-Allow-Origin': '*'}),
 			 'data':data});
 }
 
@@ -649,7 +650,8 @@ var httpserver = _http.createServer(
 								JSON.stringify(
 									{'headers':
 										(msg['headers'] || 
-										 {'Content-Type': 'text/plain'}),
+										 {'Content-Type': 'text/plain',
+										 'Access-Control-Allow-Origin': '*'}),
 									 'data':msg['data'],
 									 'sequence#':msg['sequence#']}),
 								{'Content-Type': 'application/json'});

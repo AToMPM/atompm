@@ -74,7 +74,7 @@ Note that several button toolbar models which make exhaustive use of these funct
 
 
 *function _openDialog(type,args,callback)*
-    Pop-up a dialog box for user interaction. Valid values for the *type* parameter are *_CLOUD_DATA_MANAGER*, *_DICTIONARY_EDITOR*, *_ENTITY_EDITOR*, *_ERROR*, *_FILE_BROWSER*, *_LEGAL_CONNECTIONS*, *_LOADED_TOOLBARS* and *_CUSTOM*. Each type requires its own set of arguments encoded in the *args* parameter. As for the *callback* parameter, it is a one-argument function called with the sum of the user's input when and if the user *OK*es the dialog.
+    Pop-up a dialog box for user interaction. Valid values for the *type* parameter are *_CLOUD_DATA_MANAGER*, *_DICTIONARY_EDITOR*, *_ENTITY_EDITOR*, *_ERROR*, *_FILE_BROWSER*, *_LEGAL_CONNECTIONS*, *_LOADED_TOOLBARS* and *_CUSTOM*. Each type requires its own set of arguments encoded in the *args* parameter. As for the *callback* parameter, it is a one-argument function called with the sum of the user's input when and if the user presses *OK* on the dialog.
 
 The *_CLOUD_DATA_MANAGER* dialog is used to manage user data stored within the user's personal cloud space. Its *args* parameter should be a key-value dictionary with the following optional keys: *extensions*, *readonly* and *title*. Values for the *extensions* key should be arrays of regular expressions describing allowed file names. When omitted, all file names are allowed. Values for the *readonly* key should be booleans denoting whether or not the provided dialog should allow cloud data modifications. When omitted, modifications are allowed. Finally, the *title* argument is a string that denotes the dialog's title.
 

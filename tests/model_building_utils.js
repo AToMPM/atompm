@@ -151,6 +151,22 @@ function click_off(client) {
         .mouseButtonClick('left');
 }
 
+function navigate_to_folder(client, folder_name) {
+
+    let root_button = "#navbar_\\2f";
+    client.waitForElementPresent(root_button, 1000, "Find root button")
+        .click(root_button);
+
+    let folder_path = folder_name.split("/");
+
+    for (let f of folder_path) {
+        let folder_name_div = "#" + f;
+        client.click(folder_name_div);
+        client.pause(500);
+    }
+
+}
+
 function load_model(client, folder_name, model_name) {
 
     let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
@@ -159,12 +175,7 @@ function load_model(client, folder_name, model_name) {
         .click(load_button)
         .waitForElementPresent("#dialog_btn", 1000, "Load menu opens");
 
-    let root_button = "#navbar_\\2f";
-    client.waitForElementPresent(root_button, 1000, "Find root button")
-        .click(root_button);
-
-    let folder_name_div = "#" + folder_name;
-    client.click(folder_name_div);
+    navigate_to_folder(client, folder_name);
 
     client.click("#" + fix_selector(model_name))
         .pause(200)
@@ -216,6 +227,10 @@ function save_model(client, folder_name, model_name) {
     );
 }
 
+function load_transformation(client, folder_name, model_name) {
+    compile_model(client, "transform", folder_name, model_name)
+}
+
 function compile_model(client, compile_type, folder_name, model_name) {
 
     let button = "";
@@ -235,16 +250,7 @@ function compile_model(client, compile_type, folder_name, model_name) {
         .click(button)
         .waitForElementPresent("#dialog_btn", 2000, button_name + " menu opens");
 
-    let root_button = "#navbar_\\2f";
-    client.waitForElementPresent(root_button, 1000, "Find root button")
-        .click(root_button);
-
-    let folder_div = "#" + folder_name;
-    client.element('css selector', folder_div, function (result) {
-        if (result.status != -1) {
-            client.click(folder_div);
-        }
-    });
+    navigate_to_folder(client, folder_name);
 
     let new_file_text = "#new_file";
     let model_div = "#" + fix_selector(model_name);
@@ -308,6 +314,7 @@ module.exports = {
     save_model,
     load_model,
     compile_model,
+    load_transformation,
     scroll_geometry_element,
     move_element
 };

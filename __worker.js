@@ -151,7 +151,8 @@ function __httpReq(method,url,data,port)
 				 if( data != undefined )
 				 {
 					 data = _utils.jsons(data);
-					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length};
+					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length,
+					 'Access-Control-Allow-Origin': '*'};
 				 }
 
 				 var request = 
@@ -514,7 +515,8 @@ process.on('message',
 					try 
 					{
 						if( ! p.match(/.*\.js$/) )
-							throw 'invalid plugin filename, see user\'s manual';
+							return;
+							//throw 'invalid plugin filename, see user\'s manual';
 
 						p = p.match(/(.*)\.js$/)[1];
 						_plugins[p] = require('./plugins/' + p);

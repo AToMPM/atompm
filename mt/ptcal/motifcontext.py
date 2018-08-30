@@ -13,25 +13,25 @@ import collections
 import datetime
 from time import *
 import timeit
-from tconstants import TConstants as TC
-from utils import Utilities as utils
-from tcontext import TransformationContext
-from pytcore.tcore.messages import Pivots
-from pytcore.rules.arule import ARule
-from pytcore.rules.query import Query
-from pytcore.rules.query import CQuery2
-from pytcore.rules.query import CQuery3
-from pytcore.rules.srule import SRule
-from pytcore.rules.crule import CRule
-from pytcore.rules.frule import FRule
-from pytcore.rules.brule import BRule
-from pytcore.rules.bsrule import BSRule
-from pytcore.rules.lrule import LRule
-from pytcore.rules.lfrule import LFRule
-from pytcore.rules.lsrule import LSRule
-from pytcore.rules.lqsrule import LQSRule
-from pytcore.rules.sequence import Sequence
-			
+from .tconstants import TConstants as TC
+from .utils import Utilities as utils
+from .tcontext import TransformationContext
+from .pytcore.tcore.messages import Pivots
+from .pytcore.rules.arule import ARule
+from .pytcore.rules.query import Query
+from .pytcore.rules.query import CQuery2
+from .pytcore.rules.query import CQuery3
+from .pytcore.rules.srule import SRule
+from .pytcore.rules.crule import CRule
+from .pytcore.rules.frule import FRule
+from .pytcore.rules.brule import BRule
+from .pytcore.rules.bsrule import BSRule
+from .pytcore.rules.lrule import LRule
+from .pytcore.rules.lfrule import LFRule
+from .pytcore.rules.lsrule import LSRule
+from .pytcore.rules.lqsrule import LQSRule
+from .pytcore.rules.sequence import Sequence
+
 '''
 	holds the execution context of a 'Transformation' construct 
 	t						
@@ -45,70 +45,70 @@ class MotifContext(TransformationContext) :
 		self.totalExecutionTime=0
 		self.sendAndApplyDeltaFunc = ptcal.sendAndApplyDelta
 		self.nextInput = "packetIn"
-		
+
 		self.compiler = ptcal._compiler
 		self.ptcal = ptcal
 		self.rules = {}
-		
+
 		self.startStateID = None
-		
+
 		for id in self.t['nodes']:
-			
+
 			rule = self.ruleIdentifier(self.t['nodes'], id)
-			
+
 			if rule == None:
-				
-				if self.t['nodes'][id]['$type'] == self.metamodel+"/LRule" or\
-						self.t['nodes'][id]['$type'] == self.metamodel+"/LSRule" or\
-						self.t['nodes'][id]['$type'] == self.metamodel+"/LFRule" or\
+
+				if self.t['nodes'][id]['$type'] == self.metamodel+"/LRule" or \
+						self.t['nodes'][id]['$type'] == self.metamodel+"/LSRule" or \
+						self.t['nodes'][id]['$type'] == self.metamodel+"/LFRule" or \
 						self.t['nodes'][id]['$type'] == self.metamodel+"/LQSRule":
-					
+
 					maxIterations = int(self.t['nodes'][id]['maxIterations']['value'])
 					nested = int(self.t['nodes'][id]['nested']['value'])
 					outerFirst = True if nested==0 else False
-					
-					def f(e) : 
+
+					def f(e) :
 						return e['src'] == id
-					lruleEdges = filter(f,self.t['edges'])
-					
+					lruleEdges = list(filter(f,self.t['edges']))
+
 					baseEdgeId=None
 					loopEdgeId=None
-				
+
 					for edge in lruleEdges:
 						if self.t['nodes'][edge['dest']]['$type']==self.metamodel+"/base":
 							baseEdgeId=edge['dest']
 						elif self.t['nodes'][edge['dest']]['$type']==self.metamodel+"/loop":
 							loopEdgeId=edge['dest']
-							
-					def f(e) : 
+
+					def f(e) :
 						return e['src'] == baseEdgeId
-					baseRuleIds = filter(f,self.t['edges'])
+					baseRuleIds = list(filter(f,self.t['edges']))
 					baseRuleID=baseRuleIds[0]['dest']
-					
+
 					compiledBaseRule = None
-					
-					if self.t['nodes'][id]['$type'] == self.metamodel+"/LRule" or\
+
+					if self.t['nodes'][id]['$type'] == self.metamodel+"/LRule" or \
 							self.t['nodes'][id]['$type'] == self.metamodel+"/LQSRule":
 						baseRuleName = self.t['nodes'][baseRuleID]['query']['value']
 						compiledBaseRule = self.compiler.compileRule(None,baseRuleName)
 					else:
 						baseRuleName = self.t['nodes'][baseRuleID]['rule']['value']
 						compiledBaseRule = self.compiler.compileRule(None,baseRuleName)
-						#baseRule = ARule(compiledBaseRule['lhs'],compiledBaseRule['rhs'],self.sendAndApplyDeltaFunc)
-					
-					def f(e) : 
+					#baseRule = ARule(compiledBaseRule['lhs'],compiledBaseRule['rhs'],self.sendAndApplyDeltaFunc)
+
+					def f(e) :
 						return e['src'] == loopEdgeId
-					loopRuleIds = filter(f,self.t['edges'])
+					loopRuleIds = list(filter(f,self.t['edges']))
 					loopRuleID=loopRuleIds[0]['dest']
-					
+
 					loopRuleType = self.t['nodes'][loopRuleID]['$type']
-					
+
 					if loopRuleType != self.metamodel+"/CRule":
 						loopRuleName = self.t['nodes'][loopRuleID]['rule']['value']
 						compiledLoopRule = self.compiler.compileRule(None,loopRuleName)
-					
+
 					loopRule = None
-					
+
 					if loopRuleType == self.metamodel+"/ARule":
 						loopRule = ARule(compiledLoopRule['lhs'],compiledLoopRule['rhs'],self.sendAndApplyDeltaFunc)
 					elif loopRuleType == self.metamodel+"/FRule":
@@ -120,54 +120,54 @@ class MotifContext(TransformationContext) :
 						self.ptcal._transfData[ruleName] = utils.fread('/users/%s/%s'%(self.ptcal.username,ruleName))
 						motifContext = MotifContext(ruleName,self.ptcal)
 						loopRule = CRule(motifContext)
-	
+
 					if self.t['nodes'][id]['$type'] == self.metamodel+"/LRule":
 						rule = LRule(compiledBaseRule['lhs'],loopRule,max_iterations=maxIterations)
-	
+
 					elif self.t['nodes'][id]['$type'] == self.metamodel+"/LQSRule":
 						rule = LQSRule(compiledBaseRule['lhs'],loopRule,max_iterations=maxIterations)
-	
+
 					elif self.t['nodes'][id]['$type'] == self.metamodel+"/LSRule":
 						rule = LSRule(compiledBaseRule['lhs'],compiledBaseRule['rhs'],loopRule,outer_first=outerFirst,sendAndApplyDeltaFunc=self.sendAndApplyDeltaFunc,max_iterations=maxIterations)
-	
+
 					elif self.t['nodes'][id]['$type'] == self.metamodel+"/LFRule":
 						rule = LFRule(compiledBaseRule['lhs'],compiledBaseRule['rhs'],loopRule,outer_first=outerFirst,sendAndApplyDeltaFunc=self.sendAndApplyDeltaFunc,max_iterations=maxIterations)
-						
-				elif self.t['nodes'][id]['$type'] == self.metamodel+"/BRule" or\
+
+				elif self.t['nodes'][id]['$type'] == self.metamodel+"/BRule" or \
 						self.t['nodes'][id]['$type'] == self.metamodel+"/BSRule":
-					
-					def f(e) : 
+
+					def f(e) :
 						return e['src'] == id
-					bruleEdges = filter(f,self.t['edges'])
-					
+					bruleEdges = list(filter(f,self.t['edges']))
+
 					branchRuleList=[]
-					
+
 					for edge in bruleEdges:
 						if self.t['nodes'][edge['dest']]['$type']==self.metamodel+"/branch":
 							branchID=edge['dest']
-							def f(e) : 
+							def f(e) :
 								return e['src'] == branchID
-							branchRuleID=filter(f,self.t['edges'])[0]['dest']
-							
+							branchRuleID=list(filter(f,self.t['edges']))[0]['dest']
+
 							rule = self.ruleIdentifier(self.t['nodes'],branchRuleID)
-							
+
 							if rule == None and self.t['nodes'][branchRuleID]['$type']==self.metamodel+"/CRule":
 								ruleName = self.t['nodes'][branchRuleID]['ref']['value']
 								self.ptcal._transfData[ruleName] = utils.fread('/users/%s/%s'%(self.ptcal.username,ruleName))
 								motifContext = MotifContext(ruleName,self.ptcal)
 								rule = CRule(motifContext)
-								
+
 							branchRuleList.append(rule)
-					
+
 					if self.t['nodes'][id]['$type'] == self.metamodel+"/BRule":
 						rule = BRule(branchRuleList)
 					elif self.t['nodes'][id]['$type'] == self.metamodel+"/BSRule":
 						maxIterations = int(self.t['nodes'][id]['maxIterations']['value'])
 						rule = BSRule(branchRuleList,maxIterations)
-			
+
 				elif self.t['nodes'][id]['$type'] == self.metamodel+"/CRule":
 					rule = self.t['nodes'][id]['ref']['value']
-				
+
 				elif self.t['nodes'][id]['$type'] == self.metamodel+"/Sequence":
 					sequenceRuleList=[]
 					rulesFile = self.t['nodes'][id]['ref']['value']
@@ -180,43 +180,43 @@ class MotifContext(TransformationContext) :
 						else: # TODO decide for CRule
 							pass
 					rule = Sequence(sequenceRuleList)
-			
+
 				elif self.t['nodes'][id]['$type'] == self.metamodel+"/Start":
 					self.startStateID = id
 					rule = None
-			
+
 			if rule != None:
 				self.rules[id] = {'id':id,
-							'name':self.t['nodes'][id]['name']['value'],
-							'alias':self.t['nodes'][id]['alias']['value'],
-							'rule':rule}
-	
+								  'name':self.t['nodes'][id]['name']['value'],
+								  'alias':self.t['nodes'][id]['alias']['value'],
+								  'rule':rule}
+
 	def ruleIdentifier(self,ruleList,ruleId):
-		
+
 		rule = None
-		
+
 		if ruleList[ruleId]['$type']==self.metamodel+"/ARule":
 			ruleName = ruleList[ruleId]['rule']['value']
 			compiledRule = self.compiler.compileRule(None,ruleName)
 			rule = ARule(compiledRule['lhs'],compiledRule['rhs'],self.sendAndApplyDeltaFunc)
-			
+
 		elif ruleList[ruleId]['$type']==self.metamodel+"/QRule":
 			ruleName = ruleList[ruleId]['query']['value']
 			compiledRule = self.compiler.compileRule(None,ruleName)
 			rule = Query(compiledRule['lhs'])
-		
+
 		elif ruleList[ruleId]['$type']==self.metamodel+"/FRule":
 			maxIterations = ruleList[ruleId]['maxIterations']['value']
 			ruleName = ruleList[ruleId]['rule']['value']
 			compiledRule = self.compiler.compileRule(None,ruleName)
 			rule = FRule(compiledRule['lhs'],compiledRule['rhs'],int(maxIterations),self.sendAndApplyDeltaFunc)
-		
+
 		elif ruleList[ruleId]['$type']==self.metamodel+"/SRule":
 			maxIterations = ruleList[ruleId]['maxIterations']['value']
 			ruleName = ruleList[ruleId]['rule']['value']
 			compiledRule = self.compiler.compileRule(None,ruleName)
 			rule = SRule(compiledRule['lhs'],compiledRule['rhs'],int(maxIterations),self.sendAndApplyDeltaFunc)
-		
+
 		elif ruleList[ruleId]['$type'] == self.metamodel+"/CQRule2":
 			ruleName = ruleList[ruleId]['query']['value']
 			innerRuleName = ruleList[ruleId]['innerQuery']['value']
@@ -224,7 +224,7 @@ class MotifContext(TransformationContext) :
 			compiledInnerRule = self.compiler.compileRule(None,innerRuleName)
 			innerQuery = Query(compiledInnerRule['lhs'])
 			rule = CQuery2(compiledRule['lhs'],innerQuery)
-		
+
 		elif ruleList[ruleId]['$type'] == self.metamodel+"/CQRule3":
 			ruleName = ruleList[ruleId]['query']['value']
 			innerRuleName = ruleList[ruleId]['innerQuery']['value']
@@ -235,10 +235,10 @@ class MotifContext(TransformationContext) :
 			innerQuery = Query(compiledInnerRule['lhs'])
 			secondInnerQuery = Query(compiledSecondInnerRule['lhs'])
 			rule = CQuery3(compiledRule['lhs'],innerQuery,secondInnerQuery)
-		
+
 		return rule
-	
-		
+
+
 	def setLastStepExecTime(self,a):
 		self._lastStep['time'] = a
 		self.totalExecutionTime += a
@@ -248,7 +248,7 @@ class MotifContext(TransformationContext) :
 	def getCurrentStepId(self) :
 		if self._lastStep == {} :
 			assert False, \
-				 "this function shouldn't be called when there is no current step"
+				"this function shouldn't be called when there is no current step"
 		else :
 			return self._lastStep['id']
 
@@ -268,34 +268,34 @@ class MotifContext(TransformationContext) :
 		
 	'''
 	def _getInitialStep(self) :
-		
+
 		if self.startStateID==None:
 			raise RuntimeError('There is no start state in loaded MoTif instance!')
-		
-		def f(e) : 
+
+		def f(e) :
 			return e['src'] == self.startStateID
-		startStateEdges = filter(f,self.t['edges'])
-		
+		startStateEdges = list(filter(f,self.t['edges']))
+
 		initialStepID=None
 		if len(startStateEdges) == 0 :
 			raise RuntimeError('Start state is not connected to any other state!')
 		else:
 			firstLinkID=startStateEdges[0]['dest']
-			def f(e) : 
+			def f(e) :
 				return e['src'] == firstLinkID
-			startStateEdges = filter(f,self.t['edges'])
+			startStateEdges = list(filter(f,self.t['edges']))
 			initialStepID=startStateEdges[0]['dest']
-			
+
 		if initialStepID in self.rules:
 			return self.rules[initialStepID]
 		else:
 			if self.t['nodes'][initialStepID]['$type']==self.metamodel+"/EndSuccess":
-						return {'trafoResult':TC.SUCCEEDED,
-										'feedbackReceived':'True'}
+				return {'trafoResult':TC.SUCCEEDED,
+						'feedbackReceived':'True'}
 			elif self.t['nodes'][initialStepID]['$type']==self.metamodel+"/EndFail":
-						return {'trafoResult':TC.FAILED,
-										'feedbackReceived':'True'}
-				
+				return {'trafoResult':TC.FAILED,
+						'feedbackReceived':'True'}
+
 
 
 	'''
@@ -339,16 +339,16 @@ class MotifContext(TransformationContext) :
 		else :
 			def f(e) :
 				return e['src'] == self._lastStep['id']
-			
-			edgesFromLastStep = filter(f,self.t['edges'])
-			
+
+			edgesFromLastStep = list(filter(f,self.t['edges']))
+
 			if len(edgesFromLastStep) == 0 :
 				ai = self._applicationInfo()
 				self._lastStep = {}
 				self._expired = True
 				return ai
 			else :
-				
+
 				targetLinkID=None
 				resString = None
 				if self._lastStep['applicationInfo'] == TC.SUCCEEDED :
@@ -360,27 +360,27 @@ class MotifContext(TransformationContext) :
 					if self.t['nodes'][edgeLS['dest']]['$type'] == resString:
 						targetLinkID=edgeLS['dest']
 						break
-				
-				def f(e) : 
+
+				def f(e) :
 					return e['src'] == targetLinkID
-				nodesAfterLastStep = filter(f,self.t['edges'])
-				
+				nodesAfterLastStep = list(filter(f,self.t['edges']))
+
 				nextStepID = nodesAfterLastStep[0]['dest']
-				
+
 				if nextStepID in self.rules:
 					self._lastStep = self.rules[nextStepID]
 				else:
 					if self.t['nodes'][nextStepID]['$type']==self.metamodel+"/EndSuccess":
 						self._lastStep = {'trafoResult':TC.SUCCEEDED,
-										'feedbackReceived':'True'}
+										  'feedbackReceived':'True'}
 					elif self.t['nodes'][nextStepID]['$type']==self.metamodel+"/EndFail":
 						self._lastStep = {'trafoResult':TC.FAILED,
-										'feedbackReceived':'True'}
-					
+										  'feedbackReceived':'True'}
+
 				#print clock()-timeNextStep
-				
+
 				return self._lastStep
-		
+
 
 	'''
 		set the application information of the last step '''
@@ -392,4 +392,4 @@ class MotifContext(TransformationContext) :
 
 	def isLastStepFeedbackReceived(self) :
 		return (not self._expired and self._lastStep=={}) or \
-				 'feedbackReceived' in self._lastStep
+			   'feedbackReceived' in self._lastStep

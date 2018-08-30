@@ -180,7 +180,7 @@ module.exports = {
                             }
                             for (var i = 0; i < as.edges.length; i += 2) {
                                 if (as.edges[i].src != as.edges[i + 1].dest)
-                                    remove(listNodes, as.edges[i + 1].dest);
+                                    remove(listNodes, as.edges[i].src);
                             }
                             return listNodes;
                         }

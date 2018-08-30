@@ -173,7 +173,7 @@ When in the **SOMETHING SELECTED** state (*i.e.*, when one or more entity is sel
 | Snap selection to nearest grid point | Press TAB. Enters the **DEFAULT** state.                                    |
 +--------------------------------------+-----------------------------------------------------------------------------+
 
-When in the **DRAGGING SELECTION** state (*i.e.*, when left-dragging one or more selected entity), |dragging_selection|
+When in the **DRAGGING SELECTION** state (*i.e.*, when left-dragging one or more selected entity),
 
 .. image:: img/dragging_selection.png
     :class: inline-image
@@ -194,7 +194,7 @@ When in the **DRAGGING SELECTION** state (*i.e.*, when left-dragging one or more
 | Cancel motion                        | Click ESC. Enters the **DEFAULT** state.                                    |
 +--------------------------------------+-----------------------------------------------------------------------------+
 
-When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source to target entities), |drawing_edge|
+When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source to target entities),
 
 .. image:: img/drawing_edge.png
     :class: inline-image
@@ -214,7 +214,7 @@ When in the **DRAWING EDGE** state (*i.e.*, when dragging to-be edge from source
 | Cancel current edge                   | Left-release anywhere on the Canvas. Enters the **DEFAULT** state.          |
 +---------------------------------------+-----------------------------------------------------------------------------+
 
-When in the **EDGE EDITING** state, |edge_editing|
+When in the **EDGE EDITING** state,
 
 .. image:: img/edge_editing.png
     :class: inline-image
@@ -226,6 +226,10 @@ When in the **EDGE EDITING** state, |edge_editing|
 | Action                                | Shortcut(s)                                                                 |
 +=======================================+=============================================================================+
 | Move control point                    | Left-press any control point, drag it to desired position and release.      |
+|                                       |                                                                             |
+|                                       | If editing a control point attached to an icon, movement is restricted to   |
+|                                       | within that icon's bounding box. If free movement is desired,               |
+|                                       | hold CTRL while moving the control point.                                   |
 +---------------------------------------+-----------------------------------------------------------------------------+
 | Vertically/Horizontally align control | Left-click any control point and click TAB.                                 |
 | point to previous control point       |                                                                             |
@@ -239,7 +243,7 @@ When in the **EDGE EDITING** state, |edge_editing|
 |                                       | **DEFAULT** state.                                                          |
 +---------------------------------------+-----------------------------------------------------------------------------+
 
-When in the **GEOMETRY EDITING** state, |geometry_editing|
+When in the **GEOMETRY EDITING** state,
 
 .. image:: img/geometry_editing.png
     :class: inline-image
