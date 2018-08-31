@@ -60,7 +60,7 @@ DataUtils = function(){
                 {'pos': [x, y]},
                 callback);
         }
-
+    };
 
 	
 	/**
