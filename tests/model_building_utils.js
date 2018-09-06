@@ -194,36 +194,22 @@ function save_model(client, folder_name, model_name) {
         .click(save_button)
         .waitForElementPresent("#dialog_btn", 1000, "Save menu opens");
 
-    let root_button = "#navbar_\\2f";
-    client.waitForElementPresent(root_button, 1000, "Find root button")
-        .click(root_button);
+    navigate_to_folder(client, folder_name);
 
-    let folder_name_div = "#" + folder_name;
-    client.element('css selector', folder_name_div, function (result) {
+    client.element('css selector', "#" + model_name, function (result) {
             if (result.status == -1) {
-                let new_folder_btn = "#new_folder";
-                client.click(new_folder_btn)
-                    .setAlertText(folder_name)
-                    .acceptAlert();
+                client.click(new_file_text)
+                    .clearValue(new_file_text)
+                    .setValue(new_file_text, model_name)
+                    .pause(200)
+                    .click("#dialog_btn");
+            } else {
+                client.click("#" + model_name)
+                    .pause(200)
+                    .click("#dialog_btn");
             }
-            client.click(folder_name_div);
 
-            client.element('css selector', "#" + model_name, function (result) {
-                    if (result.status == -1) {
-                        client.click(new_file_text)
-                            .clearValue(new_file_text)
-                            .setValue(new_file_text, model_name)
-                            .pause(200)
-                            .click("#dialog_btn");
-                    } else {
-                        client.click("#" + model_name)
-                            .pause(200)
-                            .click("#dialog_btn");
-                    }
-
-                    client.waitForElementNotPresent("#dialog_btn", 1000, "Save menu closes");
-                }
-            );
+            client.waitForElementNotPresent("#dialog_btn", 1000, "Save menu closes");
         }
     );
 }
