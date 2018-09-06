@@ -157,12 +157,25 @@ function navigate_to_folder(client, folder_name) {
     client.waitForElementPresent(root_button, 2000, "Find root button")
         .click(root_button);
 
+    let new_folder_selector = "#new_folder";
     let folder_path = folder_name.split("/");
 
     for (let f of folder_path) {
         let folder_name_div = "#" + f;
-        client.waitForElementPresent(folder_name_div, 2000, "Find folder: " + folder_name_div)
+
+        client.element('css selector', folder_name_div, function (result) {
+            // folder not created, so create it
+            if (result.status == -1) {
+                client.click(new_folder_selector)
+                    .pause(500)
+                    .setAlertText(f)
+                    .acceptAlert()
+                    .pause(500);
+            }
+
+            client.waitForElementPresent(folder_name_div, 2000, "Find folder: " + folder_name_div)
             .click(folder_name_div);
+        });
     }
 
 }
