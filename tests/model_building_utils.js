@@ -195,7 +195,7 @@ function load_model(client, folder_name, model_name) {
         .click(model_name_div);
     client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
         .click("#dialog_btn");
-    client.waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
+    client.waitForElementNotPresent("#dialog_btn", 2000, "Load menu closes");
 
 }
 
@@ -219,8 +219,10 @@ function save_model(client, folder_name, model_name) {
             }
 
             client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
-                .click("#dialog_btn");
-            client.waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
+                .pause(500)
+                .click("#dialog_btn")
+                .pause(500)
+                .waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
         }
     );
 }
