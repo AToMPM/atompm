@@ -154,15 +154,15 @@ function click_off(client) {
 function navigate_to_folder(client, folder_name) {
 
     let root_button = "#navbar_\\2f";
-    client.waitForElementPresent(root_button, 1000, "Find root button")
+    client.waitForElementPresent(root_button, 2000, "Find root button")
         .click(root_button);
 
     let folder_path = folder_name.split("/");
 
     for (let f of folder_path) {
         let folder_name_div = "#" + f;
-        client.click(folder_name_div);
-        client.pause(500);
+        client.waitForElementPresent(folder_name_div, 2000, "Find folder: " + folder_name_div)
+            .click(folder_name_div);
     }
 
 }
@@ -177,11 +177,12 @@ function load_model(client, folder_name, model_name) {
 
     navigate_to_folder(client, folder_name);
 
-    client.click("#" + fix_selector(model_name))
-        .pause(200)
+    let model_name_div = "#" + fix_selector(model_name);
+    client.waitForElementPresent(model_name_div, 2000, "Looking for model: " + model_name_div)
+        .click(model_name_div);
+    client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
         .click("#dialog_btn");
-
-    client.waitForElementNotPresent("#dialog_btn", 1000, "Save menu closes");
+    client.waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
 
 }
 
@@ -193,42 +194,26 @@ function save_model(client, folder_name, model_name) {
         .click(save_button)
         .waitForElementPresent("#dialog_btn", 1000, "Save menu opens");
 
-    let root_button = "#navbar_\\2f";
-    client.waitForElementPresent(root_button, 1000, "Find root button")
-        .click(root_button);
+    navigate_to_folder(client, folder_name);
 
-    let folder_name_div = "#" + folder_name;
-    client.element('css selector', folder_name_div, function (result) {
+    client.element('css selector', "#" + model_name, function (result) {
             if (result.status == -1) {
-                let new_folder_btn = "#new_folder";
-                client.click(new_folder_btn)
-                    .setAlertText(folder_name)
-                    .acceptAlert();
+                client.click(new_file_text)
+                    .clearValue(new_file_text)
+                    .setValue(new_file_text, model_name);
+            } else {
+                client.click("#" + model_name);
             }
-            client.click(folder_name_div);
 
-            client.element('css selector', "#" + model_name, function (result) {
-                    if (result.status == -1) {
-                        client.click(new_file_text)
-                            .clearValue(new_file_text)
-                            .setValue(new_file_text, model_name)
-                            .pause(200)
-                            .click("#dialog_btn");
-                    } else {
-                        client.click("#" + model_name)
-                            .pause(200)
-                            .click("#dialog_btn");
-                    }
-
-                    client.waitForElementNotPresent("#dialog_btn", 1000, "Save menu closes");
-                }
-            );
+            client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
+                .click("#dialog_btn");
+            client.waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
         }
     );
 }
 
 function load_transformation(client, folder_name, model_name) {
-    compile_model(client, "transform", folder_name, model_name)
+    compile_model(client, "transform", folder_name, model_name);
 }
 
 function compile_model(client, compile_type, folder_name, model_name) {
