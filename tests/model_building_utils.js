@@ -154,16 +154,15 @@ function click_off(client) {
 function navigate_to_folder(client, folder_name) {
 
     let root_button = "#navbar_\\2f";
-    client.waitForElementPresent(root_button, 1000, "Find root button")
-        .click(root_button)
-        .pause(1000);
+    client.waitForElementPresent(root_button, 2000, "Find root button")
+        .click(root_button);
 
     let folder_path = folder_name.split("/");
 
     for (let f of folder_path) {
         let folder_name_div = "#" + f;
-        client.click(folder_name_div);
-        client.pause(500);
+        client.waitForElementPresent(folder_name_div, 2000, "Find folder: " + folder_name_div)
+            .click(folder_name_div);
     }
 
 }
