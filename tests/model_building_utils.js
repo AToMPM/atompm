@@ -155,7 +155,8 @@ function navigate_to_folder(client, folder_name) {
 
     let root_button = "#navbar_\\2f";
     client.waitForElementPresent(root_button, 1000, "Find root button")
-        .click(root_button);
+        .click(root_button)
+        .pause(1000);
 
     let folder_path = folder_name.split("/");
 
