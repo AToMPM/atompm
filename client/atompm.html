@@ -110,8 +110,8 @@
 				<h3>Log in to use AToMPM</h3>
 					<form onsubmit="return false;">
 						<table class="default_style">
-							<tr><td>username</td><td><input id="input_username" class="default_style" type="text"/></td></tr>
-							<tr><td>password</td><td><input id="input_password" class="default_style" type="password"/></td></tr>
+							<tr><td>username</td><td><input id="input_username" class="default_style" type="text" autocomplete="username"/></td></tr>
+							<tr><td>password</td><td><input id="input_password" class="default_style" type="password" autocomplete="current-password"/></td></tr>
 						</table></br>
 						<div id="div_login_error" class="error"></div>
 						<a href="#" class="enabled_link" 
@@ -126,9 +126,9 @@
 
 					<form id="form_signup" onsubmit="return false;" style="display:none">
 						<table class="default_style">
-							<tr><td>choose username</td><td><input id="new_username" class="default_style" type="text"/></td></tr>
-							<tr><td>choose password</td><td><input id="new_password" class="default_style" type="password"/></td></tr>
-							<tr><td>re-type password</td><td><input id="new_password2" class="default_style" type="password"/></td></tr>
+							<tr><td>choose username</td><td><input id="new_username" class="default_style" type="text" autocomplete="off"/></td></tr>
+							<tr><td>choose password</td><td><input id="new_password" class="default_style" type="password" autocomplete="new-password"/></td></tr>
+							<tr><td>re-type password</td><td><input id="new_password2" class="default_style" type="password" autocomplete="new-password"/></td></tr>
 						</table></br>
 						<div id="div_signup_error" class="error"></div>
 						<a href="#" class="enabled_link" 
