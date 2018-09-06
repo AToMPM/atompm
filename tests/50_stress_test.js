@@ -5,7 +5,7 @@ let user = "./users/testuser/";
 module.exports = {
 
     beforeEach : function (client) {
-        client.url('http://localhost:8124/atompm').pause(300);
+        client.url('http://localhost:8124/atompm').pause(1000);
     },
 
     'Login' : function (client) {
