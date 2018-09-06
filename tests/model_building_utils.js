@@ -209,16 +209,18 @@ function save_model(client, folder_name, model_name) {
 
     navigate_to_folder(client, folder_name);
 
-    client.element('css selector', "#" + model_name, function (result) {
+    let model_selector = "#" + model_name;
+    client.element('css selector', model_selector, function (result) {
             if (result.status == -1) {
                 client.click(new_file_text)
                     .clearValue(new_file_text)
                     .setValue(new_file_text, model_name);
             } else {
-                client.click("#" + model_name);
+                client.click(model_selector);
             }
 
-            client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
+            client.waitForElementPresent(model_selector, 2000, "Model present: " + model_selector)
+                .waitForElementPresent("#dialog_btn", 2000, "Looking for close")
                 .pause(500)
                 .click("#dialog_btn")
                 .pause(500)
