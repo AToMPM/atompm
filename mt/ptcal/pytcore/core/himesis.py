@@ -253,7 +253,7 @@ class HimesisPreConditionPatternLHS(HimesisPreConditionPattern):
         unbound = []
         for nac in NACs:
             nac.LHS = self
-            nac.bridge_size = nac.compute_bridge()
+            nac.bridge_size = nac.compute_bridge().vcount()
             if nac.bridge_size > 0:
                 bound.append(nac)
             else:
