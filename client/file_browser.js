@@ -414,7 +414,7 @@ class FileBrowser{
                 return currfolder;
             },
             'getselection': function () {
-                return input.val();
+                return input.val().trim();
             },
             'clearselection': function () {
                 clearSelection();

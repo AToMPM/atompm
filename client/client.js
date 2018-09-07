@@ -317,7 +317,7 @@ function _saveModel(fname,backup,autosave)
 	} else if( ! __isModel(fname) )	{
 		WindowManagement.openDialog(
 			_ERROR,
-			'invalid extension... models must be saved as "*.model" files');
+			'invalid extension on \'' + fname +'\' - models must be saved as "*.model" files');
 		return;
 	}
 

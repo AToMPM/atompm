@@ -10,7 +10,7 @@ const chromedriver = require("chromedriver");
 
 module.exports = {
   "src_folders" : ["tests"],
-  "output_folder" : "reports",
+  "output_folder" : false,
   "custom_commands_path" : "",
   "custom_assertions_path" : "",
   "page_objects_path" : "",
