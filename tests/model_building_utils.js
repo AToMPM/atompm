@@ -215,15 +215,16 @@ function save_model(client, folder_name, model_name) {
                 client.click(new_file_text)
                     .clearValue(new_file_text)
                     .setValue(new_file_text, model_name);
+
+                client.assert.ok(true, "Saving model with name: '" + model_name + "'");
             } else {
                 client.click(model_selector);
             }
 
-            client.waitForElementPresent(model_selector, 2000, "Model present: " + model_selector)
-                .waitForElementPresent("#dialog_btn", 2000, "Looking for close")
-                .pause(500)
+            client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
+                .pause(200)
                 .click("#dialog_btn")
-                .pause(500)
+                .pause(200)
                 .waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
         }
     );
