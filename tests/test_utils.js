@@ -66,14 +66,15 @@ function load_toolbar(client, fnames) {
         let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
         toolbar_name = "#div_toolbar_" + toolbar_name;
 
+        //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
+
         client.element('css selector', '#dialog_btn', function (result) {
             if (result.status != -1) {
                 //Dialog has popped up, so check the text and click the button
                 client.assert.containsText("#div_dialog_0", "File not found");
                 client.click("#dialog_btn");
 
-                //client.verify.ok(false, "File: " + name + " failed to load!"); //don't stop testing
-                console.error("File: " + name + " failed to load!");
+                client.verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
             } else {
                 //Toolbar loaded, so check for it
                 client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
