@@ -18,18 +18,6 @@ module.exports = {
         test_utils.load_toolbar(client, [filename]);
     },
 
-    'Load all toolbars': function (client) {
-
-        console.log("Testing toolbars...");
-        test_utils.getFiles(client, user, '/**/*.buttons.model', test_utils.load_toolbar);
-
-        console.log("Testing metamodels...");
-        test_utils.getFiles(client, user, '/**/*Icons.metamodel', test_utils.load_toolbar);
-
-        console.log("Testing pattern metamodels...");
-        test_utils.getFiles(client, user, '/**/*Icons.pattern.metamodel', test_utils.load_toolbar);
-    },
-
     after: function (client) {
         client.end();
     },

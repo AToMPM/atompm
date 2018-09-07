@@ -234,10 +234,7 @@ class FileBrowser{
      * @param startfolder if set, starts navigation at the specified folder
      */
     static getFileBrowser(fnames, draggable, newfile, startfolder) {
-        var maxFnameLength = utils.max(fnames, function (_) {
-                return _.length;
-            }),
-            fileb = $("<div>"),
+        var fileb = $("<div>"),
             navdiv = $("<div>"),
             input = $("<input>"),
             selection = undefined,
@@ -270,11 +267,10 @@ class FileBrowser{
                     3 create navigation toolbar for complete directory hierarchy
                     4 replace previous content div, if any, with new one
                       5 clear past selection, if any, and remember current folder */
-                function (folder, fnames) {
+                async function (folder, fnames) {
                     var div = $('#div_fileb-contents'),
                         folders = [],
                         files = [],
-                        maxFnameLength = 0,
                         exists = false;
 
                     // If it already exists, remove everything!
@@ -288,31 +284,39 @@ class FileBrowser{
                     div.attr("class", 'fileb_pane')
                         .attr("id", 'div_fileb-contents');
 
-                    fnames.forEach(function (fname) {
-                        let _folder = utils.regexpe(folder);
+
+                    //fnames might be a function that returns the files in
+                    //the folder
+                    //bentley: the ModelVerse only examines one folder at a time
+                    let file_list = fnames;
+                    if (!(Array.isArray(fnames))){
+                        file_list = await fnames(folder);
+                    }
+
+                    let _folder = utils.regexpe(folder);
+                    file_list.forEach(function (fname) {
+
                         let matches = fname.match('^' + _folder + '(.+?/)');
                         if (matches) {
                             if (!utils.contains(folders, matches[1]))
                                 folders.push(matches[1]);
-                            else
-                                return;
                         }
                         else if ((matches = fname.match('^' + _folder + '(.*)'))) {
                             if (matches[1].length > 0) {
                                 files.push(matches[1]);
-                            } else {
-                                return;
                             }
                         }
-                        else
-                            return;
+                    });
 
-                        maxFnameLength =
-                            Math.max(maxFnameLength, matches[1].length);
+                    let all_entries = folders.concat(files);
+
+                    //get the maximum filename length
+                    let maxFnameLength = utils.max(all_entries, function (_) {
+                        return _.length;
                     });
 
                     //				 var tmpDiv = $("<div>");
-                    folders.concat(files).forEach(function (fname) {
+                    all_entries.forEach(function (fname) {
                         let icon = HttpUtils.getFileIcon(fname);
                         if (icon) {
                             icon.css("width", 8 + maxFnameLength + 'ex');
@@ -388,7 +392,8 @@ class FileBrowser{
                     currfolder = folder;
                 };
 
-        fileb.css("width", maxFnameLength + 'ex')
+        let file_browser_width = 120;
+        fileb.css("width", file_browser_width + 'ex')
             .css("maxWidth", '100%');
 
         navdiv.css("align", 'left');
@@ -409,7 +414,7 @@ class FileBrowser{
                 return currfolder;
             },
             'getselection': function () {
-                return input.val();
+                return input.val().trim();
             },
             'clearselection': function () {
                 clearSelection();
