@@ -350,7 +350,8 @@ module.exports = {
                         function setMapType(eAttribute, datatype, defaultValue) {
                             //var keys = datatype.split('[')[1].split(']')[0];
                             //keys = keys.split(',');
-                            var values = datatype.split(']')[1].split('[')[1].split(']')[0];
+                            //var values = datatype.split(']')[1].split('[')[1].split(']')[0];
+                            var values = datatype.split('<')[1].split('>')[0];
                             values = values.split(',');
 
                             //for(var i = 0; i < keys.length; i++)

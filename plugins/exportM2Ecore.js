@@ -175,7 +175,7 @@ module.exports = {
                             attr.name = key;
                             attr.value = as.nodes[keyDest][key].value;
                             var attrType = as.nodes[keyDest][key].type;
-                            if (attr.value.length > 0) {
+                            if (attr.value != undefined && attr.value.length > 0) {
                                 if (attrType.startsWith("list"))
                                     attr.list = true;
                                 else
@@ -206,11 +206,11 @@ module.exports = {
                                     remove(keys, "$type");
                                     for (var i = 0; i < keys.length; i++) {
                                         var attr = findAttribute(keys[i], keyDest);
-                                        if (attr.value.length > 0)
+                                        if (attr.value != undefined && attr.value.length > 0)
                                             elem.attributes.push(attr);
                                     }
                                     var contain = [];
-                                    if (!isInRoot(keyDest))
+                                    if (!isInRoot(keyDest) && nodeKey != keyDest)
                                         contain = findContained(keyDest);
                                     elem.contain = contain;
                                     listContained.push(elem);
