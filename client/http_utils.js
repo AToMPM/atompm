@@ -63,7 +63,11 @@ HttpUtils = function(){
 //			console.debug(utils.jsons(params));
 			req.open(method, url, !sync); 
 			req.onreadystatechange = onreadystatechange;
-			req.send(utils.jsons(params));
+
+			if (typeof params != 'string'){
+				params = JSON.stringify(params);
+			}
+			req.send(params);
 		}
 	};
 	
@@ -218,6 +222,7 @@ HttpUtils = function(){
 		var _context = {
 				'username':__user,
 				'wid':__wid,
+				'aswid' :__aswid,
 				'mms':utils.keys(__loadedToolbars).filter(__isIconMetamodel)};
 		try			{eval(code); return {};}
 		catch(err)	
