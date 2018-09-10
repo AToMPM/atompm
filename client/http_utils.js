@@ -68,6 +68,7 @@ HttpUtils = function(){
 				params = JSON.stringify(params);
 			}
 			req.send(params);
+
 		}
 	};
 	

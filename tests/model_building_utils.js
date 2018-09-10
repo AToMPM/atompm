@@ -176,6 +176,7 @@ function navigate_to_folder(client, folder_name) {
             client.waitForElementPresent(folder_name_div, 2000, "Find folder: " + folder_name_div)
             .click(folder_name_div);
         });
+
     }
 
 }
@@ -209,6 +210,7 @@ function save_model(client, folder_name, model_name) {
 
     navigate_to_folder(client, folder_name);
 
+
     let model_selector = "#" + model_name;
     client.element('css selector', model_selector, function (result) {
             if (result.status == -1) {
@@ -226,6 +228,7 @@ function save_model(client, folder_name, model_name) {
                 .click("#dialog_btn")
                 .pause(200)
                 .waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
+
         }
     );
 }

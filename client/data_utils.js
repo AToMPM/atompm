@@ -50,6 +50,7 @@ DataUtils = function(){
 	 * Request creation of an instance of __typeToCreate at the specified
 	 * x and y coordinates
 	 */
+
     this.create = function (x, y, callback) {
         if (__typeToCreate == undefined) {
             WindowManagement.openDialog(_ERROR, 'you must select a type to create');
@@ -62,7 +63,6 @@ DataUtils = function(){
         }
     };
 
-	
 	/**
 	 * Deletes the current selection entities
 	 */
