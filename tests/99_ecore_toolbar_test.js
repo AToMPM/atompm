@@ -31,6 +31,8 @@ module.exports = {
         client.waitForElementPresent(dialog_btn, 2000, "Load MM Menu");
         client.click(dialog_btn);
 
+        client.pause(3000);
+
         let ecore_path = ecore_dir + "autotestMetamodel.ecore";
         client.verify.ok(fs.existsSync(ecore_dir), "Check folder existance: '" + ecore_dir + "'");
         client.verify.ok(fs.existsSync(ecore_path), "Check file existance: '" + ecore_path + "'");
@@ -50,6 +52,7 @@ module.exports = {
         client.waitForElementPresent(dialog_btn, 2000, "Load M Menu");
         client.click(dialog_btn);
 
+        client.pause(3000);
 
         let ecore_path = ecore_dir + "autotest_instanceModel.xmi";
         client.verify.ok(fs.existsSync(ecore_dir), "Check folder existance: '" + ecore_dir + "'");
