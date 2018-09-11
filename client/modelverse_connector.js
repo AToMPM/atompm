@@ -10,6 +10,8 @@ class ModelVerseConnector {
         ModelVerseConnector.OKAY = 2;
 
         ModelVerseConnector.curr_model = null;
+
+        ModelVerseConnector.element_map = {};
     }
 
 
@@ -43,12 +45,12 @@ class ModelVerseConnector {
         console.log("Save model:");
 
         let parsed_data = JSON.parse(data);
-        console.log(parsed_data);
+        // console.log(parsed_data);
         let m = JSON.parse(parsed_data['data']['m']);
         let mms = JSON.parse(parsed_data['data']['mms']);
 
-        console.log(m);
-        console.log(mms);
+        // console.log(m);
+        // console.log(mms);
 
         let SCD = "formalisms/SimpleClassDiagrams";
         let model_name = "test_model";
@@ -64,6 +66,8 @@ class ModelVerseConnector {
             "data": utils.jsons(["instantiate_node", "Class", "test"])
         };
 
+        ModelVerseConnector.curr_model = model_name;
+
         ModelVerseConnector.send_command(model_create)
             .then(ModelVerseConnector.get_output)
             .then(ModelVerseConnector.send_command(model_edit))
@@ -71,12 +75,55 @@ class ModelVerseConnector {
             .then(ModelVerseConnector.send_command(node_add))
             .then(ModelVerseConnector.get_output)
             .then(function(data){
+
                 let node_creation_promises = [];
                 for (let key in m.nodes) {
-                    console.log(key);
-                    // console.log(m.nodes[key]);
+                    let node = m.nodes[key];
+                    console.log(node);
+                    if (node.name == undefined){
+                        continue;
+                    }
 
+                    if (!(node.$type.endsWith("Class"))){
+                        continue;
+                    }
+
+                    let node_name = node.name.value;
+
+                    node_creation_promises.push(ModelVerseConnector.send_command(
+                        {"data": utils.jsons(["instantiate_node", "Class", node_name])}
+                    ));
+
+                    let set_id = function (id){
+                        ModelVerseConnector.element_map[node_name] = id.split(" ")[1];
+                    };
+
+                    node_creation_promises.push(ModelVerseConnector.get_output(set_id));
                 }
+
+                Promise.all(node_creation_promises);
+
+                console.log("Element map:");
+                console.log(ModelVerseConnector.element_map);
+                
+                // let edge_creation_promises = [];
+                // for (let key in m.nodes) {
+                //     let node = m.nodes[key];
+                //     console.log(node);
+                //     if (node.name == undefined){
+                //         continue;
+                //     }
+                //
+                //     if (!(node.$type.endsWith("Class"))){
+                //         continue;
+                //     }
+                //
+                //     let node_name = node.name.value;
+                //
+                //     node_creation_promises.push(ModelVerseConnector.send_command(
+                //         {"data": utils.jsons(["instantiate_node", "Class", node_name])}
+                //     ));
+                // }
 
                 ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
             });
@@ -313,12 +360,16 @@ class ModelVerseConnector {
             });
     }
 
-    static get_output() {
+    static get_output(clbk) {
         return new Promise(
             function (resolve, reject) {
                 let callback = function (status, resp) {
                     if (utils.isHttpSuccessCode(status)) {
                         console.log("get_output Resolve: " + resp);
+
+                        if (clbk != undefined && typeof clbk == "function"){
+                            clbk(resp);
+                        }
 
                         resolve(resp);
                     } else {
@@ -442,7 +493,7 @@ class ModelVerseConnector {
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
         if (ModelVerseConnector.curr_model){
-            let command = {"data": utils.jsons(["drop"])};
+            let command = {"data": utils.jsons(["exit"])};
             this.send_command(command).then(this.get_output)
             .then(function(data){
                 //console.log(command);
