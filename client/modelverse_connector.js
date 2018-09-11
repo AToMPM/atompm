@@ -78,7 +78,6 @@ class ModelVerseConnector {
 
                 let node_creation_promises = [];
                 for (const [key, node] of Object.entries(m.nodes)) {
-                    console.log(node);
                     if (node.name == undefined){
                         continue;
                     }
@@ -90,11 +89,6 @@ class ModelVerseConnector {
                     let node_name = node.name.value;
                     let node_type = node.$type.split("/").slice(-1)[0];
 
-                    // TODO: Implement
-                    if (node_type == "GlobalConstraint"){
-                        continue;
-                    }
-
                     node_creation_promises.push(ModelVerseConnector.send_command(
                         {"data": utils.jsons(["instantiate_node", node_type, node_name])}
                     ));
@@ -103,14 +97,26 @@ class ModelVerseConnector {
                         ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
                     };
 
+
                     node_creation_promises.push(ModelVerseConnector.get_output(set_id));
                 }
+
+                let simple_type = ["String", "Int", "Float", "Boolean", "Code", "File", "Map", "List", "ENUM"];
+                for (let st of simple_type){
+
+                    node_creation_promises.push(ModelVerseConnector.send_command(
+                        {"data": utils.jsons(["instantiate_node", "SimpleAttribute", st])}
+                    ));
+                    node_creation_promises.push(ModelVerseConnector.get_output());
+                }
+
+
+
 
                 Promise.all(node_creation_promises).then( function(){
 
                     let edge_creation_promises = [];
                     for (const [key, node] of Object.entries(m.nodes)) {
-                        console.log(node);
                         if (node.name == undefined || node.linktype != undefined) {
 
                             let node_type = node.$type.split("/").slice(-1)[0];
@@ -138,16 +144,73 @@ class ModelVerseConnector {
                                 }
                             }
 
+                            let set_id = function (id){
+                                ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
+                            };
+
+
                             edge_creation_promises.push(ModelVerseConnector.send_command(
                                 {"data": utils.jsons(["instantiate_edge", node_type, node_name, src, dest])}
                             ));
-                            edge_creation_promises.push(ModelVerseConnector.get_output());
+                            edge_creation_promises.push(ModelVerseConnector.get_output(set_id));
                         }
 
 
                     }
 
                     Promise.all(edge_creation_promises).then(function() {
+
+
+                        let attrib_creation_promises = [];
+
+                        for (const [key, node] of Object.entries(m.nodes)) {
+
+                            let ele = ModelVerseConnector.element_map[key];
+                            let node_type = node.$type.split("/").slice(-1)[0];
+
+                            if (node.abstract != undefined && node.abstract.value){
+                                attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                    {"data": utils.jsons(["attr_add", ele, "abstract", true])}
+                                ));
+                                attrib_creation_promises.push(ModelVerseConnector.get_output());
+                            }
+
+                            if (node.name != undefined && node_type != "GlobalConstraint"){
+                                attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                    {"data": utils.jsons(["attr_add", ele, "name", node.name.value])}
+                                ));
+                                attrib_creation_promises.push(ModelVerseConnector.get_output());
+                            }
+
+                            //TODO: Cardinalities
+
+                            if (node.attributes != undefined) {
+                                console.log(node);
+                                for (const [key, attrib] of Object.entries(node.attributes.value)) {
+                                    //console.log(attrib);
+                                    let type = attrib.type[0].toUpperCase() + attrib.type.substring(1);
+
+                                    if (type.startsWith("ENUM")){
+                                        type = "ENUM";
+                                    }
+                                    type = type.split("<")[0];
+
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["define_attribute", ele, attrib.name, type])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+                                }
+                            }
+
+
+                        }
+
+
+
+
+
+
+
 
                         ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
                     });
