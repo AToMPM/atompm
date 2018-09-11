@@ -49,7 +49,7 @@ class ModelVerseConnector {
         let m = JSON.parse(parsed_data['data']['m']);
         let mms = JSON.parse(parsed_data['data']['mms']);
 
-        // console.log(m);
+        console.log(m);
         // console.log(mms);
 
         let SCD = "formalisms/SimpleClassDiagrams";
@@ -77,55 +77,87 @@ class ModelVerseConnector {
             .then(function(data){
 
                 let node_creation_promises = [];
-                for (let key in m.nodes) {
-                    let node = m.nodes[key];
+                for (const [key, node] of Object.entries(m.nodes)) {
                     console.log(node);
                     if (node.name == undefined){
                         continue;
                     }
 
-                    if (!(node.$type.endsWith("Class"))){
+                    if (!(node.linktype == undefined)){
                         continue;
                     }
 
                     let node_name = node.name.value;
+                    let node_type = node.$type.split("/").slice(-1)[0];
+
+                    // TODO: Implement
+                    if (node_type == "GlobalConstraint"){
+                        continue;
+                    }
 
                     node_creation_promises.push(ModelVerseConnector.send_command(
-                        {"data": utils.jsons(["instantiate_node", "Class", node_name])}
+                        {"data": utils.jsons(["instantiate_node", node_type, node_name])}
                     ));
 
                     let set_id = function (id){
-                        ModelVerseConnector.element_map[node_name] = id.split(" ")[1];
+                        ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
                     };
 
                     node_creation_promises.push(ModelVerseConnector.get_output(set_id));
                 }
 
-                Promise.all(node_creation_promises);
+                Promise.all(node_creation_promises).then( function(){
 
-                console.log("Element map:");
-                console.log(ModelVerseConnector.element_map);
-                
-                // let edge_creation_promises = [];
-                // for (let key in m.nodes) {
-                //     let node = m.nodes[key];
-                //     console.log(node);
-                //     if (node.name == undefined){
-                //         continue;
-                //     }
-                //
-                //     if (!(node.$type.endsWith("Class"))){
-                //         continue;
-                //     }
-                //
-                //     let node_name = node.name.value;
-                //
-                //     node_creation_promises.push(ModelVerseConnector.send_command(
-                //         {"data": utils.jsons(["instantiate_node", "Class", node_name])}
-                //     ));
-                // }
+                    let edge_creation_promises = [];
+                    for (const [key, node] of Object.entries(m.nodes)) {
+                        console.log(node);
+                        if (node.name == undefined || node.linktype != undefined) {
 
-                ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
+                            let node_type = node.$type.split("/").slice(-1)[0];
+
+                            let node_name = null;
+                            if (node.name != undefined) {
+                                node_name = node.name.value;
+                            }else{
+                                node_name = node_type + key;
+                            }
+
+
+
+                            let src = null;
+                            let dest = null;
+
+                            for (const [edge_key, edge] of Object.entries(m.edges)) {
+                                if (edge['src'] == key) {
+                                    let ed = edge['dest'];
+                                    dest = ModelVerseConnector.element_map[ed];
+
+                                } else if (edge['dest'] == key) {
+                                    let es = edge['src'];
+                                    src = ModelVerseConnector.element_map[es];
+                                }
+                            }
+
+                            edge_creation_promises.push(ModelVerseConnector.send_command(
+                                {"data": utils.jsons(["instantiate_edge", node_type, node_name, src, dest])}
+                            ));
+                            edge_creation_promises.push(ModelVerseConnector.get_output());
+                        }
+
+
+                    }
+
+                    Promise.all(edge_creation_promises).then(function() {
+
+                        ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
+                    });
+
+
+
+
+                });
+
+
             });
 
 
