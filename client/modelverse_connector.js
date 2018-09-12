@@ -9,8 +9,9 @@ class ModelVerseConnector {
         ModelVerseConnector.WORKING = 1;
         ModelVerseConnector.OKAY = 2;
 
-        ModelVerseConnector.curr_model = null;
+        ModelVerseConnector.connected = true;
 
+        ModelVerseConnector.curr_model = null;
         ModelVerseConnector.element_map = {};
     }
 
@@ -32,28 +33,21 @@ class ModelVerseConnector {
         set_colour(colours[status]);
     }
 
-    static save_model(response, data){
-
-
-        if (response != 200){
-            ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
-            return;
-        }
+    static save_model(model_name, data){
 
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
-        console.log("Save model:");
+        console.log("Save model: " + model_name);
 
         let parsed_data = JSON.parse(data);
         // console.log(parsed_data);
         let m = JSON.parse(parsed_data['data']['m']);
         let mms = JSON.parse(parsed_data['data']['mms']);
 
-        console.log(m);
-        // console.log(mms);
-
         let SCD = "formalisms/SimpleClassDiagrams";
-        let model_name = "test_model";
+        let model_delete = {
+            "data": utils.jsons(["model_delete", model_name])
+        };
         let model_create = {
             "data": utils.jsons(["model_add", SCD, model_name, ""])
         };
@@ -62,17 +56,11 @@ class ModelVerseConnector {
             "data": utils.jsons(["model_modify", model_name, SCD])
         };
 
-        let node_add = {
-            "data": utils.jsons(["instantiate_node", "Class", "test"])
-        };
-
         ModelVerseConnector.curr_model = model_name;
 
         ModelVerseConnector.send_command(model_create)
             .then(ModelVerseConnector.get_output)
             .then(ModelVerseConnector.send_command(model_edit))
-            .then(ModelVerseConnector.get_output)
-            .then(ModelVerseConnector.send_command(node_add))
             .then(ModelVerseConnector.get_output)
             .then(function(data){
 
@@ -578,34 +566,43 @@ class ModelVerseConnector {
     }
 
 
-    static choose_model(){
+    static choose_model(status, model_to_save){
 
         console.log("Choosing model: ");
+
+        if (status != undefined && status != 200){
+            ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
+            return;
+        };
+
+        let loading_mode = (model_to_save == undefined);
 
         let folders = [""];
         let files = [];
 
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
-        if (ModelVerseConnector.curr_model){
+        // only exit on load
+        if (ModelVerseConnector.curr_model && loading_mode){
             let command = {"data": utils.jsons(["exit"])};
             this.send_command(command).then(this.get_output)
             .then(function(data){
-                //console.log(command);
-                //console.log(data);
-
                 ModelVerseConnector.curr_model = null;
             });
         }
 
 
         let startDir = "/";
-        let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, false, __getRecentDir(startDir));
+        let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, !loading_mode, __getRecentDir(startDir));
         let feedback = GUIUtils.getTextSpan('', "feedback");
         let title = "ModelVerse Explorer";
 
         let callback = function (filenames) {
-            ModelVerseConnector.load_model(filenames[0]);
+            if (loading_mode) {
+                ModelVerseConnector.load_model(filenames[0]);
+            }else{
+                ModelVerseConnector.save_model(filenames[0], model_to_save);
+            }
         };
 
         GUIUtils.setupAndShowDialog(
@@ -625,24 +622,23 @@ class ModelVerseConnector {
 
     }
 
-    static load_model(filename) {
+    static load_model(model_name) {
 
-        let model_name = filename;
         let metamodel = "formalisms/SimpleClassDiagrams";
 
         //fix slashes on filename
-        if (model_name.endsWith("/")){
-            model_name = model_name.slice(0, -1);
-        }
-
-        if (model_name.startsWith("/")){
-            model_name = model_name.slice(1);
-        }
+        // if (model_name.endsWith("/")){
+        //     model_name = model_name.slice(0, -1);
+        // }
+        //
+        // if (model_name.startsWith("/")){
+        //     model_name = model_name.slice(1);
+        // }
 
 
         console.log("Loading model: " + model_name);
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
-        ModelVerseConnector.curr_model = filename;
+        ModelVerseConnector.curr_model = model_name;
 
 
 
