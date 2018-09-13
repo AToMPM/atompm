@@ -13,6 +13,11 @@ class ModelVerseConnector {
 
         ModelVerseConnector.curr_model = null;
         ModelVerseConnector.element_map = {};
+
+        ModelVerseConnector.PM2MV_metamodel_map = {
+            "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram" : "formalisms/SimpleClassDiagrams"
+        };
+
     }
 
 
@@ -44,16 +49,32 @@ class ModelVerseConnector {
         let m = JSON.parse(parsed_data['data']['m']);
         let mms = JSON.parse(parsed_data['data']['mms']);
 
-        let SCD = "formalisms/SimpleClassDiagrams";
+        //detect the metamodels
+        if (Object.keys(mms).length > 1){
+            console.log("Warning: More than one meta-model detected!")
+        }
+
+        let primary_mm_PM = Object.keys(mms)[0];
+        let primary_mm_MV = ModelVerseConnector.PM2MV_metamodel_map[primary_mm_PM];
+
+        //TODO: Allow user to select meta-model when it is not found
+        // console.log("MV PM: " + primary_mm_PM);
+        // console.log("MV MM: " + primary_mm_MV);
+
+        if (primary_mm_MV == undefined){
+            WindowManagement.openDialog(_ERROR,'Cannot find meta-model in ModelVerse: "' + primary_mm_PM + '"');
+            return;
+        }
+
         let model_delete = {
             "data": utils.jsons(["model_delete", model_name])
         };
         let model_create = {
-            "data": utils.jsons(["model_add", SCD, model_name, ""])
+            "data": utils.jsons(["model_add", primary_mm_MV, model_name, ""])
         };
 
         let model_edit = {
-            "data": utils.jsons(["model_modify", model_name, SCD])
+            "data": utils.jsons(["model_modify", model_name, primary_mm_MV])
         };
 
         ModelVerseConnector.curr_model = model_name;
@@ -630,18 +651,15 @@ class ModelVerseConnector {
         // if (model_name.endsWith("/")){
         //     model_name = model_name.slice(0, -1);
         // }
-        //
-        // if (model_name.startsWith("/")){
-        //     model_name = model_name.slice(1);
-        // }
+
+        if (model_name.startsWith("/")){
+            model_name = model_name.slice(1);
+        }
 
 
         console.log("Loading model: " + model_name);
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
         ModelVerseConnector.curr_model = model_name;
-
-
-
 
 
 
@@ -691,7 +709,11 @@ class ModelVerseConnector {
             .then(this.send_command(model_rendered)).then(this.get_output)
 
             .then(function(data){
+                // console.log("Data before: ");
+                // console.log(data);
                 data = data.replace("Success: ", "");
+                // console.log("Data after:");
+                // console.log(data);
                 model_CS = eval(JSON.parse(data));
             })
 
