@@ -266,172 +266,253 @@ class ModelVerseConnector {
                     });
 
 
-                let class_type = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/ClassIcon";
 
-                let model_classes = [];
-                let model_associations = [];
-                let model_inheris = [];
+                let model_elements = [];
+                let model_links = [];
+
+                let model_attrib_types = [];
                 let model_attribs = {};
 
-                // for (let i in AS) {
-                //     let obj = AS[i];
-                //     let obj_type = obj["__type"];
-                //
-                //     if (obj_type == "Class") {
-                //         model_classes.push(obj["__id"]);
-                //
-                //     }else if (obj_type == "Association"){
-                //         model_associations.push([obj["__source"], obj["__target"], obj["__id"]]);
-                //
-                //     }else if (obj_type == "Inheritance"){
-                //         model_inheris.push([obj["__source"], obj["__target"]]);
-                //
-                //     }else if (obj_type == "AttributeLink") {
-                //         if (model_attribs[obj["__source"]] == undefined){
-                //             model_attribs[obj["__source"]] = [];
-                //         }
-                //         model_attribs[obj["__source"]].push([obj["__target"], obj["__id"]]);
-                //     }
-                //
-                // }
-                //
-                //
-                // let class_locs = {};
-                //
-                // for (const cs_ele of CS){
-                //     if (!(cs_ele["__type"] == "Group")){
-                //         continue;
-                //     }
-                //
-                //     let asid = cs_ele["__asid"];
-                //     let pos = [cs_ele["x"], cs_ele["y"]];
-                //
-                //     class_locs[asid] = pos;
-                // }
-                //
-                // let ele_ids = {};
-                //
-                //
-                // __typeToCreate = class_type;
-                //
-                // let map_promises = [];
-                // for (const id of model_classes){
-                //
-                //     map_promises.push(new Promise(function(resolve, reject){
-                //         let updateClass =
-                //
-                //             function(status, resp){
-                //
-                //                 let data = JSON.parse(resp);
-                //
-                //                 let uri = class_type + "/" + data["data"] + ".instance";
-                //                 ele_ids[id] = uri;
-                //
-                //                 let changes = {"name": id};
-                //
-                //                 if (model_attribs[id] != undefined){
-                //                     let attrib_changes = [];
-                //
-                //                     for (let attrib of model_attribs[id]){
-                //                         //console.log(attrib);
-                //
-                //                         let attrib_change = {
-                //                             "name": attrib[1],
-                //                             "type" : attrib[0]
-                //                         };
-                //                         attrib_changes.push(attrib_change);
-                //                     }
-                //                     changes["attributes"] = attrib_changes;
-                //                 }
-                //
-                //                 DataUtils.update(uri, changes);
-                //                 resolve();
-                //             };
-                //
-                //
-                //         let pos = class_locs[id];
-                //         if (pos == undefined || pos == null){
-                //             pos = [100, 100];
-                //         }
-                //
-                //         let vert_offset = 200;
-                //         DataUtils.create(pos[0], pos[1] + vert_offset, updateClass);
-                //     }));
-                // }
-                //
-                // Promise.all(map_promises).then(function(){
-                //
-                //     for (const inheri of model_inheris){
-                //         let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/InheritanceLink.type";
-                //
-                //         let source = ele_ids[inheri[0]];
-                //         let target = ele_ids[inheri[1]];
-                //
-                //         if (source == undefined || target == undefined){
-                //             console.log("ERROR: Can't create inheritance between " + inheri[0] + " and " + inheri[1]);
-                //             continue;
-                //         }
-                //
-                //         HttpUtils.httpReq(
-                //              'POST',
-                //              HttpUtils.url(connectionType,__NO_USERNAME),
-                //              {'src':source,
-                //               'dest':target,
-                //               'pos':undefined,
-                //               'segments':undefined});
-                //
-                //     }
-                //
-                // })
-                // .then(function(){
-                //     let assoc_create_promises = [];
-                //
-                //     for (const assoc of model_associations){
-                //
-                //         assoc_create_promises.push(new Promise(function(resolve, reject){
-                //         let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/AssociationLink.type";
-                //
-                //         let source = ele_ids[assoc[0]];
-                //         let target = ele_ids[assoc[1]];
-                //
-                //         if (source == undefined || target == undefined){
-                //             console.log("ERROR: Can't create association between " + assoc[0] + " and " + assoc[1]);
-                //             resolve();
-                //         }
-                //
-                //         let assoc_create_callback = function(status, resp){
-                //             let id = JSON.parse(resp)["data"];
-                //             let assoc_id = connectionType.replace(".type", "/") + id + ".instance";
-                //             ele_ids[assoc[2]] = assoc_id;
-                //
-                //             resolve();
-                //         };
-                //
-                //         HttpUtils.httpReq(
-                //              'POST',
-                //              HttpUtils.url(connectionType,__NO_USERNAME),
-                //              {'src':source,
-                //               'dest':target,
-                //               'pos':undefined,
-                //               'segments':undefined},
-                //             assoc_create_callback);
-                //         }));
-                //
-                //     }
-                //
-                //     Promise.all(assoc_create_promises).then(function(){
-                //         for (const assoc of model_associations){
-                //             let uri = ele_ids[assoc[2]];
-                //             let changes = {"name" : assoc[2]};
-                //
-                //             console.log("Updating " + uri);
-                //
-                //             DataUtils.update(uri, changes);
-                //         }
-                //     });
-                //
-                //
-                // });
+                //class name, etc.
+                let model_properties = {};
+
+                for (const obj of Object.values(AS)) {
+                    let obj_type = obj["__type"];
+
+                    let name = obj["name"];
+                    if (name == undefined){
+                        name = obj_type;
+                    }
+
+                    if (obj_type == "SimpleAttribute"){
+                        model_attrib_types.push(name);
+                        continue;
+                    }
+
+                    let src = obj["__source"];
+                    let trgt =  obj["__target"];
+
+                    let add_properties = true;
+
+                    if (src == undefined && trgt == undefined){
+                        model_elements.push([name, obj_type]);
+                    }else{
+
+                        if (model_attrib_types.includes(trgt)){
+
+                            if (model_attribs[src] == undefined){
+                                model_attribs[src] = [];
+                            }
+
+                            model_attribs[src].push([name, trgt]);
+
+                            add_properties = false;
+
+                        }else{
+                            model_links.push([obj_type, src, trgt, obj["__id"]]);
+                        }
+
+                    }
+
+                    if (add_properties) {
+                        for (const [prop_name, prop_value] of Object.entries(obj)) {
+                            // console.log(prop_name + ' = ' + prop_value);
+                            if (prop_name.startsWith("__")) {
+                                continue;
+                            }
+
+                            if (prop_value == null){
+                                continue;
+                            }
+
+                            if (model_properties[name] == undefined) {
+                                model_properties[name] = [];
+                            }
+
+                            // console.log(name + ": " + prop_name + " = " + prop_value);
+                            model_properties[name].push([prop_name, prop_value]);
+                        }
+                    }
+
+                }
+
+                let ele_ids = {};
+
+
+                //TODO: Replace with better layout
+                let start_x = 100;
+                let start_y = 100;
+
+                let x_offset = 250;
+                let max_x = 4;
+
+                let y_offset = 200;
+
+                let i = 0;
+
+                let element_promises = [];
+                for (const [name, obj_type] of model_elements){
+
+                    let class_type = primary_PM_metamodel + ".defaultIcons/" + obj_type + "Icon";
+                    __typeToCreate = class_type;
+
+                    element_promises.push(new Promise(function(resolve, reject){
+                        let updateClass =
+
+                            function(status, resp){
+
+                                if (Math.floor(status / 100) != 2){
+                                    resolve();
+                                    return;
+                                }
+                                // console.log(status);
+                                // console.log(resp);
+                                let data = JSON.parse(resp);
+
+                                let uri = class_type + "/" + data["data"] + ".instance";
+                                ele_ids[name] = uri;
+
+                                resolve();
+                            };
+
+
+                        let x_pos = start_x + Math.floor(i % max_x) * x_offset;
+                        let y_pos = start_y + Math.floor(i / max_x) * y_offset;
+
+                        DataUtils.create(x_pos, y_pos, updateClass);
+                        i +=1;
+                    }));
+                }
+
+                Promise.all(element_promises).then(function(){
+
+                    console.log("Starting link promises");
+
+                    let link_promises = [];
+
+                    for (const [obj_type, src, trgt, obj_id] of model_links){
+
+                        link_promises.push(new Promise(function(resolve, reject) {
+                            let source_element = ele_ids[src];
+                            let target_element = ele_ids[trgt];
+
+                            if (source_element == undefined || target_element == undefined) {
+                                console.log("ERROR: Can't create link '" + obj_type + "' between " + src + " and " + trgt);
+                                resolve();
+                                return;
+                            }
+
+                            //skip attribute links
+                            if (obj_type == "AttributeLink"){
+                                resolve();
+                                return;
+                            }
+
+                            let connectionType = primary_PM_metamodel + ".defaultIcons/" + obj_type + "Link.type";
+
+                            let link_create_callback = function(status, resp){
+                                // console.log(status);
+                                // console.log(resp);
+                                let id = JSON.parse(resp)["data"];
+                                let assoc_id = connectionType.replace(".type", "/") + id + ".instance";
+
+                                // console.log(obj_id + " = " + assoc_id);
+                                ele_ids[obj_id] = assoc_id;
+
+                                resolve();
+                            };
+
+                            console.log(connectionType);
+                            HttpUtils.httpReq(
+                                'POST',
+                                HttpUtils.url(connectionType, __NO_USERNAME),
+                                {
+                                    'src': source_element,
+                                    'dest': target_element,
+                                    'pos': undefined,
+                                    'segments': undefined
+                                },
+                                link_create_callback);
+
+                        }));
+
+                    }
+
+                    Promise.all(link_promises).then(function(){
+
+                        console.log("Start properties");
+                        for (const [ele, properties] of Object.entries(model_properties)){
+
+                            let uri = ele_ids[ele];
+
+                            if (uri == undefined){
+                                console.log("Uri not found for element: " + ele);
+                                continue;
+                            }
+
+                            let changes = {};
+
+                            for (const [key, value] of Object.entries(properties)){
+
+                                //TODO: Fix this
+                                if (value[0] == "constraint"){
+                                    continue;
+                                }
+
+                                changes[value[0]] = value[1];
+                            }
+
+                            console.log(uri);
+                            console.log(changes);
+                            DataUtils.update(uri, changes);
+
+                        }
+
+
+                        console.log("Start attributes");
+
+                        for (const [ele, attributes] of Object.entries(model_attribs)){
+
+                            let uri = ele_ids[ele];
+
+                            if (uri == undefined){
+                                console.log("Uri not found for element: " + ele);
+                                continue;
+                            }
+
+                            let attrib_changes = [];
+
+                            // console.log(ele);
+                            // console.log(uri);
+                            // console.log(attributes);
+
+                            for (const[key, value] of attributes){
+                                //TODO: Make attributes valid PM types
+
+                                let pm_value = value.toLowerCase();
+                                if (pm_value == "natural" || pm_value == "integer"){
+                                    pm_value = "int";
+                                }
+
+                                let attrib_change = {
+                                        "name": key,
+                                        "type" : pm_value
+                                };
+                                attrib_changes.push(attrib_change);
+
+                            }
+
+                            DataUtils.update(uri, {"attributes" : attrib_changes});
+
+                        }
+
+
+
+
+                    });
+
+                });
+
 
 
                 resolve();
