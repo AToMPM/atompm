@@ -737,8 +737,38 @@ class ModelVerseConnector {
             }
         };
 
+        let folder_buttons = $('<div>');
+        let new_folder_b = $('<button>');
+        new_folder_b.attr('id', 'new_folder')
+            .html('new folder')
+            .click(function (ev) {
+                let folder_name = prompt("please fill in a name for the folder");
+                if (folder_name == null) {
+                    return;
+                }
+                folder_name = folder_name.replace(/^\s+|\s+$/g, ''); // trim
+                if (!folder_name.match(/^[a-zA-Z0-9_\s]+$/i)) {
+                    feedback.html("invalid folder name: " + folder_name);
+                } else {
+                    let full_folder_name = fileb['getcurrfolder']() + folder_name;
+                    console.log("Creating: " + full_folder_name);
+
+                    let mk_folder_command = {
+                        "data": utils.jsons(["folder_create", full_folder_name])
+                    };
+
+                    ModelVerseConnector.send_command(mk_folder_command).then(ModelVerseConnector.get_output)
+                    .then(function (data) {
+                        console.log("Got data: " + data);
+                    });
+
+                }
+
+            });
+        folder_buttons.append(new_folder_b);
+
         GUIUtils.setupAndShowDialog(
-                    [fileb['filebrowser'], null, null, feedback],
+                    [fileb['filebrowser'], loading_mode?null:folder_buttons, null, feedback],
                     function () {
                         let value = [fileb['getselection']()];
                         if (value.length > 0 && value[0] != "" && startDir) {
