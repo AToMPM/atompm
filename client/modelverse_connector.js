@@ -73,8 +73,14 @@ class ModelVerseConnector {
         // console.log("MV MM: " + primary_mm_MV);
 
         if (primary_mm_MV == undefined){
-            WindowManagement.openDialog(_ERROR,'Cannot find meta-model in ModelVerse: "' + primary_mm_PM + '"');
-            return;
+            WindowManagement.openDialog(_ERROR,'Meta-model may not exist in ModelVerse: "' + primary_mm_PM + '"');
+            //return;
+
+            if (primary_mm_PM.startsWith("/")){
+                primary_mm_PM = primary_mm_PM.slice(1);
+            }
+
+            primary_mm_MV = primary_mm_PM;
         }
 
         let model_delete = {
@@ -92,6 +98,13 @@ class ModelVerseConnector {
 
         ModelVerseConnector.send_command(model_create)
             .then(ModelVerseConnector.get_output)
+            .then(function (data) {
+                if (data.includes("Model not found")){
+                    ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
+                    WindowManagement.openDialog(_ERROR,data);
+                    return;
+                }
+            })
             .then(ModelVerseConnector.send_command(model_edit))
             .then(ModelVerseConnector.get_output)
             .then(function(data){
@@ -704,8 +717,8 @@ class ModelVerseConnector {
 
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
-        // only exit on load
-        if (ModelVerseConnector.curr_model && loading_mode){
+        //if editing a model, exit it
+        if (ModelVerseConnector.curr_model){
             let command = {"data": utils.jsons(["exit"])};
             this.send_command(command).then(this.get_output)
             .then(function(data){
