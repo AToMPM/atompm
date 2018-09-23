@@ -51,6 +51,8 @@ class ModelVerseConnector {
 
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
+
+
         console.log("Save model: " + model_name);
 
         let parsed_data = JSON.parse(data);
@@ -294,11 +296,13 @@ class ModelVerseConnector {
 
                     let add_properties = true;
 
+                    //console.log("obj " + obj_type + " " + name + " = " + src + " - " + trgt);
+
                     if (src == undefined && trgt == undefined){
                         model_elements.push([name, obj_type]);
                     }else{
 
-                        if (model_attrib_types.includes(trgt)){
+                        if (obj_type == "AttributeLink"){//model_attrib_types.includes(trgt)){
 
                             if (model_attribs[src] == undefined){
                                 model_attribs[src] = [];
@@ -316,7 +320,7 @@ class ModelVerseConnector {
 
                     if (add_properties) {
                         for (const [prop_name, prop_value] of Object.entries(obj)) {
-                            // console.log(prop_name + ' = ' + prop_value);
+                            //console.log(name + " :: " + prop_name + ' = ' + prop_value);
                             if (prop_name.startsWith("__")) {
                                 continue;
                             }
@@ -396,14 +400,14 @@ class ModelVerseConnector {
                             let source_element = ele_ids[src];
                             let target_element = ele_ids[trgt];
 
-                            if (source_element == undefined || target_element == undefined) {
-                                console.log("ERROR: Can't create link '" + obj_type + "' between " + src + " and " + trgt);
+                            //skip attribute links
+                            if (obj_type == "AttributeLink"){
                                 resolve();
                                 return;
                             }
 
-                            //skip attribute links
-                            if (obj_type == "AttributeLink"){
+                            if (source_element == undefined || target_element == undefined) {
+                                console.log("ERROR: Can't create link '" + obj_type + "' between " + src + " and " + trgt);
                                 resolve();
                                 return;
                             }
@@ -450,20 +454,21 @@ class ModelVerseConnector {
                                 continue;
                             }
 
+                            // console.log("Element: " + ele + " = uri: " + uri);
+
                             let changes = {};
 
                             for (const [key, value] of Object.entries(properties)){
+                                // console.log(value[0] + " = ");
+                                // console.log(value[1]);
 
                                 //TODO: Fix this
-                                if (value[0] == "constraint"){
+                                if (value[0].includes("constraint")){
                                     continue;
                                 }
 
                                 changes[value[0]] = value[1];
                             }
-
-                            console.log(uri);
-                            console.log(changes);
                             DataUtils.update(uri, changes);
 
                         }
@@ -482,9 +487,7 @@ class ModelVerseConnector {
 
                             let attrib_changes = [];
 
-                            // console.log(ele);
-                            // console.log(uri);
-                            // console.log(attributes);
+                            // console.log("Element: " + ele + " = uri: " + uri);
 
                             for (const[key, value] of attributes){
                                 //TODO: Make attributes valid PM types
@@ -493,6 +496,8 @@ class ModelVerseConnector {
                                 if (pm_value == "natural" || pm_value == "integer"){
                                     pm_value = "int";
                                 }
+
+                                // console.log(key + " = " + pm_value);
 
                                 let attrib_change = {
                                         "name": key,
@@ -715,6 +720,16 @@ class ModelVerseConnector {
         let title = "ModelVerse Explorer";
 
         let callback = function (filenames) {
+
+            //fix slashes on filename
+            // if (filenames[0].endsWith("/")){
+            //     filenames[0] = filenames[0].slice(0, -1);
+            // }
+
+            if (filenames[0].startsWith("/")){
+                filenames[0] = filenames[0].slice(1);
+            }
+
             if (loading_mode) {
                 ModelVerseConnector.load_model(filenames[0]);
             }else{
@@ -742,16 +757,6 @@ class ModelVerseConnector {
     static load_model(model_name) {
 
         let metamodel = "formalisms/SimpleClassDiagrams";
-
-        //fix slashes on filename
-        // if (model_name.endsWith("/")){
-        //     model_name = model_name.slice(0, -1);
-        // }
-
-        if (model_name.startsWith("/")){
-            model_name = model_name.slice(1);
-        }
-
 
         console.log("Loading model: " + model_name);
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
