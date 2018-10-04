@@ -22,7 +22,7 @@ class ModelVerseConnector {
     }
 
     static reverse_dict(dict){
-      var ret = {};
+      let ret = {};
       for(let key of Object.keys(dict)){
         ret[dict[key]] = key;
       }
@@ -273,7 +273,16 @@ class ModelVerseConnector {
                 console.log("MV MM: " + primary_MV_metamodel);
                 console.log("PM MM: " + primary_PM_metamodel);
 
-                let metamodel = primary_PM_metamodel + ".defaultIcons.metamodel";
+                let csmetamodel = ".defaultIcons";
+
+                //this concrete syntax is better
+                if (primary_MV_metamodel == "formalisms/SimpleClassDiagrams"){
+                    csmetamodel = ".umlIcons";
+                }
+
+                let metamodel = primary_PM_metamodel + csmetamodel + ".metamodel";
+
+
 
                 DataUtils.loadmm(metamodel,
                     function(){
@@ -370,7 +379,7 @@ class ModelVerseConnector {
                 let element_promises = [];
                 for (const [name, obj_type] of model_elements){
 
-                    let class_type = primary_PM_metamodel + ".defaultIcons/" + obj_type + "Icon";
+                    let class_type = primary_PM_metamodel + csmetamodel + "/" + obj_type + "Icon";
                     __typeToCreate = class_type;
 
                     element_promises.push(new Promise(function(resolve, reject){
@@ -425,7 +434,7 @@ class ModelVerseConnector {
                                 return;
                             }
 
-                            let connectionType = primary_PM_metamodel + ".defaultIcons/" + obj_type + "Link.type";
+                            let connectionType = primary_PM_metamodel + csmetamodel + "/" + obj_type + "Link.type";
 
                             let link_create_callback = function(status, resp){
                                 // console.log(status);
@@ -728,7 +737,7 @@ class ModelVerseConnector {
 
 
         let startDir = "/";
-        let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, !loading_mode, __getRecentDir(startDir));
+        let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, !loading_mode, startDir);
         let feedback = GUIUtils.getTextSpan('', "feedback");
         let title = "ModelVerse Explorer";
 
