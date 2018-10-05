@@ -143,8 +143,25 @@ class ModelVerseConnector {
                     node_creation_promises.push(ModelVerseConnector.get_output());
                 }
 
+                //get cardinalities
+                let card_dict = {};
+                let attrib_creation_promises = [];
+                // console.log("Cardinalities");
+                for (const [key, node] of Object.entries(m.nodes)) {
 
+                    if (node.cardinalities == undefined || node.cardinalities.value.length == 0){
+                        continue;
+                    }
 
+                    //console.log(node);
+                    for (const card of node.cardinalities.value){
+                        //console.log(card);
+                        let cardname = card["type"] + card["dir"];
+
+                        card_dict[cardname] = [card["min"], card["max"]];
+                        // console.log(card_dict);
+                    }
+                }
 
                 Promise.all(node_creation_promises).then( function(){
 
@@ -194,7 +211,6 @@ class ModelVerseConnector {
                     Promise.all(edge_creation_promises).then(function() {
 
 
-                        let attrib_creation_promises = [];
 
                         for (const [key, node] of Object.entries(m.nodes)) {
 
@@ -215,10 +231,47 @@ class ModelVerseConnector {
                                 attrib_creation_promises.push(ModelVerseConnector.get_output());
                             }
 
-                            //TODO: Cardinalities
+                            if (node.name != undefined){
+
+                                // console.log(Object.keys(card_dict));
+                                let src_card = card_dict[node.name.value + "out"];
+                                let trgt_card = card_dict[node.name.value + "in"];
+
+                                // console.log("Src:");
+                                // console.log(src_card);
+
+                                if (src_card != undefined){
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["attr_add", ele, "source_lower_cardinality", src_card[0]])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["attr_add", ele, "source_upper_cardinality", src_card[1]])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+                                }
+
+                                // console.log("Trgt:");
+                                // console.log(trgt_card);
+
+                                if (trgt_card != undefined){
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["attr_add", ele, "target_lower_cardinality", trgt_card[0]])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["attr_add", ele, "target_upper_cardinality", trgt_card[1]])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+                                }
+                            }
+
+
 
                             if (node.attributes != undefined) {
-                                console.log(node);
+                                //console.log(node);
                                 for (const [key, attrib] of Object.entries(node.attributes.value)) {
                                     //console.log(attrib);
                                     let type = attrib.type[0].toUpperCase() + attrib.type.substring(1);
@@ -293,6 +346,7 @@ class ModelVerseConnector {
 
                 let model_elements = [];
                 let model_links = [];
+                let model_links_dict = {};
 
                 let model_attrib_types = [];
                 let model_attribs = {};
@@ -336,13 +390,14 @@ class ModelVerseConnector {
 
                         }else{
                             model_links.push([obj_type, src, trgt, obj["__id"]]);
+                            model_links_dict[obj["__id"]] = [src, trgt];
                         }
 
                     }
 
                     if (add_properties) {
-                        for (const [prop_name, prop_value] of Object.entries(obj)) {
-                            //console.log(name + " :: " + prop_name + ' = ' + prop_value);
+                        for (let [prop_name, prop_value] of Object.entries(obj)) {
+
                             if (prop_name.startsWith("__")) {
                                 continue;
                             }
@@ -355,7 +410,30 @@ class ModelVerseConnector {
                                 model_properties[name] = [];
                             }
 
-                            // console.log(name + ": " + prop_name + " = " + prop_value);
+                            if (prop_name.endsWith("_cardinality")){
+
+                                let dest = undefined;
+                                let lower_upper = prop_name.split("_")[1];
+                                lower_upper = (lower_upper == "lower")? "min":"max";
+
+                                if (prop_name.startsWith("source")){
+                                    dest = model_links_dict[name][0];
+                                    prop_name = "cardinality_" + lower_upper + "_" + name + "_out_";
+                                }else if (prop_name.startsWith("target")){
+                                    dest = model_links_dict[name][1];
+                                    prop_name = "cardinality_" + lower_upper + "_" + name + "_in_";
+                                }
+
+                                if (model_properties[dest] == undefined) {
+                                    model_properties[dest] = [];
+                                }
+                                model_properties[dest].push([prop_name, prop_value]);
+                                //console.log(src + " :: " + prop_name + ' = ' + prop_value);
+                                continue;
+
+                            }
+
+                            // console.log(name + " :: " + prop_name + ' = ' + prop_value);
                             model_properties[name].push([prop_name, prop_value]);
                         }
                     }
@@ -467,11 +545,11 @@ class ModelVerseConnector {
                     Promise.all(link_promises).then(function(){
 
                         console.log("Start properties");
-                        for (const [ele, properties] of Object.entries(model_properties)){
+                        for (const [ele, properties] of Object.entries(model_properties)) {
 
                             let uri = ele_ids[ele];
 
-                            if (uri == undefined){
+                            if (uri == undefined) {
                                 console.log("Uri not found for element: " + ele);
                                 continue;
                             }
@@ -480,16 +558,53 @@ class ModelVerseConnector {
 
                             let changes = {};
 
-                            for (const [key, value] of Object.entries(properties)){
+                            let cardinalities = [];
+                            let card_dict = {};
+
+                            for (const [key, value] of Object.entries(properties)) {
                                 // console.log(value[0] + " = ");
                                 // console.log(value[1]);
 
                                 //TODO: Fix this
-                                if (value[0].includes("constraint")){
+                                if (value[0].includes("constraint")) {
                                     continue;
                                 }
 
-                                changes[value[0]] = value[1];
+                                if (value[0].startsWith("cardinality")) {
+
+                                    let minmax = value[0].split("_")[1];
+                                    let assoc_name = value[0].split("_")[2];
+                                    let dir = value[0].split("_")[3];
+
+                                    // console.log("Card:");
+                                    // console.log(minmax + " " + assoc_name + " " + dir);
+
+                                    let found_card = false;
+
+                                    for (let [key, existing_card] of Object.entries(cardinalities)){
+                                        if (existing_card["type"] == assoc_name){
+                                            found_card = true;
+                                            cardinalities[key][minmax] = value[1];
+                                        }
+                                    }
+
+                                    if (!found_card)
+                                    {
+                                        let new_card = {
+                                            "dir" : dir,
+                                            "type" : assoc_name
+                                        };
+                                        new_card[minmax] = value[1];
+                                        cardinalities.push(new_card);
+                                    }
+                                }else {
+                                    //all other properties
+                                    changes[value[0]] = value[1];
+                                }
+                            }
+
+                            if (cardinalities.length > 0) {
+                                changes["cardinalities"] = cardinalities;
                             }
                             DataUtils.update(uri, changes);
 
