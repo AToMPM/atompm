@@ -1,9 +1,9 @@
 
 div, span {
-	cursor:default;
+    cursor:default;
 }
 input, textarea {
-	cursor:text;
+    cursor:text;
 }
 textarea.string_input {
     resize: none;
@@ -12,440 +12,435 @@ textarea.string_input {
     resize: none;
 }
 select, option, button {
-	cursor:pointer;
+    cursor:pointer;
 }
 button {
-	font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
-  	font-size:11px;
+    font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size:11px;
 }
 span.feedback {
     color: red;
 }
 
 html {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .inputDiv {
-	position: absolute;
-	left: 10px;
-	right: 20px;
-	padding: 5px 10px;
-	height: 32px;
+    position: absolute;
+    left: 10px;
+    right: 20px;
+    padding: 5px 10px;
+    height: 32px;
 }
 
 .contentDiv {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	box-shadow: inset 7px 7px 5px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    box-shadow: inset 7px 7px 5px rgba(0, 0, 0, 0.1);
 }
 
 .rootDiv {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
 }
 
 .commandHistory {
-	width: 100%;
-	position: absolute;
-	display: none;
+    width: 100%;
+    position: absolute;
+    display: none;
 }
 
 .mainInput {
-	width: 100%;
-	border: 1px solid black;
+    width: 100%;
+    border: 1px solid black;
 }
 
 .mainInput:focus {
-	box-shadow: 0 0 5px rgb(100, 200, 255);
-	outline: none;
+    box-shadow: 0 0 5px rgb(100, 200, 255);
+    outline: none;
 }
 
 .mainInput.error:focus {
-	box-shadow: 0 0 5px red;
+    box-shadow: 0 0 5px red;
 }
 
 .canvas {
-	position:relative;
-	height:10000;
-	width:10000;
-	overflow:auto;
-	background: url(media/gridbg.png) top left repeat;
-	cursor:crosshair;
+    position:relative;
+    height:100%;
+    width:100%;
+    overflow:auto;
+    background: url(media/gridbg.png) top left repeat;
+    cursor:crosshair;
 }
 
 
 .canvas_selection {
-	stroke: chartreuse;
-	stroke-width:0.5;
-	stroke-dasharray:5,5;
-	fill: chartreuse;
-	fill-opacity:0.1;
-	cursor:move;
+    stroke: chartreuse;
+    stroke-width:0.5;
+    stroke-dasharray:5,5;
+    fill: chartreuse;
+    fill-opacity:0.1;
+    cursor:move;
 }
 
 
 .canvas_selection_overlay {
-	stroke-width:0.1;
-	fill:#0000ff;
-	fill-opacity:0.10;
-	cursor:crosshair;
+    stroke-width:0.1;
+    fill:#0000ff;
+    fill-opacity:0.10;
+    cursor:crosshair;
 }
 
 
 
 .clickable {
-	cursor:pointer;
+    cursor:pointer;
 }
 
 
 .code_style {
-	display:inline;
-	font-family:"andale mono",monospace;	
-  	font-size:11px;
-	border-radius: 5px;
+    display:inline;
+    font-family:"andale mono",monospace;
+    font-size:11px;
+    border-radius: 5px;
 }
 
 .container {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 }
 
 .ctrl_point_overlay {
-	stroke: purple;
-	stroke-width:1;
-	fill: coral;
-	fill-opacity:0.5;
-	cursor:move;
+    stroke: purple;
+    stroke-width:1;
+    fill: coral;
+    fill-opacity:0.5;
+    cursor:move;
 }
 
 .ctrl_point_center_overlay {
-	stroke: lime;
-	stroke-width:1;
-	fill: khaki;
-	fill-opacity:0.5;
-	cursor:move;
+    stroke: lime;
+    stroke-width:1;
+    fill: khaki;
+    fill-opacity:0.5;
+    cursor:move;
 }
 
 
 .dark_bg {
-	background-color: black;
-	opacity:0.85;
-	z-index: 100;
-	height: 100%;
-	width: 100%;
-	background-repeat:repeat;
-	position:fixed;
-	top: 0px;
-	left: 0px;
-	cursor:not-allowed;
+    opacity:0.85;
+    z-index: 100;
+    height: 100%;
+    width: 100%;
+    background: black repeat;
+    position:fixed;
+    top: 0;
+    left: 0;
+    cursor:not-allowed;
 }
 
 
 .default_style {
-	display:inline;
-	font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
-  	font-size:11px;
-	border-radius: 5px;
-	padding: 0;
-	margin: 0;
+    display:inline;
+    font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size:11px;
+    border-radius: 5px;
+    padding: 0;
+    margin: 0;
 }
 
 
 .dialog {
-	position:absolute;
-	padding:0px 20px 20px;
-	max-height:100%;
-	max-width:100%;
-	z-index: 30;			  
-	background-color: whitesmoke;
-	border:2px solid crimson;
-	border-radius: 5px;
-	overflow-x:hidden;
-	overflow-y:auto;
+    position:absolute;
+    padding:0 20px 20px;
+    max-height:100%;
+    max-width:100%;
+    z-index: 30;
+    background-color: whitesmoke;
+    border:2px solid crimson;
+    border-radius: 5px;
+    overflow-x:hidden;
+    overflow-y:auto;
 }
 
 .dialog_title {
-	padding: 10px;
-	font-style: italic;
-	font-weight: bold;
+    padding: 10px;
+    font-style: italic;
+    font-weight: bold;
 }
 
 
 
 .dim_bg {
-	background-color: lavender;
-	opacity:0.30;
-	z-index: 20;
-	height: 100%;
-	width: 100%;
-	background-repeat:repeat;
-	position:fixed;
-	top: 0px;
-	left: 0px;
-	cursor:not-allowed;
+    opacity:0.30;
+    z-index: 20;
+    height: 100%;
+    width: 100%;
+    background: lavender repeat;
+    position:fixed;
+    top: 0;
+    left: 0;
+    cursor:not-allowed;
 }
 
 
 .disabled_link {
-	pointer-events:none;
-	color:grey;
-	cursor:not-allowed;
+    pointer-events:none;
+    color:grey;
+    cursor:not-allowed;
 }
 
 .dock {
-	position:absolute; 
-	top:5px;
-	left:5px;
-	z-index:10;
-	overflow: auto;
+    position:absolute;
+    top:5px;
+    left:5px;
+    z-index:10;
+    overflow: auto;
 }
 .disabled_dock {
-	opacity:0.5;
-	z-index:-1;
+    opacity:0.5;
+    z-index:-1;
 }
 
 
 .droppable {
-	background-color: chartreuse !important ;
-	border: 1px dashed black !important;
-	opacity: 0.5 !important;
+    background-color: chartreuse !important ;
+    border: 1px dashed black !important;
+    opacity: 0.5 !important;
 }
 
 .dropzone {
-	width:200px;
-	height:50px;
-	background-color: lightblue;
-	background-repeat: no-repeat;
-	background-position: center center;
-	padding:10px;
-	border: 1px solid black;
-	border-radius:10px;
-	opacity:0.75
+    width:200px;
+    height:50px;
+    background: lightblue no-repeat center center;
+    padding:10px;
+    border: 1px solid black;
+    border-radius:10px;
+    opacity:0.75
 }
 
 
 .empty_icon {
-	opacity:0;
-	cursor:pointer;
+    opacity:0;
+    cursor:pointer;
 }
 
 
 .enabled_link {
-	color:indianred;
-	cursor:pointer;
+    color:indianred;
+    cursor:pointer;
 }
 
 
 .error{
-	color:crimson;
+    color:crimson;
 }
 
 
 .fileb_icon {
-	padding:5px;	
-	opacity:0.75;
-	display: inline-block;
-	text-align: left;
+    padding:5px;
+    opacity:0.75;
+    display: inline-block;
+    text-align: left;
 }
 .fileb_icon:hover {
-	opacity:1;
+    opacity:1;
 }
 .fileb_icon_selected {
-	padding:5px;	
-	opacity:1;
-	display: inline-block;
-	text-align: left;
-	border-radius:8px;	
-	background:lightBlue;
+    padding:5px;
+    opacity:1;
+    display: inline-block;
+    text-align: left;
+    border-radius:8px;
+    background:lightBlue;
 }
 
 
 .fileb_pane {
-	padding:3px;
-	border:1px solid black;
-	border-radius: 5px;
-	background-color: white;
-	height: 300px;
-	overflow:auto;			
+    padding:3px;
+    border:1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    height: 300px;
+    overflow:auto;
 }
 
 
 .footer {
-	position:absolute; 
-	bottom:25px;
-	right:32px;
+    position:absolute;
+    bottom:25px;
+    right:32px;
 }
 
 
 .geometry_ctrls {
-	position:fixed; 
-	padding:2px;
-	background-color: whitesmoke;				
-	border:2px solid crimson;
-	border-radius: 5px;
+    position:fixed;
+    padding:2px;
+    background-color: whitesmoke;
+    border:2px solid crimson;
+    border-radius: 5px;
 }
 
 .geometry_ctrl {
-	opacity:0.75;
-	cursor:pointer;
+    opacity:0.75;
+    cursor:pointer;
 }
 .geometry_ctrl:hover {
-	opacity:1;
+    opacity:1;
 }
 
 
 .header {
-	position:absolute; 
-	top:5px;
-	right:32px;
-	z-index:20;
+    position:absolute;
+    top:5px;
+    right:32px;
+    z-index:20;
 }
 
 
 .login {
-	position:relative;
-	margin: 10% auto;
-	width: 300px;
-	opacity: 1;
-	padding: 10px;
-	z-index: 101;			  
-	background-color: snow;
-	border: 5px solid dodgerblue;
-	border-radius: 10px;
-	overflow-x:hidden;
-	overflow-y:auto;
+    position:relative;
+    margin: 10% auto;
+    width: 300px;
+    opacity: 1;
+    padding: 10px;
+    z-index: 101;
+    background-color: snow;
+    border: 5px solid dodgerblue;
+    border-radius: 10px;
+    overflow-x:hidden;
+    overflow-y:auto;
 }
 
 
 .progress_bar {
-	display: inline-block;
-	border: 1px solid black;
-	border-radius: 10px;
-	height: 10px;
-	width: 100px;
-	margin: 0px 5px;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 10px;
+    width: 100px;
+    margin: 0 5px;
 }
 
 .progress_fill {
-	border-radius: 10px;
-	background-color: crimson;
-	opacity: 0.75;
-	height: 10px;
-	width: 0%;
+    border-radius: 10px;
+    background-color: crimson;
+    opacity: 0.75;
+    height: 10px;
+    width: 0;
 }
 
 
 .toolbar_alt {
-	line-height:32px;	
+    line-height:32px;
 }
 
 .toolbar {
-	padding-top:4px;
-	margin:2px;
-	background-color: whitesmoke ;
-	border-radius: 5px;
-	float:left;
+    padding-top:4px;
+    margin:2px;
+    background-color: whitesmoke ;
+    border-radius: 5px;
+    float:left;
 }
 .toolbar_bm {
-	border:2px solid lightblue;
+    border:2px solid lightblue;
 }
 .toolbar_mm {
-	border:2px solid khaki;
+    border:2px solid khaki;
 }
 
 .toolbar_space {
-	padding-left:4px;
+    padding-left:4px;
 }
 
 .toolbar_button {
-	display: inline-block;
-	opacity:0.75;
-	cursor:pointer;
+    display: inline-block;
+    opacity:0.75;
+    cursor:pointer;
 }
 .toolbar_button:hover {
-	opacity:1;
+    opacity:1;
 }
 .toolbar_button:active {
-	opacity:0.5;
+    opacity:0.5;
 }
 
 
 
 
 .transformation_preview {
-	stroke: crimson;
-	stroke-width:0.5;
-	stroke-dasharray:5,5;
-	fill: lavender;
-	fill-opacity:0.1;
-	cursor:not-allowed;
+    stroke: crimson;
+    stroke-width:0.5;
+    stroke-dasharray:5,5;
+    fill: lavender;
+    fill-opacity:0.1;
+    cursor:not-allowed;
 }
 
 .unselectable {
-	-webkit-user-select:none;
-	-moz-user-select: none;
+    -webkit-user-select:none;
+    -moz-user-select: none;
 }
 
- 
+
 form, p, span {
-	margin:0 auto;
-	padding:0; }
- 
+    margin:0 auto;
+    padding:0; }
+
 input { font:12px arial; }
- 
+
 a {
-	color:#0000FF;
-	text-decoration:none; }
- 
-	a:hover { text-decoration:underline; }
- 
+    color:#0000FF;
+    text-decoration:none; }
+
+a:hover { text-decoration:underline; }
+
 #chat, #loginform {
-  display:none;
-	margin:0 auto;
-	padding-bottom:25px;
-	background:#EBF4FB;
-	width:504px;
-	border:1px solid #ACD8F0; }
- 
+    display:none;
+    margin:0 auto;
+    padding-bottom:25px;
+    background:#EBF4FB;
+    width:504px;
+    border:1px solid #ACD8F0; }
+
 #loginform { padding-top:18px; }
- 
-	#loginform p { margin: 5px; }
- 
+
+#loginform p { margin: 5px; }
+
 #chatbox {
-	text-align:left;
-	margin:0 auto;
-	margin-bottom:25px;
-	padding:10px;
-	background:#fff;
-	height:270px;
-	width:430px;
-	border:1px solid #ACD8F0;
-	overflow:auto; }
- 
+    text-align:left;
+    margin: 0 auto 25px;
+    padding:10px;
+    background:#fff;
+    height:270px;
+    width:430px;
+    border:1px solid #ACD8F0;
+    overflow:auto; }
+
 #usermsg {
-	width:395px;
-	border:1px solid #ACD8F0; }
- 
+    width:395px;
+    border:1px solid #ACD8F0; }
+
 #submit { width: 60px; }
- 
+
 .error { color: #ff0000; }
 
-#menu { padding:12.5px 25px 12.5px 25px; }
- 
+#menu { padding:13px 25px 13px 25px; }
+
 .welcome { float:left; }
- 
+
 .logout { float:right; }
- 
+
 .msgln { margin:0 0 2px 0; }
