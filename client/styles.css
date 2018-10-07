@@ -161,12 +161,18 @@ html {
     margin: 0;
 }
 
+.center_point {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+}
 
 .dialog {
-    position:absolute;
+    position:relative;
+    min-height: auto;
+    max-height: 80%;
+    width: 50%;
     padding:0 20px 20px;
-    max-height:100%;
-    max-width:100%;
     z-index: 30;
     background-color: whitesmoke;
     border:2px solid crimson;
