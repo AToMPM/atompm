@@ -49,32 +49,20 @@
 		<script text="text/javascript" src="client/client.js"></script>
 		<script text="text/javascript" src="styleinfo.js"></script>
         <link rel="icon" href="favicon.png">
-		<script>
-			$(document).ready(function(){
-				/**
-				 * Initiate the default Window Event actions
-				 */
-				//WindowEventHelper.initDefault();
-			});
-		</script>
 	</head>
 	<body class="default_style">
-		<div id="rootDiv" class="rootDiv">
-			<div id="commandHistory" class="commandHistory">
-			</div>
-			<!--div id="inputDiv" class="inputDiv">
-				<input placeholder="type 'help' to get information about querying" name="mainInput" type="text" class="mainInput" id="mainInput" onkeyup="InputBarUtils.processKey( event )"/>
-			</div-->
-			<div id="contentDiv" class="contentDiv">
-				<div id="div_container" class="container">
-					<div id="div_canvas" class="canvas"></div>
-				</div>
-				<div class="header" align="right">
-					<a id="a_logout" class="enabled_link unselectable" onclick="UserManagement.logout(); return false;"><b>logout</b></a>
-				</div>
-				<div id="div_dock" class="dock"></div>
-			</div>
-		</div>
+        <div id="rootDiv" class="rootDiv">
+            <div id="contentDiv" class="contentDiv">
+                <div id="div_dock" class="dock"></div>
+
+                <div id="div_container" class="container">
+                    <div id="div_canvas" class="canvas"></div>
+                </div>
+                <div class="header" align="right">
+                    <a id="a_logout" class="enabled_link unselectable" onclick="UserManagement.logout(); return false;"><b>logout</b></a>
+                </div>
+            </div>
+        </div>
 
 		<div class="footer" align="right">
 			<!--a class="enabled_link unselectable" id="showChat" href=
