@@ -15,7 +15,7 @@ class ModelVerseConnector {
         ModelVerseConnector.element_map = {};
 
         ModelVerseConnector.PM2MV_metamodel_map = {
-            "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram" : "formalisms/SimpleClassDiagrams"
+            "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram" : "formalisms/SimpleClassDiagrams",
         };
 
         ModelVerseConnector.MV2PM_metamodel_map = ModelVerseConnector.reverse_dict(ModelVerseConnector.PM2MV_metamodel_map);
@@ -73,7 +73,7 @@ class ModelVerseConnector {
         // console.log("MV MM: " + primary_mm_MV);
 
         if (primary_mm_MV == undefined){
-            WindowManagement.openDialog(_ERROR,'Meta-model may not exist in ModelVerse: "' + primary_mm_PM + '"');
+            //WindowManagement.openDialog(_ERROR,'Meta-model may not exist in ModelVerse: "' + primary_mm_PM + '"');
             //return;
 
             if (primary_mm_PM.startsWith("/")){
@@ -109,17 +109,65 @@ class ModelVerseConnector {
             .then(ModelVerseConnector.get_output)
             .then(function(data){
 
-                let node_creation_promises = [];
+                //find edges
+                //these have srcs and dests in the edge list
+                let edge_map = {};
                 for (const [key, node] of Object.entries(m.nodes)) {
-                    if (node.name == undefined){
+
+                    let src = null;
+                    let dest = null;
+
+                    for (const [edge_key, edge] of Object.entries(m.edges)) {
+
+                        //iterate through each pair of edges
+                        if (edge_key == m.edges.length - 1){
+                            continue;
+                        }
+
+                        //only look at pairs
+                        if (parseInt(edge_key) % 2 == 1){
+                            continue;
+                        }
+
+                        let next_edge = m.edges[parseInt(edge_key) + 1];
+
+                        //see if the links overlap -> this node is an edge
+
+                        if (edge["dest"] == next_edge["src"] && next_edge["src"] == key){
+                            src = edge['src'];
+                            dest = next_edge['dest']
+                        }
+                    }
+
+                    if (src == null || dest == null){
                         continue;
                     }
+
+                    edge_map[key] = [src, dest];
+                }
+
+                let node_creation_promises = [];
+                for (const [key, node] of Object.entries(m.nodes)) {
+                    // if (node.name == undefined){
+                    //     continue;
+                    // }
+
+                    // console.log("Node creation:");
+                    // console.log(node);
 
                     if (!(node.linktype == undefined)){
                         continue;
                     }
 
-                    let node_name = node.name.value;
+                    if (Object.keys(edge_map).includes(key)){
+                        continue;
+                    }
+
+                    let node_name = key;
+                    if (node.name != undefined){
+                        node_name = node.name.value;
+                    }
+
                     let node_type = node.$type.split("/").slice(-1)[0];
 
                     node_creation_promises.push(ModelVerseConnector.send_command(
@@ -127,13 +175,18 @@ class ModelVerseConnector {
                     ));
 
                     let set_id = function (id){
-                        ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
+
+                        if (id.includes("Success")){
+                            ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
+                        }
+
                     };
 
 
                     node_creation_promises.push(ModelVerseConnector.get_output(set_id));
                 }
 
+                //TODO: Only for SimpleClassDiagrams?
                 let simple_type = ["String", "Int", "Float", "Boolean", "Code", "File", "Map", "List", "ENUM"];
                 for (let st of simple_type){
 
@@ -167,46 +220,45 @@ class ModelVerseConnector {
 
                     let edge_creation_promises = [];
                     for (const [key, node] of Object.entries(m.nodes)) {
-                        if (node.name == undefined || node.linktype != undefined) {
 
-                            let node_type = node.$type.split("/").slice(-1)[0];
+                        if (!(Object.keys(edge_map).includes(key))){
+                            continue;
+                        }
 
-                            let node_name = null;
-                            if (node.name != undefined) {
-                                node_name = node.name.value;
-                            }else{
-                                node_name = node_type + key;
+                        // console.log("Creating edge:");
+                        // console.log(node);
+
+                        let node_type = node.$type.split("/").slice(-1)[0];
+
+                        let node_name = null;
+                        if (node.name != undefined) {
+                            node_name = node.name.value;
+                        }else{
+                            node_name = node_type + key;
+                        }
+
+                        let es = edge_map[key][0];
+                        let ed = edge_map[key][1];
+
+                        let src = ModelVerseConnector.element_map[es];
+                        let dest = ModelVerseConnector.element_map[ed];
+
+                        let set_id = function (id){
+                            if (id.includes("Success")){
+                               ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
+
                             }
+                        };
 
 
-
-                            let src = null;
-                            let dest = null;
-
-                            for (const [edge_key, edge] of Object.entries(m.edges)) {
-                                if (edge['src'] == key) {
-                                    let ed = edge['dest'];
-                                    dest = ModelVerseConnector.element_map[ed];
-
-                                } else if (edge['dest'] == key) {
-                                    let es = edge['src'];
-                                    src = ModelVerseConnector.element_map[es];
-                                }
-                            }
-
-                            let set_id = function (id){
-                                ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
-                            };
-
-
+                        if (src != null && dest != null) {
                             edge_creation_promises.push(ModelVerseConnector.send_command(
                                 {"data": utils.jsons(["instantiate_edge", node_type, node_name, src, dest])}
                             ));
                             edge_creation_promises.push(ModelVerseConnector.get_output(set_id));
                         }
-
-
                     }
+
 
                     Promise.all(edge_creation_promises).then(function() {
 
@@ -323,6 +375,11 @@ class ModelVerseConnector {
                 let primary_MV_metamodel = metamodels.split(" ")[1].split(",")[0];
                 let primary_PM_metamodel = ModelVerseConnector.MV2PM_metamodel_map[primary_MV_metamodel];
 
+                if (primary_PM_metamodel == undefined){
+                    console.log("Warning: No metamodel known for " + primary_MV_metamodel);
+                    primary_PM_metamodel = primary_MV_metamodel;
+                }
+
                 console.log("MV MM: " + primary_MV_metamodel);
                 console.log("PM MM: " + primary_PM_metamodel);
 
@@ -398,6 +455,7 @@ class ModelVerseConnector {
                     if (add_properties) {
                         for (let [prop_name, prop_value] of Object.entries(obj)) {
 
+                            console.log(name + " :: " + prop_name + ' = ' + prop_value);
                             if (prop_name.startsWith("__")) {
                                 continue;
                             }
@@ -411,6 +469,10 @@ class ModelVerseConnector {
                             }
 
                             if (prop_name.endsWith("_cardinality")){
+
+                                if (!(Object.keys(model_links_dict).includes(name))){
+                                    continue;
+                                }
 
                                 let dest = undefined;
                                 let lower_upper = prop_name.split("_")[1];
@@ -428,7 +490,7 @@ class ModelVerseConnector {
                                     model_properties[dest] = [];
                                 }
                                 model_properties[dest].push([prop_name, prop_value]);
-                                //console.log(src + " :: " + prop_name + ' = ' + prop_value);
+
                                 continue;
 
                             }
@@ -495,6 +557,9 @@ class ModelVerseConnector {
                     let link_promises = [];
 
                     for (const [obj_type, src, trgt, obj_id] of model_links){
+
+                        console.log("Link:");
+                        console.log(obj_type + " " + src + " " + trgt + " " + obj_id);
 
                         link_promises.push(new Promise(function(resolve, reject) {
                             let source_element = ele_ids[src];
@@ -844,7 +909,7 @@ class ModelVerseConnector {
         //if editing a model, exit it
         if (ModelVerseConnector.curr_model){
             let command = {"data": utils.jsons(["exit"])};
-            this.send_command(command).then(this.get_output)
+            ModelVerseConnector.send_command(command).then(this.get_output)
             .then(function(data){
                 ModelVerseConnector.curr_model = null;
             });
@@ -923,7 +988,11 @@ class ModelVerseConnector {
 
     static load_model(model_name) {
 
+        //TODO: Allow user to choose metamodel
         let metamodel = "formalisms/SimpleClassDiagrams";
+        if (model_name.includes("autotest") && model_name != "autotest/autotest"){
+            metamodel = "autotest/autotest";
+        }
 
         console.log("Loading model: " + model_name);
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
