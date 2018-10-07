@@ -146,6 +146,9 @@ class ModelVerseConnector {
                     edge_map[key] = [src, dest];
                 }
 
+                //for detecting duplications
+                let nodes_names = [];
+
                 let node_creation_promises = [];
                 for (const [key, node] of Object.entries(m.nodes)) {
                     // if (node.name == undefined){
@@ -167,6 +170,11 @@ class ModelVerseConnector {
                     if (node.name != undefined){
                         node_name = node.name.value;
                     }
+
+                    if (nodes_names.includes((node_name))){
+                        node_name += "_" + key;
+                    }
+                    nodes_names.push(node_name);
 
                     let node_type = node.$type.split("/").slice(-1)[0];
 
@@ -263,8 +271,11 @@ class ModelVerseConnector {
                     Promise.all(edge_creation_promises).then(function() {
 
 
-
+                        // Add attributes
+                        console.log("Adding attributes");
                         for (const [key, node] of Object.entries(m.nodes)) {
+
+                            console.log(node);
 
                             let ele = ModelVerseConnector.element_map[key];
                             let node_type = node.$type.split("/").slice(-1)[0];
@@ -276,9 +287,13 @@ class ModelVerseConnector {
                                 attrib_creation_promises.push(ModelVerseConnector.get_output());
                             }
 
-                            if (node.name != undefined && node_type != "GlobalConstraint"){
+                            for (const [attrib_key, attrib_value] of Object.entries(node)){
+                                if (attrib_key.startsWith("__") || attrib_value.value == undefined){
+                                    continue;
+                                }
+
                                 attrib_creation_promises.push(ModelVerseConnector.send_command(
-                                    {"data": utils.jsons(["attr_add", ele, "name", node.name.value])}
+                                    {"data": utils.jsons(["attr_add", ele, attrib_key, attrib_value.value])}
                                 ));
                                 attrib_creation_promises.push(ModelVerseConnector.get_output());
                             }
@@ -414,10 +429,10 @@ class ModelVerseConnector {
                 for (const obj of Object.values(AS)) {
                     let obj_type = obj["__type"];
 
-                    let name = obj["name"];
-                    if (name == undefined){
-                        name = obj_type;
-                    }
+                    let name = obj["__id"];
+                    // if (name == undefined){
+                    //     name = obj["name"];
+                    // }
 
                     if (obj_type == "SimpleAttribute"){
                         model_attrib_types.push(name);
@@ -429,7 +444,7 @@ class ModelVerseConnector {
 
                     let add_properties = true;
 
-                    //console.log("obj " + obj_type + " " + name + " = " + src + " - " + trgt);
+                    // console.log("obj " + obj_type + " " + name + " = " + src + " - " + trgt);
 
                     if (src == undefined && trgt == undefined){
                         model_elements.push([name, obj_type]);
@@ -455,7 +470,7 @@ class ModelVerseConnector {
                     if (add_properties) {
                         for (let [prop_name, prop_value] of Object.entries(obj)) {
 
-                            console.log(name + " :: " + prop_name + ' = ' + prop_value);
+                            // console.log(name + " :: " + prop_name + ' = ' + prop_value);
                             if (prop_name.startsWith("__")) {
                                 continue;
                             }
@@ -558,8 +573,8 @@ class ModelVerseConnector {
 
                     for (const [obj_type, src, trgt, obj_id] of model_links){
 
-                        console.log("Link:");
-                        console.log(obj_type + " " + src + " " + trgt + " " + obj_id);
+                        // console.log("Link:");
+                        // console.log(obj_type + " " + src + " " + trgt + " " + obj_id);
 
                         link_promises.push(new Promise(function(resolve, reject) {
                             let source_element = ele_ids[src];
@@ -591,7 +606,9 @@ class ModelVerseConnector {
                                 resolve();
                             };
 
-                            console.log(connectionType);
+                            console.log("Building " + connectionType + " between "
+                                + source_element + " (" + src + ") and " + target_element + " (" + trgt + ")");
+
                             HttpUtils.httpReq(
                                 'POST',
                                 HttpUtils.url(connectionType, __NO_USERNAME),
