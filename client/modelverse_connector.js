@@ -9,7 +9,24 @@ class ModelVerseConnector {
         ModelVerseConnector.WORKING = 1;
         ModelVerseConnector.OKAY = 2;
 
+        ModelVerseConnector.connected = true;
+
         ModelVerseConnector.curr_model = null;
+        ModelVerseConnector.element_map = {};
+
+        ModelVerseConnector.PM2MV_metamodel_map = {
+            "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram" : "formalisms/SimpleClassDiagrams",
+        };
+
+        ModelVerseConnector.MV2PM_metamodel_map = ModelVerseConnector.reverse_dict(ModelVerseConnector.PM2MV_metamodel_map);
+    }
+
+    static reverse_dict(dict){
+      let ret = {};
+      for(let key of Object.keys(dict)){
+        ret[dict[key]] = key;
+      }
+      return ret;
     }
 
 
@@ -30,188 +47,696 @@ class ModelVerseConnector {
         set_colour(colours[status]);
     }
 
-     static load_MV_model(AS, CS) {
+    static save_model(model_name, data){
+
+        ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
+
+
+
+        console.log("Save model: " + model_name);
+
+        let parsed_data = JSON.parse(data);
+        // console.log(parsed_data);
+        let m = JSON.parse(parsed_data['data']['m']);
+        let mms = JSON.parse(parsed_data['data']['mms']);
+
+        //detect the metamodels
+        if (Object.keys(mms).length > 1){
+            console.log("Warning: More than one meta-model detected!")
+        }
+
+        let primary_mm_PM = Object.keys(mms)[0];
+        let primary_mm_MV = ModelVerseConnector.PM2MV_metamodel_map[primary_mm_PM];
+
+        //TODO: Allow user to select meta-model when it is not found
+        // console.log("MV PM: " + primary_mm_PM);
+        // console.log("MV MM: " + primary_mm_MV);
+
+        if (primary_mm_MV == undefined){
+            //WindowManagement.openDialog(_ERROR,'Meta-model may not exist in ModelVerse: "' + primary_mm_PM + '"');
+            //return;
+
+            if (primary_mm_PM.startsWith("/")){
+                primary_mm_PM = primary_mm_PM.slice(1);
+            }
+
+            primary_mm_MV = primary_mm_PM;
+        }
+
+        let model_delete = {
+            "data": utils.jsons(["model_delete", model_name])
+        };
+        let model_create = {
+            "data": utils.jsons(["model_add", primary_mm_MV, model_name, ""])
+        };
+
+        let model_edit = {
+            "data": utils.jsons(["model_modify", model_name, primary_mm_MV])
+        };
+
+        ModelVerseConnector.curr_model = model_name;
+
+        ModelVerseConnector.send_command(model_create)
+            .then(ModelVerseConnector.get_output)
+            .then(function (data) {
+                if (data.includes("Model not found")){
+                    ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
+                    WindowManagement.openDialog(_ERROR,data);
+                    return;
+                }
+            })
+            .then(ModelVerseConnector.send_command(model_edit))
+            .then(ModelVerseConnector.get_output)
+            .then(function(data){
+
+                //find edges
+                //these have srcs and dests in the edge list
+                let edge_map = {};
+                for (const [key, node] of Object.entries(m.nodes)) {
+
+                    let src = null;
+                    let dest = null;
+
+                    for (const [edge_key, edge] of Object.entries(m.edges)) {
+
+                        //iterate through each pair of edges
+                        if (edge_key == m.edges.length - 1){
+                            continue;
+                        }
+
+                        //only look at pairs
+                        if (parseInt(edge_key) % 2 == 1){
+                            continue;
+                        }
+
+                        let next_edge = m.edges[parseInt(edge_key) + 1];
+
+                        //see if the links overlap -> this node is an edge
+
+                        if (edge["dest"] == next_edge["src"] && next_edge["src"] == key){
+                            src = edge['src'];
+                            dest = next_edge['dest']
+                        }
+                    }
+
+                    if (src == null || dest == null){
+                        continue;
+                    }
+
+                    edge_map[key] = [src, dest];
+                }
+
+                //for detecting duplications
+                let nodes_names = [];
+
+                let node_creation_promises = [];
+                for (const [key, node] of Object.entries(m.nodes)) {
+                    // if (node.name == undefined){
+                    //     continue;
+                    // }
+
+                    // console.log("Node creation:");
+                    // console.log(node);
+
+                    if (!(node.linktype == undefined)){
+                        continue;
+                    }
+
+                    if (Object.keys(edge_map).includes(key)){
+                        continue;
+                    }
+
+                    let node_name = key;
+                    if (node.name != undefined){
+                        node_name = node.name.value;
+                    }
+
+                    if (nodes_names.includes((node_name))){
+                        node_name += "_" + key;
+                    }
+                    nodes_names.push(node_name);
+
+                    let node_type = node.$type.split("/").slice(-1)[0];
+
+                    node_creation_promises.push(ModelVerseConnector.send_command(
+                        {"data": utils.jsons(["instantiate_node", node_type, node_name])}
+                    ));
+
+                    let set_id = function (id){
+
+                        if (id.includes("Success")){
+                            ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
+                        }
+
+                    };
+
+
+                    node_creation_promises.push(ModelVerseConnector.get_output(set_id));
+                }
+
+                //TODO: Only for SimpleClassDiagrams?
+                let simple_type = ["String", "Int", "Float", "Boolean", "Code", "File", "Map", "List", "ENUM"];
+                for (let st of simple_type){
+
+                    node_creation_promises.push(ModelVerseConnector.send_command(
+                        {"data": utils.jsons(["instantiate_node", "SimpleAttribute", st])}
+                    ));
+                    node_creation_promises.push(ModelVerseConnector.get_output());
+                }
+
+                //get cardinalities
+                let card_dict = {};
+                let attrib_creation_promises = [];
+                // console.log("Cardinalities");
+                for (const [key, node] of Object.entries(m.nodes)) {
+
+                    if (node.cardinalities == undefined || node.cardinalities.value.length == 0){
+                        continue;
+                    }
+
+                    //console.log(node);
+                    for (const card of node.cardinalities.value){
+                        //console.log(card);
+                        let cardname = card["type"] + card["dir"];
+
+                        card_dict[cardname] = [card["min"], card["max"]];
+                        // console.log(card_dict);
+                    }
+                }
+
+                Promise.all(node_creation_promises).then( function(){
+
+                    let edge_creation_promises = [];
+                    for (const [key, node] of Object.entries(m.nodes)) {
+
+                        if (!(Object.keys(edge_map).includes(key))){
+                            continue;
+                        }
+
+                        // console.log("Creating edge:");
+                        // console.log(node);
+
+                        let node_type = node.$type.split("/").slice(-1)[0];
+
+                        let node_name = null;
+                        if (node.name != undefined) {
+                            node_name = node.name.value;
+                        }else{
+                            node_name = node_type + key;
+                        }
+
+                        let es = edge_map[key][0];
+                        let ed = edge_map[key][1];
+
+                        let src = ModelVerseConnector.element_map[es];
+                        let dest = ModelVerseConnector.element_map[ed];
+
+                        let set_id = function (id){
+                            if (id.includes("Success")){
+                               ModelVerseConnector.element_map[key] = id.split(" ")[1].replace("\"", "");
+
+                            }
+                        };
+
+
+                        if (src != null && dest != null) {
+                            edge_creation_promises.push(ModelVerseConnector.send_command(
+                                {"data": utils.jsons(["instantiate_edge", node_type, node_name, src, dest])}
+                            ));
+                            edge_creation_promises.push(ModelVerseConnector.get_output(set_id));
+                        }
+                    }
+
+
+                    Promise.all(edge_creation_promises).then(function() {
+
+
+                        // Add attributes
+                        console.log("Adding attributes");
+                        for (const [key, node] of Object.entries(m.nodes)) {
+
+                            console.log(node);
+
+                            let ele = ModelVerseConnector.element_map[key];
+                            let node_type = node.$type.split("/").slice(-1)[0];
+
+                            if (node.abstract != undefined && node.abstract.value){
+                                attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                    {"data": utils.jsons(["attr_add", ele, "abstract", true])}
+                                ));
+                                attrib_creation_promises.push(ModelVerseConnector.get_output());
+                            }
+
+                            for (const [attrib_key, attrib_value] of Object.entries(node)){
+                                if (attrib_key.startsWith("__") || attrib_value.value == undefined){
+                                    continue;
+                                }
+
+                                attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                    {"data": utils.jsons(["attr_add", ele, attrib_key, attrib_value.value])}
+                                ));
+                                attrib_creation_promises.push(ModelVerseConnector.get_output());
+                            }
+
+                            if (node.name != undefined){
+
+                                // console.log(Object.keys(card_dict));
+                                let src_card = card_dict[node.name.value + "out"];
+                                let trgt_card = card_dict[node.name.value + "in"];
+
+                                // console.log("Src:");
+                                // console.log(src_card);
+
+                                if (src_card != undefined){
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["attr_add", ele, "source_lower_cardinality", src_card[0]])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["attr_add", ele, "source_upper_cardinality", src_card[1]])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+                                }
+
+                                // console.log("Trgt:");
+                                // console.log(trgt_card);
+
+                                if (trgt_card != undefined){
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["attr_add", ele, "target_lower_cardinality", trgt_card[0]])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["attr_add", ele, "target_upper_cardinality", trgt_card[1]])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+                                }
+                            }
+
+
+
+                            if (node.attributes != undefined) {
+                                //console.log(node);
+                                for (const [key, attrib] of Object.entries(node.attributes.value)) {
+                                    //console.log(attrib);
+                                    let type = attrib.type[0].toUpperCase() + attrib.type.substring(1);
+
+                                    if (type.startsWith("ENUM")){
+                                        type = "ENUM";
+                                    }
+                                    type = type.split("<")[0];
+
+                                    attrib_creation_promises.push(ModelVerseConnector.send_command(
+                                        {"data": utils.jsons(["define_attribute", ele, attrib.name, type])}
+                                    ));
+                                    attrib_creation_promises.push(ModelVerseConnector.get_output());
+                                }
+                            }
+
+
+                        }
+
+
+
+
+
+
+
+
+                        ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
+                    });
+
+
+
+
+                });
+
+
+            });
+
+
+    }
+
+     static load_MV_model(metamodels, AS) {
         return new Promise(
             function (resolve, reject) {
 
                 console.log("Load MV Model");
                 console.log(AS);
-                console.log(CS);
+                console.log(metamodels);
 
-                let metamodel = "Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons.metamodel";
+                let primary_MV_metamodel = metamodels.split(" ")[1].split(",")[0];
+                let primary_PM_metamodel = ModelVerseConnector.MV2PM_metamodel_map[primary_MV_metamodel];
+
+                if (primary_PM_metamodel == undefined){
+                    console.log("Warning: No metamodel known for " + primary_MV_metamodel);
+                    primary_PM_metamodel = primary_MV_metamodel;
+                }
+
+                console.log("MV MM: " + primary_MV_metamodel);
+                console.log("PM MM: " + primary_PM_metamodel);
+
+                let csmetamodel = ".defaultIcons";
+
+                //this concrete syntax is better
+                if (primary_MV_metamodel == "formalisms/SimpleClassDiagrams"){
+                    csmetamodel = ".umlIcons";
+                }
+
+                let metamodel = primary_PM_metamodel + csmetamodel + ".metamodel";
 
 
-                let class_type = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/ClassIcon";
 
                 DataUtils.loadmm(metamodel,
                     function(){
                         console.log("Metamodel loaded: " + metamodel);
                     });
 
-                let model_classes = [];
-                let model_associations = [];
-                let model_inheris = [];
+
+
+                let model_elements = [];
+                let model_links = [];
+                let model_links_dict = {};
+
+                let model_attrib_types = [];
                 let model_attribs = {};
 
-                for (let i in AS) {
-                    let obj = AS[i];
+                //class name, etc.
+                let model_properties = {};
+
+                for (const obj of Object.values(AS)) {
                     let obj_type = obj["__type"];
 
-                    if (obj_type == "Class") {
-                        model_classes.push(obj["__id"]);
+                    let name = obj["__id"];
+                    // if (name == undefined){
+                    //     name = obj["name"];
+                    // }
 
-                    }else if (obj_type == "Association"){
-                        model_associations.push([obj["__source"], obj["__target"], obj["__id"]]);
-
-                    }else if (obj_type == "Inheritance"){
-                        model_inheris.push([obj["__source"], obj["__target"]]);
-
-                    }else if (obj_type == "AttributeLink") {
-                        if (model_attribs[obj["__source"]] == undefined){
-                            model_attribs[obj["__source"]] = [];
-                        }
-                        model_attribs[obj["__source"]].push([obj["__target"], obj["__id"]]);
-                    }
-
-                }
-
-
-                let class_locs = {};
-
-                for (const cs_ele of CS){
-                    if (!(cs_ele["__type"] == "Group")){
+                    if (obj_type == "SimpleAttribute"){
+                        model_attrib_types.push(name);
                         continue;
                     }
 
-                    let asid = cs_ele["__asid"];
-                    let pos = [cs_ele["x"], cs_ele["y"]];
+                    let src = obj["__source"];
+                    let trgt =  obj["__target"];
 
-                    class_locs[asid] = pos;
+                    let add_properties = true;
+
+                    // console.log("obj " + obj_type + " " + name + " = " + src + " - " + trgt);
+
+                    if (src == undefined && trgt == undefined){
+                        model_elements.push([name, obj_type]);
+                    }else{
+
+                        if (obj_type == "AttributeLink"){//model_attrib_types.includes(trgt)){
+
+                            if (model_attribs[src] == undefined){
+                                model_attribs[src] = [];
+                            }
+
+                            model_attribs[src].push([name, trgt]);
+
+                            add_properties = false;
+
+                        }else{
+                            model_links.push([obj_type, src, trgt, obj["__id"]]);
+                            model_links_dict[obj["__id"]] = [src, trgt];
+                        }
+
+                    }
+
+                    if (add_properties) {
+                        for (let [prop_name, prop_value] of Object.entries(obj)) {
+
+                            // console.log(name + " :: " + prop_name + ' = ' + prop_value);
+                            if (prop_name.startsWith("__")) {
+                                continue;
+                            }
+
+                            if (prop_value == null){
+                                continue;
+                            }
+
+                            if (model_properties[name] == undefined) {
+                                model_properties[name] = [];
+                            }
+
+                            if (prop_name.endsWith("_cardinality")){
+
+                                if (!(Object.keys(model_links_dict).includes(name))){
+                                    continue;
+                                }
+
+                                let dest = undefined;
+                                let lower_upper = prop_name.split("_")[1];
+                                lower_upper = (lower_upper == "lower")? "min":"max";
+
+                                if (prop_name.startsWith("source")){
+                                    dest = model_links_dict[name][0];
+                                    prop_name = "cardinality_" + lower_upper + "_" + name + "_out_";
+                                }else if (prop_name.startsWith("target")){
+                                    dest = model_links_dict[name][1];
+                                    prop_name = "cardinality_" + lower_upper + "_" + name + "_in_";
+                                }
+
+                                if (model_properties[dest] == undefined) {
+                                    model_properties[dest] = [];
+                                }
+                                model_properties[dest].push([prop_name, prop_value]);
+
+                                continue;
+
+                            }
+
+                            // console.log(name + " :: " + prop_name + ' = ' + prop_value);
+                            model_properties[name].push([prop_name, prop_value]);
+                        }
+                    }
+
                 }
 
                 let ele_ids = {};
 
 
-                __typeToCreate = class_type;
+                //TODO: Replace with better layout
+                let start_x = 100;
+                let start_y = 100;
 
-                let map_promises = [];
-                for (const id of model_classes){
+                let x_offset = 250;
+                let max_x = 4;
 
-                    map_promises.push(new Promise(function(resolve, reject){
+                let y_offset = 200;
+
+                let i = 0;
+
+                let element_promises = [];
+                for (const [name, obj_type] of model_elements){
+
+                    let class_type = primary_PM_metamodel + csmetamodel + "/" + obj_type + "Icon";
+                    __typeToCreate = class_type;
+
+                    element_promises.push(new Promise(function(resolve, reject){
                         let updateClass =
 
                             function(status, resp){
 
+                                if (Math.floor(status / 100) != 2){
+                                    resolve();
+                                    return;
+                                }
+                                // console.log(status);
+                                // console.log(resp);
                                 let data = JSON.parse(resp);
 
                                 let uri = class_type + "/" + data["data"] + ".instance";
-                                ele_ids[id] = uri;
+                                ele_ids[name] = uri;
 
-                                let changes = {"name": id};
-
-                                if (model_attribs[id] != undefined){
-                                    let attrib_changes = [];
-
-                                    for (let attrib of model_attribs[id]){
-                                        //console.log(attrib);
-
-                                        let attrib_change = {
-                                            "name": attrib[1],
-                                            "type" : attrib[0]
-                                        };
-                                        attrib_changes.push(attrib_change);
-                                    }
-                                    changes["attributes"] = attrib_changes;
-                                }
-
-                                DataUtils.update(uri, changes);
                                 resolve();
                             };
 
 
-                        let pos = class_locs[id];
-                        if (pos == undefined || pos == null){
-                            pos = [100, 100];
-                        }
+                        let x_pos = start_x + Math.floor(i % max_x) * x_offset;
+                        let y_pos = start_y + Math.floor(i / max_x) * y_offset;
 
-                        let vert_offset = 200;
-                        DataUtils.create(pos[0], pos[1] + vert_offset, updateClass);
+                        DataUtils.create(x_pos, y_pos, updateClass);
+                        i +=1;
                     }));
                 }
 
-                Promise.all(map_promises).then(function(){
+                Promise.all(element_promises).then(function(){
 
-                    for (const inheri of model_inheris){
-                        let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/InheritanceLink.type";
+                    console.log("Starting link promises");
 
-                        let source = ele_ids[inheri[0]];
-                        let target = ele_ids[inheri[1]];
+                    let link_promises = [];
 
-                        if (source == undefined || target == undefined){
-                            console.log("ERROR: Can't create inheritance between " + inheri[0] + " and " + inheri[1]);
-                            continue;
-                        }
+                    for (const [obj_type, src, trgt, obj_id] of model_links){
 
-                        HttpUtils.httpReq(
-                             'POST',
-                             HttpUtils.url(connectionType,__NO_USERNAME),
-                             {'src':source,
-                              'dest':target,
-                              'pos':undefined,
-                              'segments':undefined});
+                        // console.log("Link:");
+                        // console.log(obj_type + " " + src + " " + trgt + " " + obj_id);
 
-                    }
+                        link_promises.push(new Promise(function(resolve, reject) {
+                            let source_element = ele_ids[src];
+                            let target_element = ele_ids[trgt];
 
-                })
-                .then(function(){
-                    let assoc_create_promises = [];
+                            //skip attribute links
+                            if (obj_type == "AttributeLink"){
+                                resolve();
+                                return;
+                            }
 
-                    for (const assoc of model_associations){
+                            if (source_element == undefined || target_element == undefined) {
+                                console.log("ERROR: Can't create link '" + obj_type + "' between " + src + " and " + trgt);
+                                resolve();
+                                return;
+                            }
 
-                        assoc_create_promises.push(new Promise(function(resolve, reject){
-                        let connectionType = "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons/AssociationLink.type";
+                            let connectionType = primary_PM_metamodel + csmetamodel + "/" + obj_type + "Link.type";
 
-                        let source = ele_ids[assoc[0]];
-                        let target = ele_ids[assoc[1]];
+                            let link_create_callback = function(status, resp){
+                                // console.log(status);
+                                // console.log(resp);
+                                let id = JSON.parse(resp)["data"];
+                                let assoc_id = connectionType.replace(".type", "/") + id + ".instance";
 
-                        if (source == undefined || target == undefined){
-                            console.log("ERROR: Can't create association between " + assoc[0] + " and " + assoc[1]);
-                            resolve();
-                        }
+                                // console.log(obj_id + " = " + assoc_id);
+                                ele_ids[obj_id] = assoc_id;
 
-                        let assoc_create_callback = function(status, resp){
-                            let id = JSON.parse(resp)["data"];
-                            let assoc_id = connectionType.replace(".type", "/") + id + ".instance";
-                            ele_ids[assoc[2]] = assoc_id;
+                                resolve();
+                            };
 
-                            resolve();
-                        };
+                            console.log("Building " + connectionType + " between "
+                                + source_element + " (" + src + ") and " + target_element + " (" + trgt + ")");
 
-                        HttpUtils.httpReq(
-                             'POST',
-                             HttpUtils.url(connectionType,__NO_USERNAME),
-                             {'src':source,
-                              'dest':target,
-                              'pos':undefined,
-                              'segments':undefined},
-                            assoc_create_callback);
+                            HttpUtils.httpReq(
+                                'POST',
+                                HttpUtils.url(connectionType, __NO_USERNAME),
+                                {
+                                    'src': source_element,
+                                    'dest': target_element,
+                                    'pos': undefined,
+                                    'segments': undefined
+                                },
+                                link_create_callback);
+
                         }));
 
                     }
 
-                    Promise.all(assoc_create_promises).then(function(){
-                        for (const assoc of model_associations){
-                            let uri = ele_ids[assoc[2]];
-                            let changes = {"name" : assoc[2]};
+                    Promise.all(link_promises).then(function(){
 
-                            console.log("Updating " + uri);
+                        console.log("Start properties");
+                        for (const [ele, properties] of Object.entries(model_properties)) {
 
+                            let uri = ele_ids[ele];
+
+                            if (uri == undefined) {
+                                console.log("Uri not found for element: " + ele);
+                                continue;
+                            }
+
+                            // console.log("Element: " + ele + " = uri: " + uri);
+
+                            let changes = {};
+
+                            let cardinalities = [];
+                            let card_dict = {};
+
+                            for (const [key, value] of Object.entries(properties)) {
+                                // console.log(value[0] + " = ");
+                                // console.log(value[1]);
+
+                                //TODO: Fix this
+                                if (value[0].includes("constraint")) {
+                                    continue;
+                                }
+
+                                if (value[0].startsWith("cardinality")) {
+
+                                    let minmax = value[0].split("_")[1];
+                                    let assoc_name = value[0].split("_")[2];
+                                    let dir = value[0].split("_")[3];
+
+                                    // console.log("Card:");
+                                    // console.log(minmax + " " + assoc_name + " " + dir);
+
+                                    let found_card = false;
+
+                                    for (let [key, existing_card] of Object.entries(cardinalities)){
+                                        if (existing_card["type"] == assoc_name){
+                                            found_card = true;
+                                            cardinalities[key][minmax] = value[1];
+                                        }
+                                    }
+
+                                    if (!found_card)
+                                    {
+                                        let new_card = {
+                                            "dir" : dir,
+                                            "type" : assoc_name
+                                        };
+                                        new_card[minmax] = value[1];
+                                        cardinalities.push(new_card);
+                                    }
+                                }else {
+                                    //all other properties
+                                    changes[value[0]] = value[1];
+                                }
+                            }
+
+                            if (cardinalities.length > 0) {
+                                changes["cardinalities"] = cardinalities;
+                            }
                             DataUtils.update(uri, changes);
+
                         }
+
+
+                        console.log("Start attributes");
+
+                        for (const [ele, attributes] of Object.entries(model_attribs)){
+
+                            let uri = ele_ids[ele];
+
+                            if (uri == undefined){
+                                console.log("Uri not found for element: " + ele);
+                                continue;
+                            }
+
+                            let attrib_changes = [];
+
+                            // console.log("Element: " + ele + " = uri: " + uri);
+
+                            for (const[key, value] of attributes){
+                                //TODO: Make attributes valid PM types
+
+                                let pm_value = value.toLowerCase();
+                                if (pm_value == "natural" || pm_value == "integer"){
+                                    pm_value = "int";
+                                }
+
+                                // console.log(key + " = " + pm_value);
+
+                                let attrib_change = {
+                                        "name": key,
+                                        "type" : pm_value
+                                };
+                                attrib_changes.push(attrib_change);
+
+                            }
+
+                            DataUtils.update(uri, {"attributes" : attrib_changes});
+
+                        }
+
+
+
+
                     });
 
-
                 });
+
 
 
                 resolve();
@@ -259,12 +784,16 @@ class ModelVerseConnector {
             });
     }
 
-    static get_output() {
+    static get_output(clbk) {
         return new Promise(
             function (resolve, reject) {
                 let callback = function (status, resp) {
                     if (utils.isHttpSuccessCode(status)) {
                         console.log("get_output Resolve: " + resp);
+
+                        if (clbk != undefined && typeof clbk == "function"){
+                            clbk(resp);
+                        }
 
                         resolve(resp);
                     } else {
@@ -378,38 +907,87 @@ class ModelVerseConnector {
     }
 
 
-    static choose_model(){
+    static choose_model(status, model_to_save){
 
         console.log("Choosing model: ");
+
+        if (status != undefined && status != 200){
+            ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
+            return;
+        };
+
+        let loading_mode = (model_to_save == undefined);
 
         let folders = [""];
         let files = [];
 
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
 
+        //if editing a model, exit it
         if (ModelVerseConnector.curr_model){
-            let command = {"data": utils.jsons(["drop"])};
-            this.send_command(command).then(this.get_output)
+            let command = {"data": utils.jsons(["exit"])};
+            ModelVerseConnector.send_command(command).then(this.get_output)
             .then(function(data){
-                //console.log(command);
-                //console.log(data);
-
                 ModelVerseConnector.curr_model = null;
             });
         }
 
 
         let startDir = "/";
-        let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, false, __getRecentDir(startDir));
+        let fileb = FileBrowser.getFileBrowser(ModelVerseConnector.get_files_in_folder, false, !loading_mode, startDir);
         let feedback = GUIUtils.getTextSpan('', "feedback");
         let title = "ModelVerse Explorer";
 
         let callback = function (filenames) {
-            ModelVerseConnector.load_model(filenames[0]);
+
+            //fix slashes on filename
+            // if (filenames[0].endsWith("/")){
+            //     filenames[0] = filenames[0].slice(0, -1);
+            // }
+
+            if (filenames[0].startsWith("/")){
+                filenames[0] = filenames[0].slice(1);
+            }
+
+            if (loading_mode) {
+                ModelVerseConnector.load_model(filenames[0]);
+            }else{
+                ModelVerseConnector.save_model(filenames[0], model_to_save);
+            }
         };
 
+        let folder_buttons = $('<div>');
+        let new_folder_b = $('<button>');
+        new_folder_b.attr('id', 'new_folder')
+            .html('new folder')
+            .click(function (ev) {
+                let folder_name = prompt("please fill in a name for the folder");
+                if (folder_name == null) {
+                    return;
+                }
+                folder_name = folder_name.replace(/^\s+|\s+$/g, ''); // trim
+                if (!folder_name.match(/^[a-zA-Z0-9_\s]+$/i)) {
+                    feedback.html("invalid folder name: " + folder_name);
+                } else {
+                    let full_folder_name = fileb['getcurrfolder']() + folder_name;
+                    console.log("Creating: " + full_folder_name);
+
+                    let mk_folder_command = {
+                        "data": utils.jsons(["folder_create", full_folder_name])
+                    };
+
+                    ModelVerseConnector.send_command(mk_folder_command).then(ModelVerseConnector.get_output)
+                    .then(function (data) {
+                        console.log("Got data: " + data);
+                    });
+
+                }
+
+            });
+        folder_buttons.append(new_folder_b);
+
         GUIUtils.setupAndShowDialog(
-                    [fileb['filebrowser'], null, null, feedback],
+                    [fileb['filebrowser'], loading_mode?null:folder_buttons, null, feedback],
                     function () {
                         let value = [fileb['getselection']()];
                         if (value.length > 0 && value[0] != "" && startDir) {
@@ -425,53 +1003,21 @@ class ModelVerseConnector {
 
     }
 
-    static load_model(filename) {
+    static load_model(model_name) {
 
-        let model_name = filename;
+        //TODO: Allow user to choose metamodel
         let metamodel = "formalisms/SimpleClassDiagrams";
-
-        //fix slashes on filename
-        if (model_name.endsWith("/")){
-            model_name = model_name.slice(0, -1);
+        if (model_name.includes("autotest") && model_name != "autotest/autotest"){
+            metamodel = "autotest/autotest";
         }
-
-        if (model_name.startsWith("/")){
-            model_name = model_name.slice(1);
-        }
-
 
         console.log("Loading model: " + model_name);
         ModelVerseConnector.set_status(ModelVerseConnector.WORKING);
-        ModelVerseConnector.curr_model = filename;
+        ModelVerseConnector.curr_model = model_name;
 
-
-
-
-
-
-        //get CS for model
-        let SCD = "formalisms/SimpleClassDiagrams";
-        let MM_render = "formalisms/SCD_graphical";
-        let render_trans_model = "models/render_SCD";
-        let render_MM = this.get_render_mm();
-        let render_trans_code = this.get_render_trans();
-        let render_model_add = {
-            'data': encodeURIComponent(utils.jsons(["model_add", SCD, MM_render, render_MM]))};
-
-        let transformation_between = {
-            'data' : encodeURIComponent(utils.jsons(["transformation_add_AL", "rendered", MM_render, "abstract", SCD, "", "rendered", MM_render, "", render_trans_model]))
-        };
-
-        let transformation_data = {
-            'data' : encodeURIComponent(utils.jsons(["transformation_add_AL", render_trans_code]))
-        };
-
-        let model_rendered = {
-            'data' : encodeURIComponent(utils.jsons(["model_render", model_name, render_trans_model, "models/rendered_model"]))
-        };
 
         //get AS for model
-        let model_types = {
+        let model_types_command = {
             "data": utils.jsons(["model_types", model_name])
         };
 
@@ -484,325 +1030,45 @@ class ModelVerseConnector {
             "data": utils.jsons(["JSON"])
         };
 
-        let model_CS = null;
 
-        //CS COMMANDS
-        //TODO: only need to add models if not present
-        this.send_command(render_model_add).then(this.get_output)
-            .then(this.send_command(transformation_between)).then(this.get_output)
-            .then(this.send_command({})).then(this.get_output)
-            .then(this.send_command(transformation_data)).then(this.get_output)
-            .then(this.send_command(model_rendered)).then(this.get_output)
+        let model_types = null;
 
-            .then(function(data){
-                data = data.replace("Success: ", "");
-                model_CS = eval(JSON.parse(data));
-            })
+        //AS COMMANDS
 
-            //AS COMMANDS
+        this.send_command(model_types_command).then(this.get_output)
+        .then(function(data){
+            console.log("model_types");
+            console.log(data);
+            model_types = data;
+        })
+        .then(this.send_command(model_modify)).then(this.get_output)
+        .then(function(data){
+            console.log("model_modify");
+            console.log(data);
+        })
+        .then(this.send_command(model_dump)).then(this.get_output)
+        .then(function(data){
+            data = data.replace("Success: ", "");
+            let AS = eval(JSON.parse(data));
+            ModelVerseConnector.load_MV_model(model_types, AS)
+        })
+        .then(function () {
+            ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
+        })
+        .catch(
+            function (err) {
+                console.log("Error with model loading!");
+                console.log(err);
 
-            .then(this.send_command(model_types)).then(this.get_output)
-            .then(function(data){
-                console.log("model_types");
-                console.log(data);
-            })
-            .then(this.send_command(model_modify)).then(this.get_output)
-            .then(function(data){
-                console.log("model_modify");
-                console.log(data);
-            })
-            .then(this.send_command(model_dump)).then(this.get_output)
-            .then(function(data){
-                data = data.replace("Success: ", "");
-                let AS = eval(JSON.parse(data));
-                ModelVerseConnector.load_MV_model(AS, model_CS)
-            })
-            .then(function () {
-                ModelVerseConnector.set_status(ModelVerseConnector.OKAY);
-            })
-            .catch(
-                function (err) {
-                    console.log("Error with model loading!");
-                    console.log(err);
-
-                    ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
-                }
-            );
-
-
-
-
+                ModelVerseConnector.set_status(ModelVerseConnector.ERROR);
+            }
+        );
 
     }
 
     /*********END WRAPPER FUNCTIONS**********/
 
 
-    static get_render_mm(){
-        let mm = "include \"primitives.alh\"\n" +
-        "\n" +
-        "SimpleAttribute Natural {}\n" +
-        "SimpleAttribute String {}\n" +
-        "SimpleAttribute Boolean {}\n" +
-        "\n" +
-        "Class GraphicalElement {\n" +
-        "    x : Natural\n" +
-        "    y : Natural\n" +
-        "    layer : Natural\n" +
-        "}\n" +
-        "\n" +
-        "Class Group : GraphicalElement {\n" +
-        "    __asid : String\n" +
-        "    dirty : Boolean\n" +
-        "}\n" +
-        "\n" +
-        "Association ConnectingLine (Group, Group) {\n" +
-        "    offsetSourceX : Natural\n" +
-        "    offsetSourceY : Natural\n" +
-        "    offsetTargetX : Natural\n" +
-        "    offsetTargetY : Natural\n" +
-        "    lineWidth : Natural\n" +
-        "    lineColour : String\n" +
-        "    arrow : Boolean\n" +
-        "    __asid : String\n" +
-        "    dirty : Boolean\n" +
-        "    layer : Natural\n" +
-        "}\n" +
-        "\n" +
-        "Class LineElement : GraphicalElement {\n" +
-        "    lineWidth : Natural\n" +
-        "    lineColour : String\n" +
-        "}\n" +
-        "\n" +
-        "Class Text : LineElement {\n" +
-        "    text : String\n" +
-        "}\n" +
-        "\n" +
-        "Class Line : LineElement {\n" +
-        "    targetX : Natural\n" +
-        "    targetY : Natural\n" +
-        "    arrow : Boolean\n" +
-        "}\n" +
-        "\n" +
-        "Class Shape : LineElement {\n" +
-        "    fillColour : String\n" +
-        "    width : Natural\n" +
-        "    height : Natural\n" +
-        "}\n" +
-        "\n" +
-        "Class Figure : GraphicalElement {\n" +
-        "    width : Natural\n" +
-        "    height : Natural\n" +
-        "}\n" +
-        "\n" +
-        "Class SVG {\n" +
-        "    data : String\n" +
-        "}\n" +
-        "\n" +
-        "Class Rectangle : Shape {\n" +
-        "}\n" +
-        "\n" +
-        "Class Ellipse : Shape {\n" +
-        "}\n" +
-        "\n" +
-        "Association contains (Group, GraphicalElement) {}\n" +
-        "Association renders (Figure, SVG) {\n" +
-        "    source_lower_cardinality = 1\n" +
-        "    target_lower_cardinality = 1\n" +
-        "    target_upper_cardinality = 1\n" +
-        "}"
-        ;
 
-        return mm;
-    }
-
-    static get_render_trans(){
-        let trans = "include \"primitives.alh\"\n" +
-        "include \"modelling.alh\"\n" +
-        "include \"object_operations.alh\"\n" +
-        "include \"utils.alh\"\n" +
-        "\n" +
-        "Boolean function main(model : Element):\n" +
-        "\tElement elements\n" +
-        "\tString class\n" +
-        "\tElement attrs\n" +
-        "\tElement attr_keys\n" +
-        "\tString attr_key\n" +
-        "\tString group\n" +
-        "\tString elem\n" +
-        "\tInteger loc\n" +
-        "\tInteger text_loc\n" +
-        "\tElement related_groups\n" +
-        "\tloc = 10\n" +
-        "\n" +
-        "\tElement groups\n" +
-        "\tgroups = dict_create()\n" +
-        "\n" +
-        "\telements = allInstances(model, \"rendered/Group\")\n" +
-        "\twhile (set_len(elements) > 0):\n" +
-        "\t\tgroup = set_pop(elements)\n" +
-        "\t\tif (set_len(allIncomingAssociationInstances(model, group, \"TracabilityClass\")) == 0):\n" +
-        "\t\t\tElement to_remove\n" +
-        "\t\t\tString elem_to_remove\n" +
-        "\t\t\tto_remove = allAssociationDestinations(model, group, \"rendered/contains\")\n" +
-        "\t\t\twhile (set_len(to_remove) > 0):\n" +
-        "\t\t\t\telem_to_remove = set_pop(to_remove)\n" +
-        "\t\t\t\tif (read_type(model, elem_to_remove) == \"rendered/Group\"):\n" +
-        "\t\t\t\t\tset_add(to_remove, elem_to_remove)\n" +
-        "\t\t\t\telse:\n" +
-        "\t\t\t\t\tmodel_delete_element(model, elem_to_remove)\n" +
-        "\t\t\tmodel_delete_element(model, group)\n" +
-        "\n" +
-        "\telements = allInstances(model, \"abstract/Class\")\n" +
-        "\twhile (set_len(elements) > 0):\n" +
-        "\t\tclass = set_pop(elements)\n" +
-        "\t\t\n" +
-        "\t\tInteger x\n" +
-        "\t\tInteger y\n" +
-        "\t\tx = loc\n" +
-        "\t\ty = 10\n" +
-        "\n" +
-        "\t\t// Check if there is already an associated element\n" +
-        "\t\tif (set_len(allOutgoingAssociationInstances(model, class, \"TracabilityClass\")) > 0):\n" +
-        "\t\t\t// Yes, but is it still clean?\n" +
-        "\t\t\tBoolean dirty\n" +
-        "\t\t\tdirty = False\n" +
-        "\n" +
-        "\t\t\trelated_groups = allAssociationDestinations(model, class, \"TracabilityClass\")\n" +
-        "\t\t\twhile (set_len(related_groups) > 0):\n" +
-        "\t\t\t\tgroup = set_pop(related_groups)\n" +
-        "\t\t\t\tif (value_eq(read_attribute(model, group, \"dirty\"), True)):\n" +
-        "\t\t\t\t\t// No, so mark all as dirty\n" +
-        "\t\t\t\t\tdirty = True\n" +
-        "\t\t\t\t\tbreak!\n" +
-        "\t\t\t\telse:\n" +
-        "\t\t\t\t\t// Yes, so just ignore this!\n" +
-        "\t\t\t\t\tcontinue!\n" +
-        "\n" +
-        "\t\t\tif (bool_not(dirty)):\n" +
-        "\t\t\t\tdict_add(groups, class, group)\n" +
-        "\t\t\t\tcontinue!\n" +
-        "\t\t\telse:\n" +
-        "\t\t\t\trelated_groups = allAssociationDestinations(model, class, \"TracabilityClass\")\n" +
-        "\t\t\t\tElement to_remove\n" +
-        "\t\t\t\tString elem_to_remove\n" +
-        "\t\t\t\twhile (set_len(related_groups) > 0):\n" +
-        "\t\t\t\t\tgroup = set_pop(related_groups)\n" +
-        "\t\t\t\t\tto_remove = allAssociationDestinations(model, group, \"rendered/contains\")\n" +
-        "\t\t\t\t\tx = create_value(read_attribute(model, group, \"x\"))\n" +
-        "\t\t\t\t\ty = create_value(read_attribute(model, group, \"y\"))\n" +
-        "\t\t\t\t\twhile (set_len(to_remove) > 0):\n" +
-        "\t\t\t\t\t\telem_to_remove = set_pop(to_remove)\n" +
-        "\t\t\t\t\t\tif (read_type(model, elem_to_remove) == \"rendered/Group\"):\n" +
-        "\t\t\t\t\t\t\tset_add(to_remove, elem_to_remove)\n" +
-        "\t\t\t\t\t\telse:\n" +
-        "\t\t\t\t\t\t\tmodel_delete_element(model, elem_to_remove)\n" +
-        "\t\t\t\t\tmodel_delete_element(model, group)\n" +
-        "\n" +
-        "\t\tattr_keys = dict_keys(getAttributeList(model, class))\n" +
-        "\t\ttext_loc = 5\n" +
-        "\n" +
-        "\t\tgroup = instantiate_node(model, \"rendered/Group\", \"\")\n" +
-        "\t\tinstantiate_attribute(model, group, \"x\", x)\n" +
-        "\t\tinstantiate_attribute(model, group, \"y\", y)\n" +
-        "\t\tinstantiate_attribute(model, group, \"__asid\", list_read(string_split_nr(class, \"/\", 1), 1))\n" +
-        "\t\tinstantiate_attribute(model, group, \"layer\", 0)\n" +
-        "\t\tdict_add(groups, class, group)\n" +
-        "\t\tloc = loc + 200\n" +
-        "\n" +
-        "\t\telem = instantiate_node(model, \"rendered/Rectangle\", \"\")\n" +
-        "\t\tinstantiate_attribute(model, elem, \"x\", 0)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"y\", 0)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"height\", 40 + set_len(getInstantiatableAttributes(model, class, \"abstract/AttributeLink\")) * 20)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"width\", 150)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"lineWidth\", 2) \n" +
-        "\t\tinstantiate_attribute(model, elem, \"lineColour\", \"black\")\n" +
-        "\t\tinstantiate_attribute(model, elem, \"fillColour\", \"white\")\n" +
-        "\t\tinstantiate_attribute(model, elem, \"layer\", 1)\n" +
-        "\t\tinstantiate_link(model, \"rendered/contains\", \"\", group, elem)\n" +
-        "\n" +
-        "\t\tString multiplicities\n" +
-        "\t\tString lower_card\n" +
-        "\t\tString upper_card\n" +
-        "\t\tif (element_eq(read_attribute(model, class, \"lower_cardinality\"), read_root())):\n" +
-        "\t\t\tlower_card = \"*\"\n" +
-        "\t\telse:\n" +
-        "\t\t\tlower_card = cast_value(read_attribute(model, class, \"lower_cardinality\"))\n" +
-        "\t\tif (element_eq(read_attribute(model, class, \"upper_cardinality\"), read_root())):\n" +
-        "\t\t\tupper_card = \"*\"\n" +
-        "\t\telse:\n" +
-        "\t\t\tupper_card = cast_value(read_attribute(model, class, \"upper_cardinality\"))\n" +
-        "\t\tmultiplicities = (((\"[\" + lower_card) + \"..\") + upper_card) + \"]\"\n" +
-        "\n" +
-        "\t\telem = instantiate_node(model, \"rendered/Text\", \"\")\n" +
-        "\t\tinstantiate_attribute(model, elem, \"x\", 5)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"y\", 3)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"lineWidth\", 1)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"lineColour\", \"black\")\n" +
-        "\t\tif (element_neq(read_attribute(model, class, \"name\"), read_root())):\n" +
-        "\t\t\tinstantiate_attribute(model, elem, \"text\", string_join(read_attribute(model, class, \"name\"), \"  \" + multiplicities))\n" +
-        "\t\telse:\n" +
-        "\t\t\tinstantiate_attribute(model, elem, \"text\", \"(unnamed) \" + multiplicities)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"layer\", 2)\n" +
-        "\t\tinstantiate_link(model, \"rendered/contains\", \"\", group, elem)\n" +
-        "\n" +
-        "\t\telem = instantiate_node(model, \"rendered/Line\", \"\")\n" +
-        "\t\tinstantiate_attribute(model, elem, \"x\", 0)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"y\", 20)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"targetX\", 150)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"targetY\", 20)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"lineWidth\", 1)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"lineColour\", \"black\")\n" +
-        "\t\tinstantiate_attribute(model, elem, \"arrow\", False)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"layer\", 2)\n" +
-        "\t\tinstantiate_link(model, \"rendered/contains\", \"\", group, elem)\n" +
-        "\n" +
-        "\t\tattrs = getInstantiatableAttributes(model, class, \"abstract/AttributeLink\")\n" +
-        "\t\tattr_keys = dict_keys(attrs)\n" +
-        "\t\twhile (dict_len(attr_keys) > 0):\n" +
-        "\t\t\tattr_key = set_pop(attr_keys)\n" +
-        "\t\t\telem = instantiate_node(model, \"rendered/Text\", \"\")\n" +
-        "\t\t\tinstantiate_attribute(model, elem, \"x\", 5)\n" +
-        "\t\t\tinstantiate_attribute(model, elem, \"y\", text_loc + 20)\n" +
-        "\t\t\tinstantiate_attribute(model, elem, \"lineWidth\", 1)\n" +
-        "\t\t\tinstantiate_attribute(model, elem, \"lineColour\", \"black\")\n" +
-        "\t\t\tinstantiate_attribute(model, elem, \"text\", (attr_key + \" : \") + cast_string(list_read(string_split_nr(attrs[attr_key], \"/\", 1), 1)))\n" +
-        "\t\t\tinstantiate_attribute(model, elem, \"layer\", 2)\n" +
-        "\t\t\tinstantiate_link(model, \"rendered/contains\", \"\", group, elem)\n" +
-        "\t\t\ttext_loc = text_loc + 15\n" +
-        "\n" +
-        "\t\tinstantiate_link(model, \"TracabilityClass\", \"\", class, group)\n" +
-        "\n" +
-        "\t// Flush all associations\n" +
-        "\telements = allInstances(model, \"rendered/ConnectingLine\")\n" +
-        "\twhile (set_len(elements) > 0):\n" +
-        "\t\tclass = set_pop(elements)\n" +
-        "\t\tmodel_delete_element(model, class)\n" +
-        "\n" +
-        "\t// Rerender associations\n" +
-        "\telements = allInstances(model, \"abstract/Association\")\n" +
-        "\twhile (set_len(elements) > 0):\n" +
-        "\t\tclass = set_pop(elements)\n" +
-        "\n" +
-        "\t\tattr_keys = dict_keys(getAttributeList(model, class))\n" +
-        "\n" +
-        "\t\telem = instantiate_link(model, \"rendered/ConnectingLine\", \"\", groups[readAssociationSource(model, class)], groups[readAssociationDestination(model, class)])\n" +
-        "\t\tinstantiate_attribute(model, elem, \"offsetSourceX\", 75)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"offsetSourceY\", 30)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"offsetTargetX\", 75)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"offsetTargetY\", 30)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"lineWidth\", 1)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"lineColour\", \"black\")\n" +
-        "\t\tinstantiate_attribute(model, elem, \"arrow\", True)\n" +
-        "\t\tinstantiate_attribute(model, elem, \"__asid\", list_read(string_split_nr(class, \"/\", 1), 1))\n" +
-        "\t\tinstantiate_attribute(model, elem, \"layer\", 0)\n" +
-        "\t\tlog(\"Real ASID: \" + cast_value(class))\n" +
-        "\t\tlog(\"Found ASID \" + cast_value(list_read(string_split_nr(class, \"/\", 1), 1)))\n" +
-        "\t\tinstantiate_link(model, \"rendered/contains\", \"\", group, elem)\n" +
-        "\n" +
-        "\treturn True!";
-
-        return trans;
-    }
 
 }
