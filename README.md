@@ -52,7 +52,7 @@ Documentation for AToMPM can be found here: https://atompm.readthedocs.io
 Please create an issue for your bug or comments here: https://github.com/AToMPM/atompm/issues
 
 ## Testing
-To run tests on AToMPM, run `npm test'
+To run tests on AToMPM, run `npm test'. Ensure that your resolution of your screen is set quite high, as elements cannot be placed by the script off-screen.
 
 ## LICENSING
 The AToMPM project is licensed under the LGPL as stated in COPYING.lesser.
