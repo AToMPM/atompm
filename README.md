@@ -1,4 +1,4 @@
-# AToMPM - A Tool for Multi-Paradigm Modelling
+# AToMPM - A Tool for Multi-Paradigm Modelling [![Build Status](https://travis-ci.org/AToMPM/atompm.svg?branch=master)](https://travis-ci.org/AToMPM/atompm)
 AToMPM is an open-source research framework for generating domain-specific modeling web-based tools that run on the cloud. AToMPM facilitates designing DSML environments, performing model transformations, and manipulating and managing models. It runs completely over the web, making it independent from any operating system, platform, or device it may execute on. AToMPM follows the philosophy of modeling everything explicitly, at the right level of abstraction(s), using the most appropriate formalism(s) and process(es), as it is completely modeled by itself.
 
 ## Installation
