@@ -33,12 +33,31 @@ var workerIds2socketIds = {};
 
 
 /************************************ UTILS ***********************************/
+
+/** Remove invalid characters from a string. **/
+function __clean_string(s)
+{
+	if (s == undefined) {
+        return s;
+    }
+
+	s = JSON.stringify(s);
+	s = s.replace(/'/g, '');
+	s = s.replace(/"/g, '');
+	s = s.replace(/‘/g, '');
+	s = s.replace(/’/g, '');
+	s = s.replace(/\\/g, '\\');
+	s = s.replace(/\//g, '\/');
+	s = s.replace(/\\n/g, ' ');
+	return s;
+}
+
 /** Syntactic sugar to build and send HTTP responses **/
 function __respond(response, statusCode, reason, data, headers)
 {
 	response.writeHead(
 			statusCode,
-			JSON.stringify(reason),
+			__clean_string(reason),
 			(headers || {'Content-Type': 'text/plain',
 			'Access-Control-Allow-Origin': '*'}));
 
