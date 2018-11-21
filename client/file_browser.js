@@ -6,6 +6,13 @@ class FileBrowser{
             HttpUtils.url('/filelist', __NO_WID),
             undefined,
             function (statusCode, resp) {
+
+                if (statusCode == 404){
+                    let err_msg = "Error! Cannot load file list!";
+                    WindowManagement.openDialog(_ERROR, err_msg);
+                    return;
+                }
+
                 extensions.push('/');
                 var fnames = __localizeFilenames(
                     __filterFilenamesByExtension(
