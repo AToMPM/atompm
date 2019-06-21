@@ -1,27 +1,19 @@
-'''*****************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
+'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+Copyright 2011 by the AToMPM team and licensed under the LGPL
+See COPYING.lesser and README.md in the root of this project for full details'''
 
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*****************************************************************************'''
-
-import threading, urlparse
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-from SocketServer import ThreadingMixIn
-from mtworker import mtworkerThread
+import sys
+if sys.version_info[0] < 3:
+	import threading, urlparse
+	from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+	from SocketServer import ThreadingMixIn
+	from mtworker import mtworkerThread
+else:
+	import threading
+	import urllib.parse as urlparse
+	from http.server import BaseHTTPRequestHandler, HTTPServer
+	from socketserver import ThreadingMixIn
+	from mtworker import mtworkerThread
 
 
 
@@ -60,29 +52,33 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		#check for valid worker id
 		url   = urlparse.urlparse(self.path)
 		query = urlparse.parse_qs(url[4])
-		if query == '' or 'wid' not in query : 
+		if query == '' or 'wid' not in query :
 			return self._respond(400, 'missing worker id')
 
 		wid = query['wid'][0]
-		if wid not in mtw2msgQueue : 
+		if wid not in mtw2msgQueue :
 			return self._respond(400, 'invalid worker id :: '+wid)
 
 		#retrieve reqdata if any
 		reqData = None
 		if (self.command == 'PUT' or self.command == 'POST') :
-			dl = int(self.headers.getheader('Content-Length') or 0)
+			if sys.version_info < (3, 0):
+				header = self.headers.getheader('Content-Length')
+			else:
+				header = self.headers.get('Content-Length')
+			dl = int(header or 0)
 			if dl > 0 :
 				reqData = self.rfile.read(dl)
 
 		#setup lock and response objects + forward request to worker
-		self.lock 		 = threading.Condition()	
- 		self._response = {}		 
-  		self._postMessage(
-					wid,
-  					{'method':self.command,
- 					 'uri':self.path,
-  					 'reqData':reqData,
-  					 'resp':self})
+		self.lock 		 = threading.Condition()
+		self._response = {}
+		self._postMessage(
+			wid,
+			{'method':self.command,
+			 'uri':self.path,
+			 'reqData':reqData,
+			 'resp':self})
 
 		#wait on worker's response (necessary completing the execution of a do_*()
 		#causes an empty response to be sent)
@@ -91,10 +87,10 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 			self.lock.wait()
 		self.lock.release()
 		self._respond(
-				self._response['statusCode'],
-				self._response['reason'],
-				self._response['data'],
-				self._response['headers'])
+			self._response['statusCode'],
+			self._response['reason'],
+			self._response['data'],
+			self._response['headers'])
 
 
 
@@ -104,7 +100,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 				worker is currently using msgQueue)
 			2. add msg to it
 			3. release lock and notify worker that a new msg is available '''
-	def _postMessage(self,wid,msg) : 
+	def _postMessage(self,wid,msg) :
 		mtw2lock[wid].acquire()
 		mtw2msgQueue[wid].append(msg)
 		mtw2lock[wid].notify()
@@ -124,17 +120,25 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		if headers == '' :
 			self.send_header('Content-Type','text/plain')
 		else :
-			for h,i in headers.iteritems() :
+			for h,i in headers.items() :
 				self.send_header(h,i)
 		self.end_headers()
 
 		if round(statusCode/100.0) != 2 :
 			if reason != '' :
+				if sys.version_info < (3, 0):
+					reason = bytes(reason)
+				else:
+					reason = bytes(reason, 'utf8')
 				self.wfile.write(reason)
-		else : 
+		else :
 			if data != '' :
+				if sys.version_info < (3, 0):
+					data = bytes(data)
+				else:
+					data = bytes(data, 'utf8')
 				self.wfile.write(data)
-		
+
 
 
 	'''
@@ -143,9 +147,9 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		self._response['statusCode'] = msg['statusCode']
 
 		for x in ('reason','data','headers') :
-			if x in msg : 
+			if x in msg :
 				self._response[x] = msg[x]
-			else : 
+			else :
 				self._response[x] = ''
 
 
@@ -162,7 +166,7 @@ class HTTPServerThread(threading.Thread) :
 		self.httpd = MultiThreadedHTTPServer(('127.0.0.1', 8125), HTTPRequestHandler)
 		self.httpd.serve_forever()
 		self.httpd.socket.close()
-	
+
 
 	def stop(self) :
 		self.httpd.shutdown()

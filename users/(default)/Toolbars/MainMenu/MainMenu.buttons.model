@@ -2430,7 +2430,7 @@
 							"2": {
 								"textContent": {
 									"type": "string",
-									"value": "userguide"
+									"value": "about"
 								},
 								"style": {
 									"type": "map<string,string>",
@@ -2704,7 +2704,10 @@
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons"
+			"/Formalisms/__Utilities__/Buttons/Buttons.defaultIcons",
+			"/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax.defaultIcons",
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons",
+			"/Formalisms/SCCD/SCCD.defaultIcons"
 		]
 	},
 	"asm": {
@@ -2720,7 +2723,7 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options  = {'extensions':['.*Icons.metamodel','.*Icons.pattern.metamodel','buttons.model'],\n            \t'multipleChoice':true,\n                'title':'choose toolbar(s) to load',\n                'startDir':'toolbar' },\n    callback = \tfunction(fnames)\n\t\t{\n\t\t   fnames.forEach( function(fname) {_loadToolbar(fname);} );\n\t\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options  = {'extensions':['.*Icons.metamodel','.*Icons.pattern.metamodel','buttons.model'],\n            \t'multipleChoice':true,\n                'title':'choose toolbar(s) to load\\nextensions: Icons.metamodel, Icons.pattern.metamodel, buttons.model',\n                'startDir':'toolbar' },\n    callback = \tfunction(fnames)\n\t\t{\n\t\t   fnames.forEach( function(fname) {_loadToolbar(fname);} );\n\t\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -2750,7 +2753,7 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n               'title':'choose model to load',\n               'startDir':'model'},\n    callback = \n        function(fnames)\n        {                    \n            if( fnames.length > 0 )\n                _loadModel(fnames[0]);\n        };\n\nfunction doIt() {\n    WindowManagement.openDialog(_FILE_BROWSER,options,callback);\n}\n\n\nif (! __isSaved() ) {\n\tGUIUtils.setupAndShowDialog(\n\t\t[GUIUtils.getTextSpan('There are unsaved changes. Are you sure you want to continue?')],\n\t\tundefined,\n\t\t__TWO_BUTTONS,\n\t\t'Unsaved Changes',\n\t\tdoIt);\n} else {\n    doIt();\n}"
+					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n               'title':'choose model to load\\nextension: .model',\n               'startDir':'model'},\n    callback = \n        function(fnames)\n        {                    \n            if( fnames.length > 0 )\n                _loadModel(fnames[0]);\n        };\n\nfunction doIt() {\n    WindowManagement.openDialog(_FILE_BROWSER,options,callback);\n}\n\n\nif (! __isSaved() ) {\n\tGUIUtils.setupAndShowDialog(\n\t\t[GUIUtils.getTextSpan('There are unsaved changes. Are you sure you want to continue?')],\n\t\tundefined,\n\t\t__TWO_BUTTONS,\n\t\t'Unsaved Changes',\n\t\tdoIt);\n} else {\n    doIt();\n}"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -2780,7 +2783,7 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n\t       'manualInput':true,\n               'title':'specify target model',\n               'startDir':'model'},\n    callback =\n\tfunction(fnames)\n\t{\n\t\t_saveModel(fnames[0]);\n\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n\t       'manualInput':true,\n               'title':'specify target model\\nextension: .model',\n               'startDir':'model'},\n    callback =\n\tfunction(fnames)\n\t{\n\t\t_saveModel(fnames[0]);\n\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -2900,22 +2903,22 @@
 				},
 				"code": {
 					"type": "code",
-					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n               'title':'choose model to insert',\n               'startDir':'model'},\n    callback = \n\tfunction(fnames)\n\t{\n\t   _insertModel(fnames[0]);\n\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
+					"value": "var options = {'extensions':['\\\\.model'],\n\t       'multipleChoice':false,\n               'title':'choose model to insert\\nextension: .model',\n               'startDir':'model'},\n    callback = \n\tfunction(fnames)\n\t{\n\t   _insertModel(fnames[0]);\n\t};\nWindowManagement.openDialog(_FILE_BROWSER,options,callback);"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
 			"13": {
 				"name": {
 					"type": "string",
-					"value": "userguide"
+					"value": "about"
 				},
 				"tooltip": {
 					"type": "string",
-					"value": "open the user's manual"
+					"value": "about AToMPM"
 				},
 				"code": {
 					"type": "code",
-					"value": "window.open('https://msdl.uantwerpen.be/documentation/AToMPM/', '_blank')"
+					"value": "showAboutDialog();"
 				},
 				"$type": "/Formalisms/__Utilities__/Buttons/Buttons/Button"
 			},
@@ -2937,7 +2940,10 @@
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__Utilities__/Buttons/Buttons"
+			"/Formalisms/__Utilities__/Buttons/Buttons",
+			"/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax",
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram",
+			"/Formalisms/SCCD/SCCD"
 		]
 	}
 }

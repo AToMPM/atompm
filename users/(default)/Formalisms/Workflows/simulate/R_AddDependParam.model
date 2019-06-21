@@ -2458,7 +2458,7 @@
 			"108": {
 				"Action": {
 					"type": "code",
-					"value": "gen = getAttr('parameterList','0')\ngen = gen.rstrip('}')\ngen = gen.lstrip('{')\nid = getAttr('$atompmId','2')\nextsrc = getAttr('extension','1')\nprint extsrc\nexttar = getAttr('extension','2')\nif exttar is None :\n\texttar = ''\nif extsrc not in ['Icons.model','Icons.metamodel','Icons.pattern.metamodel']  :\t\t\t\t\t\t\n\textsrc = '.'+extsrc\nsetAttr(getAttr('srcParam','3'),getAttr(getAttr('srcParam','3'),'1'),'2')\ntarParam = getAttr(getAttr('srcParam','3'),'2')\ngen = gen + ','+id+':'+ tarParam+extsrc\n#gen = gen.replace(id+':','?',1)\n#gen = gen.replace(','+id+':','.',1)\n#en = gen.replace('?',id+':',1)\ngen = '{'+gen\ngen += '}'\nsetAttr('parameterList',gen,'0')"
+					"value": "gen = getAttr('parameterList', '0')\ngen = gen.rstrip('}')\ngen = gen.lstrip('{')\naid = getAttr('$atompmId', '2')\n\nextsrc = getAttr('extension', '1')\nexttar = getAttr('extension', '2')\n\next = extsrc\n\nif exttar is not None:\n    ext = exttar\n\nif ext not in ['Icons.model', 'Icons.metamodel', 'Icons.pattern.metamodel']:\n    ext = '.' + ext\n\nsetAttr(getAttr('srcParam', '3'), getAttr(getAttr('srcParam', '3'), '1'), '2')\ntarParam = getAttr(getAttr('srcParam', '3'), '2')\ngen = gen + ',' + aid + ':' + tarParam + ext\n# gen = gen.replace(id+':','?',1)\n# gen = gen.replace(','+id+':','.',1)\n# en = gen.replace('?',id+':',1)\ngen = '{' + gen\ngen += '}'\nsetAttr('parameterList', gen, '0')\n"
 				},
 				"$type": "/Formalisms/__Transformations__/TransformationRule/TransformationRule/RHS"
 			},

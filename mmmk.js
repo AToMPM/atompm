@@ -1,22 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 /* NOTES:
 		atom3 supported pre/post actions and constraints for the 'SAVE' EVENT...
@@ -25,7 +10,13 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 		atom3 supported 'save' events as a hack to enable forcing mm validation...
 		in atompm, such validation is carried out by _mmmk.validateModel (which
 		clients can 'call') and thus, we do no support 'save' events... */
-{
+
+const _utils = require('./utils');
+const _util = require("util");
+const _mt = require("./libmt");
+const _styleinfo = require('./styleinfo');
+
+module.exports = {
 	/********************************* GLOBALS *********************************/
 	'metamodels':{},
 	'model':{'nodes':{},'edges':[],'metamodels':[]},
@@ -822,41 +813,55 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 				types2ids[type].push(id);
 			}
 
-			for( var i in allHandlers )
-			{
-				var handler = allHandlers[i];
-				if( _utils.contains(events,handler['event']) )
-				{
-					if( handler['targetType'] == '*' )
-					{
-						for( var j in ids )
-							if( (res = this.__runDesignerCode(
-														handler['code'],
-														handler['event']+' '+handler['name'],
-														handlerType,
-														ids[j])) )
-								return res;
+            for (let i in allHandlers) {
+                let handler = allHandlers[i];
 
-						if( ids.length == 0 )
-							if( (res = this.__runDesignerCode(
-														handler['code'],
-														handler['event']+' '+handler['name'],
-														handlerType)) )
-								return res;
-					}
-					else
-						for( var j in types2ids[handler['targetType']] )
-						{
-							var id = types2ids[handler['targetType']][j];
-							if( (res = this.__runDesignerCode(
-														handler['code'],
-														handler['event']+' '+handler['name'],
-														handlerType,
-														id)) )
-								return res;
-						}
-				}
-			}
+                let handled = _utils.contains(events, handler['event']) ||
+                    (_utils.contains(events, "validate") && handler['event'] == ""); //handle legacy events
+
+                if (!handled) {
+                    continue;
+                }
+                if (handler['targetType'] == '*') {
+                    let result = null;
+                    for (let j in ids) {
+                        result = this.__runDesignerCode(
+                            handler['code'],
+                            handler['event'] + ' ' + handler['name'],
+                            handlerType,
+                            ids[j]);
+                        if (result) {
+                            return result;
+                        }
+                    }
+
+                    if (ids.length == 0) {
+                        result = this.__runDesignerCode(
+                            handler['code'],
+                            handler['event'] + ' ' + handler['name'],
+                            handlerType);
+
+                        if (result) {
+                            return result;
+                        }
+                    }
+                }
+                else {
+                    for (let j in types2ids[handler['targetType']]) {
+                        let id = types2ids[handler['targetType']][j];
+                        let result = this.__runDesignerCode(
+                            handler['code'],
+                            handler['event'] + ' ' + handler['name'],
+                            handlerType,
+                            id);
+
+                        if (result) {
+                            return result;
+                        }
+                    }
+                }
+
+            }
 		},
 
 
@@ -882,7 +887,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 				 model.edges == undefined ||
 				 model.metamodels == undefined ||
 				 model.metamodels.length == 0 )
-				return {'$err':'provided model is either empty or not an atompm model'}
+				return {'$err':'provided model is either empty or not an atompm model'};
 
 			for( var i in model.edges )
 			{
@@ -919,7 +924,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                 }
 			}
 
-            var checked_for_loops = []
+            var checked_for_loops = [];
 			for( var id in model.nodes )
 			{
 				var metamodel = this.__getMetamodel(model.nodes[id]['$type']),
@@ -940,6 +945,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                 if (checked_for_loops.indexOf(id) < 0 && !(type in this.metamodels[metamodel]['connectorTypes'])) {
                     var visited = [],
                         tv = [id];
+// eslint-disable-next-line no-inner-declarations
                     function dfs(to_visit) {
                         var curr = to_visit.pop();
                         if( curr == undefined )
@@ -962,10 +968,13 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                     checked_for_loops= checked_for_loops.concat(visited);
                 }
 			}
-			
-			for( var metamodel in this.metamodels )
-				if( (err=this.__runEventHandlers(this.metamodels[metamodel]['constraints'], [''], [], 'constraint')) )
-					return err;
+
+            for (let metamodel in this.metamodels) {
+
+                let err = this.__runEventHandlers(this.metamodels[metamodel]['constraints'], ['validate'], [], 'constraint');
+                if (err)
+                    return err;
+            }
 		},
 
 
@@ -1019,7 +1028,6 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 					var model =	_utils.jsonp(this.read());
 					nodes = {};
 					for (var id in model.nodes) {
-						console
 						if (model.nodes[id]['$type'].slice(0, CS.length) == CS) {
 							nodes[id] = model.nodes[id];
 						}
@@ -1418,13 +1426,18 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 					types2legalNeighborTypes[type].forEach(
 							function(ntype)
 							{
+								if (types2legalNeighborTypes[ntype] == undefined){
+									let msg = "Error! Problem with edges for class: " + type +"\nFound constraints: " + JSON.stringify(types2legalNeighborTypes[type]);
+									throw msg;
+								}
+
 								types2legalNeighborTypes[ntype].forEach(
 									function(nntype)
 									{
 										if( mm.legalConnections[type] == undefined )
 											mm.legalConnections[type] = {};
 										if( mm.legalConnections[type][nntype] == undefined )
-											mm.legalConnections[type][nntype] = []
+											mm.legalConnections[type][nntype] = [];
 										mm.legalConnections[type][nntype].push(ntype);
 									});
 								});
@@ -1435,7 +1448,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			}
 			catch(err)
 			{
-				return {'$err':'invalid metamodel model, crashed on :: '+err};
+				return {'$err':'invalid metamodel model, crashed on :: ' + err};
 			}
 		},
 
@@ -1540,8 +1553,8 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			else if( log == 'UNDOREDO' )
 				this.undoredoJournal.push(step);
 
-			else if( log == 'DONTLOG' )
-				;
+			//else if( log == 'DONTLOG' )
+			//	;
 		},
 
 
@@ -1930,4 +1943,4 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			{
 				return fulltype.match(/.*\/(.*)/)[1];
 			}
-}
+};

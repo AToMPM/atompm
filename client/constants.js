@@ -1,26 +1,13 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 /****************************** GLOBAL CONSTANTS ******************************/
-var __WEBPAGE__ = 'http://www-ens.iro.umontreal.ca/~syriani/atompm/atompm.htm',
-    __VERSION__ = '0.5.4',
+var __WEBPAGE__ = 'https://atompm.github.io/',
+	__RELEASE_LOC__ = "https://api.github.com/repos/AToMPM/atompm/releases/latest",
+	__DOC_WEBPAGE__ = "https://msdl.uantwerpen.be/documentation/AToMPM/index.html",
+    __VERSION__ = '0.8.1',
     __DEFAULT_SAVEAS		 	= '.autosave.model',
 	 __TITLE						= 'AToMPM',
 	 __EXITWARNING				= 'There are unsaved changes. Proceeding will cause'+
@@ -71,7 +58,7 @@ var __WEBPAGE__ = 'http://www-ens.iro.umontreal.ca/~syriani/atompm/atompm.htm',
 	 __CONTAINMENT_LINK	 	= 'containment',
 
 	 __EVENT_RIGHT_RELEASE_CANVAS			= 0,
- 	 __EVENT_RIGHT_RELEASE_ICON			= 1
+ 	 __EVENT_RIGHT_RELEASE_ICON			= 1,
  	 __EVENT_RIGHT_PRESS_ICON				= 2,
  	 __EVENT_LEFT_RELEASE_CANVAS			= 3,
 	 __EVENT_LEFT_RELEASE_ICON				= 4,

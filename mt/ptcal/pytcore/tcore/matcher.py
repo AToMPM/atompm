@@ -1,30 +1,17 @@
-'''*****************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
+'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+Copyright 2011 by the AToMPM team and licensed under the LGPL
+See COPYING.lesser and README.md in the root of this project for full details'''
 
-Copyright (c) 2011 Eugene Syriani
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*****************************************************************************'''
-
+import sys
 from copy import deepcopy
 from ..util.infinity import INFINITY
 from ..core.match_algo import HimesisMatcher
 from ..core.himesis import HConstants as HC
-from rule_primitive import RulePrimitive
-from messages import MatchSet, Match, TransformationException
+from .rule_primitive import RulePrimitive
+from .messages import MatchSet, Match, TransformationException
 
+if sys.version_info[0] >= 3:
+    from functools import reduce
 
 class Matcher(RulePrimitive):
     '''
@@ -39,13 +26,13 @@ class Matcher(RulePrimitive):
         super(Matcher, self).__init__()
         self.max = max
         self.condition = condition
-    
+
     def __str__(self):
         s = super(Matcher, self).__str__()
         s = s.split(' ')
         s.insert(1, '[%s]' % self.condition.name)
         return reduce(lambda x, y: '%s %s' % (x,y), s)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -53,7 +40,7 @@ class Matcher(RulePrimitive):
             matchSet = packet.match_sets[self.condition[HC.GUID]]
         else:
             matchSet = MatchSet()
-        
+
         # Find the matches
         try:
             i = 1
@@ -67,20 +54,20 @@ class Matcher(RulePrimitive):
                     if i > self.max:
                         # We don't need any more matches
                         break
-        except Exception, e:
+        except Exception as e:
             self.is_success = False
             self.exception = TransformationException(e)
             self.exception.packet = packet
             self.exception.transformation_unit = self
             return packet
-        
+
         # Don't forget to add the match set to the packet, even if no matches were found
         if len(matchSet.matches) > 0:
             packet.match_sets[self.condition[HC.GUID]] = matchSet
-        
+
         # Identify that this is the condition we are currently processing
         packet.current = self.condition[HC.GUID]
-        
+
         # Success only if matches were found
         self.is_success = len(matchSet.matches) > 0
         return packet
@@ -100,11 +87,11 @@ class Matcher(RulePrimitive):
         '''
         pred1 = {}  # To optimize the matcher, since otherwise matcher will compute the predecessors of the source graph many times
         succ1 = {}  # To optimize the matcher, since otherwise matcher will compute the successors of the source graph many times
-        
+
         # Cache the pivot nodes of the source graph
         pivots = deepcopy(pivots)
         pivots.to_source_node_indices(graph)
-        
+
         #===================================================================
         # First process the NACs that are not bound to the LHS
         #===================================================================
@@ -126,7 +113,7 @@ class Matcher(RulePrimitive):
             # For further matching optimizations
             pred1 = nacMatcher.pred1
             succ1 = nacMatcher.succ1
-        
+
         # Either there are no NACs, or there were only unbound NACs that do not match, so match the LHS now
         if not self.condition.hasBoundNACs():
             lhsMatcher = HimesisMatcher(source_graph=graph, pattern_graph=self.condition, pred1=pred1, succ1=succ1)
@@ -141,19 +128,19 @@ class Matcher(RulePrimitive):
                         yield mapping
             except: raise
             finally: lhsMatcher.reset_recursion_limit()
-            
+
             # The matching is complete
             return
-        
+
         #===================================================================
         # Now process the NACs that have some nodes bound to the LHS
         #===================================================================
-        
+
         # Continue the matching looking for the LHS now
         lhsMatcher = HimesisMatcher(source_graph=graph, pattern_graph=self.condition, pred1=pred1, succ1=succ1)
         # Augment the bridge mapping with the pivot mappings
         lhs_pivots = pivots.to_mapping(graph, self.condition)
-        
+
         try:
             for mapping in lhsMatcher.match_iter(context=lhs_pivots):
                 # Make the mapping into {...,LHSlabel:graphIndex,...}
@@ -165,7 +152,7 @@ class Matcher(RulePrimitive):
                     for NAC in self.condition.getBoundNACs():
                         # This mapping represents the mapping of the bridge of this NAC with the LHS
                         bridgeMapping = match.to_mapping(graph, NAC)
-                        
+
                         # Now continue the matching looking for a match of the corresponding NAC
                         nacMatcher = HimesisMatcher(source_graph=graph, pattern_graph=NAC, pred1=pred1, succ1=succ1)
                         for nac_mapping in nacMatcher.match_iter(context=bridgeMapping):

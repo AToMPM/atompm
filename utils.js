@@ -1,22 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 
 var utils = {};
@@ -313,7 +298,7 @@ utils.createCookie =
 		}
 		else var expires = "";
 		document.cookie = name+"="+value+expires+"; path=/";
-	}
+	};
 
 /* returns the value of the cookie with given name */
 utils.readCookie =
@@ -326,13 +311,13 @@ utils.readCookie =
 			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
 		}
 		return null;
-	}
+	};
 
 /* erases the cookie with given name */
 utils.eraseCookie =
 	function(name) {
 		createCookie(name,"",-1);
-	}
+	};
 	
 __pendingCalls = {};
 
@@ -349,7 +334,7 @@ utils.doAfterUnlessRepeated =
 			clearTimeout(__pendingCalls[func]);
 		}
 		__pendingCalls[func] = setTimeout(doIt, ms);
-	}
+	};
 
 /* NOTE: 'exports' exists in back-end 'require', but not in browser import...
 			this ensures no errors are reported during browser imports */
@@ -382,4 +367,4 @@ exports.values 						= utils.values;
 exports.createCookie				= utils.createCookie;
 exports.readCookie					= utils.readCookie;
 exports.eraseCookie					= utils.eraseCookie;
-exports.doAfterUnlessRepeated		= utils.doAfterUnlessRepeated
+exports.doAfterUnlessRepeated		= utils.doAfterUnlessRepeated;

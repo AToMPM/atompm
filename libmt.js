@@ -1,24 +1,13 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
 
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
-This file is part of AToMPM.
+const _utils = require('./utils');
 
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
-
-{
+/* eslint-disable no-inner-declarations */
+module.exports = {
 	/* apply transformation T to specified model 
 
 		TBI:: this method only supports transforming class diagrams to ER diagrams
@@ -66,8 +55,8 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                                         new_model.nodes[parent_id]['attributes']['value'].filter(
                                             function(attr) {
                                                 return !new_model.nodes[child_id]['attributes']['value'].find(
-                                                    function(el) {return el['name'] == attr['name']}
-                                                )
+                                                    function(el) {return el['name'] == attr['name'];}
+                                                );
                                             }
                                         )
                                     );
@@ -76,8 +65,8 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                                         new_model.nodes[parent_id]['constraints']['value'].filter(
                                             function(constr) {
                                                 return !new_model.nodes[child_id]['constraints']['value'].find(
-                                                    function(el) {return el['name'] == constr['name']}
-                                                )
+                                                    function(el) {return el['name'] == constr['name'];}
+                                                );
                                             }
                                         )
                                     );
@@ -86,8 +75,8 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                                         new_model.nodes[parent_id]['actions']['value'].filter(
                                             function(act) {
                                                 return !new_model.nodes[child_id]['actions']['value'].find(
-                                                    function(el) {return el['name'] == act['name']}
-                                                )
+                                                    function(el) {return el['name'] == act['name'];}
+                                                );
                                             }
                                         )
                                     );
@@ -96,8 +85,8 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
                                         new_model.nodes[parent_id]['cardinalities']['value'].filter(
                                             function(card) {
                                                 return !new_model.nodes[child_id]['cardinalities']['value'].find(
-                                                    function(el) {return el['dir'] == card['dir'] && el['type'] == card['type']}
-                                                )
+                                                    function(el) {return el['dir'] == card['dir'] && el['type'] == card['type'];}
+                                                );
                                             }
                                         )
                                     );
@@ -197,7 +186,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 							new_model.nodes[id]['constraints']['value'].push(
 									{'name':'noAbstractInstances',
 									 'event':'pre-create',
-									 'code':'false'})
+									 'code':'false'});
 						}
 					}
 					else if( new_model.nodes[id]['$type'] == SCD+'/Association' )
@@ -212,7 +201,7 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 							a) remove all edges pertaining to it
 							b) remove it */
 						new_model.edges = new_model.edges.filter(
-								function(edge)	{return edge['src'] != id && edge['dest'] != id});
+								function(edge)	{return edge['src'] != id && edge['dest'] != id;});
 						delete new_model.nodes[id];
 					}
 				}
@@ -226,11 +215,11 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 					var type = new_model.nodes[id]['name']['value'];
 					if( types2parentTypes[type] == undefined ) 
 					{
-						types2parentTypes[type] = []
+						types2parentTypes[type] = [];
 						ids2ancestors[id].forEach(
 								function(a)
 								{
-									types2parentTypes[type].push(new_model.nodes[a]['name']['value'])
+									types2parentTypes[type].push(new_model.nodes[a]['name']['value']);
 								});
 					}
 				}
@@ -486,5 +475,5 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 
 			return {'asmm':asmm,'csmms':csmms};
 		}
-}
+};
 

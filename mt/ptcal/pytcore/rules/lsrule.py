@@ -1,25 +1,9 @@
-'''*****************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Eugene Syriani
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*****************************************************************************'''
+'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+Copyright 2011 by the AToMPM team and licensed under the LGPL
+See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.infinity import INFINITY
-from lrule import LRule
+from .lrule import LRule
 from ..tcore.rewriter import Rewriter
 from ..tcore.resolver import Resolver
 
@@ -40,7 +24,7 @@ class LSRule(LRule):
         super(LSRule, self).__init__(LHS, inner_rule, max_iterations)
         self.W = Rewriter(condition=RHS,sendAndApplyDeltaFunc=sendAndApplyDeltaFunc)
         self.outer_first = outer_first
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -54,7 +38,7 @@ class LSRule(LRule):
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         while True:
             if self.outer_first:
                 # Rewrite
@@ -62,13 +46,13 @@ class LSRule(LRule):
                 if not self.W.is_success:
                     self.exception = self.W.exception
                     return packet
-                
+
             # Apply the inner rule
             packet = self.inner_rule.packet_in(packet)
             if not self.inner_rule.is_success:
                 self.exception = self.inner_rule.exception
                 return packet
-            
+
             if not self.outer_first:
                 # Rewrite
                 packet = self.W.packet_in(packet)
@@ -112,7 +96,7 @@ class LSRule_r(LSRule):
         super(LSRule_r, self).__init__()
         self.R = Resolver(external_matches_only=external_matches_only,
                           custom_resolution=custom_resolution)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False

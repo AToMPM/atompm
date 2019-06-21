@@ -1,29 +1,13 @@
-'''*****************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*****************************************************************************'''
+'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+Copyright 2011 by the AToMPM team and licensed under the LGPL
+See COPYING.lesser and README.md in the root of this project for full details'''
 
 import sys
-from tconstants import TConstants as TC
-from dapi import DesignerAPI
+from .tconstants import TConstants as TC
+from .dapi import DesignerAPI
 
 try :
-	import spidermonkey 
+	import spidermonkey
 except ImportError as ex :
 	pass
 
@@ -52,7 +36,7 @@ class DesignerCodeAbstractionLayer :
 			elif lang == TC.JAVASCRIPT and 'spidermonkey' in sys.modules :
 				self._execContexts[lang] = JavaScriptExecutionContext(self._dAPI)
 			else :
-				assert False, 'unsupported designer code language :: '+str(lang)	
+				assert False, 'unsupported designer code language :: '+str(lang)
 		self._execContext = self._execContexts[lang]
 
 		self._dAPI.configure(graph,type,pl2gi,ex,pLabel,attr,journal)
@@ -88,7 +72,7 @@ class JavaScriptExecutionContext :
 	def __init__(self,dAPI) :
 		self._context = spidermonkey.Runtime().new_context()
 		self._context.bind_callable("getAttr",dAPI._getAttr)
-		self._context.bind_callable("hasAttr",dAPI._hasAttr)		
+		self._context.bind_callable("hasAttr",dAPI._hasAttr)
 		self._context.bind_callable("setAttr",dAPI._setAttr)
 		self._context.bind_callable("getAllNodes",dAPI._getAllNodes)
 		self._context.bind_callable("getNeighbors",dAPI._getNeighbors)
@@ -126,8 +110,9 @@ class PythonExecutionContext :
 			{'getAttr' 				: dAPI._getAttr,
 			 'hasAttr'				: dAPI._hasAttr,
 			 'getAttrNames'		    : dAPI._getAttrNames,
-		 	 'setAttr' 				: dAPI._setAttr,
+			 'setAttr' 				: dAPI._setAttr,
 			 'getAllNodes' 			: dAPI._getAllNodes,
+			 'getNodesFromLabels'	: dAPI._getNodesFromLabels,
 			 'getNeighbors' 		: dAPI._getNeighbors,
 			 'isConnectionType' 	: dAPI._isConnectionType,
 			 'httpReq'		 		: dAPI._httpReq,
@@ -151,7 +136,10 @@ class PythonExecutionContext :
 		if 'result' in self._context :
 			del self._context['result']
 
-		exec(code) in self._context
+		if sys.version_info[0] < 3:
+			exec(code) in self._context
+		else:
+			exec((code), self._context)
 
 		if 'result' not in self._context :
 			return None

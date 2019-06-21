@@ -1,3 +1,8 @@
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
+
 var __nextASWSequenceNumber = '/asworker#1',
 	 __nextCSWSequenceNumber = '/csworker#1',	
 	 __pendingASWChangelogs = [],
@@ -20,7 +25,7 @@ function __clearObsoleteChangelogs(pendingChangelogs,sn)
 function __forceNextASWSequenceNumber(sn)
 {
 	__nextASWSequenceNumber = sn;
-	__clearObsoleteChangelogs(__pendingASWChangelogs,sn)
+	__clearObsoleteChangelogs(__pendingASWChangelogs,sn);
 }
 
 
@@ -28,7 +33,7 @@ function __forceNextASWSequenceNumber(sn)
 function __forceNextCSWSequenceNumber(sn)
 {
 	__nextCSWSequenceNumber = sn;
-	__clearObsoleteChangelogs(__pendingCSWChangelogs,sn)
+	__clearObsoleteChangelogs(__pendingCSWChangelogs,sn);
 }
 
 //Todo: Shred this into smaller functions
@@ -43,7 +48,7 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 {
 	console.debug(' ++ ('+seqNum+') ',changelog);
 
-	var isCSWChangelog 	 = seqNum.match(/csworker/)
+	var isCSWChangelog 	 = seqNum.match(/csworker/);
 		 nextSeqNum 	 	 = 
 			 (isCSWChangelog ? __nextCSWSequenceNumber : __nextASWSequenceNumber),
 		 pendingChangelogs = 
@@ -301,7 +306,7 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 						function(selection) {
 							__select(selection);
 						}, [__selection['items']], 5
-					)
+					);
 			}
 
 			/* react to loading of an IconDefinition (CS metamodel)

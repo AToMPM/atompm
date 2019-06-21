@@ -1,3 +1,10 @@
+#ignore autosave files
+.autosave.*
+
+#Jetbrains project files
+.idea/
+AToMPM.iml
+
 # ---> Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -54,6 +61,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+doc/_build/
 
 # PyBuilder
 target/

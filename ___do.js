@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-REF:: https://github.com/creationix/do (+ .setup/do.js.patch)
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 // Takes an array of actions and runs them all in parallel.
 // You can either pass in an array of actions, or several actions
@@ -45,7 +29,7 @@ exports.parallel = function parallel(actions) {
         }
       }, errback);
     });
-  }
+  };
 };
 
 // Chains together several actions feeding the output of the first to the
@@ -66,12 +50,13 @@ exports.chain = function chain(actions) {
       }
     }
     actions[pos](loop, errback);
-  }
-}
+  };
+};
 
 // Takes an array and does an array map over it using the async callback `fn`
 // The signature of `fn` is `function fn(item, callback, errback)`
-exports.map = function map(array, fn) { return function (callback, errback) {
+exports.map = function map(array, fn) {
+  return function (callback, errback) {
   var counter = array.length;
   var new_array = [];
   array.forEach(function (item, index) {
@@ -79,7 +64,7 @@ exports.map = function map(array, fn) { return function (callback, errback) {
       new_array[index] = result;
       counter--;
       if (counter <= 0) {
-        new_array.length = array.length
+        new_array.length = array.length;
         callback(new_array);
       }
     };
@@ -88,7 +73,8 @@ exports.map = function map(array, fn) { return function (callback, errback) {
       cont(local_callback, errback);
     }
   });
-}}
+};
+};
 
 // Takes an array and does an array filter over it using the async callback `fn`
 // The signature of `fn` is `function fn(item, callback, errback)`
@@ -114,7 +100,8 @@ exports.filter = function filter(array, fn) { return function (callback, errback
       cont(local_callback, errback);
     }
   });
-}}
+};
+};
 
 // Takes an array and does a combined filter and map over it.  If the result
 // of an item is undefined, then it's filtered out, otherwise it's mapped in.
@@ -138,28 +125,29 @@ exports.filterMap = function filterMap(array, fn) { return function (callback, e
       cont(local_callback, errback);
     }
   });
-}};
+};
+};
 
 // Allows to group several callbacks.
-exports.combo = function combo(callback) {
-  var items = 0,
-      results = [];
-  function add() {
-    var id = items;
-    items++;
-    return function () {
-      check(id, arguments);
-    };
-  }
-  function check(id, arguments) {
-    results[id] = Array.prototype.slice.call(arguments);
-    items--;
-    if (items == 0) {
-      callback.apply(this, results);
-    }
-  }
-  return { add: add, check: check };
-}
+// exports.combo = function combo(callback) {
+//   var items = 0,
+//       results = [];
+//   function add() {
+//     var id = items;
+//     items++;
+//     return function () {
+//       check(id, arguments);
+//     };
+//   }
+//   function check(id, arguments) {
+//     results[id] = Array.prototype.slice.call(arguments);
+//     items--;
+//     if (items == 0) {
+//       callback.apply(this, results);
+//     }
+//   }
+//   return { add: add, check: check };
+// }
 
 
 // Takes any async lib that uses callback based signatures and converts
@@ -180,10 +168,10 @@ exports.convert = function (lib, names) {
             callback(val);
           }
         });
-        lib[key].apply(lib, args)
-      }
-    }
+        lib[key].apply(lib, args);
+      };
+    };
   });
   return newlib;
-}
+};
 

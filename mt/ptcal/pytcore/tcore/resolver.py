@@ -1,25 +1,9 @@
-'''*****************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
+'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+Copyright 2011 by the AToMPM team and licensed under the LGPL
+See COPYING.lesser and README.md in the root of this project for full details'''
 
-Copyright (c) 2011 Eugene Syriani
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*****************************************************************************'''
-
-from rule_primitive import RulePrimitive
-from messages import TransformationException
+from .rule_primitive import RulePrimitive
+from .messages import TransformationException
 
 
 class Resolver(RulePrimitive):
@@ -37,7 +21,7 @@ class Resolver(RulePrimitive):
         super(Resolver, self).__init__()
         self.external_matches_only = external_matches_only
         self.custom_resolution = custom_resolution
-    
+
     def packet_in(self, packet):
         '''
             Attempts to merge the packets into a single one, only if all threads had succeeded.
@@ -63,13 +47,13 @@ class Resolver(RulePrimitive):
         # No conflicts are to be reported
         self.is_success = True
         return packet
-    
+
     def _custom_resolution(self, packet, match):
         '''
             Applies the user-defined resolution function
         '''
         return self.custom_resolution(packet)
-    
+
     def _default_resolution(self, packet, match):
         '''
             Attempts to resolve conservatively any conflicts

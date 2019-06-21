@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 /**
  * Gets the metamodel at the current URI
@@ -196,18 +180,17 @@ function __createEdge(segments,style,edgeId,linkuri)
     }
     function getOrderNr(id,visited) {
         var icon = __icons[id];
-        if (visited.indexOf(icon) > 0) return
+        if (visited.indexOf(icon) > 0) return;
         if (icon['ordernr']) return;
         visited.push(icon);
         if (__isConnectionType(id)) {
-            // I like my edges as I like my women: always on top
             icon['ordernr'] = 9999;
         } else if (icon['edgesIn'].length > 0) {
             for (var edgeId in icon['edgesIn']) {
-                var associationid = __edges[icon['edgesIn'][edgeId]]['start']
+                var associationid = __edges[icon['edgesIn'][edgeId]]['start'];
                 if (__isContainmentConnectionType(associationid)) {
                     getOrderNr(__edges[__icons[associationid]['edgesIn'][0]]['start'], visited);
-                    icon['ordernr'] = __icons[__edges[__icons[associationid]['edgesIn'][0]]['start']]['ordernr'] + 1
+                    icon['ordernr'] = __icons[__edges[__icons[associationid]['edgesIn'][0]]['start']]['ordernr'] + 1;
                 }
             }
             if (!icon['ordernr']) icon['ordernr'] = 0;
@@ -219,11 +202,10 @@ function __createEdge(segments,style,edgeId,linkuri)
         getOrderNr(id, []);
     }
     
-    Object.keys(__icons).concat().sort(function(a, b) {return __icons[a]['ordernr'] - __icons[b]['ordernr']}).forEach(function(el) {
+    Object.keys(__icons).concat().sort(function(a, b) {return __icons[a]['ordernr'] - __icons[b]['ordernr'];}).forEach(function(el) {
         __icons[el]['icon'].toFront();
     });
     Object.keys(__edges).forEach(function(el) {
-        // I like my edges as I like my women: always on top
         __edges[el]['icon'].toFront();
     });
     
@@ -434,7 +416,7 @@ function __getIconsInContainer(container)
 			return [];
         
         if( explored.indexOf(container) > -1 ) {
-            return []
+            return [];
         }
 	
 		var contents = 
@@ -452,7 +434,7 @@ function __getIconsInContainer(container)
 								}).concat([linkuri]);
 				}));
                 
-        explored.push(container)
+        explored.push(container);
 
         for (var ct_idx in contents) {
             var to_concat = utils.flatten(getExplicitContents(contents[ct_idx], explored));

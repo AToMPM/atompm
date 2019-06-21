@@ -1,22 +1,6 @@
-'''*****************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Eugene Syriani
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*****************************************************************************'''
+'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+Copyright 2011 by the AToMPM team and licensed under the LGPL
+See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..tcore.composer import Composer
 from ..tcore.matcher import Matcher
@@ -35,7 +19,7 @@ class Query(Composer):
         super(Query, self).__init__()
         self.M = Matcher(condition=LHS, max=1)
         self.I = Iterator(max_iterations=1)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -55,7 +39,7 @@ class Query(Composer):
         # Output success packet
         self.is_success = True
         return packet
-    
+
 class CQuery2(Composer):
     '''
         Finds a match for the LHS.
@@ -69,7 +53,7 @@ class CQuery2(Composer):
         self.M = Matcher(condition=LHS)
         self.I = Iterator()
         self.innerQuery=innerQuery
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -78,21 +62,21 @@ class CQuery2(Composer):
         if not self.M.is_success:
             self.exception = self.M.exception
             return packet
-        
+
         # Choose the first match
         packet = self.I.packet_in(packet)
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         while True:
-            
+
             packet = self.innerQuery.packet_in(packet)
             if self.innerQuery.is_success:
                 if self.innerQuery.exception:
                     self.exception = self.innerQuery.exception
                     return packet
-            
+
                 # Choose another match
                 packet = self.I.next_in(packet)
                 # No more iterations are left
@@ -106,7 +90,7 @@ class CQuery2(Composer):
             else:
                 self.is_success=True
                 return packet
-            
+
 class CQuery3(Composer):
     '''
         Finds a match for the LHS.
@@ -121,7 +105,7 @@ class CQuery3(Composer):
         self.I = Iterator()
         self.innerQuery=innerQuery
         self.secondInnerQuery=secondInnerQuery
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -130,21 +114,21 @@ class CQuery3(Composer):
         if not self.M.is_success:
             self.exception = self.M.exception
             return packet
-        
+
         # Choose the first match
         packet = self.I.packet_in(packet)
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         while True:
-            
+
             packet = self.innerQuery.packet_in(packet)
             if self.innerQuery.is_success:
                 if self.innerQuery.exception:
                     self.exception = self.innerQuery.exception
                     return packet
-            
+
                 # Choose another match
                 packet = self.I.next_in(packet)
                 # No more iterations are left
@@ -155,7 +139,7 @@ class CQuery3(Composer):
                         self.is_success = False
                     return packet
             else:
-                
+
                 packet = self.secondInnerQuery.packet_in(packet)
                 if self.secondInnerQuery.is_success:
                     if self.secondInnerQuery.exception:

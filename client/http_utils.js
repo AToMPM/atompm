@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 //Todo: replace this with JQuery
 //This remains outside for easier replacement later down the line
@@ -44,13 +28,17 @@ HttpUtils = function(){
 		var onreadystatechange = function(ev) {
 			 if( req.readyState == 4 )
 			 {
-	 			 console.debug(method+' '+url+' >> '+req.status);
-				 if( req.status == 0 )
-	 				 WindowManagement.openDialog(__FATAL_ERROR,'lost connection to back-end');
-				 else if( onresponse )
-					 onresponse(req.status,req.responseText);
-				 else if( ! utils.isHttpSuccessCode(req.status) )
-	 				 WindowManagement.openDialog(_ERROR,req.responseText);
+                 console.debug(method + ' ' + url + ' >> ' + req.status);
+                 //ignore calls made to other addresses
+                 if (url.startsWith("http://") || url.startsWith("https://")) {
+                     onresponse(req.status, req.responseText);
+                 }
+                 else if (req.status == 0)
+                     WindowManagement.openDialog(__FATAL_ERROR, 'lost connection to back-end');
+                 else if (onresponse)
+                     onresponse(req.status, req.responseText);
+                 else if (!utils.isHttpSuccessCode(req.status))
+                     WindowManagement.openDialog(_ERROR, req.responseText);
 			 }
  		 };
 	
@@ -75,7 +63,12 @@ HttpUtils = function(){
 //			console.debug(utils.jsons(params));
 			req.open(method, url, !sync); 
 			req.onreadystatechange = onreadystatechange;
-			req.send(utils.jsons(params));
+
+			if (typeof params != 'string'){
+				params = JSON.stringify(params);
+			}
+			req.send(params);
+
 		}
 	};
 	
@@ -125,6 +118,8 @@ HttpUtils = function(){
 		span.attr("class", 'fileb_icon');
 //		img.attr("class", 'clickable');
 		txt.css("padding", '5px');
+
+		txt.attr('id', fname.replace("/", ""));
 		
 		span.append(img);
 		span.append(txt);
@@ -151,6 +146,7 @@ HttpUtils = function(){
 		txt.attr("contentEditable", true);
 		// JQuery does not support HTML5 oninput
 		txt.keyup( oninput );
+		txt.attr('id', 'new_file');
 		span.append(img);
 		span.append(txt);
 		return span;
@@ -227,6 +223,7 @@ HttpUtils = function(){
 		var _context = {
 				'username':__user,
 				'wid':__wid,
+				'aswid' :__aswid,
 				'mms':utils.keys(__loadedToolbars).filter(__isIconMetamodel)};
 		try			{eval(code); return {};}
 		catch(err)	

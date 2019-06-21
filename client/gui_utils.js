@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 GUIUtils = function(){
 	
@@ -31,16 +15,16 @@ GUIUtils = function(){
 	/**
 	 * Converts from page centric X coordinates to canvas centric X coordinates
 	 */
-	this.convertToCanvasX = function(pageX){
-		return pageX + $('#div_container').scrollLeft() - $('#contentDiv').offset().left;
-	};
+    this.convertToCanvasX = function (event) {
+        return event.layerX;
+    };
 
 	/**
 	 * Converts from page centric Y coordinates to canvas centric Y coordinates
-	 */	
-	this.convertToCanvasY = function(pageY){
-		return pageY + $('#div_container').scrollTop() - $('#contentDiv').offset().top;
-	};
+	 */
+    this.convertToCanvasY = function (event) {
+        return event.layerY;
+    };
 	
 	/**
 	 * Disables the dock bar
@@ -65,198 +49,7 @@ GUIUtils = function(){
 		cb.prop("checked", checked);
 		return cb;
 	};
-	
-	/**
-	 * Returns a <div> with an interactive file browser within it
-	 * 
-	 * @param fnames - a complete list of all files in the directory tree
-	 * structure
-	 * @param draggable - when true, files and folders can be meaningfully
-	 * dragged
-	 * @param newfile when true, an editable new file icon is present
-	 * @param startfolder if set, starts navigation at the specified folder
-	 */
-	this.getFileBrowser = function(fnames, draggable, newfile, startfolder){
-		var maxFnameLength = utils.max(fnames,function(_) {return _.length;}),
-			 fileb = $("<div>"),
-			 navdiv = $("<div>"),
-			 input = $("<input>"),
-			 selection = undefined,
-			 currfolder = '/',
-			 clearSelection = 
-				 function()
-				 {
-					 if( selection )
-					 {
-						 selection.attr("class", 'fileb_icon');
-						 selection = undefined;
-						 input.val('');
-					 }
-				 },
-			 navbuttononclick	=
-				 /* 1 construct the full path associated to the clicked button
-					 2 remove 'deeper' buttons
-					 3 chdir to selected folder */
-				 function(ev)
-				 {
-					 var path = '';
-					 for( var i=0; i<navdiv.children("button").length; i++ )
-					 {
-						 path += $(navdiv.children()[i]).html() +'/';
-						 if( $(navdiv.children()[i]).html() == $(ev.target).html() )
-							 break;
-					 }
-					 
-					 setCurrentFileBrowserFolder(path.substring(1), fnames);
-				 },
-			 setCurrentFileBrowserFolder = 
-				 /* 1 determine files and folders from the given folder
-					 2 produce icons for them and add them to to-be content div
-					 3 create navigation toolbar for complete directory hierarchy
-					 4 replace previous content div, if any, with new one 
-				  	 5 clear past selection, if any, and remember current folder */
-				 function(folder,fnames) 
-				 {
-					 var div = $('#div_fileb-contents'),
-						  folders		  = [],
-						  files			  = [],
-						  maxFnameLength = 0,
-						  exists = false;
-					 
-					 // If it already exists, remove everything!
-					 if( div.length > 0 ) {
-						 $('#div_fileb-contents').remove();
-	//					 exists = true;
-					 }
-					 
-					 div = $("<div>");
-						 
-					 div.attr("class", 'fileb_pane')
-					 	.attr("id", 'div_fileb-contents');
-					 
-					 fnames.forEach( function(fname) {
-						 var _folder = utils.regexpe(folder);
-						 if( (matches=fname.match('^'+_folder+'(.+?/)')) )
-						 {
-							 if( ! utils.contains(folders,matches[1]) )
-								 folders.push(matches[1]);
-							 else
-								 return;
-						 }
-						 else if( (matches=fname.match('^'+_folder+'(.*)')) ) {
-                             if (matches[1].length > 0) {
-                                 files.push(matches[1]);
-                             } else {
-                                 return;
-                             }
-                         }
-						 else
-							 return;
-							 
-						 maxFnameLength = 
-							 Math.max(maxFnameLength,matches[1].length);
-					 });
-							 
-	//				 var tmpDiv = $("<div>");
-					 folders.concat(files).forEach( function(fname) {
-						 var icon = HttpUtils.getFileIcon(fname);
-						 if( icon )
-						 {
-							 icon.css("width", 8+maxFnameLength+'ex');
-							 icon.click( function(ev) {
-							 	 clearSelection();								 	
-	
-								 if( fname.match(/\/$/) )
-									 setCurrentFileBrowserFolder(folder+fname,fnames);
-								 else
-								 {
-									 input.val( folder+fname );
-									 selection = icon;
-									 selection.attr("class", 'fileb_icon_selected');
-								 }
-							 });
-				 			 
-				 			 if( draggable )
-							 {
-								 //icon.setAttribute('draggable',true);
-				 				 icon.attr("draggable", true);
-								 icon.get(0).ondragstart = 
-									 function(event) 
-									 {
-										 var uri = HttpUtils.url(folder+fname+'.file',__NO_WID);
-			  							 event.dataTransfer.effectAllowed = 'copyMove';
-			  							 event.dataTransfer.setData(
-											 'DownloadURL', 
-											 'application/zip:'+fname+'.zip:'+
-												 window.location.origin+uri);
-										 event.dataTransfer.setData('uri',uri);
-									 };
-							 }
-	
-							 div.append(icon);
-						 }
-					 });
-					 
-					 if( newfile )
-					 {
-						 var icon = HttpUtils.getNewFileIcon( function(ev) {
-							 input.val( folder+ev.target.textContent );
-						 });
-						 icon.css("width", 8+maxFnameLength+'ex');
-						 div.append(icon);
-					 }
-					 
-					 navdiv.empty();
-					 
-	//				 while (navdiv.children().length > 0) {
-	//					navdiv.find(navdiv.lastChild).remove();
-	//				 }
-					 tmpDiv = $("<div>");
-					 var subfolders = folder.split('/').filter(function(subf) {return subf != '';});
-					 subfolders.unshift('/');
-					 subfolders.forEach(function(subfolder) {
-						var navbutton = $('<button>');
-						navbutton.html( subfolder );
-						navbutton.click(navbuttononclick);
-						navdiv.append(navbutton);
-					 });
-					 
-					 //navdiv.html( tmpDiv.html() );
-					 
-					 
-					 if( exists ) {
-	//					 $('#div_fileb-contents').html( div.html() );
-	//					 fileb.append(div);
-						 $('#div_fileb-contents').remove();
-						 fileb.append(div);
-					 } else
-						 fileb.append(div);
-	
-					 clearSelection();				 
-					 currfolder = folder;
-				 };
-	
-		fileb.css("width", maxFnameLength+'ex')
-			.css("maxWidth", '100%');
-		
-		navdiv.css("align",  'left');
-		
-		input.attr("type", 'hidden');
-		
-		fileb.append(navdiv);
-		fileb.append(input);
-		
-		setCurrentFileBrowserFolder(startfolder ? startfolder : '/',fnames);
-	
-		return {'filebrowser':	 fileb,
-				  'filepane':	 	 function() {return $('#div_fileb-contents');},
-				  'getcurrfolder': function() {return currfolder;},	
-				  'getselection':	 function()	{return input.val();},
-                  'clearselection': function() {clearSelection()},
-                  'refresh': function(fnames, the_folder) {
-                      setCurrentFileBrowserFolder(the_folder || currfolder, fnames);
-                  }};
-	};
+
 	
 	// TODO: replace the bundled function with an actual object generation. The
 	// current method is sloppy.
@@ -381,7 +174,7 @@ GUIUtils = function(){
 			var vals 	 = type.match(/^ENUM\((.*)\)$/)[1],
 				 input 	 = GUIUtils.getSelector(vals.split(','),false,[value]),
 				 getinput = 
-					 function(_){return HttpUtils.getSelectorSelection(_)[0]};
+					 function(_){return HttpUtils.getSelectorSelection(_)[0];};
 		}
 	
 		else if( type.match(/^boolean$/) )
@@ -394,9 +187,9 @@ GUIUtils = function(){
 		else if( type.match(/^\$/) )
 			return GUIUtils.getInputField(__specialTypes[type],value);
 	
-		else if (matches = type.match("^file<(.*)>")) {
+		else if ((matches = type.match("^file<(.*)>"))) {
 			var input 	 = GUIUtils.getFileInput(value,matches[1],"code_style string_input",1),
-				 getinput = function(_){return _.val();}
+				 getinput = function(_){return _.val();};
         }
 	
 		else
@@ -415,7 +208,7 @@ GUIUtils = function(){
 	 * 
 	 * @param choices - the choices for the <select> element
 	 * @param multipleChoice - if true, allows for multiple options to be selected
-	 * @param defaultSelect - sets the default selection for the list
+	 * @param defaultSelection - sets the default selection for the list
 	 * @param numVisibleOptions - sets the number of visible options
 	 */
 	this.getSelector = function(choices,multipleChoice,defaultSelection,numVisibleOptions){
@@ -430,6 +223,7 @@ GUIUtils = function(){
 					var option = $('<option>');
 					option.val( choice ); 
 					option.html( choice );
+					option.attr('id', "choice_" + choice);
 					select.append(option);
 					if( defaultSelection != undefined && 
 						 utils.contains(defaultSelection,choice) )
@@ -480,7 +274,7 @@ GUIUtils = function(){
         });
         string_input.extra_el = extra_el;
         return string_input;
-    }
+    };
 	
 	/**
 	 * Constructs a <textarea> element. In this element, Alt + Right Arrow
@@ -515,27 +309,21 @@ GUIUtils = function(){
 				
 				return true;
 			}
-            // https://media.giphy.com/media/12XMGIWtrHBl5e/giphy.gif
-			else if( event.keyCode == KEY_ENTER )
-			{
-                if (rows > 1) {
-                    // only for multi-line input fields
-                    var cursorPos = event.target.selectionStart;
-                    input.val( 
-                            input.val().substring(0,cursorPos)+'\r\n'+
-                            input.val().substring(cursorPos));
-                    input.get(0).setSelectionRange(cursorPos+1,cursorPos+1);
+
+            else if (event.keyCode == KEY_ENTER) {
+                //for single row fields, don't create a new line
+                if (rows == 1) {
+                    event.preventDefault();
                 }
-				event.stopPropagation();
-                event.preventDefault();
-				return true;
-			}
+            }
 		});
-        input.keyup( function (event) {
-			if( event.keyCode == KEY_ENTER )
-			{
-				event.stopPropagation();
-                event.preventDefault();
+        input.keyup(function (event) {
+            if (event.keyCode == KEY_ENTER) {
+                //don't send the enter key for multi-line fields
+                //this closes the window
+                if (rows > 1) {
+                    event.stopPropagation();
+                }
             }
         });
 		return input;
@@ -653,6 +441,7 @@ GUIUtils = function(){
 					callback(input); 
 				}
 			});
+			ok.attr("id", "dialog_btn");
 			ok.html('ok');
 			dialog.append(ok);
 		}
@@ -667,8 +456,48 @@ GUIUtils = function(){
 			dialog.append(cancel);
 		}
 
-		BehaviorManager.setActiveBehaviourStatechart(__SC_DIALOG);
-		BehaviorManager.handleUserEvent(__EVENT_SHOW_DIALOG);
+        dialog.keydown(function (event) {
+
+            //tab through the fields
+            if (event.key == "Tab") {
+
+                try {
+                    if (title.startsWith("edit")) {
+                        let table_row = event.target.parentElement.parentElement;
+                        let nextEle = table_row.nextElementSibling;
+
+                        // at end, so select first element
+                        if (nextEle == null) {
+                            nextEle = table_row.parentElement.firstElementChild;
+                        }
+
+                        //get the actual text field
+                        let nextField = nextEle.children[1].children[0];
+                        nextField.focus();
+                    } else if (title.startsWith("Parameters")) { //try to tab through workflow parameters
+                        let element = event.target;
+
+                        //get the next element
+                        //skips the <br>s and labels
+                        let nextEle = element.nextElementSibling.nextElementSibling
+                            .nextElementSibling.nextElementSibling;
+
+                        //cycle back around to the top
+                        if (nextEle.nodeName == "BUTTON") {
+                            nextEle = nextEle.parentElement.children[3];
+                        }
+                        nextEle.focus();
+                    }
+
+                } catch (err) { //catch errors if something was unexpected
+                    console.debug("Tab event failed: " + err);
+                }
+
+            }
+        });
+
+        BehaviorManager.setActiveBehaviourStatechart(__SC_DIALOG);
+        BehaviorManager.handleUserEvent(__EVENT_SHOW_DIALOG);
 	};
 	
 	/* 
@@ -769,10 +598,17 @@ GUIUtils = function(){
 									 _ERROR,
 									 'error in button code ::\n '+res['$err']);
 			 		 });
-//			 		 var url = HttpUtils.url(imgSrc(name),__NO_WID);
-			 		 img.attr("src", HttpUtils.url(imgSrc(name),__NO_WID));
-			 		 div.append(img);
-			 		 return div;
+                     var url = HttpUtils.url(imgSrc(name),__NO_WID);
+                     img.attr("src", url);
+
+                     //handle missing icon
+                     let defaultUrl = HttpUtils.url("/Formalisms/default.icon.png");
+                     let missingMsg = "Warning: The icon \"" + url + "\" is missing! The default icon has been used.";
+                     let onerrorStr = "this.onerror = ''; this.src = '" + defaultUrl + "'; console.log('" + missingMsg + "');";
+                     img.attr('onerror', onerrorStr);
+
+                     div.append(img);
+                     return div;
 			 	 };
 
 		GUIUtils.removeToolbar(tb);
@@ -814,9 +650,41 @@ GUIUtils = function(){
 		if( tb_div.children().length == 0 )
 			tb_div.append( GUIUtils.getTextSpan(tb,'toolbar_alt') );
 
-		$('#div_dock').append(tb_div);
+        //get the toolbar
+        let dock = $('#div_dock');
 
-		__loadedToolbars[tb] = data;
+        //create an array and add the new toolbar
+        let items = Array.from(dock[0].childNodes);
+        items.push(tb_div[0]);
+
+        //sort the dock
+        items.sort(function(a, b) {
+
+            //main menu comes first
+            if (a.id.includes("MainMenu")){
+                return -1;
+            }
+
+            //toolbars come first
+            if (a.id.includes("Toolbars") && !(b.id.includes("Toolbars"))){
+                return -1;
+            }
+
+            if (b.id.includes("Toolbars") && !(a.id.includes("Toolbars"))){
+                return 1;
+            }
+
+            //otherwise, sort by name
+            return a.id == b.id? 0 : (a.id > b.id ? 1 : -1);
+        });
+
+        //add the elements back into the dock
+        for (let i = 0; i < items.length; ++i) {
+            dock.append(items[i]);
+        }
+
+
+        __loadedToolbars[tb] = data;
 	};
 	
 	return this;

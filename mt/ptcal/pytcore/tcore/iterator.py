@@ -1,26 +1,10 @@
-'''*****************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Eugene Syriani
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*****************************************************************************'''
+'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+Copyright 2011 by the AToMPM team and licensed under the LGPL
+See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.seeded_random import Random
 from ..util.infinity import INFINITY
-from rule_primitive import RulePrimitive
+from .rule_primitive import RulePrimitive
 #from messages import TransformationException
 
 
@@ -41,12 +25,12 @@ class Iterator(RulePrimitive):
         self.rng = rng
         if condition:
             self.condition = condition.get_id()
-    
+
     def cancelIn(self, cancel):
         if self.condition not in cancel.exclusions:
             super(Iterator, self).cancelIn(cancel)
             self.iterations = 0
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -58,7 +42,7 @@ class Iterator(RulePrimitive):
             self.iterations = 1
             self.is_success = True
         return packet
-    
+
     def next_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -73,11 +57,11 @@ class Iterator(RulePrimitive):
             self.iterations += 1
             self.is_success = True
         return packet
-    
+
     def _choose(self, packet):
         # Choose a match form the current match set and remove it from the list of matches
         return packet.match_sets[packet.current].matches.pop((self.rng if self.rng != None else Random).randint(0, len(packet.match_sets[packet.current].matches) - 1))
-    
+
     def _globalize_pivots(self, packet):
         """
             Puts all local pivots of the current match in the global pivots of the packet.

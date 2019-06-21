@@ -1,24 +1,24 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("./__worker");
 
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
+const _do = require("./___do");
+const _utils = require('./utils');
+const _mmmk = require("./mmmk");
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
 
-This file is part of AToMPM.
 
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
-
-{
+module.exports = {
 	/************************** REST REQUEST HANDLING **************************/
 	/* INTENT :
 			ask our mtworker to do something (e.g., change transformation execution
@@ -139,14 +139,20 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 			}
 
 
-
-			_do.chain(actions)(
-					function() 
-					{
-						__postMessage({'statusCode':200, 'respIndex':resp});
-					},
-					function(err) 	{__postInternalErrorMsg(resp,err);}
-			);
+            _do.chain(actions)(
+                function () {
+                    __postMessage({'statusCode': 200, 'respIndex': resp});
+                },
+                function (err) {
+                    if (err.includes("ECONNREFUSED")) {
+                        let msg = "could not connect to model transformation worker!\n" +
+                            "please ensure the worker is running!";
+                        __postInternalErrorMsg(resp, msg);
+                    } else {
+                        __postInternalErrorMsg(resp, err);
+                    }
+                }
+            );
 		},
 
 		
@@ -207,7 +213,13 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 							 'hitchhiker':reqData['hitchhiker'],
 							 'respIndex':resp});
 					},
-					function(err) 	{__postInternalErrorMsg(resp,err);}
+					function (err) {
+
+						if (err['code'].includes("ENOENT")) {
+							err = "Error! File not found: " + err['path'];
+						}
+						__postInternalErrorMsg(resp, err);
+					}
 			);
 		},
 
@@ -508,4 +520,4 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 					 'sequence#':__sequenceNumber(),
 					 'respIndex':resp});
 		}	
-}
+};

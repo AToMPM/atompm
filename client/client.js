@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 /*TODO: look into reworking naming convention to be more intuitive
 *ie: 
@@ -280,7 +264,7 @@ function _loadModel(fname)
 		else
 			__saveas = fname;
 		DataUtils.loadm(fname);
-		if (__msg != '')
+		if (__msg != '' && __msg != null)
 			WindowManagement.openDialog(_CUSTOM,{'widgets':[{'id':'1','type':'text','label':'text message','default':''}],"title":__msg});
 	}
 }
@@ -295,7 +279,7 @@ function _loadToolbar(fname)
 		DataUtils.loadbm(fname);
 	else if( __isIconMetamodel(fname) )
 		DataUtils.loadmm(fname);
-	if (__msg != '')
+	if (__msg != '' && __msg != null)
 		WindowManagement.openDialog(_CUSTOM,{'widgets':[{'id':'1','type':'text','label':'text message','default':''}],"title":__msg});
 }
 
@@ -318,7 +302,7 @@ function _saveModel(fname,backup,autosave)
 			var options = {'extensions':['\\.model'],
 						   'multipleChoice':false,
 						   'manualInput':true,
-						   'title':'specify target model',
+						   'title':'specify target model\nextension: .model',
 						   'startDir':'model'},
 				callback =
 					function(fnames)
@@ -333,7 +317,7 @@ function _saveModel(fname,backup,autosave)
 	} else if( ! __isModel(fname) )	{
 		WindowManagement.openDialog(
 			_ERROR,
-			'invalid extension... models must be saved as "*.model" files');
+			'invalid extension on \'' + fname +'\' - models must be saved as "*.model" files');
 		return;
 	}
 
@@ -352,7 +336,7 @@ function _saveModel(fname,backup,autosave)
 	  collaborator) inherit them */
 function _setInvisibleMetamodels(mms)
 {
-	mms = mms.map( function(mm) {return mm.match(/(.*)\.metamodel/)[1]} );
+	mms = mms.map( function(mm) {return mm.match(/(.*)\.metamodel/)[1];} );
 
 	function hideOrShow(uri,icon)
 	{
@@ -412,8 +396,8 @@ function _newFormalism(formalism_name) {
 			if( ! utils.isHttpSuccessCode(statusCode) ) {
 				WindowManagement.openDialog(_ERROR, 'failed to create new formalism :: '+resp);
             } else {
-                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".model")
-                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".defaultIcons.model")
+                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".model");
+                WindowManagement.spawnClient("/Formalisms/" + formalism_name + "/" + formalism_name + ".defaultIcons.model");
             }
 		});
 }
@@ -434,7 +418,7 @@ function _newTransformation(transformation_loc) {
                 if( ! utils.isHttpSuccessCode(statusCode) ) {
                     WindowManagement.openDialog(_ERROR, 'failed to create new transformation :: '+resp);
                 } else {
-                    WindowManagement.spawnClient(transformation_loc)
+                    WindowManagement.spawnClient(transformation_loc);
                 }
             });
     } else {
@@ -458,7 +442,7 @@ function _newRule(rule_loc) {
                 if( ! utils.isHttpSuccessCode(statusCode) ) {
                     WindowManagement.openDialog(_ERROR, 'failed to create new rule :: '+resp);
                 } else {
-                    WindowManagement.spawnClient(rule_loc)
+                    WindowManagement.spawnClient(rule_loc);
                 }
             });
     } else {
@@ -578,7 +562,7 @@ function _loadModelInWindow(args/*fname[]*/)
 	else if(tf > 0 )
 		option = 'TF';
 	else if (vas == 'VAS')
-		option = 'VAS';;
+		option = 'VAS';
 	WindowManagement.spawnClientOption(loc[aid],'',loc[path],option,loc[msg]);
 }
 
@@ -649,7 +633,7 @@ function _openNewDialog(args)
 				}
 				data += ','+msg;				
 				data = '{'+data;
-				data += '}'
+				data += '}';
 				_updateAttr({"asid":pid,"attr":"parameterList","val":data});
 				play = function()
                {
@@ -700,7 +684,7 @@ function _loadToolbarInWindow(args/*fname[]*/)
 	else if(tr > 0 )
 		option = 'TR';
 	else if(tf > 0 )
-		option = 'TF';;	
+		option = 'TF';	
 	WindowManagement.spawnClientOption(loc[path],loc[aid],option,'',loc[msg]);
 }
 
@@ -824,6 +808,12 @@ function __iconToFront(tgt)
 	__icons[__vobj2uri(tgt)]['icon'].toFront();
 }
 
+/*---------------------------- LAYOUT -----------------------------*/
+
+function _autolayout()
+{
+    Layout.autolayout();
+}
 
 /*---------------------------- SELECTION OVERLAY -----------------------------*/
 
@@ -1032,11 +1022,12 @@ function __relativizeURL(url)
 
 
 /* returns the csuri of the icon that contains the specified VisualObject */
-function __vobj2uri(vobj)
-{
-	if( vobj != document.body )
-		return vobj.parentNode.getAttribute('__csuri') ||
-				 __vobj2uri(vobj.parentNode);
+function __vobj2uri(vobj) {
+    if (vobj != document.body) {
+        return vobj.parentNode.getAttribute('__csuri') ||
+            vobj.parentNode.getAttribute('__linkuri') ||
+            __vobj2uri(vobj.parentNode);
+    }
 }
 
 function __getRecentDir(name) {

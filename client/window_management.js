@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // DEPRECATED FUNCTIONS
@@ -74,6 +58,55 @@ WindowManagement = function(){
 		__setCanvasScrolling(false);
 	};
 	
+	this.showAboutDialog = function () {
+
+        let create_about = function (status, text) {
+
+            let version = null;
+            let time_at = null;
+
+            if (utils.isHttpSuccessCode(status)) {
+                let resp = JSON.parse(text);
+                version = resp['tag_name'];
+
+                time_at = resp['published_at'];
+                time_at = time_at.split("T")[0];
+            }
+
+            let title = "About AToMPM";
+            let elements = [];
+
+            let website = "<a href= '" + __WEBPAGE__ + "' target='_blank'>Website and Tutorials</a>";
+            elements.push(GUIUtils.getTextSpan(website));
+
+            let doc_website = "<a href= '" + __DOC_WEBPAGE__ + "' target='_blank'>Documentation</a>";
+            elements.push(GUIUtils.getTextSpan(doc_website));
+
+            let curr_version_str = "Current Version: " + __VERSION__;
+            elements.push(GUIUtils.getTextSpan(curr_version_str));
+
+            elements.push(GUIUtils.getTextSpan("\n"));
+
+            if (version != null) {
+                let new_version_str = "Newest Version: " + version;
+                elements.push(GUIUtils.getTextSpan(new_version_str));
+
+                let time_at_str = "Released on: " + time_at;
+                elements.push(GUIUtils.getTextSpan(time_at_str));
+
+            }
+
+            GUIUtils.setupAndShowDialog(
+                elements,
+                null,
+                __ONE_BUTTON,
+                title,
+                null);
+        };
+
+        HttpUtils.httpReq("GET", "https://api.github.com/repos/AToMPM/atompm/releases/latest", null, create_about);
+	};
+	
 	//Todo: Shred this function into smaller functions, as this should
 	// really just amount to a switch statement
 	//TBI: complete comments about each dialog (copy from user's manual)
@@ -115,7 +148,7 @@ WindowManagement = function(){
 										return _.length;
 									}),
 						 
-								fileb 			= GUIUtils.getFileBrowser(fnames,true),
+								fileb 			= FileBrowser.getFileBrowser(fnames,true),
 								feedbackarea	= $('<div>'),
 								feedback		 = GUIUtils.getTextSpan(''),
 								progressbar	 = $('<div>'),
@@ -408,236 +441,9 @@ WindowManagement = function(){
 			error(args,true);
 	
 		else if( type == _FILE_BROWSER )
-			/* args: extensions,multipleChoice,manualInput,title,startDir */
+			/* args: extensions,manualInput,title,startDir */
 		{
-			HttpUtils.httpReq(
-				'GET',
-				HttpUtils.url('/filelist',__NO_WID),
-				undefined,
-				function(statusCode,resp)
-				{
-                    args['extensions'].push('/');
-					var fnames = __localizeFilenames(
-							__filterFilenamesByExtension(
-								resp.split('\n'),
-								args['extensions'] || ['.*'])
-							).sort(),
-							maxFnameLength = 
-								utils.max(fnames,function(_) {return _.length;}),
-                             folder_buttons = $('<div>'),
-                             new_folder_b = $('<button>'),
-                             rename_folder_b = $('<button>'),
-                             delete_folder_b = $('<button>'),
-                             move_folder_b = $('<button>'),
-                             file_buttons = $('<div>'),
-                             rename_file_b = $('<button>'),
-                             delete_file_b = $('<button>'),
-                             move_file_b = $('<button>'),                
-                             feedbackarea = $('<div>'),
-                             feedback = GUIUtils.getTextSpan('',"feedback"),
-							 fileb = 
-								 GUIUtils.getFileBrowser(fnames,false,args['manualInput'],__getRecentDir(args['startDir']));
-                    
-                    new_folder_b.html('new folder')
-                    .click(function(ev) {
-                        var folder_name = prompt("please fill in a name for the folder");
-                        if (folder_name != null) {
-                            folder_name = folder_name.replace(/^\s+|\s+$/g, ''); // trim
-                            if (!folder_name.match(/^[a-zA-Z0-9_\s]+$/i)) {
-                                feedback.html("invalid folder name: " + folder_name);
-                            } else {
-                                console.log("/" + window.localStorage.getItem('user') + fileb['getcurrfolder']() + folder_name + '.folder');
-                                DataUtils.createFolder("/" + window.localStorage.getItem('user') + fileb['getcurrfolder']() + folder_name + '.folder', function(statusCode, resp) {
-                                    if( ! utils.isHttpSuccessCode(statusCode) ) {
-                                        feedback.html(resp)
-                                    } else {
-                                        feedback.html('created ' + folder_name);
-                                        fnames.push(fileb['getcurrfolder']() + folder_name + "/")
-                                        fileb['refresh'](fnames);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    folder_buttons.append(new_folder_b);
-                    
-                    rename_folder_b.html('rename folder')
-                    .click(function(ev) {
-                        var value = fileb['getcurrfolder']();
-                        var folder_name = prompt("please fill in a new name for folder " + value);
-                        if (folder_name != null) {
-                            folder_name = folder_name.replace(/^\s+|\s+$/g, ''); // trim
-                            if (!folder_name.match(/^[a-zA-Z0-9_\s]+$/i)) {
-                                feedback.html("invalid folder name: " + folder_name);
-                            } else {
-                                DataUtils.renameInCloud("/" + window.localStorage.getItem('user') + value.slice(0, -1) + ".folder", folder_name, function(statusCode,resp)
-                                    {
-                                        if( ! utils.isHttpSuccessCode(statusCode) ) {
-                                            feedback.html(resp);
-                                        } else {
-                                            var matches = value.match(/^\/(.*\/)?(.*)\/$/),
-                                                newvalue = "/" + (matches[1] || "") + folder_name + "/";
-                                            for (var idx in fnames) {
-                                                fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2"); 
-                                            }
-                                            fileb['refresh'](fnames, newvalue);
-                                            fileb['clearselection']();
-                                            feedback.html('renamed ' + value + ' to ' + newvalue);
-                                        }
-                                    });
-                            }
-                        }
-                    });
-                    folder_buttons.append(rename_folder_b);
-                    
-                    delete_folder_b.html('delete folder')
-                    .click(function(ev) {
-                        var value = fileb['getcurrfolder']();
-                        if (confirm("are you sure you want to delete " + value + "?")) {
-                            DataUtils.deleteFromCloud("/" + window.localStorage.getItem('user') + value.slice(0, -1) + ".folder", function(statusCode,resp)
-                                {
-                                    if( ! utils.isHttpSuccessCode(statusCode) ) {
-                                        feedback.html(resp);
-                                    } else {
-                                        var matches = value.match(/^\/(.*\/)?(.*)\/$/),
-                                            newvalue = "/_Trash_" + value;
-                                        for (var idx in fnames) {
-                                            fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2");
-                                        }
-                                        fileb['refresh'](fnames);
-                                        fileb['clearselection']();
-                                        feedback.html('deleted ' + value);
-                                    }
-                                });
-                        }
-                    });
-                    folder_buttons.append(delete_folder_b);
-                    
-                    move_folder_b.html('move folder')
-                    .click(function(ev) {
-                        var value = fileb['getcurrfolder']();
-                        var folder_loc = prompt("please fill in a new parent folder for folder " + value);
-                        if (folder_loc != null) {
-                            folder_loc = folder_loc.replace(/^\s+|\s+$/g, ''); // trim
-                            if (!folder_loc.match(/^\/([a-zA-Z0-9_\s]+\/)*$/i)) {
-                                feedback.html("invalid parent location: " + folder_loc);
-                            } else {
-                                DataUtils.moveInCloud("/" + window.localStorage.getItem('user') + value.slice(0, -1) + ".folder", folder_loc, function(statusCode,resp)
-                                    {
-                                        if( ! utils.isHttpSuccessCode(statusCode) ) {
-                                            feedback.html(resp);
-                                        } else {
-                                            var matches = value.match(/^\/(.*\/)?(.*)\/$/),
-                                                newvalue = folder_loc + matches[2] + "/";
-                                            for (var idx in fnames) {
-                                                fnames[idx] = fnames[idx].replace(new RegExp("^("+value+")(.*)"), newvalue+"$2"); 
-                                            }
-                                            fileb['refresh'](fnames, newvalue);
-                                            fileb['clearselection']();
-                                            feedback.html('moved ' + value + ' to ' + folder_loc);
-                                        }
-                                    });
-                            }
-                        }
-                    });
-                    folder_buttons.append(move_folder_b);
-                    
-                    rename_file_b.html('rename file')
-                    .click(function(ev) {
-                        var value = fileb['getselection']();
-                        var file_name = prompt("please fill in a new name for file " + value);
-                        if (file_name != null) {
-                            file_name = file_name.replace(/^\s+|\s+$/g, ''); // trim
-                            if (!file_name.match(/^[a-zA-Z0-9_\s\.]+$/i)) {
-                                feedback.html("invalid file name: " + file_name);
-                            } else {
-                                DataUtils.renameInCloud("/" + window.localStorage.getItem('user') + value + ".file", file_name, function(statusCode,resp)
-                                    {
-                                        if( ! utils.isHttpSuccessCode(statusCode) ) {
-                                            feedback.html(resp);
-                                        } else {
-                                            var matches = value.match(/^\/(.*\/)?(.*)$/),
-                                                newvalue = "/" + (matches[1] || "") + file_name;
-                                            var idx = fnames.indexOf(value);
-                                            if (idx >= 0) {
-                                                fnames[idx] = newvalue;
-                                            }
-                                            fileb['refresh'](fnames);
-                                            fileb['clearselection']();
-                                            feedback.html('renamed ' + value + ' to ' + newvalue);
-                                        }
-                                    });
-                            }
-                        }
-                    });
-                    file_buttons.append(rename_file_b);
-                    
-                    delete_file_b.html('delete file')
-                    .click(function(ev) {
-                        var value = fileb['getselection']();
-                        if (confirm("are you sure you want to delete " + value + "?")) {
-                            DataUtils.deleteFromCloud("/" + window.localStorage.getItem('user') + value + ".file", function(statusCode,resp)
-                                {
-                                    if( ! utils.isHttpSuccessCode(statusCode) ) {
-                                        feedback.html(resp);
-                                    } else {
-                                        feedback.html('deleted ' + value);
-                                        var idx = fnames.indexOf(value);
-                                        if (idx >= 0) {
-                                            fnames.splice(idx, 1);
-                                        }
-                                        fileb['refresh'](fnames);
-                                        fileb['clearselection']();
-                                    }
-                                });
-                        }
-                    });
-                    file_buttons.append(delete_file_b);                    
-                    
-                    move_file_b.html('move file')
-                    .click(function(ev) {
-                        var value = fileb['getselection']();
-                        var folder_loc = prompt("please fill in a new parent folder for file " + value);
-                        if (folder_loc != null) {
-                            folder_loc = folder_loc.replace(/^\s+|\s+$/g, ''); // trim
-                            if (!folder_loc.match(/^\/([a-zA-Z0-9_\s]+\/)*$/i)) {
-                                feedback.html("invalid parent location: " + folder_loc);
-                            } else {
-                                DataUtils.moveInCloud("/" + window.localStorage.getItem('user') + value + ".file", folder_loc, function(statusCode,resp)
-                                    {
-                                        if( ! utils.isHttpSuccessCode(statusCode) ) {
-                                            feedback.html(resp);
-                                        } else {
-                                            var matches = value.match(/^\/(.*\/)?(.*)$/),
-                                                newvalue = folder_loc + matches[2];
-                                            feedback.html('moved ' + value + ' to ' + folder_loc);
-                                            var idx = fnames.indexOf(value);
-                                            if (idx >= 0) {
-                                                fnames[idx] = newvalue;
-                                            }
-                                            fileb['refresh'](fnames);
-                                            fileb['clearselection']();
-                                        }
-                                    });
-                            }
-                        }
-                    });
-                    file_buttons.append(move_file_b);
-	
-					GUIUtils.setupAndShowDialog(
-						[fileb['filebrowser'],folder_buttons,file_buttons,feedback],
-						function() 
-						{
-							var value = [fileb['getselection']()];
-							if (value.length > 0 && value[0] != "" && args['startDir']) {
-								__setRecentDir(args['startDir'],value[0].substring(0, value[0].lastIndexOf('/') + 1));
-							}
-							return value;
-						},
-						__TWO_BUTTONS,
-						args['title'],
-						callback);
-				});	
+			FileBrowser.buildFileBrowser(args['extensions'], args['manualInput'], args['title'], args['startDir'], callback);
 		}
 	
 		else if( type == _LEGAL_CONNECTIONS )
@@ -703,11 +509,20 @@ WindowManagement = function(){
 				if( args['ignoreKey'] != undefined && 
 					 args['ignoreKey'](attr,args['data'][attr]['value']) )
 					continue;
-	
-				var tr = $('<tr>');
-				var ii = GUIUtils.getInputField(
-						args['data'][attr]['type'],
-						args['data'][attr]['value']);
+
+                var tr = $('<tr>');
+                tr.attr("id", "tr_" + attr);
+                var ii = null;
+                try {
+                    ii = GUIUtils.getInputField(
+                        args['data'][attr]['type'],
+                        args['data'][attr]['value']);
+                } catch (err) {
+                    console.log(args['data'][attr]);
+                    WindowManagement.openDialog(
+                        _ERROR,
+                        'unexpected error in editing mode ::\n ' + err + '\n' + utils.jsons(args['data'][attr]));
+                }
 //				var tr = table.append( $('<tr>') ),
 //					 ii = GUIUtils.getInputField(
 //							 args['data'][attr]['type'],
@@ -788,8 +603,13 @@ WindowManagement = function(){
 			 completion */
 	this.spawnClient = function (fname,callbackURL)
 	{
-		var c 		= window.open(window.location.href, '_blank'),
-		onspawn = 
+		let c 		= window.open(window.location.href, '_blank');
+
+		if (c == undefined){
+			WindowManagement.openDialog(_ERROR, "Failed to open new window. Are pop-ups blocked?");
+			return;
+		}
+			let onspawn =
 			 function()
 			 {
 				 if( (fname || callbackURL)	 &&
@@ -823,8 +643,15 @@ WindowManagement = function(){
 		the instance*/	
 	this.spawnClientOption = function (fname,tbname,option,trafo,msg)
 	{
-		var c 		= window.open(window.location.href, '_blank'),
-		onspawn = 
+        let c = window.open(window.location.href, '_blank');
+
+        if (c == undefined) {
+            WindowManagement.openDialog(_ERROR, "Failed to open new window. Are pop-ups blocked?\n" +
+                "Please reload the workflow model after allowing pop-ups.");
+            return;
+        }
+
+		let onspawn =
 			 function()
 			 {
 				if( (fname|| tbname)	 &&
@@ -839,15 +666,15 @@ WindowManagement = function(){
 				 c.__trafo = trafo;
 				 c.__msg = msg;
 				if (trafo == undefined){
-					trafo = option
+					trafo = option;
 				}
-				if( tbname ){
-						toolbars = tbname.split(",");
-						for ( var n in toolbars){
-							c._loadToolbar(toolbars[n]);
-						}						
-				}				
-				if( fname ){
+                 if (tbname) {
+                     let toolbars = tbname.split(",");
+                     for (let toolbar of toolbars) {
+                         c._loadToolbar(toolbar);
+                     }
+                 }
+                 if( fname ){
 						c.__saveas = fname;
 						if( option.length > 2 ){
 							c._loadModel(fname);
@@ -978,7 +805,7 @@ WindowManagement = function(){
 		if(ev!=null && ev.keyCode==13) {
 			$('#div_dialog_' + (__dialog_stack.length-1).toString() + " .okbutton").click();
 		}
-        __dialog_stack.pop()
+        __dialog_stack.pop();
 		var dialog = $('#div_dialog_'+__dialog_stack.length);
         dialog.remove();
 		if (!__dialog_stack.length) {

@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 ConnectionUtils = function(){
 	var connectionPathEditingOverlay = {};
@@ -216,18 +200,68 @@ ConnectionUtils = function(){
 		connectionPathEditingOverlay = {};
 		currentControlPoint = undefined;
 	};
-	
-	/**
-	 * Moves the control point and its overlay to the specified coordinates
-	 */
-	this.previewControlPointTranslation = function(x,y){
-		var _x = parseInt( currentControlPoint.node.getAttribute('_x') ),
-			 _y = parseInt( currentControlPoint.node.getAttribute('_y') );
-		currentControlPoint.translate(x-_x,y-_y);
-		currentControlPoint.node.setAttribute('_x',x);
-		currentControlPoint.node.setAttribute('_y',y);
-		ConnectionUtils.updateConnectionPath(true);
-	};
+
+    /**
+     * Moves the control point and its overlay to the specified coordinates
+     */
+    this.previewControlPointTranslation = function (x, y, ctrl_key_down) {
+
+        // if the control key is not down,
+        // restrict control point to within bounding box
+        if (!ctrl_key_down) {
+            let new_points = this.restrictControlPoint(x, y);
+            x = new_points[0];
+            y = new_points[1];
+        }
+
+        let _x = parseInt(currentControlPoint.node.getAttribute('_x')),
+            _y = parseInt(currentControlPoint.node.getAttribute('_y'));
+
+        currentControlPoint.translate(x - _x, y - _y);
+
+        currentControlPoint.node.setAttribute('_x', x);
+        currentControlPoint.node.setAttribute('_y', y);
+        ConnectionUtils.updateConnectionPath(true);
+    };
+
+    /**
+     * Restricts the control point to within an icon's bounding box
+     */
+    this.restrictControlPoint = function (x, y) {
+        let start = currentControlPoint.node.getAttribute("__start");
+        let end = currentControlPoint.node.getAttribute("__end");
+
+        // something went wrong, or we're not an
+		// outside edge, so return the points
+        if (start == undefined && end == undefined) {
+            return [x, y];
+        }
+
+        //get the bounding box rectangle
+        let icon = __getIcon(start || end);
+        let bbox = icon.getBBox();
+
+        //get the dimensions
+        let iconX = bbox.x;
+        let iconY = bbox.y;
+
+        let width = bbox.width;
+        let height = bbox.height;
+
+        //restrict x and y to within the bounding box
+        if (x < iconX) {
+            x = iconX;
+        } else if (x > iconX + width) {
+            x = iconX + width;
+        }
+
+        if (y < iconY) {
+            y = iconY;
+        } else if (y > iconY + height) {
+            y = iconY + height;
+        }
+        return [Math.round(x), Math.round(y)];
+    };
 	
 	/**
 	 * Show the connection path editing overlay. This shows draggable circles

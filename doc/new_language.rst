@@ -105,10 +105,10 @@ Associations
 ^^^^^^^^^^^^
 Associations connect classes. In models created in the language, they are instantiated as links between objects. Associations are the only way to refer from one object to another object (attributes can only be of primitive types!). There are two types of associations, which result in different behaviour when using the language:
 
-* **Visual** associations are instantiated by right-clicking on the source object, dragging acrsoss the canvas, and releasing on the target object. This results in a visual link between the two objects.
+* **Visual** associations are instantiated by right-clicking on the source object, dragging across the canvas, and releasing on the target object. This results in a visual link between the two objects.
 * **Containment** associations are instantiated by dragging the source object on top of the target object, and releasing. This will automatically instantiate the containment association.
 
-An *Association* in the abstract syntax definition is itself visual association. It is created by right-clicking a source class, and releasing on the target class. The definition of the *TimedTransition* association can be seen below:
+An *Association* in the abstract syntax definition is itself a visual association. It is created by right-clicking a source class, and releasing on the target class. The definition of the *TimedTransition* association can be seen below:
 
 .. image:: img/timed_transition.png
 
@@ -235,8 +235,9 @@ The events that can trigger are:
 * **post-disconnect**, which triggers just after a link between two instances is deleted
 * **post-delete**, which triggers just after an instance is deleted
 * **post-edit**, which triggers just after an instance is edited
+* **verify**, which triggers when the user presses the *verify* button on the *MainMenu* toolbar
 
-.. note:: A constraint without a trigger is evaluated when the user presses the *verify* button on the *MainMenu* toolbar.
+.. note:: A constraint/action with no defined triggers will execute on the *verify* event. These constraints/actions should be updated to select the event explicitly.
 
 .. _action-library:
 
@@ -244,6 +245,8 @@ Action Library
 ^^^^^^^^^^^^^^
 
 .. rst-class:: table-with-borders
+
+.. note:: The notion of full types is best explained by example: the full type of a SimpleClassDiagram.Class entity is "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/Class".
 
 +---------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | name                            | parameters                          | Description                                                                   |
@@ -261,19 +264,15 @@ Action Library
 +---------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | getAllNodes(_fulltypes)         | * *_fulltypes*: list<string>        | Return the abstract syntax identifiers of all entities whose types are        |
 |                                 |                                     | contained within the fulltypes array. If it is omitted, return the abstract   |
-|                                 |                                     | syntax identifiers of all entities. The notion of full types is best          |
-|                                 |                                     | explained by example: the full type of a SimpleClassDiagram.Class entity is   |
-|                                 |                                     | "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/Class". |
+|                                 |                                     | syntax identifiers of all entities.                                           |
 +---------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | getNeighbors(_dir[, _type, _id])| * *_dir*: string                    | Return neighbours of the given entity, specified via its abstract syntax      |
-|                                 | * *_type*: string                   | identifier. The *_dir* parameter can take on three values: "in" implies that  |
-|                                 | * *_id*: string                     | only inbound neighbours should be returned, "out" implies that only outbound  |
-|                                 |                                     | neighbours should be returned, "*" implies that neighbours in either          |
-|                                 |                                     | direction should be returned. Finally, the *_type* parameter can be set to    |
-|                                 |                                     | indicate that only neighbours of the given full type should be re turned. The |
-|                                 |                                     | notion of full types is best explained by example: the full type of a         |
-|                                 |                                     | SimpleClassDiagram.Class entity is                                            |
-|                                 |                                     | "/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram/Class". |
+|                                 | * *_type*: string                   | identifier or __pLabel. The *_dir* parameter can take on three values: "in"   |
+|                                 | * *_id*: string                     | implies that only inbound neighbours should be returned, "out" implies that   |
+|                                 |                                     | only outbound neighbours should be returned, "*" implies that neighbours in   |
+|                                 |                                     | either direction should be returned. Finally, the *_type* parameter can be    |
+|                                 |                                     | set to indicate that only neighbours of the given full type should be         |
+|                                 |                                     | returned.                                                                     |
 |                                 |                                     | To match any type, use "*".                                                   |
 +---------------------------------+-------------------------------------+-------------------------------------------------------------------------------+
 | print(msg)                      | * *msg*: string                     | Print the given string to the console that launched the AToMPM back-end.      |
@@ -300,7 +299,7 @@ There are two "main" classes: **Icon** and **Link**. The first is a container fo
 
 .. image:: img/trafficlights_cs.png
 
-.. warning:: Naming is very important. The *typename* attribute of an icon needs to be *<class-name>*Icon, where *<class-name>* is the name of the class, and the *typename* attribute of a link needs to be *<association-name>*Link, where *<association-name>* is the name of the association.
+.. warning:: Naming is very important. The *typename* attribute of an icon needs to be the name of the class followed by the suffix *Icon*, and the *typename* attribute of a link needs to be the name of the association followed by the suffix *Link*. For example, *StateIcon* and *TimedTransitionLink*.
 
 .. note:: For Icons, place its contents as close as possible to the top-left corner. This ensures that the icon is instantiated as close as possible to the mouse position.
 
@@ -326,7 +325,7 @@ There are two "main" classes: **Icon** and **Link**. The first is a container fo
 #. *Path*
     * *segments* defines the segments of the path -- this allows for arbitrary shapes using the `SVG Paths <https://www.w3.org/TR/SVG/paths.html>`_ syntax.
 #. *Image*
-    * *src* specifies where the image can be found. This is a path relative to your user folder. It is recommended to put your images in your formalism folder (for example */Formalisms/<FormalismName>/images/).
+    * *src* specifies where the image can be found. This is a path relative to your user folder. It is recommended to put your images in your formalism folder (for example */Formalisms/<FormalismName>/images/*).
     * *width* defines the width of the image (in pixels).
     * *height* defines the width of the image (in pixels).
     
@@ -337,6 +336,8 @@ Mappers and Parsers
 All visual elements have a number of attributes that change its appearance. For example, a circle has a radius that can be changed to resize it. But, you might want to make the values of concrete syntax attributes depend on the values of abstract syntax attributes, and vice versa, make the values of abstract syntax attributes depend on the value of concrete syntax attributes.
 
 For example, a class might have a "name" attribute. It makes sense to include a *Text* instance in the icon definition for that class, but normally, the text content is fixed. Mappers make it possible to map the content of the name on the content of the text visual element. Converesely, let's say we want to access the position of an element in abstract syntax. Normally, the position attribute is only a concrete syntax attribute. Parsers make it possible to parse the content of the position attribute and change the abstract syntax attribute.
+
+The actions available in the parser and mapper are found in the :ref:`action-library`.
 
 For the *TrafficLights* attribute, the icon of the *State* class consists of a circle and a text, which should display the name of the state. The definition of the text element is as follows:
 

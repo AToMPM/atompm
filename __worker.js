@@ -1,22 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 /* NOTES: 
 	because of the *asynchronous* nature of numerous operations in our system, 
@@ -121,21 +106,19 @@ with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
 
 /**************************** LIBRARIES and GLOBALS ****************************/
 var  _util 	= require('util'),
-	 _path 	= require('path'),
 	 _http 	= require('http'),
 	 _do  	= require('./___do'),
 	 _fs 	 	= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
-	 _fspp	= _do.convert(require('./___fs++'), ['mkdirs']),	 
-	 _siocl	= require('socket.io-client'),
 	 _utils	= require('./utils'),
-	 _styleinfo = require('./styleinfo'),
-	 _svg		= require('./libsvg').SVG,
 	 _wlib,
 	 _mmmk,
 	 _mt,
 	 _plugins,
-	 __wid,
 	 __wtype;
+
+//have worker id global so that workers can detect it when loaded
+global.__wid = null;
+
 var keepaliveAgent = new _http.Agent({keepAlive: true, maxSockets: 10, maxFreeSockets: 5}); // proposed by yentl to improve performance
 
 
@@ -144,13 +127,13 @@ var keepaliveAgent = new _http.Agent({keepAlive: true, maxSockets: 10, maxFreeSo
 /* return a failure continuable */
 function __errorContinuable(err)	
 {
-	return function(callback,errback) {errback(err);}
+	return function(callback,errback) {errback(err);};
 }
 
 /* return a success continuable */
 function __successContinuable(arg)	
 {
-	return function(callback,errback) {callback(arg);}
+	return function(callback,errback) {callback(arg);};
 }
 
 
@@ -168,7 +151,8 @@ function __httpReq(method,url,data,port)
 				 if( data != undefined )
 				 {
 					 data = _utils.jsons(data);
-					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length};
+					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length,
+					 'Access-Control-Allow-Origin': '*'};
 				 }
 
 				 var request = 
@@ -322,6 +306,11 @@ function __postMessage(msg)
 			 (typeof msg.data == 'object' ? 
 				  _utils.jsons(msg.data) : 
 				  msg.data)));
+
+	//make sure that reason is a string
+	if (typeof msg.reason == 'object'){
+		msg.reason = _utils.jsons(msg.reason);
+	}
 
 	if( 'respIndex' in msg )
 		__onRequestResponse(msg.respIndex);
@@ -507,9 +496,17 @@ process.on('message',
 
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
-			_wlib   = eval('('+_fs.readFileSync('.'+__wtype+'.js', 'utf8')+')');
-			_mmmk   = eval('('+_fs.readFileSync('./mmmk.js', 'utf8')+')');
-			_mt  	  = eval('('+_fs.readFileSync('./libmt.js', 'utf8')+')');
+
+            if (__wtype == "/asworker") {
+                _wlib = require("./asworker");
+            } else if (__wtype == "/csworker") {
+                _wlib = require("./csworker");
+            } else {
+                throw "Error! Unknown worker type: " + __wtype;
+            }
+			_mmmk   = require('./mmmk');
+
+            _mt  	  = require('./libmt');
 
 			_plugins = {};
 			_fs.readdirSync('./plugins').forEach(
@@ -518,11 +515,11 @@ process.on('message',
 					try 
 					{
 						if( ! p.match(/.*\.js$/) )
-							throw 'invalid plugin filename, see user\'s manual';
+							return;
+							//throw 'invalid plugin filename, see user\'s manual';
 
 						p = p.match(/(.*)\.js$/)[1];
-						_plugins[p] = eval(
-							'('+_fs.readFileSync('./plugins/'+p+'.js','utf8')+')');
+						_plugins[p] = require('./plugins/' + p);
 						if( ! ('interfaces' in _plugins[p]) ||
 							 ! ('csworker' in _plugins[p])  ||
 							 ! ('asworker' in _plugins[p]) )
@@ -638,7 +635,7 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 							 method,
  							 uri,
 							 reqData,
- 							 _wlib)
+ 							 _wlib);
  						 return true;
 	 				 }
 	 			 }) )
@@ -762,7 +759,7 @@ function POST_batchedit(resp,reqData)
 			 							  '/batchCheckpoint?wid='+__wid+
 	  										  '&backstagePass='+__backstagePass,
 				 						  {'name':name});
-						  }
+						  };
 	 		 },
 		 actions = [__successContinuable(), setbchkpt(startchkpt)];
 
@@ -823,7 +820,7 @@ function POST_batchedit(resp,reqData)
 					function()	
 					{
 						__backstagePass = undefined;
-						__postInternalErrorMsg(resp,err)
+						__postInternalErrorMsg(resp,err);
 					},
 					function(undoErr)	
 					{	
@@ -836,3 +833,28 @@ function POST_batchedit(resp,reqData)
 			}
 	);
 }
+
+module.exports = {
+	__errorContinuable,
+	__successContinuable,
+	__httpReq,
+	__wHttpReq,
+
+	__postInternalErrorMsg,
+	__postForbiddenErrorMsg,
+	__postBadReqErrorMsg,
+	__sequenceNumber,
+
+	__postMessage,
+	__uri_to_id,
+	__id_to_uri,
+	__batchCheckpoint,
+
+	GET__current_state,
+
+	//GLOBAL VARS
+	__ids2uris,
+	__nextSequenceNumber,
+	__wtype,
+
+};

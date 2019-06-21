@@ -1,25 +1,9 @@
-'''*****************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Eugene Syriani
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*****************************************************************************'''
+'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+Copyright 2011 by the AToMPM team and licensed under the LGPL
+See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.infinity import INFINITY
-from arule import ARule
+from .arule import ARule
 from ..tcore.resolver import Resolver
 
 
@@ -38,7 +22,7 @@ class FRule(ARule):
         # Matcher needs to find many matches
         self.M.max = max_iterations
         self.I.max_iterations = max_iterations
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False
@@ -52,7 +36,7 @@ class FRule(ARule):
         if not self.I.is_success:
             self.exception = self.I.exception
             return packet
-        
+
         while True:
             # Rewrite
             packet = self.W.packet_in(packet)
@@ -88,7 +72,7 @@ class FRule_r(ARule):
         super(FRule_r, self).__init__(LHS, RHS, max_iterations)
         self.R = Resolver(external_matches_only=external_matches_only,
                           custom_resolution=custom_resolution)
-    
+
     def packet_in(self, packet):
         self.exception = None
         self.is_success = False

@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // DEPRECATED FUNCTIONS
@@ -217,7 +201,7 @@ CompileUtils = function(){
 				continue;
 	
 			var r  = __getVobjGeomAttrVal(vobj['orientation']['value']),
-				 sx = __getVobjGeomAttrVal(vobj['scale']['value'][0])
+				 sx = __getVobjGeomAttrVal(vobj['scale']['value'][0]);
 				 sy = __getVobjGeomAttrVal(vobj['scale']['value'][1]);
 			vobjects[vid].attr(vobj['style']['value']);
 			vobjects[vid].transform(
@@ -285,6 +269,7 @@ CompileUtils = function(){
 				icon.setAttr('__r',0);			
 				icon.setAttr('__sx',1);
 				icon.setAttr('__sy',1);
+				icon.setAttr('id', id);
 			}
 	
 			if( 'attrs' in options )
@@ -325,7 +310,8 @@ CompileUtils = function(){
 								BehaviorManager.handleUserEvent(__EVENT_MIDDLE_RELEASE_ICON,event);
 						}
 					};
-				icon.node.onmousewheel = 
+
+				let shiftWheelFunction =
 					function(event)
 					{
 						if( event.shiftKey )
@@ -334,6 +320,10 @@ CompileUtils = function(){
 							return false;
 						}
 					};
+
+				icon.node.onmousewheel = shiftWheelFunction;
+				icon.node.onwheel = shiftWheelFunction;
+
 				/*icon.node.onmouseover = 
 					function(event)
 					{
@@ -353,26 +343,51 @@ CompileUtils = function(){
 	/**
 	 * Compile the current model to an Abstract Syntax Metamodel
 	 */
-	this.compileToASMM = function(fname){
-		if( ! __isAbstractSyntaxMetamodel(fname) )
-			WindowManagement.openDialog(
-				_ERROR,
-				'invalid extension... abstract syntax metamodels are "*.metamodel" files');
-		else
-			HttpUtils.httpReq('PUT', HttpUtils.url(fname,__FORCE_GET));
-	};
-	
-	/**
-	 * Compile the current model to a Concrete Syntax Metamodel
-	 */
-	this.compileToCSMM = function(fname){
-		if( ! __isIconMetamodel(fname) )
-			WindowManagement.openDialog(
-				_ERROR,
-				'invalid extension... icon definition metamodels are "*Icons.metamodel" files');
-		else
-			HttpUtils.httpReq('PUT', HttpUtils.url(fname,__FORCE_GET));
-	};
+    this.compileToASMM = function (fname) {
+        if (!__isAbstractSyntaxMetamodel(fname))
+            WindowManagement.openDialog(
+                _ERROR,
+                'invalid extension... abstract syntax metamodels are "*.metamodel" files');
+        else
+            HttpUtils.httpReq('PUT', HttpUtils.url(fname, __FORCE_GET), null,
+                function (status, text) {
+                    //there was a problem
+                    if (!utils.isHttpSuccessCode(status)) {
+                        //let resp = JSON.parse(text);
+                        WindowManagement.openDialog(_ERROR, JSON.stringify(text));
+                    }
+
+                });
+    };
+
+    /**
+     * Compile the current model to a Concrete Syntax Metamodel
+     */
+    this.compileToCSMM = function (fname) {
+        if (!__isIconMetamodel(fname))
+            WindowManagement.openDialog(
+                _ERROR,
+                'invalid extension... icon definition metamodels are "*Icons.metamodel" files');
+        else
+            HttpUtils.httpReq('PUT', HttpUtils.url(fname, __FORCE_GET), null,
+                function (status, text) {
+                    //there was a problem
+                    if (!utils.isHttpSuccessCode(status)) {
+                        let resp = text;
+                        if (!(resp.startsWith("500"))) {
+                            resp = JSON.parse(text);
+                        }
+
+                        if (resp["code"] && resp["code"].includes("ENOENT")) {
+                            let msg = "ERROR: Corresponding metamodel could not be found in same directory!";
+                            WindowManagement.openDialog(_ERROR, msg);
+                        } else {
+                            WindowManagement.openDialog(_ERROR, JSON.stringify(text));
+                        }
+                    }
+
+                });
+    };
 	
 	/**
 	 * Compiles the current model to an Icon Pattern Metamodel

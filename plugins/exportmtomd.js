@@ -1,4 +1,19 @@
-{
+const {
+    __errorContinuable,
+    __httpReq,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+const _do = require("../___do");
+const _utils = require('../utils');
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _fspp	= _do.convert(require('../___fs++'), ['mkdirs']);
+
+module.exports = {
 	
 	'interfaces': [{'method':'POST', 'url=':'/exportmtomd'}],
 	'csworker':
@@ -81,7 +96,7 @@
 							// Import extra metamodels
 							for (var i = mms.length - 1; i >= 0; i--) {
 								file_contents += 'load "' + extract_md_type(mms[i]) + '"\n';
-							};
+							}
 							// FIX: Define an auxiliary metamodel which imports all other metamodels and is then instantiated by the main model
 							var mm = extract_md_type(mms[0]);
 							var modelName = reqData['name'];
@@ -89,16 +104,16 @@
 							file_contents += '\nModel ' + mm + ' imports ';
 							for (var i = 0; i < mms.length - 1; i++) {
 								file_contents += extract_md_type(mms[i]) + ', ';
-							};
-							file_contents += extract_md_type(mms[mms.length - 1])
+							}
+							file_contents += extract_md_type(mms[mms.length - 1]);
 							file_contents += ' {} \n\n';
 							var edges = {};
 							for (var i = 0; i < as.edges.length; i += 2) {
 								if (as.edges[i].dest != as.edges[i + 1].src) console.error('The source and destination of the edge are different!');
 								edges[as.edges[i].dest] = ([as.edges[i].src, as.edges[i + 1].dest]);
-							};
+							}
 							// Model definition
-							file_contents += mm + ' ' + modelName + ' {\n'
+							file_contents += mm + ' ' + modelName + ' {\n';
 							// console.log('------------');
 							// console.log(as.nodes);
 							// console.log('------------');
@@ -168,8 +183,8 @@
 									}
 									file_contents += '}\n';
 								// }
-							};
-							file_contents += '}\n'
+							}
+							file_contents += '}\n';
 							_fs.writeFileSync('./exported_to_md/' + reqData['name'] + '.mdepth', file_contents);
 							__postMessage({	'statusCode': 200,
 											'respIndex': resp});
@@ -178,7 +193,7 @@
 					);					
 				},
 				function(err) {__postInternalErrorMsg(resp, err);}
-			)
+			);
 		},
 	'asworker':
 		function(resp, method, uri, reqData, wcontext)
@@ -187,4 +202,4 @@
 				{'statusCode': 200,
 					 'respIndex': resp});	
 		}
-}
+};

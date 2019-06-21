@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 var __selectionOverlay;
 var __highlighted = [];
@@ -169,7 +153,9 @@ function __flash(uri,color,timeout)
 	function turnOff()
 	{
 		try			{__icons[uri]['icon'].unhighlight();} 
-		catch(err)	{}
+		catch(err)	{
+			console.log(err);
+		}
 	}
 	window.setTimeout(turnOff,timeout || 500);
 }
@@ -215,13 +201,17 @@ function __highlight(uri,followCrossFormalismLinks,timeout,color)
 				 function() 
 				 {
 					 try			{__icons[uri]['icon'].unhighlight();}
-					 catch(err)	{}
+					 catch(err)	{
+					 	console.log(err);
+					 }
 
 					 if( followCrossFormalismLinks != undefined )
 					 	neighbors.nodes.forEach( 
 							function(n) {
 	  							try			{__icons[n]['icon'].unhighlight();}
-								catch(err)	{}
+								catch(err)	{
+	  								console.log(err);
+								}
 							} );
 					 if( timeout != undefined )
 						 window.clearTimeout(tid);
@@ -232,7 +222,7 @@ function __highlight(uri,followCrossFormalismLinks,timeout,color)
 
 function isHighlighted(uri)
 {
-	return __highlighted.length > 0 && __highlighted.filter(function(hl) {return uri == hl['uri']}).length == 1;
+	return __highlighted.length > 0 && __highlighted.filter(function(hl) {return uri == hl['uri'];}).length == 1;
 }
 
 
@@ -240,11 +230,11 @@ function __unhighlight(uri)
 {
 	if( __highlighted.length > 0 )
 	{
-		__highlighted.filter(function(hl) {return !uri || uri == hl['uri']}).forEach(function(hl) {hl.turnOff()})
+		__highlighted.filter(function(hl) {return !uri || uri == hl['uri'];}).forEach(function(hl) {hl.turnOff();});
 		if (!uri) {
 			__highlighted = [];
 		} else {
-			__highlighted = __highlighted.filter(function(hl) {return uri != hl['uri']})
+			__highlighted = __highlighted.filter(function(hl) {return uri != hl['uri'];});
 		}
 		
 	}

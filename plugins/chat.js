@@ -1,6 +1,16 @@
 /* Chat plugin for collaboration, need to list available users.
 , and notify when the message comes in by flashing chat "Open" link*/
-{
+const {
+    __errorContinuable,
+    __httpReq,
+    __wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("../__worker");
+
+module.exports = {
 	'interfaces'	: [{'method':'POST', 'url=':'/chat'}],
 
 
@@ -40,4 +50,4 @@
 				 'respIndex':resp});
 			
 		}
-}
+};

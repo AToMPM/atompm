@@ -1,22 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 __canvasBehaviourStatechart = {
 	'__STATE_IDLE'	 				 		 				: 0,
@@ -33,19 +18,19 @@ __canvasBehaviourStatechart = {
 			function(event)
 			{
 				GUIUtils.disableDock();
-				__initCanvasSelectionOverlay(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+				__initCanvasSelectionOverlay(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 			},
 		3:
 			function(event)	
 			{
 				GUIUtils.disableDock();
-				GeometryUtils.initSelectionTransformationPreviewOverlay(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+				GeometryUtils.initSelectionTransformationPreviewOverlay(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 			},
 		4:
 			function(event)	
 			{
 				GUIUtils.disableDock();
-				ConnectionUtils.initConnectionPath(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY),event.target);
+				ConnectionUtils.initConnectionPath(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event),event.target);
 			},
 		6:
 			function(event)	
@@ -107,7 +92,7 @@ __canvasBehaviourStatechart = {
 			if( this.__currentState == this.__STATE_IDLE )
 			{
 				if( name == __EVENT_RIGHT_RELEASE_CANVAS )
-					DataUtils.create(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+					DataUtils.create(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 			
 				else if( name == __EVENT_LEFT_PRESS_CANVAS )
 					this.__T(this.__STATE_CANVAS_SELECTING,event);
@@ -166,7 +151,7 @@ __canvasBehaviourStatechart = {
 			else if( this.__currentState == this.__STATE_CANVAS_SELECTING )
 			{
 				if( name == __EVENT_MOUSE_MOVE ){
-					__updateCanvasSelectionOverlay(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+					__updateCanvasSelectionOverlay(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 				}
 				
 				else if( name == __EVENT_LEFT_RELEASE_CANVAS ||
@@ -217,7 +202,7 @@ __canvasBehaviourStatechart = {
 					if( ! GeometryUtils.areTransformationsAllowed() )
 						console.warn('the selection dragging mode can only be activated if '+
 										 'all of the ends of selected edges are also selected, '+
-										 'and if the geometry controls are inactive')
+										 'and if the geometry controls are inactive');
 					else			
 						this.__T(this.__STATE_DRAGGING_SELECTION,event);
 				}
@@ -227,7 +212,7 @@ __canvasBehaviourStatechart = {
 					if( ! GeometryUtils.areTransformationsAllowed() )
 						console.warn('the geometry controls can only be activated if all '+
 										 'of the ends of selected edges are also selected, and'+
-										 'if the geometry controls aren\'t already active')
+										 'if the geometry controls aren\'t already active');
 					else			
 						GeometryUtils.showGeometryControlsOverlay();
 				}
@@ -281,7 +266,7 @@ __canvasBehaviourStatechart = {
 			else if( this.__currentState == this.__STATE_DRAGGING_SELECTION )
 			{
 				if( name == __EVENT_MOUSE_MOVE )
-					GeometryUtils.previewSelectionTranslation(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+					GeometryUtils.previewSelectionTranslation(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 				
 				else if( name == __EVENT_KEYUP_ESC )
 				{
@@ -330,7 +315,7 @@ __canvasBehaviourStatechart = {
 			else if( this.__currentState == this.__STATE_DRAWING_EDGE )
 			{
 				if( name == __EVENT_MOUSE_MOVE ){
-					ConnectionUtils.updateConnectionSegment(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
+					ConnectionUtils.updateConnectionSegment(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event));
 				}
 				else if( name == __EVENT_KEYUP_ESC ||
 							name == __EVENT_RIGHT_RELEASE_CANVAS )
@@ -393,9 +378,9 @@ __canvasBehaviourStatechart = {
 				else if( name == __EVENT_MIDDLE_RELEASE_CTRL_POINT )
 					ConnectionUtils.deleteControlPoint(event.target);
 		
-				else if( name == __EVENT_RIGHT_RELEASE_CTRL_POINT )
-					ConnectionUtils.addControlPoint(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY),event.target);
-						
+				else if( name == __EVENT_RIGHT_RELEASE_CTRL_POINT ) {
+                    ConnectionUtils.addControlPoint(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event), event.target);
+				}
 				else if( name == __EVENT_KEYUP_TAB )
 					ConnectionUtils.snapControlPoint();
 		
@@ -419,9 +404,9 @@ __canvasBehaviourStatechart = {
 
 			else if( this.__currentState == this.__STATE_DRAGGING_CONNECTION_PATH_CTRL_POINT )
 			{
-				if( name == __EVENT_MOUSE_MOVE )
-					ConnectionUtils.previewControlPointTranslation(GUIUtils.convertToCanvasX(event.pageX), GUIUtils.convertToCanvasY(event.pageY));
-		
+				if( name == __EVENT_MOUSE_MOVE ) {
+                    ConnectionUtils.previewControlPointTranslation(GUIUtils.convertToCanvasX(event), GUIUtils.convertToCanvasY(event), event.ctrlKey);
+				}
 				else if( name == __EVENT_LEFT_RELEASE_CTRL_POINT )
 				{
 					ConnectionUtils.updateConnectionPath();
@@ -438,5 +423,5 @@ __canvasBehaviourStatechart = {
 				}
 			}
 		}
-	}
+	};
 

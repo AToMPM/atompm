@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 /**
  * The WindowEventHelper function is a helper function that holds all of 
@@ -41,8 +25,10 @@ WindowEventHelper = function(){
 				
 				// Are we actually in the table?
 				if( table != null && table.rows != undefined){
-					for(var i=0, row; row = table.rows[i]; i++){
-						
+					for(var i=0; i < table.length; i++){
+
+						let row = table.rows[i];
+
 						// Is the current row the parent row of the active element?
 						if( row == activeElement.parentNode.parentNode ){
 							if( currentKeys[ KEY_SHIFT ] == 1){
@@ -225,6 +211,16 @@ WindowEventHelper = function(){
 	this.isKeyPressed = function( keyCode ){
 		return currentKeys[ keyCode ] == 1;
 	};
+
+	/**
+	 * Called when the window gains focus
+	 * Resets all keys
+	 */
+	this.onfocus = function(){
+		for (let keyCode in currentKeys){
+			currentKeys[ keyCode ] = 0;
+		}
+	};
 	
 	/**
 	 * Initializes the default window behavior
@@ -237,6 +233,7 @@ WindowEventHelper = function(){
 		window.onmousemove = this.onMouseMove;
 		window.onkeydown = this.onKeyDown;
 		window.onkeyup = this.onKeyUp;
+		window.onfocus = this.onfocus;
 	};
 	
 	return this;

@@ -1,14 +1,27 @@
-{ "name": "AToMPM",
-  "version": "0.6.0",
+{
+  "name": "atompm",
+  "version": "0.8.1",
   "description": "A Tool for Multi-Paradigm Modelling",
-  "bugs": 
-    {"url": "https://msdl.uantwerpen.be/git/simon/AToMPM/issues",
-     "email" : "simon.vanmierlo@uantwerpen.be"},
-  "repository" :
-      { "type" : "git",
-        "url" : "https://msdl.uantwerpen.be/git/simon/AToMPM"
-      },
-  "dependencies" :
-    {"socket.io" : "0.9.16",
-     "socket.io-client" : "0.9.16"}
+  "license": "LGPL-3.0-only",
+  "homepage": "https://atompm.github.io/",
+  "bugs": {
+    "url": "https://msdl.uantwerpen.be/git/simon/AToMPM/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://msdl.uantwerpen.be/git/simon/AToMPM"
+  },
+  "dependencies": {
+    "socket.io": "^0.9.19",
+    "socket.io-client": "^0.9.16"
+  },
+  "devDependencies": {
+    "chromedriver": "^2.43.1",
+    "glob": "^7.1.2",
+    "nightwatch": "^0.9.21",
+    "selenium-server": "^3.13.0"
+  },
+  "scripts": {
+    "test": "./run_tests.sh"
+  }
 }

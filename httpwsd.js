@@ -1,22 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 /*********************************** IMPORTS **********************************/
 var _util	= require("util"),
@@ -48,13 +33,33 @@ var workerIds2socketIds = {};
 
 
 /************************************ UTILS ***********************************/
+
+/** Remove invalid characters from a string. **/
+function __clean_string(s)
+{
+	if (s == undefined) {
+        return s;
+    }
+
+	s = JSON.stringify(s);
+	s = s.replace(/'/g, '');
+	s = s.replace(/"/g, '');
+	s = s.replace(/‘/g, '');
+	s = s.replace(/’/g, '');
+	s = s.replace(/\\/g, '\\');
+	s = s.replace(/\//g, '\/');
+	s = s.replace(/\\n/g, ' ');
+	return s;
+}
+
 /** Syntactic sugar to build and send HTTP responses **/
 function __respond(response, statusCode, reason, data, headers)
 {
 	response.writeHead(
 			statusCode,
-			reason,
-			(headers || {'Content-Type': 'text/plain'}));
+			__clean_string(reason),
+			(headers || {'Content-Type': 'text/plain',
+			'Access-Control-Allow-Origin': '*'}));
 
 	var encoding = 
 		(headers && 
@@ -75,11 +80,11 @@ function __respond(response, statusCode, reason, data, headers)
 /** Syntactic sugar to build and send a socket.io message **/
 function __send(socket, statusCode, reason, data, headers)
 {
-//headers['Access-Control-Allow-Origin'] = 'http://raven10.kicks-ass.net:8080';
 	socket.json.emit('message',
 			{'statusCode':statusCode,
 			 'reason':reason,
-			 'headers':(headers || {'Content-Type': 'text/plain'}),
+			 'headers':(headers || {'Content-Type': 'text/plain',
+			 'Access-Control-Allow-Origin': '*'}),
 			 'data':data});
 }
 
@@ -449,7 +454,7 @@ var httpserver = _http.createServer(
                                          _fs.unlink(newname);
                                      }
                                 }
-                            _fspp.mv(userdir+"/"+folder+fname,userdir+data,onmove)
+                            _fspp.mv(userdir+"/"+folder+fname,userdir+data,onmove);
                         } else {
                             // rename
                             var matches  = url.pathname.match(/^\/(.*?)\/(.*\/)?(.*)\.(file|folder)$/),
@@ -465,10 +470,10 @@ var httpserver = _http.createServer(
                                          else
                                              __respond(resp,200);
                                      };
-                            _fs.rename(userdir+folder+fname,userdir+folder+data,onrename)
+                            _fs.rename(userdir+folder+fname,userdir+folder+data,onrename);
                         }
                     }
-                )
+                );
 				
 			}
             
@@ -664,7 +669,8 @@ var httpserver = _http.createServer(
 								JSON.stringify(
 									{'headers':
 										(msg['headers'] || 
-										 {'Content-Type': 'text/plain'}),
+										 {'Content-Type': 'text/plain',
+										 'Access-Control-Allow-Origin': '*'}),
 									 'data':msg['data'],
 									 'sequence#':msg['sequence#']}),
 								{'Content-Type': 'application/json'});
@@ -738,7 +744,7 @@ wsserver.sockets.on('connection',
 		  	has no more registered sockets, terminate it */
 		function unregister(wid)
 		{
-			var i = workerIds2socketIds[wid].indexOf(socket.id)
+			var i = workerIds2socketIds[wid].indexOf(socket.id);
 			if( i == -1 )
 				__send(socket,403,'already unregistered from worker');
 			else

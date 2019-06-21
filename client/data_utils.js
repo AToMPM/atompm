@@ -1,23 +1,7 @@
-/*******************************************************************************
-AToMPM - A Tool for Multi-Paradigm Modelling
-
-Copyright (c) 2011 Raphael Mannadiar (raphael.mannadiar@mail.mcgill.ca)
-Modified by Conner Hansen (chansen@crimson.ua.edu)
-
-This file is part of AToMPM.
-
-AToMPM is free software: you can redistribute it and/or modify it under the
-terms of the GNU Lesser General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later 
-version.
-
-AToMPM is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License along
-with AToMPM.  If not, see <http://www.gnu.org/licenses/>.
-*******************************************************************************/
+/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+*  Copyright 2011 by the AToMPM team and licensed under the LGPL
+*  See COPYING.lesser and README.md in the root of this project for full details
+*/
 
 /* delete specified file/folder */
 
@@ -66,16 +50,19 @@ DataUtils = function(){
 	 * Request creation of an instance of __typeToCreate at the specified
 	 * x and y coordinates
 	 */
-	this.create = function(x,y){
-		if( __typeToCreate != undefined )
-			HttpUtils.httpReq(
-					'POST',
-					HttpUtils.url(__typeToCreate+'.type',__NO_USERNAME),
-					{'pos':[x,y]});
-		else
-			WindowManagement.openDialog(_ERROR,'you must select a type to create');
-	};
-	
+
+    this.create = function (x, y, callback) {
+        if (__typeToCreate == undefined) {
+            WindowManagement.openDialog(_ERROR, 'you must select a type to create');
+        } else {
+            HttpUtils.httpReq(
+                'POST',
+                HttpUtils.url(__typeToCreate + '.type', __NO_USERNAME),
+                {'pos': [x, y]},
+                callback);
+        }
+    };
+
 	/**
 	 * Deletes the current selection entities
 	 */
@@ -286,19 +273,29 @@ DataUtils = function(){
 	 * 
 	 * @param bm - the button model to load
 	 */
-	this.loadbm = function(bm){
-		HttpUtils.httpReq(
-				'GET',
-				HttpUtils.url(bm,true),
-				undefined,
-				function(statusCode,resp)
-				{
-					GUIUtils.setupAndShowToolbar(
-						bm,
-						eval('('+resp+')'),
-						__BUTTON_TOOLBAR);					
-				});	
-	};
+    this.loadbm = function (bm) {
+        HttpUtils.httpReq(
+            'GET',
+            HttpUtils.url(bm, true),
+            undefined,
+            function (statusCode, resp) {
+                if (!utils.isHttpSuccessCode(statusCode)) {
+
+                    if (resp.includes("ENOENT")) {
+                        let err_msg = "Error! File not found: " + bm;
+                        WindowManagement.openDialog(_ERROR, err_msg);
+                    } else {
+                        WindowManagement.openDialog(_ERROR, resp);
+                    }
+                    return;
+                }
+
+                GUIUtils.setupAndShowToolbar(
+                    bm,
+                    eval('(' + resp + ')'),
+                    __BUTTON_TOOLBAR);
+            });
+    };
 	
 	/* 
 		1. does the deed
@@ -309,37 +306,48 @@ DataUtils = function(){
 	/**
 	 * Request that the specified model be loaded
 	 */
-	this.loadm = function(fname,insert) {
-		HttpUtils.httpReq(
-				'PUT',
-				HttpUtils.url('/current.model', __NO_USERNAME),
-				{'m':HttpUtils.url(fname,__NO_WID),
-				 'insert':insert},
-				function(statusCode,resp)
-				{
-					if( ! utils.isHttpSuccessCode(statusCode) )
-					{
-						if( (matches = resp.match(/metamodel not loaded :: (.*)/)) )
-						{
-							var missing = matches[1]+'.metamodel';
-							console.warn('auto-loading missing metamodel :: '+missing);
-							DataUtils.loadmm(
-									missing,
-									function(_statusCode,_resp)
-									{
-										if( ! utils.isHttpSuccessCode(_statusCode) )
-											WindowManagement.openDialog(_ERROR,_resp);
-										else
-											DataUtils.loadm(fname,insert);
-									});
-						}
-						else
-							WindowManagement.openDialog(_ERROR,resp);
-					}
-					else
-						WindowManagement.setWindowTitle();
-				});				
-	};
+    this.loadm = function (fname, insert) {
+        HttpUtils.httpReq(
+            'PUT',
+            HttpUtils.url('/current.model', __NO_USERNAME),
+            {
+                'm': HttpUtils.url(fname, __NO_WID),
+                'insert': insert
+            },
+            function (statusCode, resp) {
+                if (utils.isHttpSuccessCode(statusCode)) {
+                    WindowManagement.setWindowTitle();
+                    return;
+                }
+
+                if ((matches = resp.match(/metamodel not loaded :: (.*)/))) {
+                    var missing = matches[1] + '.metamodel';
+                    console.warn('auto-loading missing metamodel :: ' + missing);
+                    DataUtils.loadmm(missing,
+                        function (_statusCode, _resp) {
+                            if (!utils.isHttpSuccessCode(_statusCode)) {
+
+                                if (_resp.includes("ENOENT")) {
+                                    _resp = utils.jsonp(_resp);
+                                    _resp = "Error! File not found: " + _resp['path'];
+                                }
+                                WindowManagement.openDialog(_ERROR, _resp);
+                            }
+                            else {
+                                DataUtils.loadm(fname, insert);
+                            }
+                        });
+                } else {
+                    if (resp.includes("cannot read")) {
+                        let err_msg = "Error! File cannot be read: " + fname;
+                        WindowManagement.openDialog(_ERROR, err_msg);
+                    } else {
+                        WindowManagement.openDialog(_ERROR, resp);
+                    }
+                }
+
+            });
+    };
 	
 	/*
 	CASE 1: asmm is already loaded but with a different csmm
