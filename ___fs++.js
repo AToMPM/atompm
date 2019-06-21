@@ -73,10 +73,7 @@ exports.findfiles =
                                             if (_fs.lstatSync(path).isDirectory()) {
                                                 newpath = newpath + '/';
                                             }
-                                        } catch (e) {
-                                            console.log("Error!");
-                                            console.log(e);
-										}
+                                        } catch (e) {}
                                         return newpath;
 									});
 							paths.pop();
