@@ -19,6 +19,7 @@ To install AToMPM, follow these steps:
         * For Python2: `pip install six`
         * For Python3: `pip3 install six`
 * Download and install node.js
+    * Required version: >= 8.0
     * Use a package manager on Linux
     * Or visit https://nodejs.org/en/download/
 * Download and unzip the source files for the newest AToMPM release from https://github.com/AToMPM/atompm/releases
