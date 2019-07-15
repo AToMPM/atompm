@@ -16,10 +16,10 @@ module.exports = {
   "globals_path" : "",
 
   "selenium" : {
-    "start_process" : true,
+    "start_process" : false,
     "server_path" : selenium_server.path,
     "log_path" : "",
-    "port" : 4445,
+    "port" : 4444,
     "cli_args" : {
       "webdriver.chrome.driver" : chromedriver.path,
       "webdriver.gecko.driver" : "",
