@@ -399,9 +399,7 @@ class FileBrowser{
                     currfolder = folder;
                 };
 
-        let file_browser_width = 120;
-        fileb.css("width", file_browser_width + 'ex')
-            .css("maxWidth", '100%');
+        fileb.css("maxWidth", '100%');
 
         navdiv.css("align", 'left');
 
