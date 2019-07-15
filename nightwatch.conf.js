@@ -4,7 +4,7 @@
 */
 
 const chromedriver = require("chromedriver");
-const selenium_standalone_server = require("selenium-server-standalone-jar");
+const selenium_server = require("selenium-server");
 
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
 
   "selenium" : {
     "start_process" : true,
-    "server_path" : selenium_standalone_server.path,
+    "server_path" : selenium_server.path,
     "log_path" : "",
     "port" : 4444,
     "cli_args" : {
