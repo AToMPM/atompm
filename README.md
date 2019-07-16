@@ -47,10 +47,10 @@ To run AToMPM on Windows, execute the `run.bat` script inside of the main AToMPM
     * If, for any reason, the download process is interrupted or you experience problems with AToMPM, remove the `dependencies/` folder and run the script again.
 
 ## Documentation
-Documentation for AToMPM can be found here: https://atompm.readthedocs.io
+Documentation for AToMPM can be found here: https://msdl.uantwerpen.be/documentation/AToMPM/index.html
 
 ## Bug Reporting/Comments
-Please create an issue for your bug or comments here: https://github.com/AToMPM/atompm/issues
+Please create an issue for your bug or comments here: https://msdl.uantwerpen.be/git/simon/AToMPM/issues
 
 ## Testing
 To run tests on AToMPM, run `npm test'. Ensure that your resolution of your screen is set quite high, as elements cannot be placed by the script off-screen.
