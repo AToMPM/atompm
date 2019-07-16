@@ -294,6 +294,7 @@ class FileBrowser{
 
                     //fnames might be a function that returns the files in
                     //the folder
+                    //bentley: the ModelVerse only examines one folder at a time
                     let file_list = fnames;
                     if (!(Array.isArray(fnames))){
                         file_list = await fnames(folder);
