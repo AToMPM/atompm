@@ -81,8 +81,8 @@ exports.findfiles =
 												newpath = newpath + '/';
 											}
 										} catch (e) {
-											console.log("Error!");
-											console.log(e);
+											//console.log("Error!");
+											//console.log(e);
 										}
 										return newpath;
 									});
