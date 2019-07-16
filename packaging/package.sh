@@ -5,17 +5,18 @@
 #   i. In AToMPM - client/constants.js
 #   ii. In documentation - doc/conf.py
 #   iii. In Node - package.json
-#2. Create a new release on GitHub
-#3. The tag should be something like v0.8.0
-#4. Run this script, which will download the latest tagged version
+#2. Push these changes to GitHub
+#3. Create a new release on GitHub
+#4. The tag should be something like v0.8.0
+#5. Run this script, which will download the latest tagged version
 #   and package everything
 #   - Run it for the Python2 and the Python3 version
 #   - Fix up the files in the package
 #        - Delete the unused Python directory in each zip
-#5. Upload the package .zip to the release on GitHub
-#6. Publish to npm repo
+#6. Upload the package .zip to the release on GitHub
+#7. Publish to npm repo
 
-version="v0.8.1-rc4"
+version="v0.8.2"
 
 package_python3=true
 
