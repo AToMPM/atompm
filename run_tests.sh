@@ -29,15 +29,26 @@ if ! kill -0 "$mtpid"; then
     exit $mt_status
 fi
 
+echo "Starting Selenium server."
+java -jar "./node_modules/selenium-server/lib/runner/selenium-server-standalone-3.141.59.jar" &
+seleniumpid=$!
+sleep 3
+
+#check if model transformer is dead
+if ! kill -0 "$seleniumpid"; then
+    wait seleniumpid
+    se_status=$?
+    exit $se_status
+fi
+
+
 echo "Starting tests..."
-
-#start nightwatch tests
 nightwatch
-
 
 echo "Stopping server and mt script..."
 kill "$serverpid"
 kill "$mtpid"
+kill "$seleniumpid"
 
 
 

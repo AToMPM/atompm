@@ -33,12 +33,31 @@ var workerIds2socketIds = {};
 
 
 /************************************ UTILS ***********************************/
+
+/** Remove invalid characters from a string. **/
+function __clean_string(s)
+{
+	if (s == undefined) {
+        return s;
+    }
+
+	s = JSON.stringify(s);
+	s = s.replace(/'/g, '');
+	s = s.replace(/"/g, '');
+	s = s.replace(/‘/g, '');
+	s = s.replace(/’/g, '');
+	s = s.replace(/\\/g, '\\');
+	s = s.replace(/\//g, '\/');
+	s = s.replace(/\\n/g, ' ');
+	return s;
+}
+
 /** Syntactic sugar to build and send HTTP responses **/
 function __respond(response, statusCode, reason, data, headers)
 {
 	response.writeHead(
 			statusCode,
-			JSON.stringify(reason),
+			__clean_string(reason),
 			(headers || {'Content-Type': 'text/plain',
 			'Access-Control-Allow-Origin': '*'}));
 
@@ -522,9 +541,16 @@ var httpserver = _http.createServer(
 			{
 				req.setEncoding('utf8');
 
-				var reqData = '',
+				let reqData = '',
 					 tmpzip	= 'upload'+Date.now()+'.zip',
 					 destdir	= './users/'+url.pathname.match(/(.*)\.file$/)[1]+'/';
+
+				if( url.pathname.contains("..") || url.pathname.contains(";") ) {
+					__respond(resp, 404,
+						'invalid pathname, no semicolons or .. allowed :: ' + url.pathname);
+					return;
+				}
+
 				req.addListener("data", function(chunk) {reqData += chunk;});
 				req.addListener("end", 
 					function() 
@@ -550,7 +576,10 @@ var httpserver = _http.createServer(
 														__respond(resp,500,String(err));
 													else
 														__respond(resp,200);
-													_fs.unlink(destdir+tmpzip);
+													_fs.unlink(destdir+tmpzip, function(err){
+														console.log("Unlinked " + destdir + tmpzip);
+														}
+													);
 												});
 										});
 							});
@@ -560,11 +589,17 @@ var httpserver = _http.createServer(
 			/* serve specified file/folder within a zip file */ 
 			else if( req.method == 'GET' && url.pathname.match(/\.file$/) )
 			{
-				var matches  = url.pathname.match(/^\/(.*?)\/(.*)\.file$/),
+				let matches  = url.pathname.match(/^\/(.*?)\/(.*)\.file$/),
 					 username = matches[1],
  					 fname 	 = './'+matches[2],
 					 userdir	 = './users/'+username+'/',
 					 tmpzip	 = 'download'+Date.now()+'.zip';
+
+				if( username.contains("..") || username.contains(";") ) {
+					__respond(resp, 404,
+						'invalid username, no colons or .. allowed :: ' + username);
+					return;
+				}
 
 				_fs.exists(userdir+fname,
 					function(exists)
@@ -579,14 +614,16 @@ var httpserver = _http.createServer(
 									if( err )
 										__respond(resp,500,String(err));
 									else
-										_fs.readFile(userdir+tmpzip,'binary',
+										_fs.readFile(userdir+tmpzip,
 											function(err, data)
 											{
 												__respond(resp,200,'',data,
 													{'Content-Type':'application/zip',
 													 'Content-Disposition':
 													 	'attachment; filename="'+tmpzip+'"'});
-												_fs.unlink(userdir+tmpzip);
+												_fs.unlink(userdir+tmpzip, function(err){
+													console.log("Unlinked " + userdir+tmpzip);
+												});
 											});
 								});
 					});

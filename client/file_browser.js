@@ -6,6 +6,13 @@ class FileBrowser{
             HttpUtils.url('/filelist', __NO_WID),
             undefined,
             function (statusCode, resp) {
+
+                if (statusCode == 404){
+                    let err_msg = "Error! Cannot load file list!";
+                    WindowManagement.openDialog(_ERROR, err_msg);
+                    return;
+                }
+
                 extensions.push('/');
                 var fnames = __localizeFilenames(
                     __filterFilenamesByExtension(
@@ -287,7 +294,6 @@ class FileBrowser{
 
                     //fnames might be a function that returns the files in
                     //the folder
-                    //bentley: the ModelVerse only examines one folder at a time
                     let file_list = fnames;
                     if (!(Array.isArray(fnames))){
                         file_list = await fnames(folder);
@@ -392,9 +398,7 @@ class FileBrowser{
                     currfolder = folder;
                 };
 
-        let file_browser_width = 120;
-        fileb.css("width", file_browser_width + 'ex')
-            .css("maxWidth", '100%');
+        fileb.css("maxWidth", '100%');
 
         navdiv.css("align", 'left');
 

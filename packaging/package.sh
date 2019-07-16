@@ -11,9 +11,11 @@
 #   and package everything
 #   - Run it for the Python2 and the Python3 version
 #   - Fix up the files in the package
-#        - Delete other Python files, and switch out Python.bat
+#        - Delete the unused Python directory in each zip
 #5. Upload the package .zip to the release on GitHub
 #6. Publish to npm repo
+
+version="v0.8.1-rc4"
 
 package_python3=true
 
@@ -38,7 +40,6 @@ chrome_url="https://newcontinuum.dl.sourceforge.net/project/portableapps/Google%
 
 manual_url="https://media.readthedocs.org/pdf/atompm/latest/atompm.pdf"
 
-version="v0.8.1-rc2"
 #$(curl --silent "https://api.github.com/repos/AToMPM/atompm/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 
 echo "Packaging version: $version"

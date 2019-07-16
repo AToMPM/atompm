@@ -1,5 +1,5 @@
-# AToMPM - A Tool for Multi-Paradigm Modelling
-AToMPM is a research framework from which you can generate domain-specific modeling web-based tools that run on the cloud. AToMPM is an open-source framework for designing DSML environements, performing model transformations, and manipulating and managing models. It runs completely over the web, making it independent from any operating system, platform, or device it may execute on. AToMPM follows the philosophy of modeling everything explicitly, at the right level of abstraction(s), using the most appropriate formalism(s) and process(es), being completely modeled by itself.
+# AToMPM - A Tool for Multi-Paradigm Modelling [![Build Status](https://travis-ci.org/AToMPM/atompm.svg?branch=master)](https://travis-ci.org/AToMPM/atompm)
+AToMPM is an open-source research framework for generating domain-specific modeling web-based tools that run on the cloud. AToMPM facilitates designing DSML environments, performing model transformations, and manipulating and managing models. It runs completely over the web, making it independent from any operating system, platform, or device it may execute on. AToMPM follows the philosophy of modeling everything explicitly, at the right level of abstraction(s), using the most appropriate formalism(s) and process(es), as it is completely modeled by itself.
 
 ## Installation
 A portable .zip version of AToMPM is available for Windows. This portable version is intended for those users with limited installation capabilities, such that they can skip these installation instructions. Please check https://github.com/AToMPM/atompm/releases for the newest release.
@@ -19,6 +19,7 @@ To install AToMPM, follow these steps:
         * For Python2: `pip install six`
         * For Python3: `pip3 install six`
 * Download and install node.js
+    * Required version: >= 8.0
     * Use a package manager on Linux
     * Or visit https://nodejs.org/en/download/
 * Download and unzip the source files for the newest AToMPM release from https://github.com/AToMPM/atompm/releases
@@ -48,8 +49,11 @@ To run AToMPM on Windows, execute the `run.bat` script inside of the main AToMPM
 ## Documentation
 Documentation for AToMPM can be found here: https://atompm.readthedocs.io
 
+## Bug Reporting/Comments
+Please create an issue for your bug or comments here: https://github.com/AToMPM/atompm/issues
+
 ## Testing
-To run tests on AToMPM, run `npm test'
+To run tests on AToMPM, run `npm test'. Ensure that your resolution of your screen is set quite high, as elements cannot be placed by the script off-screen.
 
 ## LICENSING
 The AToMPM project is licensed under the LGPL as stated in COPYING.lesser.

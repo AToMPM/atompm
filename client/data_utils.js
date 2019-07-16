@@ -273,19 +273,29 @@ DataUtils = function(){
 	 * 
 	 * @param bm - the button model to load
 	 */
-	this.loadbm = function(bm){
-		HttpUtils.httpReq(
-				'GET',
-				HttpUtils.url(bm,true),
-				undefined,
-				function(statusCode,resp)
-				{
-					GUIUtils.setupAndShowToolbar(
-						bm,
-						eval('('+resp+')'),
-						__BUTTON_TOOLBAR);					
-				});	
-	};
+    this.loadbm = function (bm) {
+        HttpUtils.httpReq(
+            'GET',
+            HttpUtils.url(bm, true),
+            undefined,
+            function (statusCode, resp) {
+                if (!utils.isHttpSuccessCode(statusCode)) {
+
+                    if (resp.includes("ENOENT")) {
+                        let err_msg = "Error! File not found: " + bm;
+                        WindowManagement.openDialog(_ERROR, err_msg);
+                    } else {
+                        WindowManagement.openDialog(_ERROR, resp);
+                    }
+                    return;
+                }
+
+                GUIUtils.setupAndShowToolbar(
+                    bm,
+                    eval('(' + resp + ')'),
+                    __BUTTON_TOOLBAR);
+            });
+    };
 	
 	/* 
 		1. does the deed
@@ -327,10 +337,14 @@ DataUtils = function(){
                                 DataUtils.loadm(fname, insert);
                             }
                         });
+                } else {
+                    if (resp.includes("cannot read")) {
+                        let err_msg = "Error! File cannot be read: " + fname;
+                        WindowManagement.openDialog(_ERROR, err_msg);
+                    } else {
+                        WindowManagement.openDialog(_ERROR, resp);
+                    }
                 }
-                else
-                    WindowManagement.openDialog(_ERROR, resp);
-
 
             });
     };

@@ -338,7 +338,7 @@ module.exports = {
         client.click(constraintIcon);
 
         client
-            .moveToElement(canvas, 100, 150)
+            .moveToElement(canvas, start_x + 3 * x_diff, start_y)
             .mouseButtonClick('right')
             .pause(500)
             .waitForElementPresent(constraint_div, 500, "Created class: " + constraint_div);
