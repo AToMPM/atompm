@@ -9,8 +9,8 @@
   	provide higher-level functions that those provided by nodejs' fs module */
 
 var _cp = require('child_process'),
-	 _os = require('os'),
-     _fs = require('fs');
+	_os = require('os'),
+	_fs = require('fs');
 
 
 /* NOTE:: because microsoft has apparently diversified into hiring comedians,
@@ -18,6 +18,10 @@ var _cp = require('child_process'),
 exports.cp =
 	function(src,dest,callback)
 	{
+		//guard against injection
+		src = src.split(';')[0];
+		dest = dest.split(';')[0];
+
 		switch(_os.type())
 		{
 			case 'Windows_NT' :
@@ -30,7 +34,7 @@ exports.cp =
 							callback(err,stdout,stderr);
 					});
 				break;
-				
+
 			case 'Linux'  :
 			case 'Darwin' :
 				_cp.exec('cp -R "'+src+'" "'+dest+'"',callback);
@@ -51,6 +55,9 @@ exports.cp =
 exports.findfiles =
 	function(dir,callback)
 	{
+		//guard against injection
+		dir = dir.split(';')[0];
+
 		switch(_os.type())
 		{
 			case 'Windows_NT' :
@@ -61,27 +68,30 @@ exports.findfiles =
 							callback(err,stdout,stderr);
 						else
 						{
-							var windir = (dir.charAt(0)=='.' ? dir.substring(1) : dir).
-												replace(/\//g,'\\'),
-								 paths  = stdout.split('\r\n').map(
+							let windir = (dir.charAt(0)=='.' ? dir.substring(1) : dir).
+								replace(/\//g,'\\'),
+								paths  = stdout.split('\r\n').map(
 									function(path)
 									{
-										var newpath = dir+path.substring(
-														path.indexOf(windir)+windir.length).
-													  replace(/\\/g,'/');
-                                        try {
-                                            if (_fs.lstatSync(path).isDirectory()) {
-                                                newpath = newpath + '/';
-                                            }
-                                        } catch (e) {}
-                                        return newpath;
+										let newpath = dir+path.substring(
+											path.indexOf(windir)+windir.length).
+										replace(/\\/g,'/');
+										try {
+											if (_fs.lstatSync(path).isDirectory()) {
+												newpath = newpath + '/';
+											}
+										} catch (e) {
+											//console.log("Error!");
+											//console.log(e);
+										}
+										return newpath;
 									});
 							paths.pop();
 							callback(err,paths.join('\n'),stderr);
 						}
 					});
 				break;
-				
+
 			case 'Linux'  :
 			case 'Darwin' :
 				_cp.exec('find "'+dir+'"',
@@ -90,14 +100,14 @@ exports.findfiles =
 						if( err )
 							callback(err,stdout,stderr);
 						else {
-                            var paths = stdout.slice(0,-1),
-                                newpaths = paths.split('\n').map(function(path) {
-                                    if (_fs.lstatSync(path).isDirectory()) {
-                                        return path + "/";
-                                    } else return path;
-                                });
+							let paths = stdout.slice(0,-1),
+								newpaths = paths.split('\n').map(function(path) {
+									if (_fs.lstatSync(path).isDirectory()) {
+										return path + "/";
+									} else return path;
+								});
 							callback(err,newpaths.join('\n'),stderr);
-                        }
+						}
 					});
 				break;
 
@@ -113,15 +123,18 @@ exports.findfiles =
 exports.mkdirs =
 	function(dir,callback)
 	{
-        var split_dir = dir.split('/'),
-            curr_dir = '';
-        for (var i in split_dir) {
-            curr_dir += split_dir[i] + '/';
-            if (!_fs.existsSync(curr_dir)) {
-                _fs.mkdir(curr_dir, 484, function(err) {if (err) {if (err.code != 'EEXIST') callback(err);}});
-            }
-        }
-        callback();
+		//guard against injection
+		dir = dir.split(';')[0];
+
+		let split_dir = dir.split('/'),
+			curr_dir = '';
+		for (let i in split_dir) {
+			curr_dir += split_dir[i] + '/';
+			if (!_fs.existsSync(curr_dir)) {
+				_fs.mkdir(curr_dir, 484, function(err) {if (err) {if (err.code != 'EEXIST') callback(err);}});
+			}
+		}
+		callback();
 	};
 
 
@@ -129,8 +142,12 @@ exports.mkdirs =
 exports.mv =
 	function(src,dest,callback)
 	{
-        var split_string = src.split('/');
-        _fs.rename(src, dest + split_string[split_string.length-1],callback);
+		//guard against injection
+		src = src.split(';')[0];
+		dest = dest.split(';')[0];
+
+		let split_string = src.split('/');
+		_fs.rename(src, dest + split_string[split_string.length-1],callback);
 	};
 
 
@@ -138,37 +155,28 @@ exports.mv =
 exports.rmdirs =
 	function(dir,callback)
 	{
-		switch(_os.type())
-		{
-			case 'Windows_NT' :
-				_cp.exec('rmdir /s "'+dir+'"',callback);
-				break;
-				
-			case 'Linux'  :
-			case 'Darwin' :
-				_cp.exec('rm -rf "'+dir+'"',callback);
-				break;
+		//guard against injection
+		dir = dir.split(';')[0];
 
-			default:
-				throw 'unsupported OS :: '+_os.type();
-		}
+		_fs.rmdir(dir, callback)
 	};
-
-
 
 // http://stackoverflow.com/questions/18052762/remove-directory-which-is-not-empty
 exports.deleteFolderRecursive = function(path) {
-   if( _fs.existsSync(path) ) {
-       _fs.readdirSync(path).forEach(function(file,index){
-           var curPath = path + "/" + file;
-           if(_fs.lstatSync(curPath).isDirectory()) { // recurse
-               exports.deleteFolderRecursive(curPath);
-           } else { // delete file
-               _fs.unlinkSync(curPath);
-           }
-       });
-       _fs.rmdirSync(path);
-   }
+	//guard against injection
+	path = path.split(';')[0];
+
+	if( _fs.existsSync(path) ) {
+		_fs.readdirSync(path).forEach(function(file,index){
+			let curPath = path + "/" + file;
+			if(_fs.lstatSync(curPath).isDirectory()) { // recurse
+				exports.deleteFolderRecursive(curPath);
+			} else { // delete file
+				_fs.unlinkSync(curPath);
+			}
+		});
+		_fs.rmdirSync(path);
+	}
 };
 	
 	

@@ -59,18 +59,3 @@ To export metamodels or models in AToMPM, follow these steps:
 
 10. If you want to use the exported file in Eclipse, you have to register the metamodel.
 
-
-ModelVerse Toolbar
-------------------
-
-.. warning:: The ModelVerse toolbar is currently in an alpha state. It is only intended as a prototype and should not be used for everyday use, as data loss is certain to occur.
-
-The ModelVerse toolbar is intended to allow for the user to load and save models to/from AToMPM to the Modelverse. 
-
-.. warning:: Currently, only metamodels in the SimpleClassDiagram formalism can be loaded and saved, along with instance models.
-
-The first button on the toolbar connects to a running ModelVerse instance running on the current machine.
-
-The second button loads a model from the ModelVerse into the current AToMPM canvas.
-
-The third button saves the current AToMPM model to the ModelVerse.
