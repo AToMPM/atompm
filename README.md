@@ -42,9 +42,6 @@ To run AToMPM on Windows, execute the `run.bat` script inside of the main AToMPM
     3. Open a browser (Firefox or Chrome) and navigate to http://localhost:8124/atompm
 
 * The above steps are automated by the `run_AToMPM_local.sh` script
-* Note that the `run_AToMPM.sh` script can automate the installation and usage of AToMPM
-    * The first time you run this script, all dependencies are automatically downloaded and installed in the `dependencies/` folder.
-    * If, for any reason, the download process is interrupted or you experience problems with AToMPM, remove the `dependencies/` folder and run the script again.
 
 ## Documentation
 Documentation for AToMPM can be found here: https://msdl.uantwerpen.be/documentation/AToMPM/index.html
