@@ -16,7 +16,7 @@ module.exports = {
   "globals_path" : "",
 
   "selenium" : {
-    "start_process" : false,
+    "start_process" : true,
     "server_path" : selenium_server.path,
     "log_path" : "",
     "port" : 4444,
@@ -43,7 +43,11 @@ module.exports = {
       "desiredCapabilities": {
         "browserName": "chrome",
         "javascriptEnabled": true,
-        "marionette": true
+        "marionette": true,
+        "chromeOptions": {
+            "args" : ["--no-sandbox"],
+            "w3c": false
+          },
       }
     },
 
