@@ -1,4 +1,5 @@
 let test_utils = require('./test_utils');
+let model_building_utils = require('./model_building_utils');
 let user = "./users/testuser/";
 
 module.exports = {
@@ -15,6 +16,14 @@ module.exports = {
 
         let filename = 'Formalisms/ClassicDEVS/ClassicDEVS.model';
         test_utils.load_model(client, [filename]);
+    },
+
+    'Load and save model' : function (client) {
+
+        let filename = 'Formalisms/ClassicDEVS/ClassicDEVS.model';
+        let new_filename = 'ClassicDEVS2.model';
+        test_utils.load_model(client, [filename]);
+        model_building_utils.save_model(client, "Models", new_filename)
     },
 
     'Load two models' : function (client) {

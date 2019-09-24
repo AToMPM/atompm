@@ -201,7 +201,7 @@ function load_model(client, folder_name, model_name) {
 }
 
 function save_model(client, folder_name, model_name) {
-    let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModel";
+    let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModelAs";
     let new_file_text = "#new_file";
 
     client.waitForElementPresent(save_button, 1000, "Looking for save button")
