@@ -39,8 +39,6 @@ module.exports = {
         let undoBtn = "#\\/Toolbars\\/MainMenu\\/MainMenu\\.buttons\\.model\\/undo";
         client.waitForElementPresent(undoBtn, 2000, "Check for undo button...");
         client.click(undoBtn);
-        client.pause(1000);
-        client.click(undoBtn);
         client.waitForElementPresent(class_div, 1000, "Class restored");
 
         //SECOND DELETE
