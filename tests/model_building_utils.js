@@ -201,7 +201,7 @@ function load_model(client, folder_name, model_name) {
 }
 
 function save_model(client, folder_name, model_name) {
-    let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModel";
+    let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModelAs";
     let new_file_text = "#new_file";
 
     client.waitForElementPresent(save_button, 1000, "Looking for save button")
@@ -216,6 +216,7 @@ function save_model(client, folder_name, model_name) {
             if (result.status == -1) {
                 client.click(new_file_text)
                     .clearValue(new_file_text)
+                    .setValue(new_file_text, '\u0008') // Send a backspace
                     .setValue(new_file_text, model_name);
 
                 client.assert.ok(true, "Saving model with name: '" + model_name + "'");
@@ -269,11 +270,17 @@ function compile_model(client, compile_type, folder_name, model_name) {
                 }
 
                 client.click(new_file_text)
+                    .pause(200)
                     .clearValue(new_file_text)
+                    .pause(200)
+                    .setValue(new_file_text, '\u0008') // Send a backspace
+                    .setValue(new_file_text, '\u0008') // Send a backspace
                     .setValue(new_file_text, model_name)
+                    .pause(200)
                     .click("#dialog_btn");
             } else {
                 client.click(model_div)
+                    .pause(200)
                     .click("#dialog_btn");
             }
 

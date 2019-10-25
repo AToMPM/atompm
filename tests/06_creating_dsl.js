@@ -173,7 +173,7 @@ module.exports = {
             .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
             .moveToElement(canvas, 0, 100)
             .mouseButtonClick('left')
-            .pause(500)
+            .pause(100)
         ;
 
         let class_div3 = model_building_utils.get_class_div(0);
@@ -186,7 +186,7 @@ module.exports = {
             .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
             .moveToElement(canvas, 0, 100)
             .mouseButtonClick('left')
-            .pause(500)
+            .pause(100)
         ;
 
 
@@ -204,7 +204,7 @@ module.exports = {
             .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
             .moveToElement(canvas, 0, 100)
             .mouseButtonClick('left')
-            .pause(500)
+            .pause(100)
         ;
 
         //CREATE INHERITANCE
@@ -224,22 +224,22 @@ module.exports = {
                 .mouseButtonDown('right')
                 .moveToElement(sup, 50 + offset, 50 + offset)
                 .mouseButtonUp('right')
-                .pause(500)
+                .pause(100)
                 .click(inheri_relation)
                 .waitForElementPresent("#dialog_btn", 1000, "Inheri menu opens")
                 .click("#dialog_btn")
-                .pause(500)
+                .pause(100)
                 .waitForElementNotPresent("#dialog_btn", 1000, "Inheri menu closes")
                 .moveToElement(canvas, 0, 100)
                 .mouseButtonClick('left')
-                .pause(500)
+                .pause(100)
             ;
 
             num_elements++;
         }
 
         //SET ASSOCS
-        client.pause(300);
+        client.pause(100);
 
         let assoc_num = 0;
         for (let assoc of assocs) {
@@ -268,15 +268,15 @@ module.exports = {
                 .mouseButtonDown('right')
                 .moveToElement(to_ele, 20 + offset, 20 + offset)
                 .mouseButtonUp('right')
-                .pause(500)
+                .pause(100)
                 .click(assoc_relation)
                 .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
                 .click("#dialog_btn")
-                .pause(500)
+                .pause(100)
                 .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes")
                 .moveToElement(canvas, 0, 100)
                 .mouseButtonClick('left')
-                .pause(500)
+                .pause(100)
                 .waitForElementPresent(assoc_div, 1000, "Assoc name present: " + assoc_div);
 
             if (out_card) {
@@ -290,7 +290,7 @@ module.exports = {
                     .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
                     .moveToElement(canvas, 0, 100)
                     .mouseButtonClick('left')
-                    .pause(500);
+                    .pause(100);
             }
 
             if (in_card) {
@@ -303,7 +303,7 @@ module.exports = {
                     .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
                     .moveToElement(canvas, 0, 100)
                     .mouseButtonClick('left')
-                    .pause(500);
+                    .pause(100);
             }
             client.getElementSize(assoc_div, function (result) {
 
@@ -326,7 +326,7 @@ module.exports = {
                     .waitForElementNotPresent("#dialog_btn", 1000, "Editing assoc name closes")
                     .moveToElement(canvas, 0, 100)
                     .mouseButtonClick('left')
-                    .pause(500);
+                    .pause(100);
             });
         }
 
@@ -340,7 +340,7 @@ module.exports = {
         client
             .moveToElement(canvas, start_x + 3 * x_diff, start_y)
             .mouseButtonClick('right')
-            .pause(500)
+            .pause(100)
             .waitForElementPresent(constraint_div, 500, "Created class: " + constraint_div);
 
         let pre_create_opt = "#tr_event > td:nth-child(2) > select > option:nth-child(2)";
@@ -364,7 +364,7 @@ module.exports = {
             .waitForElementNotPresent("#dialog_btn", 1000, "Constraint menu closes")
             .moveToElement(canvas, 0, 100)
             .mouseButtonClick('left')
-            .pause(1000);
+            .pause(100);
 
 
         //SAVE MODEL
@@ -440,10 +440,10 @@ module.exports = {
             attrs[textContent_field] = text;
 
             client
-                .pause(300)
+                .pause(100)
                 .moveToElement(canvas, 20, 200)
                 .mouseButtonClick('right')
-                .pause(500)
+                .pause(100)
                 .waitForElementPresent(textDiv, 500, "Created text: " + textDiv);
 
             model_building_utils.set_attribs(client, num_elements, attrs, textType);
@@ -452,9 +452,9 @@ module.exports = {
 
             client.moveToElement(textDiv, 10, 10)
                 .mouseButtonClick('left')
-                .pause(300)
+                .pause(100)
                 .mouseButtonDown('left')
-                .pause(300);
+                .pause(100);
 
             model_building_utils.move_to_element_ratio(client, iconDiv, 35, 15);
             client.mouseButtonUp('left');
@@ -487,10 +487,10 @@ module.exports = {
 
 
             client
-                .pause(300)
+                .pause(100)
                 .moveToElement(canvas, 50, 200)
                 .mouseButtonClick('right')
-                .pause(1000)
+                .pause(100)
                 .waitForElementPresent(symbolDiv, 500, "Created symbol: " + symbolDiv);
 
             model_building_utils.click_off(client);
@@ -500,12 +500,12 @@ module.exports = {
             model_building_utils.move_to_element_ratio(client, symbolDiv, 50, 50);
             client
                 .mouseButtonClick('left')
-                .pause(300)
+                .pause(100)
                 .mouseButtonDown('left')
-                .pause(300);
+                .pause(100);
 
             model_building_utils.move_to_element_ratio(client, iconDiv, 50, 55);
-            client.pause(300).mouseButtonUp('left');
+            client.pause(100).mouseButtonUp('left');
 
             model_building_utils.click_off(client);
 

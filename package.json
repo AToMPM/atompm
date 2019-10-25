@@ -1,8 +1,8 @@
 {
   "name": "atompm",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "A Tool for Multi-Paradigm Modelling",
-  "license": "LGPL-3.0-only",
+  "license": "LGPL-3.0",
   "homepage": "https://atompm.github.io/",
   "bugs": {
     "url": "https://msdl.uantwerpen.be/git/simon/AToMPM/issues"
@@ -16,10 +16,10 @@
     "socket.io-client": "^0.9.16"
   },
   "devDependencies": {
-    "chromedriver": "^2.46.0",
+    "chromedriver": "^77.0",
     "glob": "^7.1.4",
-    "nightwatch": "^1.1.13",
-    "selenium-server": "3.141.59"
+    "nightwatch": "^1.2.4",
+    "selenium-server": "^3.141.59"
   },
   "scripts": {
     "test": "./run_tests.sh"
