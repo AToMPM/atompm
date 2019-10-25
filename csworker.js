@@ -743,7 +743,7 @@ const _siocl = require('socket.io-client');
 					 pp  		= _svg.fns.getPointOnPathAtRatio(path,ldi.xratio);
                      
                 if (pp == undefined)
-                    continue
+                    continue;
                 
 				var yoffset	= new _svg.types.Point(0,ldi.yoffset).rotate(pp.O),
 					endAt	= (ldi.xratio >= 1 ? 
@@ -906,12 +906,12 @@ const _siocl = require('socket.io-client');
 			//			new_node['$linktype'] = this.metamodels[metamodel]['connectorTypes'][type];	
 
 			return [];
-			return [{'op':'SYSOUT',
-			  		  'text':'WARNING :: '+
-						  		'a proper layout constraint solver has yet to be '+
-						  		'implemented... inter-VisualObject relationships are '+
-								'ignored and containers do not resize to fit their '+
-								'contents'}];
+			// return [{'op':'SYSOUT',
+			//   		  'text':'WARNING :: '+
+			// 			  		'a proper layout constraint solver has yet to be '+
+			// 			  		'implemented... inter-VisualObject relationships are '+
+			// 					'ignored and containers do not resize to fit their '+
+			// 					'contents'}];
 		},
 
 
@@ -2299,4 +2299,4 @@ const _siocl = require('socket.io-client');
 		{
 			return parseInt(sn.match(/.*#(\d*)/)[1]);
 		}
-}
+};
