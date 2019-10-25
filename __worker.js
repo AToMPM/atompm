@@ -106,10 +106,16 @@
 
 /**************************** LIBRARIES and GLOBALS ****************************/
 var  _util 	= require('util'),
+
+	 _path 	= require('path'),
 	 _http 	= require('http'),
 	 _do  	= require('./___do'),
 	 _fs 	 	= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
+	 _fspp	= _do.convert(require('./___fs++'), ['mkdirs']),	 
+	 _siocl	= require('socket.io-client'),
 	 _utils	= require('./utils'),
+	 _styleinfo = require('./styleinfo'),
+	 _svg		= require('./libsvg').SVG,
 	 _wlib,
 	 _mmmk,
 	 _mt,
@@ -497,13 +503,13 @@ process.on('message',
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
 
-            if (__wtype == "/asworker") {
-                _wlib = require("./asworker");
-            } else if (__wtype == "/csworker") {
-                _wlib = require("./csworker");
-            } else {
-                throw "Error! Unknown worker type: " + __wtype;
-            }
+			if (__wtype == "/asworker") {
+				_wlib = require("./asworker");
+			}else if (__wtype == "/csworker") {
+				_wlib = require("./csworker");
+			}else {
+				 throw "Error! Unknown worker type: " + __wtype;
+			}
 			_mmmk   = require('./mmmk');
 
             _mt  	  = require('./libmt');
@@ -834,6 +840,23 @@ function POST_batchedit(resp,reqData)
 	);
 }
 
+//required so that csworker has access to these variables
+function get__ids2uris(){
+	return __ids2uris;
+}
+function set__ids2uris(new__ids2uris){
+	__ids2uris = new__ids2uris;
+}
+function get__nextSequenceNumber(){
+	return get__nextSequenceNumber;
+}
+function set__nextSequenceNumber(new__nextSequenceNumber){
+	__nextSequenceNumber = new__nextSequenceNumber;
+}
+function get__wtype(){
+	return __wtype;
+}
+
 module.exports = {
 	__errorContinuable,
 	__successContinuable,
@@ -853,8 +876,10 @@ module.exports = {
 	GET__current_state,
 
 	//GLOBAL VARS
-	__ids2uris,
-	__nextSequenceNumber,
-	__wtype,
+	get__ids2uris,
+	set__ids2uris,
+	get__nextSequenceNumber,
+	set__nextSequenceNumber,
+	get__wtype,
 
 };

@@ -177,21 +177,21 @@
 			SYSOUT message announcing the launching of the rule... a sensible and 
 		  	nice solution would be not to remember such changelogs in
 			__handledSeqNums */
-let {
-    __id_to_uri,
-    __ids2uris, __nextSequenceNumber,
-    __postBadReqErrorMsg,
-    __postForbiddenErrorMsg,
-    __wtype,
-    GET__current_state
-} = require("./__worker");
 
 const {
 	__batchCheckpoint,
     __errorContinuable,
-    __httpReq,
+	GET__current_state,
+	get__ids2uris,
+	set__ids2uris,
+	get__nextSequenceNumber,
+	set__nextSequenceNumber,
+	get__wtype,
+     __httpReq,
+	__id_to_uri,
 	__wHttpReq,
     __postInternalErrorMsg, __postMessage,
+	__postBadReqErrorMsg, __postForbiddenErrorMsg,
     __sequenceNumber,
     __successContinuable,
 	__uri_to_id
@@ -208,7 +208,7 @@ const _mt = require('./libmt');
 
 const _siocl = require('socket.io-client');
 
-module.exports = {
+ module.exports = {
 	'__REGEN_ICON_RETRY_DELAY_MS':200,
 	'__asmm2csmm':{},
 	'__asid2csid':{},
@@ -243,8 +243,8 @@ module.exports = {
 	'__applyASWChanges' :
 		function(changelog,aswSequenceNumber,hitchhiker)
 		{
-			//console.error('w#'+__wid+' ++ ('+aswSequenceNumber+') '+
-			//				_utils.jsons(changelog));
+			console.error('w#'+__wid+' ++ ('+aswSequenceNumber+') '+
+							_utils.jsons(changelog));
 
 
 			if( _utils.sn2int(aswSequenceNumber) > 
@@ -566,8 +566,8 @@ module.exports = {
 				{
 					var cschangelog = _utils.flatten(cschangelogs);
 
-					//console.error('w#'+__wid+' -- ('+aswSequenceNumber+') '+
-					//	_utils.jsons(cschangelog));
+					console.error('w#'+__wid+' -- ('+aswSequenceNumber+') '+
+						_utils.jsons(cschangelog));
 
 					__postMessage(
 							{'statusCode':200,
@@ -665,9 +665,11 @@ module.exports = {
 										var state = respData['data'];
 										_mmmk.clone(state['_mmmk']);
 										self.__clone(state['_wlib']);										
-										__ids2uris = state['__ids2uris'];
-										__nextSequenceNumber = 
+										var __ids2uris = state['__ids2uris'];
+										set__ids2uris(__ids2uris);
+										var __nextSequenceNumber =
 												state['__nextSequenceNumber'];
+										set__nextSequenceNumber(__nextSequenceNumber);
 				
 										self.__pendingChangelogs = 
 											self.__pendingChangelogs.filter(
@@ -675,7 +677,7 @@ module.exports = {
 												{
 													return self.__sn2int(pc['sequence#']) > 
 																self.__sn2int(
-																	self.__nextASWSequenceNumber);
+																	self.__nextASWSequenceNumber)
 												});
 										callback();
 										self.__applyPendingASWChanges();
@@ -1060,8 +1062,8 @@ module.exports = {
 					{'statusCode':200,
 					 'data':{'_mmmk':_mmmk.clone(),
 	 						   '_wlib':this.__clone(),
-								'__ids2uris':_utils.clone(__ids2uris),
-								'__nextSequenceNumber':__nextSequenceNumber},
+								'__ids2uris':_utils.clone(get__ids2uris()),
+								'__nextSequenceNumber':get__nextSequenceNumber()},
 					 'sequence#':__sequenceNumber(0),
 					 'respIndex':resp});
 		},
@@ -1884,8 +1886,8 @@ module.exports = {
                             function(result) {
                                 return __wHttpReq('PUT',
                                            uri+'?wid='+aswid,
-                                           ({'csm':_mmmk.read(), 'asmm': asmm}));
-                            }];
+                                           ({'csm':_mmmk.read(), 'asmm': asmm}))
+                            }]
                  } else {
                      actions = [__wHttpReq('PUT',
                                            uri+'?wid='+aswid,
@@ -2051,7 +2053,7 @@ module.exports = {
 	'__undoredo' :
 		function(resp,uri,sn,func)
 		{
-			if( ! sn.match(__wtype) )
+			if( ! sn.match(get__wtype()) )
 			{
 				var hitchhiker = {},
 					 reqData		= {'hitchhiker':hitchhiker},
