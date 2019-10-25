@@ -177,38 +177,41 @@
 			SYSOUT message announcing the launching of the rule... a sensible and 
 		  	nice solution would be not to remember such changelogs in
 			__handledSeqNums */
-let {
-    __id_to_uri,
-    __ids2uris, __nextSequenceNumber,
-    __postBadReqErrorMsg,
-    __postForbiddenErrorMsg,
-    __wtype,
-    GET__current_state
-} = require("./__worker");
-
-const {
-	__batchCheckpoint,
-    __errorContinuable,
-    __httpReq,
-	__wHttpReq,
-    __postInternalErrorMsg, __postMessage,
-    __sequenceNumber,
-    __successContinuable,
-	__uri_to_id
-} = require("./__worker");
-
-const _do = require("./___do");
-const _utils = require('./utils');
-const _mmmk = require("./mmmk");
-const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
-const _path = require('path');
-const _fspp	= _do.convert(require('./___fs++'), ['mkdirs']);
-const _svg = require('./libsvg').SVG;
-const _mt = require('./libmt');
-
-const _siocl = require('socket.io-client');
-
-module.exports = {
+// <<<<<<< HEAD
+// let {
+//     __id_to_uri,
+//     __ids2uris, __nextSequenceNumber,
+//     __postBadReqErrorMsg,
+//     __postForbiddenErrorMsg,
+//     __wtype,
+//     GET__current_state
+// } = require("./__worker");
+//
+// const {
+// 	__batchCheckpoint,
+//     __errorContinuable,
+//     __httpReq,
+// 	__wHttpReq,
+//     __postInternalErrorMsg, __postMessage,
+//     __sequenceNumber,
+//     __successContinuable,
+// 	__uri_to_id
+// } = require("./__worker");
+//
+// const _do = require("./___do");
+// const _utils = require('./utils');
+// const _mmmk = require("./mmmk");
+// const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+// const _path = require('path');
+// const _fspp	= _do.convert(require('./___fs++'), ['mkdirs']);
+// const _svg = require('./libsvg').SVG;
+// const _mt = require('./libmt');
+//
+// const _siocl = require('socket.io-client');
+//
+// module.exports = {
+// =======
+{
 	'__REGEN_ICON_RETRY_DELAY_MS':200,
 	'__asmm2csmm':{},
 	'__asid2csid':{},
@@ -243,8 +246,8 @@ module.exports = {
 	'__applyASWChanges' :
 		function(changelog,aswSequenceNumber,hitchhiker)
 		{
-			//console.error('w#'+__wid+' ++ ('+aswSequenceNumber+') '+
-			//				_utils.jsons(changelog));
+			console.error('w#'+__wid+' ++ ('+aswSequenceNumber+') '+
+							_utils.jsons(changelog));
 
 
 			if( _utils.sn2int(aswSequenceNumber) > 
@@ -566,8 +569,8 @@ module.exports = {
 				{
 					var cschangelog = _utils.flatten(cschangelogs);
 
-					//console.error('w#'+__wid+' -- ('+aswSequenceNumber+') '+
-					//	_utils.jsons(cschangelog));
+					console.error('w#'+__wid+' -- ('+aswSequenceNumber+') '+
+						_utils.jsons(cschangelog));
 
 					__postMessage(
 							{'statusCode':200,
@@ -675,7 +678,7 @@ module.exports = {
 												{
 													return self.__sn2int(pc['sequence#']) > 
 																self.__sn2int(
-																	self.__nextASWSequenceNumber);
+																	self.__nextASWSequenceNumber)
 												});
 										callback();
 										self.__applyPendingASWChanges();
@@ -741,7 +744,7 @@ module.exports = {
 					 pp  		= _svg.fns.getPointOnPathAtRatio(path,ldi.xratio);
                      
                 if (pp == undefined)
-                    continue;
+                    continue
                 
 				var yoffset	= new _svg.types.Point(0,ldi.yoffset).rotate(pp.O),
 					endAt	= (ldi.xratio >= 1 ? 
@@ -904,12 +907,12 @@ module.exports = {
 			//			new_node['$linktype'] = this.metamodels[metamodel]['connectorTypes'][type];	
 
 			return [];
-			// return [{'op':'SYSOUT',
-			//   		  'text':'WARNING :: '+
-			// 			  		'a proper layout constraint solver has yet to be '+
-			// 			  		'implemented... inter-VisualObject relationships are '+
-			// 					'ignored and containers do not resize to fit their '+
-			// 					'contents'}];
+			return [{'op':'SYSOUT',
+			  		  'text':'WARNING :: '+
+						  		'a proper layout constraint solver has yet to be '+
+						  		'implemented... inter-VisualObject relationships are '+
+								'ignored and containers do not resize to fit their '+
+								'contents'}];
 		},
 
 
@@ -1884,8 +1887,8 @@ module.exports = {
                             function(result) {
                                 return __wHttpReq('PUT',
                                            uri+'?wid='+aswid,
-                                           ({'csm':_mmmk.read(), 'asmm': asmm}));
-                            }];
+                                           ({'csm':_mmmk.read(), 'asmm': asmm}))
+                            }]
                  } else {
                      actions = [__wHttpReq('PUT',
                                            uri+'?wid='+aswid,
@@ -2297,4 +2300,4 @@ module.exports = {
 		{
 			return parseInt(sn.match(/.*#(\d*)/)[1]);
 		}
-};
+}

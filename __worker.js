@@ -106,10 +106,16 @@
 
 /**************************** LIBRARIES and GLOBALS ****************************/
 var  _util 	= require('util'),
+
+	 _path 	= require('path'),
 	 _http 	= require('http'),
 	 _do  	= require('./___do'),
 	 _fs 	 	= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
+	 _fspp	= _do.convert(require('./___fs++'), ['mkdirs']),	 
+	 _siocl	= require('socket.io-client'),
 	 _utils	= require('./utils'),
+	 _styleinfo = require('./styleinfo'),
+	 _svg		= require('./libsvg').SVG,
 	 _wlib,
 	 _mmmk,
 	 _mt,
@@ -497,13 +503,11 @@ process.on('message',
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
 
-            if (__wtype == "/asworker") {
-                _wlib = require("./asworker");
-            } else if (__wtype == "/csworker") {
-                _wlib = require("./csworker");
-            } else {
-                throw "Error! Unknown worker type: " + __wtype;
-            }
+			if (__wtype == "/asworker"){
+				_wlib = require("./asworker");
+			}else {
+                _wlib = eval('(' + _fs.readFileSync('.' + __wtype + '.js', 'utf8') + ')');
+			}
 			_mmmk   = require('./mmmk');
 
             _mt  	  = require('./libmt');

@@ -5,7 +5,6 @@
 const {
     __errorContinuable,
     __httpReq,
-	__wHttpReq,
     __postInternalErrorMsg, __postMessage,
     __sequenceNumber,
     __successContinuable,
