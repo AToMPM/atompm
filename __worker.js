@@ -503,10 +503,12 @@ process.on('message',
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
 
-			if (__wtype == "/asworker"){
+			if (__wtype == "/asworker") {
 				_wlib = require("./asworker");
+			}else if (__wtype == "/csworker") {
+				_wlib = require("./csworker");
 			}else {
-                _wlib = eval('(' + _fs.readFileSync('.' + __wtype + '.js', 'utf8') + ')');
+				 throw "Error! Unknown worker type: " + __wtype;
 			}
 			_mmmk   = require('./mmmk');
 
@@ -838,6 +840,23 @@ function POST_batchedit(resp,reqData)
 	);
 }
 
+//required so that csworker has access to these variables
+function get__ids2uris(){
+	return __ids2uris;
+}
+function set__ids2uris(new__ids2uris){
+	__ids2uris = new__ids2uris;
+}
+function get__nextSequenceNumber(){
+	return get__nextSequenceNumber;
+}
+function set__nextSequenceNumber(new__nextSequenceNumber){
+	__nextSequenceNumber = new__nextSequenceNumber;
+}
+function get__wtype(){
+	return __wtype;
+}
+
 module.exports = {
 	__errorContinuable,
 	__successContinuable,
@@ -857,8 +876,10 @@ module.exports = {
 	GET__current_state,
 
 	//GLOBAL VARS
-	__ids2uris,
-	__nextSequenceNumber,
-	__wtype,
+	get__ids2uris,
+	set__ids2uris,
+	get__nextSequenceNumber,
+	set__nextSequenceNumber,
+	get__wtype,
 
 };

@@ -177,41 +177,38 @@
 			SYSOUT message announcing the launching of the rule... a sensible and 
 		  	nice solution would be not to remember such changelogs in
 			__handledSeqNums */
-// <<<<<<< HEAD
-// let {
-//     __id_to_uri,
-//     __ids2uris, __nextSequenceNumber,
-//     __postBadReqErrorMsg,
-//     __postForbiddenErrorMsg,
-//     __wtype,
-//     GET__current_state
-// } = require("./__worker");
-//
-// const {
-// 	__batchCheckpoint,
-//     __errorContinuable,
-//     __httpReq,
-// 	__wHttpReq,
-//     __postInternalErrorMsg, __postMessage,
-//     __sequenceNumber,
-//     __successContinuable,
-// 	__uri_to_id
-// } = require("./__worker");
-//
-// const _do = require("./___do");
-// const _utils = require('./utils');
-// const _mmmk = require("./mmmk");
-// const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
-// const _path = require('path');
-// const _fspp	= _do.convert(require('./___fs++'), ['mkdirs']);
-// const _svg = require('./libsvg').SVG;
-// const _mt = require('./libmt');
-//
-// const _siocl = require('socket.io-client');
-//
-// module.exports = {
-// =======
-{
+
+const {
+	__batchCheckpoint,
+    __errorContinuable,
+	GET__current_state,
+	get__ids2uris,
+	set__ids2uris,
+	get__nextSequenceNumber,
+	set__nextSequenceNumber,
+	get__wtype,
+     __httpReq,
+	__id_to_uri,
+	__wHttpReq,
+    __postInternalErrorMsg, __postMessage,
+	__postBadReqErrorMsg, __postForbiddenErrorMsg,
+    __sequenceNumber,
+    __successContinuable,
+	__uri_to_id
+} = require("./__worker");
+
+const _do = require("./___do");
+const _utils = require('./utils');
+const _mmmk = require("./mmmk");
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _path = require('path');
+const _fspp	= _do.convert(require('./___fs++'), ['mkdirs']);
+const _svg = require('./libsvg').SVG;
+const _mt = require('./libmt');
+
+const _siocl = require('socket.io-client');
+
+ module.exports = {
 	'__REGEN_ICON_RETRY_DELAY_MS':200,
 	'__asmm2csmm':{},
 	'__asid2csid':{},
@@ -668,9 +665,11 @@
 										var state = respData['data'];
 										_mmmk.clone(state['_mmmk']);
 										self.__clone(state['_wlib']);										
-										__ids2uris = state['__ids2uris'];
-										__nextSequenceNumber = 
+										var __ids2uris = state['__ids2uris'];
+										set__ids2uris(__ids2uris);
+										var __nextSequenceNumber =
 												state['__nextSequenceNumber'];
+										set__nextSequenceNumber(__nextSequenceNumber);
 				
 										self.__pendingChangelogs = 
 											self.__pendingChangelogs.filter(
@@ -1063,8 +1062,8 @@
 					{'statusCode':200,
 					 'data':{'_mmmk':_mmmk.clone(),
 	 						   '_wlib':this.__clone(),
-								'__ids2uris':_utils.clone(__ids2uris),
-								'__nextSequenceNumber':__nextSequenceNumber},
+								'__ids2uris':_utils.clone(get__ids2uris()),
+								'__nextSequenceNumber':get__nextSequenceNumber()},
 					 'sequence#':__sequenceNumber(0),
 					 'respIndex':resp});
 		},
@@ -2054,7 +2053,7 @@
 	'__undoredo' :
 		function(resp,uri,sn,func)
 		{
-			if( ! sn.match(__wtype) )
+			if( ! sn.match(get__wtype()) )
 			{
 				var hitchhiker = {},
 					 reqData		= {'hitchhiker':hitchhiker},
