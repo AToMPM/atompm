@@ -667,6 +667,9 @@ GUIUtils = function(){
 			if (a.id.includes("MainMenu")) {
 				return -1;
 			}
+			if (b.id.includes("MainMenu")) {
+				return 1;
+			}
 
 			//toolbars come first
 			if (a.id.includes("Toolbars") && !(b.id.includes("Toolbars"))) {
@@ -674,6 +677,15 @@ GUIUtils = function(){
 			}
 
 			if (b.id.includes("Toolbars") && !(a.id.includes("Toolbars"))) {
+				return 1;
+			}
+
+			//any other kind of buttons come next
+			if (a.id.includes(".buttons.model") && !(b.id.includes(".buttons.model"))) {
+				return -1;
+			}
+
+			if (b.id.includes(".buttons.model") && !(a.id.includes(".buttons.model"))) {
 				return 1;
 			}
 
