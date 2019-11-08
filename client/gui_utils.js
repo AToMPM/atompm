@@ -524,167 +524,160 @@ GUIUtils = function(){
 	 */
 	this.setupAndShowToolbar = function(tb,data,type)
 	{
-		var imgSrc = 
-				function(name) 
-				{
+		var imgSrc =
+				function (name) {
 					return (type == __BUTTON_TOOLBAR ?
-								tb.substring(0,tb.lastIndexOf('/')+1)+name+'.icon.png' :
-								'/Formalisms/default.icon.png');
+						tb.substring(0, tb.lastIndexOf('/') + 1) + name + '.icon.png' :
+						'/Formalisms/default.icon.png');
 				},
-			 className = 
-				function()
-					{return (type == __BUTTON_TOOLBAR ? 'toolbar_bm' : 'toolbar_mm');},
-			 buttons = 
-				 (type == __BUTTON_TOOLBAR ?	data.asm.nodes : data.types),
-			 sortedButtons = 
-				 function()
-				 	{
-						return (type == __BUTTON_TOOLBAR ?
-							/* sort button names according to their position in their
-								associated buttons model */
-							utils.sortDict(data.csm.nodes,
-								function(b1,b2)
-								{
-									var pos1 = b1['position']['value'],
-										 pos2 = b2['position']['value'];
-										 
-	 								 if( (pos1[1] < pos2[1]) ||
-										  (pos1[1] == pos2[1] && pos1[0] < pos2[0]) )
-										 return -1;
-									 return 1;									
-								 }) :
-							utils.sortDict(data.types,
+			className =
+				function () {
+					return (type == __BUTTON_TOOLBAR ? 'toolbar_bm' : 'toolbar_mm');
+				},
+			buttons =
+				(type == __BUTTON_TOOLBAR ? data.asm.nodes : data.types),
+			sortedButtons =
+				function () {
+					return (type == __BUTTON_TOOLBAR ?
+						/* sort button names according to their position in their
+							associated buttons model */
+						utils.sortDict(data.csm.nodes,
+							function (b1, b2) {
+								var pos1 = b1['position']['value'],
+									pos2 = b2['position']['value'];
+
+								if ((pos1[1] < pos2[1]) ||
+									(pos1[1] == pos2[1] && pos1[0] < pos2[0]))
+									return -1;
+								return 1;
+							}) :
+						utils.sortDict(data.types,
 							/* sort type names according to their IconIcon's position in 
 								the associated icon definition model */
-								function(b1,b2)
-								{
-									var pos1 = undefined,
-										 pos2 = undefined;
-	 								 b1.some( function(attr) 
-												 {
-													 if(attr['name'] == 'position')
-														 pos1 = attr['default'];
-	 												 return pos1;
-	 											 });
-									 b2.some( function(attr) 
-												 {
-													 if(attr['name'] == 'position')
-														 pos2 = attr['default'];
-	 												 return pos2;
-	 											 });
+							function (b1, b2) {
+								var pos1 = undefined,
+									pos2 = undefined;
+								b1.some(function (attr) {
+									if (attr['name'] == 'position')
+										pos1 = attr['default'];
+									return pos1;
+								});
+								b2.some(function (attr) {
+									if (attr['name'] == 'position')
+										pos2 = attr['default'];
+									return pos2;
+								});
 
-										if( (pos1[1] < pos2[1]) ||
-										  	 (pos1[1] == pos2[1] && pos1[0] < pos2[0]) )
-											return -1;
-										return 1;									
-								}) );
-					},
-			 createButton = 
-			 	 function(name,tooltip,code)
-			 	 {
-			 		 var div = $('<div>'),
-						  img = $('<img>');
-					 div.addClass( 'toolbar_button' );
-					 div.attr("id", tb+'/'+name);
-			 		 div.attr("title", tooltip);
-			 		 div.click( function(ev){
-						 var res = HttpUtils.safeEval(code);
-		 				 if( res['$uerr'] )
-		 					 WindowManagement.openDialog(
-									 _ERROR,
-									 'unexpected error in button code ::\n '+res['$uerr']);
-						 else if( res['$err'] )
-		 					 WindowManagement.openDialog(
-									 _ERROR,
-									 'error in button code ::\n '+res['$err']);
-			 		 });
-                     var url = HttpUtils.url(imgSrc(name),__NO_WID);
-                     img.attr("src", url);
+								if ((pos1[1] < pos2[1]) ||
+									(pos1[1] == pos2[1] && pos1[0] < pos2[0]))
+									return -1;
+								return 1;
+							}));
+				},
+			createButton =
+				function (name, tooltip, code) {
+					var div = $('<div>'),
+						img = $('<img>');
+					div.addClass('toolbar_button');
+					div.attr("id", tb + '/' + name);
+					div.attr("title", tooltip);
+					div.click(function (ev) {
+						var res = HttpUtils.safeEval(code);
+						if (res['$uerr'])
+							WindowManagement.openDialog(
+								_ERROR,
+								'unexpected error in button code ::\n ' + res['$uerr']);
+						else if (res['$err'])
+							WindowManagement.openDialog(
+								_ERROR,
+								'error in button code ::\n ' + res['$err']);
+					});
+					var url = HttpUtils.url(imgSrc(name), __NO_WID);
+					img.attr("src", url);
 
-                     //handle missing icon
-                     let defaultUrl = HttpUtils.url("/Formalisms/default.icon.png");
-                     let missingMsg = "Warning: The icon \"" + url + "\" is missing! The default icon has been used.";
-                     let onerrorStr = "this.onerror = ''; this.src = '" + defaultUrl + "'; console.log('" + missingMsg + "');";
-                     img.attr('onerror', onerrorStr);
+					//handle missing icon
+					let defaultUrl = HttpUtils.url("/Formalisms/default.icon.png");
+					let missingMsg = "Warning: The icon \"" + url + "\" is missing! The default icon has been used.";
+					let onerrorStr = "this.onerror = ''; this.src = '" + defaultUrl + "'; console.log('" + missingMsg + "');";
+					img.attr('onerror', onerrorStr);
 
-                     div.append(img);
-                     return div;
-			 	 };
+					div.append(img);
+					return div;
+				};
 
 		GUIUtils.removeToolbar(tb);
 
 		var tb_div = $('<div>');
-		tb_div.attr("id", 'div_toolbar_'+tb);
-		tb_div.attr("class", className()+' toolbar unselectable' );
+		tb_div.attr("id", 'div_toolbar_' + tb);
+		tb_div.attr("class", className() + ' toolbar unselectable');
 		tb_div.attr("title", tb);
 
-		sortedButtons().forEach( 
-			function(b)
-			{
-				if( type == __METAMODEL_TOOLBAR && b.match(/(.*)Link$/) )
+		sortedButtons().forEach(
+			function (b) {
+				if (type == __METAMODEL_TOOLBAR && b.match(/(.*)Link$/))
 					return;
 
 				var spc1 = $('<span>'),
-					 spc2 = $('<span>');
+					spc2 = $('<span>');
 //				spc1.className = spc2.className = 'toolbar_space';
-				spc1.attr("class", "toolbar_space" );
-				spc2.attr("class", "toolbar_space" );
+				spc1.attr("class", "toolbar_space");
+				spc2.attr("class", "toolbar_space");
 				tb_div.append(spc1);
-				if( type == __BUTTON_TOOLBAR )
+				if (type == __BUTTON_TOOLBAR)
 					tb_div.append(
-		 				 createButton(
-			 				 buttons[b]['name']['value'],						
-			 				 buttons[b]['tooltip']['value'],
-			 				 buttons[b]['code']['value']) );
-				else if( (matches = b.match(/(.*)Icon/)) )
+						createButton(
+							buttons[b]['name']['value'],
+							buttons[b]['tooltip']['value'],
+							buttons[b]['code']['value']));
+				else if ((matches = b.match(/(.*)Icon/)))
 					tb_div.append(
-						 createButton(
-							 b,
-							 'create instance(s) of '+b.match(/(.*)Icon/)[1],
-							 '_setTypeToCreate("'+
-								 tb.substring(0,tb.length-'.metamodel'.length)+
-								 '/'+b+'");') );
+						createButton(
+							b,
+							'create instance(s) of ' + b.match(/(.*)Icon/)[1],
+							'_setTypeToCreate("' +
+							tb.substring(0, tb.length - '.metamodel'.length) +
+							'/' + b + '");'));
 				tb_div.append(spc2);
-			} );
+			});
 
-		if( tb_div.children().length == 0 )
-			tb_div.append( GUIUtils.getTextSpan(tb,'toolbar_alt') );
+		if (tb_div.children().length == 0)
+			tb_div.append(GUIUtils.getTextSpan(tb, 'toolbar_alt'));
 
-        //get the toolbar
-        let dock = $('#div_dock');
+		//get the toolbar
+		let dock = $('#div_dock');
 
-        //create an array and add the new toolbar
-        let items = Array.from(dock[0].childNodes);
-        items.push(tb_div[0]);
+		//create an array and add the new toolbar
+		let items = Array.from(dock[0].childNodes);
+		items.push(tb_div[0]);
 
-        //sort the dock
-        items.sort(function(a, b) {
+		//sort the dock
+		items.sort(function (a, b) {
 
-            //main menu comes first
-            if (a.id.includes("MainMenu")){
-                return -1;
-            }
+			//main menu comes first
+			if (a.id.includes("MainMenu")) {
+				return -1;
+			}
 
-            //toolbars come first
-            if (a.id.includes("Toolbars") && !(b.id.includes("Toolbars"))){
-                return -1;
-            }
+			//toolbars come first
+			if (a.id.includes("Toolbars") && !(b.id.includes("Toolbars"))) {
+				return -1;
+			}
 
-            if (b.id.includes("Toolbars") && !(a.id.includes("Toolbars"))){
-                return 1;
-            }
+			if (b.id.includes("Toolbars") && !(a.id.includes("Toolbars"))) {
+				return 1;
+			}
 
-            //otherwise, sort by name
-            return a.id == b.id? 0 : (a.id > b.id ? 1 : -1);
-        });
+			//otherwise, sort by name
+			return a.id == b.id ? 0 : (a.id > b.id ? 1 : -1);
+		});
 
-        //add the elements back into the dock
-        for (let i = 0; i < items.length; ++i) {
-            dock.append(items[i]);
-        }
+		//add the elements back into the dock
+		for (let i = 0; i < items.length; ++i) {
+			dock.append(items[i]);
+		}
 
 
-        __loadedToolbars[tb] = data;
+		__loadedToolbars[tb] = data;
 	};
 	
 	return this;
