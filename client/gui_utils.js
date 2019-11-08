@@ -612,10 +612,15 @@ GUIUtils = function(){
 		tb_div.attr("class", className() + ' toolbar unselectable');
 		tb_div.attr("title", tb);
 
+		// record whether this toolbar has buttons
+		let has_buttons = false;
+
 		sortedButtons().forEach(
 			function (b) {
 				if (type == __METAMODEL_TOOLBAR && b.match(/(.*)Link$/))
 					return;
+
+				has_buttons = true;
 
 				var spc1 = $('<span>'),
 					spc2 = $('<span>');
@@ -639,6 +644,11 @@ GUIUtils = function(){
 							'/' + b + '");'));
 				tb_div.append(spc2);
 			});
+
+		// print an informative message if no buttons were loaded
+		if (! has_buttons){
+			console.log("Warning: Toolbar '" + tb + "' was loaded, but there are no buttons. This may be due to the toolbar only containing associations or abstract classes.");
+		}
 
 		if (tb_div.children().length == 0)
 			tb_div.append(GUIUtils.getTextSpan(tb, 'toolbar_alt'));
