@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 RUN apt-get update -y && \
 		apt-get upgrade -y
@@ -7,11 +7,15 @@ RUN apt-get install -y git
 
 RUN apt-get install -y curl
 
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
+
 RUN apt-get install -y zlib1g-dev libxml2-dev
 
 RUN apt-get install -y pkg-config
 
 RUN apt-get install -y python3 python3-pip
+
+RUN pip3 install six
 
 RUN pip3 install python-igraph
 
