@@ -1,18 +1,35 @@
 #!/bin/bash
-# Author: Yentl Van Tendeloo
+# Author: Yentl Van Tendeloo and Bentley James Oakes
 
 set -e
 
+echo "Running AToMPM script..."
+echo "Starting node..."
 node httpwsd.js &
 serverpid=$!
 sleep 3
 
-python2 mt/main.py&
+echo "Starting Python model transformation engine..."
+python mt/main.py&
 mtpid=$!
 sleep 1
 
+echo "AToMPM now running. Opening browser..."
+
+echo "Trying to run Google Chrome..."
+set +e
 google-chrome-stable http://localhost:8124/atompm
 
-kill $serverpid
-kill $mtpid
-echo "All done!"
+ret=$?
+if [ $ret -ne 0 ]; then
+    echo "Google Chrome not installed. Trying Firefox..."
+    firefox http://localhost:8124/atompm
+fi
+
+ret=$?
+if [ $ret = 0 ]; then
+    echo "Stopping AToMPM"
+    kill $serverpid
+    kill $mtpid
+    echo "Finished!"
+fi

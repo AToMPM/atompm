@@ -18,7 +18,7 @@ fi
 
 #run mt script
 echo "Starting model transformation script..."
-python2 mt/main.py &
+python mt/main.py &
 mtpid=$!
 sleep 3
 
@@ -43,7 +43,7 @@ fi
 
 
 echo "Starting tests..."
-nightwatch
+./node_modules/nightwatch/bin/nightwatch
 
 echo "Stopping server and mt script..."
 kill "$serverpid"

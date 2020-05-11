@@ -36,6 +36,16 @@ module.exports = {
         test_utils.load_model(client, filenames);
     },
 
+    'Rename model' : function (client) {
+
+        let filename = 'Formalisms/ClassicDEVS/ClassicDEVS.model';
+        let old_filename = 'Test.model';
+        let new_filename = 'Test2.model';
+        test_utils.load_model(client, [filename]);
+        model_building_utils.save_model(client, "~", old_filename)
+        model_building_utils.rename_model(client, "~", old_filename, new_filename)
+    },
+
     after : function (client) {
         client.end();
     },

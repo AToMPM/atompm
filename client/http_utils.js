@@ -64,9 +64,7 @@ HttpUtils = function(){
 			req.open(method, url, !sync); 
 			req.onreadystatechange = onreadystatechange;
 
-			if (typeof params != 'string'){
-				params = JSON.stringify(params);
-			}
+			params = JSON.stringify(params);
 			req.send(params);
 
 		}
