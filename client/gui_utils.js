@@ -452,6 +452,7 @@ GUIUtils = function(){
 			cancel.click(function(ev) {
 				BehaviorManager.handleUserEvent(__EVENT_CANCELED_DIALOG);
 			});
+			cancel.attr("id", "dialog_cancel_btn");
 			cancel.html('cancel');
 			dialog.append(cancel);
 		}

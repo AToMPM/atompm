@@ -33,7 +33,8 @@ class FileBrowser{
                     fileb =
                         FileBrowser.getFileBrowser(fnames, false, manualInput, __getRecentDir(startDir));
 
-                new_folder_b.attr('id', 'new_folder')
+                new_folder_b
+                    .attr('id', 'new_folder')
                     .html('new folder')
                     .click(function (ev) {
                         var folder_name = prompt("please fill in a name for the folder");
@@ -57,7 +58,9 @@ class FileBrowser{
                     });
                 folder_buttons.append(new_folder_b);
 
-                rename_folder_b.html('rename folder')
+                rename_folder_b
+                    .attr('id', 'rename_folder')
+                    .html('rename folder')
                     .click(function (ev) {
                         var value = fileb['getcurrfolder']();
                         var folder_name = prompt("please fill in a new name for folder " + value);
@@ -85,7 +88,9 @@ class FileBrowser{
                     });
                 folder_buttons.append(rename_folder_b);
 
-                delete_folder_b.html('delete folder')
+                delete_folder_b
+                    .attr('id', 'delete_folder')
+                    .html('delete folder')
                     .click(function (ev) {
                         var value = fileb['getcurrfolder']();
                         if (confirm("are you sure you want to delete " + value + "?")) {
@@ -107,7 +112,9 @@ class FileBrowser{
                     });
                 folder_buttons.append(delete_folder_b);
 
-                move_folder_b.html('move folder')
+                move_folder_b
+                    .attr('id', 'move_folder')
+                    .html('move folder')
                     .click(function (ev) {
                         var value = fileb['getcurrfolder']();
                         var folder_loc = prompt("please fill in a new parent folder for folder " + value);
@@ -135,7 +142,9 @@ class FileBrowser{
                     });
                 folder_buttons.append(move_folder_b);
 
-                rename_file_b.html('rename file')
+                rename_file_b
+                    .attr('id', 'rename_file')
+                    .html('rename file')
                     .click(function (ev) {
                         var value = fileb['getselection']();
                         var file_name = prompt("please fill in a new name for file " + value);
@@ -164,7 +173,9 @@ class FileBrowser{
                     });
                 file_buttons.append(rename_file_b);
 
-                delete_file_b.html('delete file')
+                delete_file_b
+                    .attr('id', 'delete_file')
+                    .html('delete file')
                     .click(function (ev) {
                         var value = fileb['getselection']();
                         if (confirm("are you sure you want to delete " + value + "?")) {
@@ -185,7 +196,9 @@ class FileBrowser{
                     });
                 file_buttons.append(delete_file_b);
 
-                move_file_b.html('move file')
+                move_file_b
+                    .attr('id', 'move_file')
+                    .html('move file')
                     .click(function (ev) {
                         var value = fileb['getselection']();
                         var folder_loc = prompt("please fill in a new parent folder for file " + value);
