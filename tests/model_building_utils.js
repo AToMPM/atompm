@@ -157,6 +157,10 @@ function navigate_to_folder(client, folder_name) {
     client.waitForElementPresent(root_button, 2000, "Find root button")
         .click(root_button);
 
+    if (folder_name === "~") {
+        return;
+    }
+
     let new_folder_selector = "#new_folder";
     let folder_path = folder_name.split("/");
 
@@ -229,6 +233,41 @@ function save_model(client, folder_name, model_name) {
                 .click("#dialog_btn")
                 .pause(200)
                 .waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
+
+        }
+    );
+}
+
+function rename_model(client, folder_name, old_filename, new_filename) {
+    let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
+
+    client.waitForElementPresent(load_button, 1000, "Looking for load button")
+        .click(load_button)
+        .waitForElementPresent("#dialog_btn", 1000, "Load menu opens");
+
+    navigate_to_folder(client, folder_name);
+
+    let rename_file_text = "#rename_file";
+    let model_selector = "#" + fix_selector(old_filename);
+    client.element('css selector', model_selector, function (result) {
+            if (result.status == -1) {
+                client.assert.ok(false, "Could not find file with name: '" + old_filename + "'");
+            } else {
+                client.click(model_selector);
+            }
+
+            client.click(rename_file_text)
+                    .pause(500)
+                    .setAlertText(new_filename)
+                    .acceptAlert();
+
+            client.assert.ok(true, "Renaming model to name: '" + new_filename + "'");
+
+            client.waitForElementPresent("#dialog_cancel_btn", 2000, "Looking for close")
+                .pause(200)
+                .click("#dialog_cancel_btn")
+                .pause(200)
+                .waitForElementNotPresent("#dialog_cancel_btn", 2000, "Load menu closes");
 
         }
     );
@@ -326,6 +365,7 @@ module.exports = {
     click_off,
     save_model,
     load_model,
+    rename_model,
     compile_model,
     load_transformation,
     scroll_geometry_element,
