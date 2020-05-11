@@ -43,7 +43,7 @@ fi
 
 
 echo "Starting tests..."
-nightwatch
+./node_modules/nightwatch/bin/nightwatch
 
 echo "Stopping server and mt script..."
 kill "$serverpid"
