@@ -16,7 +16,7 @@
 #6. Upload the package .zip to the release on GitHub
 #7. Publish to npm repo
 
-version="v0.8.2"
+version="v0.8.4"
 
 package_python3=true
 
