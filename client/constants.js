@@ -6,7 +6,7 @@
 /****************************** GLOBAL CONSTANTS ******************************/
 var __WEBPAGE__ = 'https://atompm.github.io/',
 	__RELEASE_LOC__ = "https://api.github.com/repos/AToMPM/atompm/releases/latest",
-	__DOC_WEBPAGE__ = "https://msdl.uantwerpen.be/documentation/AToMPM/index.html",
+	__DOC_WEBPAGE__ = "https://atompm.readthedocs.io/en/latest/",
     __VERSION__ = '0.8.4',
     __DEFAULT_SAVEAS		 	= '.autosave.model',
 	 __TITLE						= 'AToMPM',
