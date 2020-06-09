@@ -1043,6 +1043,7 @@ class PyTCoreAbstractionLayer :
         try :
             nr = self._nextRule()
         except Exception :
+            print(traceback.format_exc())
             nr = {'$err':traceback.format_exc()}
 
         ''' hergin :: motif-integration start TRAFO RESULT: in case of a CRule_end, pop it from context and continue the rest '''

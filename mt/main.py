@@ -11,6 +11,8 @@ from httpd import HTTPServerThread
 '''
 def main() :
 	logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+
+	print("Starting Model Transformation Server... ")
 	httpd = HTTPServerThread()
 	httpd.start()
 
