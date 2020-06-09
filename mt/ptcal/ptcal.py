@@ -2,7 +2,7 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
-import re, json, uuid, threading, itertools, traceback, logging, sys
+import re, json, uuid, threading, itertools, traceback, logging, sys, time, os
 
 if sys.version_info[0] < 3:
     import cPickle as pickle
@@ -14,7 +14,7 @@ else:
     import io as StringIO
     from queue import *
 
-from random import Random
+#from random import Random
 from .utils import Utilities as utils
 from .tcontext import ModelTransformationContext, ExhaustContext
 from .tconstants import TConstants as TC
@@ -22,11 +22,8 @@ from .compiler import ModelAndRuleCompiler
 from .pytcore.core.himesis import HConstants as HC
 from .pytcore.rules.ndarule import NDARule
 from .pytcore.tcore.messages import Packet
-from .accurate_time import time as clock
-from .accurate_time import set_start_time
-set_start_time()
 
-import cProfile, pstats
+#import cProfile, pstats
 
 ''' hergin :: motif-integration start '''
 from .motifcontext import MotifContext
@@ -36,19 +33,16 @@ from .pytcore.tcore.messages import Pivots
 
 import igraph as ig
 #import pydot
-import datetime
+#import datetime
 from random import *
-from threading import *
+#from threading import *
 
-from .barrier import *
+#from .barrier import *
 from .synchgraph import *
-from itertools import *
 #from petrinet import *
 
-from pprint import isreadable
-from math import *
-
-import os
+#from pprint import isreadable
+#from math import *
 
 ''' 
     py-t-core abstraction layer 
@@ -103,6 +97,8 @@ class PyTCoreAbstractionLayer :
         self.defaultDCL                 = TC.PYTHON
         self._mtwid                 = mtwid
 
+        self.start_time = time.time()
+        self.clock = None
 
         ''' Used only in COMP 522 and comp 621
         Petri Net Modules, docomposition of disconnected
@@ -717,7 +713,7 @@ class PyTCoreAbstractionLayer :
                 seconds '''
     def play(self) :
 
-        self.start_time = clock()
+        self.start_time = time.time()
         if self._execmode == 'STOPPED':
             self._randomGen = Random(0)
         if self._execmode != 'PLAY' :
@@ -979,8 +975,7 @@ class PyTCoreAbstractionLayer :
         NOTE: this function assumes that feedback for the last step has already
                 been received '''
     def step(self) :
-        if not hasattr(self, 'start_time'):
-            self.start_time = clock()
+        self.start_time = time.time()
         if self._execmode == 'PLAY' :
             pass
         else :
@@ -1005,27 +1000,22 @@ class PyTCoreAbstractionLayer :
             else:
                 ar = NDARule(r['cr']['lhs'],r['cr']['rhs'],rng=self._randomGen,sendAndApplyDeltaFunc=self.sendAndApplyDelta)
 
+            startTime = time.time()
             if mtc.nextInput == "packetIn":
-                startTime=clock()
-
                 self.packet = ar.packet_in(self.packet)
-
-                mtc.setLastStepExecTime(clock()-startTime)
+                mtc.setLastStepExecTime(time.time()-startTime)
 
             elif mtc.nextInput == "nextIn":
-                startTime=clock()
                 self.packet = ar.next_in(self.packet)
-                mtc.setLastStepExecTime(clock()-startTime)
+                mtc.setLastStepExecTime(time.time()-startTime)
 
             elif mtc.nextInput == "cancelIn":
-                startTime=clock()
                 self.packet = ar.cancelIn(self.packet)
-                mtc.setLastStepExecTime(clock()-startTime)
+                mtc.setLastStepExecTime(time.time()-startTime)
 
             elif mtc.nextInput == "successIn":
-                startTime=clock()
                 self.packet = ar.success_in(self.packet)
-                mtc.setLastStepExecTime(clock()-startTime)
+                mtc.setLastStepExecTime(time.time()-startTime)
 
             ''' hergin :: motif-integration end '''
 
@@ -1043,6 +1033,7 @@ class PyTCoreAbstractionLayer :
         try :
             nr = self._nextRule()
         except Exception :
+            print(traceback.format_exc())
             nr = {'$err':traceback.format_exc()}
 
         ''' hergin :: motif-integration start TRAFO RESULT: in case of a CRule_end, pop it from context and continue the rest '''
@@ -1060,7 +1051,9 @@ class PyTCoreAbstractionLayer :
                         return
                     self._handleChangelogs()
 
-                self._aswPrintReq(TC.TRANSFORMATION_DONE+nr['trafoResult']+" in "+str(self._mtContexts[-1].totalExecutionTime/1000.0)+" seconds, in total "+str((clock()-self.start_time)/1000.0))
+                exec_time = self._mtContexts[-1].totalExecutionTime/1000.0
+                total_time = (time.time()-self.start_time)/1000.0
+                self._aswPrintReq(TC.TRANSFORMATION_DONE+nr['trafoResult']+" in "+str(exec_time)+" seconds, in total "+str(total_time))
                 self.stop()
                 return
             else:

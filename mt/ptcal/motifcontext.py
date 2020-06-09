@@ -8,11 +8,8 @@ Author: Huseyin Ergin (hergin)
 Purpose: MoTif integration to AtomPM
 '''
 
-import random
 import collections
-import datetime
 from time import *
-import timeit
 from .tconstants import TConstants as TC
 from .utils import Utilities as utils
 from .tcontext import TransformationContext
@@ -327,7 +324,7 @@ class MotifContext(TransformationContext) :
 			
 			'''
 	def nextStep(self) :
-		timeNextStep = clock()
+		#timeNextStep = clock()
 		if self._expired == True :
 			raise RuntimeError('can not step in expired mtContext')
 		elif self._lastStep == {} :
