@@ -189,7 +189,7 @@ As a local constraint:
 
 .. image:: img/local_constraint.png
 
-.. warning:: Multi-line local constraints need to have each line end with ``\\``.
+.. warning:: Multi-line local constraints need to have each line end with ``\``.
 
 One disadvantage of this constraint is that the minimum number of instances (also 1) is not checked. A global constraint solves this:
 
@@ -211,7 +211,7 @@ As a local action:
 
 .. image:: img/local_action.png
 
-.. warning:: Multi-line local actions need to have each line end with "\\".
+.. warning:: Multi-line local actions need to have each line end with ``\``.
 
 As a global action:
 
