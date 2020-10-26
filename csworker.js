@@ -1796,34 +1796,44 @@ const _siocl = require('socket.io-client');
 		{
 			if( (matches = uri.match(/\.pattern\.metamodel/)) )
 			{
-				var matches   	 = uri.match(/\/GET(((.*\/).*).pattern.metamodel)/),
-					 RAMasmmPath = './users'+matches[1],
-					 asmmPath  	 = './users'+matches[2]+'.metamodel',
-					 parentDir	 = './users'+matches[3],
-					 asmm		 	 = undefined,
-					 csmms	 	 = {},
-					 actions		 = 
-	 					 [_fs.readFile(asmmPath,'utf8'),
-						  function(data)
-	 					  {
-	 						  asmm = data;
-	 						  return _fs.readdir(parentDir);
-	 					  }];
+				let matches = uri.match(/\/GET(((.*\/).*).pattern.metamodel)/);
+				let RAMasmmPath = './users' + matches[1];
+				let asmmPath = './users' + matches[2] + '.metamodel';
+				let parentDir = './users' + matches[3];
+				let asmm = undefined;
+				let csmms = {};
+				let actions =
+					[_fs.readFile(asmmPath, 'utf8'),
+						function (data) {
+							asmm = data;
+							return _fs.readdir(parentDir);
+						}];
+
+				// only rewrite CS models matching the metamodel name
+				// obtains last token in path
+				let metamodel_name = matches[2].split("/").slice(-1)[0];
 
 				_do.chain(actions)(
-						function(files) 
+						function(files)
 						{
-							files = 
+							files =
 								  files.filter(
-	 								  function(f) 
-									 	 {return f.match(/\..*Icons\.metamodel/);});
+	 								  function(f)
+									 	 {
+									 	 	let m = metamodel_name + "\..*Icons\.metamodel";
+									 	 	return f.match(m);
+									 	 });
+
+							if (files.length === 0) {
+								throw 'could not match concrete syntax model to metamodel. model names must match';
+							}
 
 						  	var ramActions = [__successContinuable()];
 							files.forEach(
 								function(f)
 								{
 									ramActions.push(
-										function() 
+										function()
 										{
 											return _fs.readFile(parentDir+f,'utf8');
 										},
@@ -1831,10 +1841,10 @@ const _siocl = require('socket.io-client');
 										{
 											csmms[f] = data;
 											return __successContinuable();
-  										});								  		
+  										});
 	 							});
 							ramActions.push(
-									function() 
+									function()
 									{
 										var res = _mt.ramify(_utils.jsonp(asmm),csmms);
 										asmm	= res['asmm'];
@@ -1847,7 +1857,7 @@ const _siocl = require('socket.io-client');
 								function(f)
 								{
 									ramActions.push(
-										function() 
+										function()
 										{
 											var RAMf = parentDir +
 														  f.match(/(.*)\.metamodel/)[1] +
