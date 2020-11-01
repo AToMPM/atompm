@@ -443,9 +443,10 @@ class HimesisPostConditionPattern(HimesisPattern):
                         # Not 'really' an attribute
                         continue
                     oldVal = None
-                    if not newNode :
-                        oldVal = graph.vs[graphNodeIndex][attrName]
                     try :
+                        if not newNode :
+                            oldVal = graph.vs[graphNodeIndex][attrName]
+
                         newVal = self.vs[rhsNodeIndex][attrName](pLabel2graphIndexMap, graph)
                         if oldVal != newVal :
                             graph.vs[graphNodeIndex][attrName] = newVal
