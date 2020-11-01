@@ -5034,7 +5034,11 @@
 		},
 		"edges": [],
 		"metamodels": [
-			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons"
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons",
+			"/MyFactory/Factory.defaultIcons",
+			"/MyFactory/RuntimeCounterMM.defaultIcons",
+			"/MyFactory/ScheduleMM.defaultIcons",
+			"/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax.defaultIcons"
 		]
 	},
 	"asm": {
@@ -5687,7 +5691,7 @@
 					"value": [
 						{
 							"name": "src",
-							"type": "string",
+							"type": "file<png|jpg|gif|bmp>",
 							"default": "/Formalisms/__LanguageSyntax__/ConcreteSyntax/defaultImage.png"
 						},
 						{
@@ -5839,7 +5843,11 @@
 			}
 		],
 		"metamodels": [
-			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram"
+			"/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram",
+			"/MyFactory/Factory",
+			"/MyFactory/RuntimeCounterMM",
+			"/MyFactory/ScheduleMM",
+			"/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax"
 		]
 	}
 }
