@@ -75,7 +75,6 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 		return;
 	}
 
-	WindowManagement.setWindowTitle(true);
 	changelog.forEach(
 		function(step)
 		{
@@ -89,6 +88,16 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 					'to keep your changes, click OK... to discard them and see'+
 					' what has changed, click CANCEL');
 				__changed(step['id'],true);
+			}
+
+			// record the changes that mark the model as unsaved
+			// (as well, note that SYSOUT can change the model through
+			// the back-door API 'CLIENT_BDAPI')
+			let dirty_ops = ['MKEDGE', 'RMEDGE',
+				'MKNODE', 'RMNODE', 'CHATTR',
+				'LOADMM', 'LOADASMM', 'DUMPMM'];
+			if (dirty_ops.includes(step['op'])){
+				WindowManagement.setWindowTitle(true);
 			}
 				
 			if( step['op'] == 'MKEDGE' )
@@ -392,6 +401,7 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 				{
 					var op = utils.jsonp(step['text'].match(/^CLIENT_BDAPI :: (.*)/)[1]);
 					this[op['func']](op['args']);
+					WindowManagement.setWindowTitle(true);
 				}
 				else
 					console.log('MESSAGE :: '+step['text']);
