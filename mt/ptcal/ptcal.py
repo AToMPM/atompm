@@ -827,8 +827,8 @@ class PyTCoreAbstractionLayer :
             elif d['op'] == 'MKNODE' :
                 mknodes[d['guid']] = len(reqs)
                 node = self._M.vs[self._M.get_node(d['guid'])]
-                if neighborhood == None :
-                    neighborhood = neighborhood = [n[HC.FULLTYPE]+'/'+n['$atompmId']+'.instance' for n in d['neighborhood']]
+                if neighborhood is None :
+                    neighborhood = [n[HC.FULLTYPE]+'/'+n['$atompmId']+'.instance' for n in d['neighborhood'] if '$atompmId' in n]
                 if node[HC.CONNECTOR_TYPE] :
                     reqs.append({ \
                         'method':'POST',
