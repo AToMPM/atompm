@@ -402,6 +402,13 @@ class HimesisMatcher(object):
         src_node = self.G1.vs[src_node]
         patt_node = self.G2.vs[patt_node]
 
+        # check the type information
+        exact_type_match = src_node[Himesis.Constants.FULLTYPE] == patt_node[Himesis.Constants.FULLTYPE]
+        sub_type_match = patt_node[Himesis.Constants.MT_SUBTYPE_MATCH] and \
+             src_node[Himesis.Constants.FULLTYPE] in patt_node[Himesis.Constants.MT_SUBTYPES]
+        if not (exact_type_match or sub_type_match):
+            return False
+
         # Check for attributes value/constraint
         for attr in patt_node.attribute_names():
             # Ignore non-RAM attributes 
