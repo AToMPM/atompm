@@ -64,6 +64,11 @@ class ModelAndRuleCompiler :
                 hg.vs[newNodeIndex][attr[2:]] = n[attr]['value']
             elif 'value' in n[attr]:
                 hg.vs[newNodeIndex][attr] = n[attr]['value']
+
+                #raise exception for default code in value
+                default_code = '"[PYTHON]"\n"Example:\t result = True"\n"Example:\t result = getAttr()"\n\n"[JAVASCRIPT]"\n"Example:\t true"\n"Example:\t getAttr()"'
+                if n[attr]['value'] == default_code:
+                    raise RuntimeError("Error: Default code found in node labelled: " + str(n['$MT_label__']) + " of type " + n['$type'] )
         return newNodeIndex
 
 
