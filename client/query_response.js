@@ -90,13 +90,11 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 				__changed(step['id'],true);
 			}
 
-			// record the changes that mark the model as unsaved
+			// record the changes that do not mark the model as unsaved
 			// (as well, note that SYSOUT can change the model through
 			// the back-door API 'CLIENT_BDAPI')
-			let dirty_ops = ['MKEDGE', 'RMEDGE',
-				'MKNODE', 'RMNODE', 'CHATTR',
-				'LOADMM', 'LOADASMM', 'DUMPMM'];
-			if (dirty_ops.includes(step['op'])){
+			let clean_ops = ['RESETM', 'SYSOUT'];
+			if (!clean_ops.includes(step['op'])){
 				WindowManagement.setWindowTitle(true);
 			}
 				
