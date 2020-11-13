@@ -75,6 +75,10 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 		return;
 	}
 
+	// BUG: changes to element values are not being sent as changelog steps
+	// so for now, mark any change as making the model unsaved
+	WindowManagement.setWindowTitle(true);
+
 	changelog.forEach(
 		function(step)
 		{
