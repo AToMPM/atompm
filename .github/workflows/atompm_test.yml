@@ -1,0 +1,35 @@
+name: ATOMPM_CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: npm install
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+        
+    - name: setup chromedriver
+      uses: nanasess/setup-chromedriver@master
+  
+    - name: npm run
+      run: npm ci
+      env:
+        DETECT_CHROMEDRIVER_VERSION: true
+          
+    - name: install igraph
+      run: |
+        sudo apt-get install python3-setuptools
+        pip3 install wheel
+        pip3 install --user python-igraph
+      
+    - name: run tests
+      run: |
+        google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh
+        
