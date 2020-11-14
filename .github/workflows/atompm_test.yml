@@ -31,7 +31,7 @@ jobs:
           ${{ runner.os }}-pip-
           
     - name: install igraph
-#      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         sudo apt-get install python3-setuptools
         pip3 install wheel
