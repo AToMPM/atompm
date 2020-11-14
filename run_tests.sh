@@ -18,7 +18,7 @@ fi
 
 #run mt script
 echo "Starting model transformation script..."
-python mt/main.py &
+python3 mt/main.py &
 mtpid=$!
 sleep 3
 
