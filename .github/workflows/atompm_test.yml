@@ -15,16 +15,15 @@ jobs:
         node-version: 12.x
         
     - name: npm run
-      run: npm ci
+      run: |
+        npm ci
+        npm install chromedriver --chromedriver-force-download
     
     - name: install igraph
       run: |
         sudo apt-get install python3-setuptools
         pip3 install wheel
         pip3 install --user python-igraph
-    
-    - name: setup chromedriver
-      uses: nanasess/setup-chromedriver@master
       
     - name: run tests
       run: |
