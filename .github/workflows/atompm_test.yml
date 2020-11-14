@@ -16,11 +16,11 @@ jobs:
     - run: npm ci
     
     - name: install igraph
-    - run: pip3 install --user python-igraph
+      run: pip3 install --user python-igraph
     
     - name: run tests
-    - uses: nanasess/setup-chromedriver@master
-    - run: |
+      uses: nanasess/setup-chromedriver@master
+      run: |
         google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
         xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh
         
