@@ -15,7 +15,7 @@ jobs:
         node-version: 12.x
         
     - name: setup chromedriver
-        uses: nanasess/setup-chromedriver@master
+      uses: nanasess/setup-chromedriver@master
   
     - name: npm run
       run: |
