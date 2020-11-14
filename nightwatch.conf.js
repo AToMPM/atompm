@@ -20,6 +20,7 @@ module.exports = {
     "server_path" : selenium_server.path,
     "log_path" : "",
     "port" : 4444,
+    "check_process_delay": 2000,
     "cli_args" : {
       "webdriver.chrome.driver" : chromedriver.path,
       "webdriver.gecko.driver" : "",
