@@ -3,7 +3,7 @@ name: ATOMPM_CI
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     
     steps:
@@ -20,6 +20,7 @@ jobs:
     - name: install igraph
       run: |
         sudo apt-get install python3-setuptools
+        pip3 install wheel
         pip3 install --user python-igraph
     
     - name: setup chromedriver
