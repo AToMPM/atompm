@@ -19,6 +19,8 @@ jobs:
   
     - name: npm run
       run: npm ci
+      env:
+        DETECT_CHROMEDRIVER_VERSION: true
         
         #npm install chromedriver --detect_chromedriver_version
     
