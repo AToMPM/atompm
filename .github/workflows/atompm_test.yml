@@ -18,7 +18,9 @@ jobs:
       run: npm ci
     
     - name: install igraph
-      run: pip3 install --user python-igraph
+      run: |
+        sudo apt-get install python3-setuptools
+        pip3 install --user python-igraph
     
     - name: setup chromedriver
       uses: nanasess/setup-chromedriver@master
