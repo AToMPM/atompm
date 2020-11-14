@@ -18,9 +18,9 @@ jobs:
       uses: nanasess/setup-chromedriver@master
   
     - name: npm run
-      run: |
-        npm ci
-        npm install chromedriver --detect_chromedriver_version
+      run: npm ci
+        
+        #npm install chromedriver --detect_chromedriver_version
     
     - uses: actions/cache@v1
       id:   cache
