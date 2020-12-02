@@ -50,6 +50,7 @@ function __initClient()
 			params[_arg[0]] = _arg[1];
 		});
 
+
 	let socket = io(
 		window.location.hostname + ':8124', {
 			// 'port':8124,

@@ -6,7 +6,6 @@ import re, threading, json, logging
 
 import socketio
 
-import sys
 
 
 '''
@@ -23,8 +22,18 @@ import sys
 	_ws			the python-websocket '''
 class WebSocket :
 
+	#socket.io messages types
+	CONNECT = '0'
+	DISCONNECT = '1'
+	EVENT = '2'
+	ACK = '3'
+	ERROR = '4'
+	BINARY_EVENT = '5'
+	BINARY_ACK = '6'
+
+
 	def __init__(self, _aswid, chlogh=None) :
-		print("WS INIT: " + str(_aswid))
+		print("WS INIT")
 		assert chlogh is None or 'onchangelog' in dir(chlogh)
 		self._opened 	 = False
 		self._chlogh 	 = chlogh
@@ -39,6 +48,7 @@ class WebSocket :
 	def _start_ws(self):
 
 		try:
+
 			self.socketIO = socketio.Client(logger=True, engineio_logger=True)
 
 			self.socketIO.on('connect', self._onopen)
@@ -105,7 +115,6 @@ class WebSocket :
 			raise Exception('received error from socketio :: ' + str(data))
 		else :
 			pass
-
 
 
 
