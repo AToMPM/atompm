@@ -4,27 +4,14 @@ See COPYING.lesser and README.md in the root of this project for full details'''
 
 import re, threading, json, logging
 
-from socketIO_client import SocketIO
+import socketio
 
 import sys
 
 
-if sys.version_info[0] < 3:
-	import httplib as httplib
-	import websocket._app as websocket
-else:
-	import http.client as httplib
-	import websocket._app as websocket
-
 '''
 	a friendly wrapper around a socketio client
-	
-	WARNING:
-	A good socketio client library for Python is very hard to find.
-	The code in socketIO_client is from https://github.com/nexus-devs/socketIO-client-2.0.3
-	This is patched to work with SocketIO 2
-	Future programmer, try to find a good library or at least update this one
-	
+
 	_opened		true when the socket is first opened
 	_chlogh		a reference to an object that implements onchangelog(), this
   					method is called upon reception of changelogs from the asworker
@@ -35,19 +22,10 @@ else:
 						False: subscription failed
 	_ws			the python-websocket '''
 class WebSocket :
-	#socket.io messages types
-	CONNECT = '0'
-	DISCONNECT = '1'
-	EVENT = '2'
-	ACK = '3'
-	ERROR = '4'
-	BINARY_EVENT = '5'
-	BINARY_ACK = '6'
-
 
 	def __init__(self, _aswid, chlogh=None) :
-		print("WS INIT")
-		assert chlogh == None or 'onchangelog' in dir(chlogh)
+		print("WS INIT: " + str(_aswid))
+		assert chlogh is None or 'onchangelog' in dir(chlogh)
 		self._opened 	 = False
 		self._chlogh 	 = chlogh
 		self.subscribed = None
@@ -61,17 +39,25 @@ class WebSocket :
 	def _start_ws(self):
 
 		try:
+			self.socketIO = socketio.Client(logger=True, engineio_logger=True)
 
-			self.socketIO = SocketIO('http://127.0.0.1', 8124, None)
 			self.socketIO.on('connect', self._onopen)
 			self.socketIO.on('message', self._onmessage)
+
+			self.socketIO.connect('http://127.0.0.1:8124')
 
 			data = {'method': 'POST', 'url': '/changeListener?wid='+self._aswid}
 			self.socketIO.emit('message', data)
 
 			self.socketIO.wait()
 		except Exception as e:
-			print(e)
+			raise e
+
+	''' 
+		mark socket connection as opened '''
+
+	def _onopen(self, ws) :
+		self._opened = True
 
 	'''
 		close the socket '''
@@ -122,8 +108,5 @@ class WebSocket :
 
 
 
-	''' 
-		mark socket connection as opened '''
-	def _onopen(self, ws) :
-		self._opened = True
+
 
