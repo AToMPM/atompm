@@ -80,7 +80,7 @@ function __respond(response, statusCode, reason, data, headers)
 /** Syntactic sugar to build and send a socket.io message **/
 function __send(socket, statusCode, reason, data, headers)
 {
-	socket.json.emit('message',
+	socket.emit('message',
 			{'statusCode':statusCode,
 			 'reason':reason,
 			 'headers':(headers || {'Content-Type': 'text/plain'}),
@@ -670,7 +670,7 @@ var httpserver = _http.createServer(
 								function(sid)
 								{
 									__send(
-										wsserver.sockets.sockets[sid],
+										wsserver.sockets.sockets.get(sid),
 										undefined,
 										undefined,
 										_msg);
@@ -746,9 +746,9 @@ var httpserver = _http.createServer(
 		});
 httpserver.listen(8124);
 
-let wsserver = _sio.listen(httpserver);
+let wsserver = new _sio.Server(httpserver);
 
-wsserver.on('connection',
+wsserver.sockets.on('connection',
 	function(socket)
 	{
 		/* unregister this socket from the specified worker ... when a worker
