@@ -69,7 +69,7 @@ class WebSocket :
 		parse and handle incoming message '''
 	def _onmessage(self, data) :
 
-		#print('## data recvd '+ str(data))
+		logging.debug('## data recvd '+ str(data))
 
 		if 'statusCode' in data and data['statusCode'] is not None :
 			#on POST /changeListener response
