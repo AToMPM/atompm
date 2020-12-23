@@ -3,10 +3,9 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 import re, threading, json, logging
+from time import sleep
 
 import socketio
-
-
 
 '''
 	a friendly wrapper around a socketio client
@@ -22,18 +21,9 @@ import socketio
 	_ws			the python-websocket '''
 class WebSocket :
 
-	#socket.io messages types
-	CONNECT = '0'
-	DISCONNECT = '1'
-	EVENT = '2'
-	ACK = '3'
-	ERROR = '4'
-	BINARY_EVENT = '5'
-	BINARY_ACK = '6'
-
 
 	def __init__(self, _aswid, chlogh=None) :
-		print("WS INIT")
+
 		assert chlogh is None or 'onchangelog' in dir(chlogh)
 		self._opened 	 = False
 		self._chlogh 	 = chlogh
@@ -49,12 +39,13 @@ class WebSocket :
 
 		try:
 
-			self.socketIO = socketio.Client(logger=True, engineio_logger=True)
+			self.socketIO = socketio.Client(logger=False, engineio_logger=False)
 
 			self.socketIO.on('connect', self._onopen)
 			self.socketIO.on('message', self._onmessage)
 
 			self.socketIO.connect('http://127.0.0.1:8124')
+			self.socketIO.sleep(1)
 
 			data = {'method': 'POST', 'url': '/changeListener?wid='+self._aswid}
 			self.socketIO.emit('message', data)
@@ -66,55 +57,30 @@ class WebSocket :
 	''' 
 		mark socket connection as opened '''
 
-	def _onopen(self, ws) :
+	def _onopen(self) :
 		self._opened = True
 
 	'''
 		close the socket '''
-	def close(self, ws) :
+	def close(self) :
 		self.socketIO.close()
 
 	''' 
 		parse and handle incoming message '''
-	def _onmessage(self,msg) :
+	def _onmessage(self, data) :
 
-		#handle binary
-		try:
-			msg = msg.decode()
-		except Exception:
-			pass
+		#print('## data recvd '+ str(data))
 
-		print('## msg recvd '+msg)
+		if 'statusCode' in data and data['statusCode'] is not None :
+			#on POST /changeListener response
 
-		#get the first character
-		msgType = msg[:1]
+			if data['statusCode'] == 201 :
+				self.subscribed = True
+			else :
+				self.subscribed = False
+		elif self._chlogh and self.subscribed :
+			self._chlogh.onchangelog(data['data'])
 
-		#chop it off
-		msg = msg[1:]
-
-		data = json.loads(msg)
-
-		if msgType == WebSocket.EVENT :
-
-			if data[0] != 'message' :
-				raise Exception('received unexpected socketio event :: '+str(msg))
-
-			data = data[1]
-
-			if 'statusCode' in data and data['statusCode'] is not None :
-				#on POST /changeListener response
-
-				if data['statusCode'] == 201 :
-					self.subscribed = True
-				else :
-					self.subscribed = False
-			elif self._chlogh and self.subscribed :
-				self._chlogh.onchangelog(data['data'])
-
-		elif msgType == WebSocket.ERROR:
-			raise Exception('received error from socketio :: ' + str(data))
-		else :
-			pass
 
 
 
