@@ -25,9 +25,10 @@ jobs:
     - name: install igraph
       run: |
         sudo apt-get install python3-setuptools
+        pip3 install python-socketio
         pip3 install wheel
         pip3 install --user python-igraph
-      
+        
     - name: run tests
       run: |
         google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
