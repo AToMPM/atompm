@@ -2,10 +2,10 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
+
 import threading, json, logging, sys
 
 import socketio
-
 
 '''
 	a friendly wrapper around a socketio client
@@ -36,12 +36,13 @@ class WebSocket :
 	def _start_ws(self):
 
 		try:
-			self.socketIO = socketio.Client(logger=True, engineio_logger=True)
+			self.socketIO = socketio.Client(logger=False, engineio_logger=False)
 
 			self.socketIO.on('connect', self._onopen)
 			self.socketIO.on('message', self._onmessage)
 
 			self.socketIO.connect('http://127.0.0.1:8124')
+			self.socketIO.sleep(1)
 
 			data = {'method': 'POST', 'url': '/changeListener?wid='+self._aswid}
 			self.socketIO.emit('message', data)
@@ -53,12 +54,12 @@ class WebSocket :
 	''' 
 		mark socket connection as opened '''
 
-	def _onopen(self, ws) :
+	def _onopen(self) :
 		self._opened = True
 
 	'''
 		close the socket '''
-	def close(self, ws) :
+	def close(self) :
 		self.socketIO.close()
 
 	''' 
@@ -85,20 +86,16 @@ class WebSocket :
 			if data[0] != 'message' :
 				raise Exception('received unexpected socketio event :: '+str(msg))
 
-			data = data[1]
+		#print('## data recvd '+ str(data))
 
-			if 'statusCode' in data and data['statusCode'] is not None :
-				#on POST /changeListener response
+		if 'statusCode' in data and data['statusCode'] is not None :
+			#on POST /changeListener response
 
-				if data['statusCode'] == 201 :
-					self.subscribed = True
-				else :
-					self.subscribed = False
-			elif self._chlogh and self.subscribed :
-				self._chlogh.onchangelog(data['data'])
+			if data['statusCode'] == 201 :
+				self.subscribed = True
+			else :
+				self.subscribed = False
+		elif self._chlogh and self.subscribed :
+			self._chlogh.onchangelog(data['data'])
 
-		elif msgType == WebSocket.ERROR:
-			raise Exception('received error from socketio :: ' + str(data))
-		else :
-			pass
 
