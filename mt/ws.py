@@ -86,7 +86,7 @@ class WebSocket :
 			if data[0] != 'message' :
 				raise Exception('received unexpected socketio event :: '+str(msg))
 
-		#print('## data recvd '+ str(data))
+		logging.debug('## data recvd '+ str(data))
 
 		if 'statusCode' in data and data['statusCode'] is not None :
 			#on POST /changeListener response
