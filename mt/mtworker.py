@@ -259,7 +259,7 @@ class mtworkerThread(threading.Thread) :
 	'''
 		post response back to server '''
 	def _postMessage(self,resp,msg) :
-		#print(self.wid+' << #'+str(id(resp))+' '+str(msg))
+		logging.debug(self.wid+' << #'+str(id(resp))+' '+str(msg))
 		resp.lock.acquire()
 		resp.setResponse(msg)
 		resp.lock.notify()
