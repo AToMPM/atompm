@@ -22,10 +22,10 @@ To install AToMPM, follow these steps:
         * For Python3: `pip3 install python-igraph`
     * For Windows, you may need to install the compiled igraph core
         * `http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph`
-1. Download and install six
+1. Download and install the six and python-socketio libraries
     * Use the pip package manager (comes with Python)
-        * For Python2: `pip install six`
-        * For Python3: `pip3 install six`
+        * For Python2: `pip install six python-socketio`
+        * For Python3: `pip3 install six python-socketio`
 1. Download and install node.js
     * Required version: >= 8.0
     * Use a package manager on Linux

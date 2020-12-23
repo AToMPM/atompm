@@ -47,9 +47,9 @@ jobs:
     - name: install igraph
 #      if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        pip3 install six wheel
+        pip3 install six wheel python-socketio
         pip3 install --user python-igraph
-      
+        
     - name: run tests
       run: |
         chromium --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
