@@ -503,7 +503,7 @@ class EventLoop:
 		if now - self.last_print > 1.0:
 			behind_schedule = now - simulated_now
 			if behind_schedule > 0.1:
-				print "Warning: running %.f ms behind schedule" % (behind_schedule*1000.0)
+				print("Warning: running %.f ms behind schedule" % (behind_schedule*1000.0))
 				self.last_print = now
 		if self.last_time:
 			delta = simulated_now - self.last_time

@@ -10,17 +10,17 @@ class Logger(object):
 	@staticmethod   
 	def showError(error):
 		if(Logger.verbose > -1) :
-			print "ERROR : " + error
+			print("ERROR : " + error)
 				
 	@staticmethod
 	def showWarning(warning):
 		if(Logger.verbose > 0) :
-			print "WARNING : " + warning
+			print("WARNING : " + warning)
 			
 	@staticmethod	
 	def showInfo(info):
 		if(Logger.verbose > 1) :
-			print "INFO : " + info
+			print("INFO : " + info)
 
 #######################
 
