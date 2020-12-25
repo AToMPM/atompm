@@ -9,7 +9,7 @@ jobs:
     steps:
     
     - name: install chromium
-      run: sudo apt install chromium
+      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y chromium-browser
     
     - uses: actions/checkout@v2
     
