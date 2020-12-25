@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    
+    - name: install chromium
+      run: sudo apt install chromium
+    
     - uses: actions/checkout@v2
     
     - name: npm install
@@ -30,6 +34,6 @@ jobs:
       
     - name: run tests
       run: |
-        google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+        chromium --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
         xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh
         
