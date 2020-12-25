@@ -15,10 +15,17 @@ mtpid=$!
 sleep 1
 
 echo "AToMPM now running. Opening browser..."
-
-echo "Trying to run Google Chrome..."
 set +e
-google-chrome-stable http://localhost:8124/atompm
+
+
+echo "Trying to run Chromium..."
+chromium-browser http://localhost:8124/atompm
+
+ret=$?
+if [ $ret -ne 0 ]; then
+    echo "Chromium not installed. Trying Google Chrome..."
+    google-chrome-stable http://localhost:8124/atompm
+fi
 
 ret=$?
 if [ $ret -ne 0 ]; then
