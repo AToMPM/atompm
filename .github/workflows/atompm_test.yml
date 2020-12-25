@@ -9,7 +9,9 @@ jobs:
     steps:
     
     - name: install chromium and setuptools
-      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y chromium-browser python3-setuptools
+      run: |
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y chromium-browser python3-setuptools
+        python -m pip install -U pip
     
     - uses: actions/checkout@v2
     
