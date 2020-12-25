@@ -4,14 +4,16 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
     
     - name: install chromium and setuptools
       run: |
         sudo DEBIAN_FRONTEND=noninteractive apt-get install -y chromium-browser python3-setuptools
-        python -m pip install -U pip
+        sudo apt install python3-pip
     
     - uses: actions/checkout@v2
     
