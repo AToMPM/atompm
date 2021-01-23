@@ -1,6 +1,10 @@
 #ignore autosave files
 .autosave.*
 
+#ignore user files (except default)
+users/*
+!users/(default)
+
 #Jetbrains project files
 .idea/
 AToMPM.iml
