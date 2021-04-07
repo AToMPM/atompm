@@ -26,6 +26,7 @@ jobs:
       run: |
         sudo apt-get install python3-setuptools
         pip3 install python-socketio
+        pip3 install python-socketio[client]
         pip3 install wheel
         pip3 install --user python-igraph
         
