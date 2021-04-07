@@ -452,11 +452,11 @@ class ModelAndRuleCompiler :
                         return self._dcal.eval(code)
                     except Exception as e :
                         if '$err' in ex :
-                            raise RuntimeError(ex['$err'])
+                            err_msg = str(ex['$err']) + " in filename: " + fname
                         else :
-                            raise RuntimeError( \
-                                'unexpected error encountered while evaluating '+
-                                'pattern condition code :: '+str(e))
+                            err_msg = 'unexpected error encountered while evaluating '+ \
+                                'pattern condition code :: '+str(e) + " in filename: " + fname
+                        raise RuntimeError(err_msg)
                 return evalPatternCode
 
             hg[HC.MT_CONSTRAINT] = wrap(hg[HC.MT_CONSTRAINT])

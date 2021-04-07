@@ -184,8 +184,7 @@ class mtworkerThread(threading.Thread) :
 					transfs.reverse()
 					self._ptcal.loadTransforms(transfs)
 					self._postMessage(msg['resp'],{'statusCode':200})
-			except Exception as e :
-				print("Exception: " + str(e))
+			except Exception as e:
 				traceback.print_exc()
 
 				self._postMessage(
