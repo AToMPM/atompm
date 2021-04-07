@@ -744,8 +744,10 @@ var httpserver = _http.createServer(
 						 'uriData':url['query'],
 						 'respIndex':responses.push(resp)-1});
 		});
-httpserver.listen(8124);
 
+let port = 8124;
+httpserver.listen(port);
+console.log("AToMPM listening on port: " + port)
 
 let wsserver = new _sio.Server(httpserver);
 
