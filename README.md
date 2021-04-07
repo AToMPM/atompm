@@ -25,7 +25,7 @@ To install AToMPM, follow these steps:
 1. Download and install the six and python-socketio libraries
     * Use the pip package manager (comes with Python)
         * For Python2: `pip install six python-socketio`
-        * For Python3: `pip3 install six python-socketio`
+        * For Python3: `pip3 install six python-socketio python-socketio[client]`
 1. Download and install node.js
     * Required version: >= 8.0
     * Use a package manager on Linux

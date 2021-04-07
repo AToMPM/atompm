@@ -47,7 +47,7 @@ jobs:
     - name: install igraph
 #      if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        pip3 install six wheel python-socketio
+        pip3 install six wheel python-socketio python-socketio[client]
         pip3 install --user python-igraph
         
     - name: run tests
