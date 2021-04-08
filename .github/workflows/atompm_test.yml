@@ -44,12 +44,12 @@ jobs:
 #        restore-keys: |
 #          ${{ runner.os }}-pip-
       
-    - name: install igraph
+    - name: install igraph and socketio dependencies
 #      if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        pip3 install six wheel
+        pip3 install six wheel websocket-client python-socketio[client] python-socketio
         pip3 install --user python-igraph
-      
+        
     - name: run tests
       run: |
         chromium --headless --disable-gpu --remote-debugging-port=9222 http://localhost &

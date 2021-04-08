@@ -80,11 +80,10 @@ function __respond(response, statusCode, reason, data, headers)
 /** Syntactic sugar to build and send a socket.io message **/
 function __send(socket, statusCode, reason, data, headers)
 {
-	socket.json.emit('message',
+	socket.emit('message',
 			{'statusCode':statusCode,
 			 'reason':reason,
-			 'headers':(headers || {'Content-Type': 'text/plain',
-			 'Access-Control-Allow-Origin': '*'}),
+			 'headers':(headers || {'Content-Type': 'text/plain'}),
 			 'data':data});
 }
 
@@ -671,7 +670,7 @@ var httpserver = _http.createServer(
 								function(sid)
 								{
 									__send(
-										wsserver.sockets.sockets[sid],
+										wsserver.sockets.sockets.get(sid),
 										undefined,
 										undefined,
 										_msg);
@@ -745,17 +744,14 @@ var httpserver = _http.createServer(
 						 'uriData':url['query'],
 						 'respIndex':responses.push(resp)-1});
 		});
-httpserver.listen(8124);
 
+let port = 8124;
+httpserver.listen(port);
+console.log("AToMPM listening on port: " + port)
 
+let wsserver = new _sio.Server(httpserver);
 
-var wsserver = _sio.listen(httpserver);
-wsserver.configure(
-	function()
-	{
-		wsserver.set('log level',2);
-	});
-wsserver.sockets.on('connection', 
+wsserver.sockets.on('connection',
 	function(socket)
 	{
 		/* unregister this socket from the specified worker ... when a worker

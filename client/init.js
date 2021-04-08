@@ -49,9 +49,39 @@ function __initClient()
 			var _arg = arg.split('=');
 			params[_arg[0]] = _arg[1];
 		});
-	
-	var socket = io.connect(
-			window.location.hostname,{'port':8124,'reconnect':false});
+
+    let socket = io(
+        window.location.hostname + ':8124', {
+            // 'port':8124,
+            'reconnect': false,
+            'timeout': 200000
+        });
+
+    socket.on('connect',
+        function () {
+
+            if (window.location.search == '' ||
+                ('aswid' in params && 'cswid' in params))
+                HttpUtils.httpReq(
+                    'POST',
+                    '/csworker',
+                    undefined,
+                    function (statusCode, resp) {
+                        __wid = resp;
+                        socket.emit(
+                            'message',
+                            {'method': 'POST', 'url': '/changeListener?wid=' + __wid});
+                    });
+
+            else if ('cswid' in params)
+                socket.emit(
+                    'message',
+                    {'method': 'POST', 'url': '/changeListener?wid=' + params['cswid']});
+
+            else
+                WindowManagement.openDialog(__FATAL_ERROR, 'invalid URL parameters ' +
+                    utils.jsons(params));
+        });
 
 	socket.on('message', 
 		function(msg)	
@@ -141,32 +171,7 @@ function __initClient()
 			WindowManagement.openDialog(__FATAL_ERROR, 'lost connection to back-end');
 		});
 
-	socket.on('connect', 
-		function()	
-		{  
-			if( window.location.search == '' ||
-				 ('aswid' in params && 'cswid' in params) )
-				HttpUtils.httpReq(
-					'POST',
-					'/csworker',
-					undefined,
-					function(statusCode,resp)
-					{
-						__wid = resp;
-						socket.emit(
-							'message',
-							{'method':'POST','url':'/changeListener?wid='+__wid});
-					});								
-				
-			else if( 'cswid' in params )
-				socket.emit(
-					'message',
-					{'method':'POST','url':'/changeListener?wid='+params['cswid']});
 
-			else
-				WindowManagement.openDialog(__FATAL_ERROR, 'invalid URL parameters '+
-						utils.jsons(params));
-		});
 		
 
 	/** PART 2 **/
