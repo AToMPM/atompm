@@ -13,19 +13,17 @@ To run the portable version, execute `AToMPM.bat`.
 
 To install AToMPM, follow these steps:
 1. Download and install the latest Python
-    * This can be either Python 2.7.X or 3.X.X, but 3.X.X is strongly recommended
+    * Python 2.7.X is unsupported. Please use 3.X.X.
     * Use a package manager on Linux
     * Or visit http://python.org/download/
 1. Download and install python-igraph
     * Use the pip package manager (comes with Python)
-        * For Python2: `pip install python-igraph`
-        * For Python3: `pip3 install python-igraph`
+        * `pip3 install python-igraph`
     * For Windows, you may need to install the compiled igraph core
         * `http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph`
 1. Download and install the six and python-socketio libraries
     * Use the pip package manager (comes with Python)
-        * For Python2: `pip install six python-socketio`
-        * For Python3: `pip3 install six python-socketio python-socketio[client]`
+        * `pip3 install six python-socketio python-socketio[client] websocket-client`
 1. Download and install node.js
     * Required version: >= 8.0
     * Use a package manager on Linux
