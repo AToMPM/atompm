@@ -4,7 +4,6 @@ See COPYING.lesser and README.md in the root of this project for full details'''
 
 
 import threading, json, logging, sys
-
 import socketio
 
 '''
@@ -63,7 +62,8 @@ class WebSocket :
 		self.socketIO.close()
 
 	''' 
-		parse and handle incoming data '''
+
+		parse and handle incoming message '''
 	def _onmessage(self, data) :
 
 		logging.debug('## data recvd '+ str(data))
