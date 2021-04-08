@@ -19,7 +19,7 @@ RUN pip3 install six
 
 RUN pip3 install python-igraph
 
-RUN pip3 install python-socketio
+RUN pip3 install python-socketio python-socketio[client]
 
 RUN apt-get install -y nodejs npm
 
