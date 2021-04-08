@@ -2,16 +2,13 @@
 Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
-import re, threading, json, logging
+import threading, json, logging, sys
 
 import socketio
-
-import sys
 
 
 '''
 	a friendly wrapper around a socketio client
-
 	_opened		true when the socket is first opened
 	_chlogh		a reference to an object that implements onchangelog(), this
   					method is called upon reception of changelogs from the asworker
@@ -105,8 +102,5 @@ class WebSocket :
 			raise Exception('received error from socketio :: ' + str(data))
 		else :
 			pass
-
-
-
 
 
