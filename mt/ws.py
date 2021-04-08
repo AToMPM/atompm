@@ -21,7 +21,7 @@ import socketio
 class WebSocket :
 
 	def __init__(self, _aswid, chlogh=None) :
-		print("WS INIT: " + str(_aswid))
+
 		assert chlogh is None or 'onchangelog' in dir(chlogh)
 		self._opened 	 = False
 		self._chlogh 	 = chlogh
@@ -63,28 +63,8 @@ class WebSocket :
 		self.socketIO.close()
 
 	''' 
-		parse and handle incoming message '''
-	def _onmessage(self,msg) :
-
-		#handle binary
-		try:
-			msg = msg.decode()
-		except Exception:
-			pass
-
-		print('## msg recvd '+msg)
-
-		#get the first character
-		msgType = msg[:1]
-
-		#chop it off
-		msg = msg[1:]
-
-		data = json.loads(msg)
-
-		if msgType == WebSocket.EVENT :
-			if data[0] != 'message' :
-				raise Exception('received unexpected socketio event :: '+str(msg))
+		parse and handle incoming data '''
+	def _onmessage(self, data) :
 
 		logging.debug('## data recvd '+ str(data))
 
