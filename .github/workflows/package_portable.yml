@@ -12,7 +12,9 @@ jobs:
     steps:
     
       - name: install wine
-        run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wine
+        run: |
+          sudo apt update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wine
         
       - name: checkout
         uses: actions/checkout@v2
