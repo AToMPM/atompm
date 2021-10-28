@@ -2,9 +2,11 @@ name: PackagePortable
 
 on:
   push:
-    paths-ignore:
-      - 'doc/**'
-      - '**.md'
+#    paths-ignore:
+#      - 'doc/**'
+#      - '**.md'
+    tags:
+      - "v*.*.*"
 
 jobs:
   package:
@@ -29,7 +31,13 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: atompm-portable
-          path: ./packaging/atompm-portable.zip
-#      - name: release
+          path: ./packaging/atompm-portable/
+          
+#      - name: create release
 #        uses: softprops/action-gh-release@v1
-#        if: startsWith(github.ref, 'refs/tags/')
+#        with:
+#          files: ./packaging/atompm-portable/atompm-portable.zip
+          
+          
+          
+        

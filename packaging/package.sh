@@ -5,14 +5,10 @@
 #   i. In AToMPM - client/constants.js
 #   ii. In documentation - doc/conf.py
 #   iii. In Node - package.json
-#2. Push these changes to GitHub
-#3. Create a new release on GitHub
-#4. The tag should be something like v0.8.0
-#5. Run this script, which will download the latest tagged version
-#   and package everything
-#6. Upload the package .zip to the release on GitHub
-#7. Publish to npm repo
-
+#2. Create a new tag like v0.8.0
+#3. Push these changes to GitHub
+#4. Create a new release on GitHub
+#5. The packaging action (on GitHub) should have made an atompm-portable.zip file. Attach this to the release.
 
 winpython_url="https://github.com/winpython/winpython/releases/download/4.3.20210620/Winpython64-3.9.5.0dot.exe"
 
@@ -148,7 +144,7 @@ add_atompm
 add_batch_scripts
 add_manual
 
-rm ./atompm-portable.zip
+#rm ./atompm-portable.zip
 
-zip -r ./atompm-portable.zip atompm-portable/
+#zip -r ./atompm-portable.zip atompm-portable/
 
