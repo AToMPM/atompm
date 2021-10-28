@@ -1,0 +1,30 @@
+name: PackagePortable
+
+on:
+  push:
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: install wine
+        run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wine
+        
+      - name: checkout
+        uses: actions/checkout@v2
+        
+      - name: run package script
+        run: ./packaging/package.sh
+        
+      - name: Archive atompm-portable file
+        uses: actions/upload-artifact@v2
+        with:
+          name: atompm-portable
+          path: ./packaging/atompm-portable.zip
+#      - name: release
+#        uses: softprops/action-gh-release@v1
+#        if: startsWith(github.ref, 'refs/tags/')
