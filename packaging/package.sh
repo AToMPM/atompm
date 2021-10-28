@@ -10,40 +10,23 @@
 #4. The tag should be something like v0.8.0
 #5. Run this script, which will download the latest tagged version
 #   and package everything
-#   - Run it for the Python2 and the Python3 version
-#   - Fix up the files in the package
-#        - Delete the unused Python directory in each zip
 #6. Upload the package .zip to the release on GitHub
 #7. Publish to npm repo
 
-version="v0.8.4"
 
-package_python3=true
-
-#Python2
-portable_python_url="http://elvis.rowan.edu/mirrors/portablepython/v2.7/PortablePython_2.7.6.1.exe"
-
-igraph_whl_url="https://github.com/AToMPM/atompm/releases/download/v0.7.0/python_igraph-0.7.1.post6-cp27-cp27m-win32.whl"
-
-#Python3
-
-python_version="3.6.5"
-
-winpython_url="https://github.com/winpython/winpython/releases/download/1.10.20180404/WinPython32-3.6.5.0Zero.exe"
-
-igraph3_whl_url="https://github.com/AToMPM/atompm/releases/download/v0.7.0/python_igraph-0.7.1.post6-cp36-cp36m-win32.whl"
+winpython_url="https://github.com/winpython/winpython/releases/download/4.3.20210620/Winpython64-3.9.5.0dot.exe"
 
 #platform
 
-nodejs_zip_url="https://nodejs.org/dist/v8.11.3/node-v8.11.3-win-x64.zip"
+nodejs_zip_url="https://nodejs.org/dist/v16.13.0/node-v16.13.0-win-x64.zip"
 
-chrome_url="https://newcontinuum.dl.sourceforge.net/project/portableapps/Google%20Chrome%20Portable/GoogleChromePortable_67.0.3396.87_online.paf.exe"
+chrome_url="https://github.com/portapps/ungoogled-chromium-portable/releases/download/92.0.4515.107-11/ungoogled-chromium-portable-win64-92.0.4515.107-11.7z"
 
 manual_url="https://media.readthedocs.org/pdf/atompm/latest/atompm.pdf"
 
 #$(curl --silent "https://api.github.com/repos/AToMPM/atompm/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 
-echo "Packaging version: $version"
+echo "Packaging AToMPM"
 
 #echo $nodejs_zip_url
 #echo $portable_python_url
@@ -51,49 +34,6 @@ echo "Packaging version: $version"
 
 # STEPS
 # 1. Download Python
-#   a. Currently, this is PortablePython from
-#   b. http://portablepython.com/wiki/PortablePython2.7.6.1/
-function get_PP() {
-    echo "Downloading PortablePython"
-    
-    PP_file=$(basename $portable_python_url)
-    echo $PP_file
-
-    if [ ! -f $PP_file ]; then
-        echo "Downloading $portable_python_url" 
-        curl -O $portable_python_url
-    fi
-
-    #   c. Install PortablePython
-    #TODO: Automate installation
-    #Z:\home\dcx\Projects\AToMPM\packaging\atompm-portable\platform\PortablePython27\
-    #No modules and no core editors
-    #Except for the Six package
-    wine $PP_file
-
-    #   d. Install pip on the packaging machine (Python2 version)
-
-    cd atompm-portable/platform/PortablePython27/App
-
-    # INSTALL PIP
-    #TODO: Fix this installation
-    #wine scripts/easy_install.exe pip
-    #TODO: Replace with above
-    #pip2 install --upgrade --target=Lib/site-packages/ pip
-
-    #INSTALL IGRAPH
-    igraph_whl_file=$(basename $igraph_whl_url)
-    echo $igraph_whl_file
-
-    #if [ ! -f $igraph_whl_file ]; then
-    #    echo "Downloading $igraph_whl_url" 
-    #    curl -O $igraph_whl_url
-    #fi
-
-    #MUST HAVE WHL FILE LOCALLY FOR NOW
-    cd ../../../..
-    unzip -o $igraph_whl_file -d atompm-portable/platform/PortablePython27/App/Lib/site-packages/
-}
 
 function get_WP() {
     echo "Downloading WinPython"
@@ -103,35 +43,18 @@ function get_WP() {
 
     if [ ! -f $WP_file ]; then
         echo "Downloading $winpython_url" 
-        curl -O $winpython_url
+        curl -O $winpython_url -L
     fi
 
     #   c. Install WinPython
-    #TODO: Automate installation
-    #Z:\home\dcx\Projects\AToMPM\packaging\atompm-portable\platform\WinPython\
-    #No modules and no core editors
-    #Except for the Six package
-    wine $WP_file
-
-    #   d. Install pip on the packaging machine (Python2 version)
-
-    cd atompm-portable/platform/WinPython/python-$python_version
+    7z x Winpython64-*.exe
     
-    # INSTALL IGRAPH
-    #TODO: Fix this installation
-    #wine Scripts/pip3 install python-igraph
+    mkdir atompm-portable/platform/WinPython
+    mv WPy*/* ./atompm-portable/platform/WinPython/
     
-    igraph3_whl_file=$(basename $igraph3_whl_url)
-    echo $igraph3_whl_file
-
-    #if [ ! -f $igraph_whl_file ]; then
-    #    echo "Downloading $igraph_whl_url" 
-    #    curl -O $igraph_whl_url
-    #fi
-
-    #MUST HAVE WHL FILE LOCALLY FOR NOW
-    cd ../../../..
-    unzip -o $igraph3_whl_file -d atompm-portable/platform/WinPython/python-$python_version/Lib/site-packages/
+    #   d. Install dependencies
+    wine atompm-portable/platform/WinPython/python*/python.exe -m pip install python-igraph six python-socketio python-socketio[client] websocket-client
+    
 }
 
 function get_nodejs() {
@@ -160,12 +83,14 @@ function get_chrome() {
 
     if [ ! -f $chrome_file ]; then
         echo "Downloading $chrome_url" 
-        curl -O $chrome_url
+        curl -O $chrome_url -L
     fi
+    
+    mkdir ./atompm-portable/platform/ChromiumPortable
+    7z x ungoogled-chromium-*.7z -o./atompm-portable/platform/ChromiumPortable
+    
+    mv ./atompm-portable/platform/ChromiumPortable/ungoogled-chromium* ./atompm-portable/platform/ChromiumPortable/ChromiumPortable.exe
 
-    #TODO: Automate installation
-    #Z:\home\dcx\Projects\AToMPM\packaging\atompm-portable\platform\GoogleChromePortable
-    wine GoogleChromePortable_67.0.3396.87_online.paf.exe
 }
 
 # 4. Add AToMPM files
@@ -177,7 +102,6 @@ function add_atompm () {
     cd atompm-portable
     git clone --depth 1 https://github.com/AToMPM/atompm.git
     cd atompm
-    git checkout $version
     rm -rf .git
     
     npm install --production
@@ -205,22 +129,18 @@ function add_manual(){
 
 ###MAIN######
 
-if [ "$package_python3" = false ] ; then
-    if [ ! -d ./atompm-portable/platform/PortablePython27 ]; then
-        get_PP
-    fi
-    
-else
-    if [ ! -d ./atompm-portable/platform/WinPython ]; then
-        get_WP
-    fi  
-fi
+mkdir atompm-portable
+mkdir atompm-portable/platform
 
 if [ ! -d ./atompm-portable/platform/NodeJS ]; then
     get_nodejs
 fi
 
-if [ ! -d ./atompm-portable/platform/GoogleChromePortable ]; then
+if [ ! -d ./atompm-portable/platform/WinPython ]; then
+    get_WP
+fi 
+
+if [ ! -d ./atompm-portable/platform/ChromiumPortable ]; then
     get_chrome
 fi
 
@@ -230,9 +150,5 @@ add_manual
 
 rm atompm-portable.zip
 
-if [ "$package_python3" = false ] ; then
-    zip -r atompm-portable-python2.zip atompm-portable/
-else
-    zip -r atompm-portable-python3.zip atompm-portable/
-fi
+zip -r atompm-portable.zip atompm-portable/
 
