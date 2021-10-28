@@ -10,6 +10,7 @@
 #4. Create a new release on GitHub
 #5. The packaging action (on GitHub) should have made an atompm-portable.zip file. Attach this to the release.
 
+
 winpython_url="https://github.com/winpython/winpython/releases/download/4.3.20210620/Winpython64-3.9.5.0dot.exe"
 
 #platform
@@ -21,6 +22,11 @@ chrome_url="https://github.com/portapps/ungoogled-chromium-portable/releases/dow
 manual_url="https://media.readthedocs.org/pdf/atompm/latest/atompm.pdf"
 
 #$(curl --silent "https://api.github.com/repos/AToMPM/atompm/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+
+#!/bin/bash
+
+#exit on errors
+set -e
 
 echo "Packaging AToMPM"
 
@@ -128,13 +134,13 @@ function add_manual(){
 mkdir ./atompm-portable
 mkdir ./atompm-portable/platform
 
+if [ ! -d ./atompm-portable/platform/WinPython ]; then
+    get_WP
+fi
+
 if [ ! -d ./atompm-portable/platform/NodeJS ]; then
     get_nodejs
 fi
-
-if [ ! -d ./atompm-portable/platform/WinPython ]; then
-    get_WP
-fi 
 
 if [ ! -d ./atompm-portable/platform/ChromiumPortable ]; then
     get_chrome
