@@ -13,14 +13,17 @@ jobs:
     
       - name: install wine
         run: |
+          sudo dpkg --add-architecture i386
           sudo apt update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wine
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wine wine32
         
       - name: checkout
         uses: actions/checkout@v2
         
       - name: run package script
-        run: ./packaging/package.sh
+        run: |
+          cd ./packaging
+          ./package.sh
         
       - name: Archive atompm-portable file
         uses: actions/upload-artifact@v2
