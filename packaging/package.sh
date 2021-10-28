@@ -114,7 +114,7 @@ function add_atompm () {
 
 function add_batch_scripts (){
     echo "Adding batch scripts"
-    cp windows_scripts/*.bat atompm-portable/
+    cp ./windows_scripts/*.bat atompm-portable/
 }
 # 6. Add manual
 
@@ -129,8 +129,8 @@ function add_manual(){
 
 ###MAIN######
 
-mkdir atompm-portable
-mkdir atompm-portable/platform
+mkdir ./atompm-portable
+mkdir ./atompm-portable/platform
 
 if [ ! -d ./atompm-portable/platform/NodeJS ]; then
     get_nodejs
@@ -148,7 +148,7 @@ add_atompm
 add_batch_scripts
 add_manual
 
-rm atompm-portable.zip
+rm ./atompm-portable.zip
 
-zip -r atompm-portable.zip atompm-portable/
+zip -r ./atompm-portable.zip atompm-portable/
 
