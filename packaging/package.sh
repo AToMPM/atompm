@@ -1,3 +1,4 @@
+#!/bin/bash
 
 #Steps when making a new release:
 
@@ -10,20 +11,15 @@
 #4. Create a new release on GitHub
 #5. The packaging action (on GitHub) should have made an atompm-portable.zip file. Attach this to the release.
 
-
-winpython_url="https://github.com/winpython/winpython/releases/download/4.3.20210620/Winpython64-3.9.5.0dot.exe"
-
 #platform
 
+winpython_url="https://github.com/winpython/winpython/releases/download/4.3.20210620/Winpython32-3.9.5.0dot.exe"
 nodejs_zip_url="https://nodejs.org/dist/v16.13.0/node-v16.13.0-win-x64.zip"
-
 chrome_url="https://github.com/portapps/ungoogled-chromium-portable/releases/download/92.0.4515.107-11/ungoogled-chromium-portable-win64-92.0.4515.107-11.7z"
-
 manual_url="https://media.readthedocs.org/pdf/atompm/latest/atompm.pdf"
 
 #$(curl --silent "https://api.github.com/repos/AToMPM/atompm/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
 
-#!/bin/bash
 
 #exit on errors
 set -e
@@ -49,7 +45,7 @@ function get_WP() {
     fi
 
     #   c. Install WinPython
-    7z x Winpython64-*.exe
+    7z x Winpython*.exe
     
     mkdir atompm-portable/platform/WinPython
     mv WPy*/* ./atompm-portable/platform/WinPython/
