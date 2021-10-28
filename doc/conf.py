@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'AToMPM'
-copyright = '2018, The AToMPM Team'
+copyright = '2021, The AToMPM Team'
 author = 'The AToMPM Team'
 
 # The short X.Y version
