@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: atompm-portable
-          path: ./packaging/atompm-portable/
+          path: ./packaging/atompm-portable/atompm-portable.zip
           
 #      - name: create release
 #        uses: softprops/action-gh-release@v1
