@@ -15,7 +15,7 @@ const _cp = require('child_process'),
 	logger = require('./logger'),
 	_utils = require('./utils');
 
-logger.set_level(logger.LOG_LEVELS.INFO);
+logger.set_level(logger.LOG_LEVELS.HTTP);
 
 /*********************************** GLOBALS **********************************/
 /* an array of WebWorkers
@@ -76,7 +76,7 @@ function __respond(response, statusCode, reason, data, headers)
 	else
 		response.end(content, encoding);
 
-	logger.http("Server resp: " + statusCode);
+	logger.http("server >> client: " + statusCode);
 }
 
 
@@ -89,7 +89,7 @@ function __send(socket, statusCode, reason, data, headers)
 			 'headers':(headers || {'Content-Type': 'text/plain'}),
 			 'data':data});
 
-	logger.http("Server send  to  worker: " + statusCode + " " + data);
+	logger.http("server >> worker: " + statusCode + " " + data);
 }
 
 
@@ -100,7 +100,7 @@ var httpserver = _http.createServer(
 			var url = _url.parse(req.url,true);
 			url.pathname = decodeURI(url.pathname);
 
-			logger.http("Server recv: " + req.method + " " + url.path);
+			logger.http("server << client: " + req.method + " " + url.path);
 
 			/* serve client */
 			if( req.method == 'GET' && url.pathname == '/atompm' )
@@ -787,7 +787,7 @@ wsserver.sockets.on('connection',
 			{		
 				let url = _url.parse(msg.url,true);
 
-				logger.http("Server recv from worker: " + msg.method + " " + url.pathname);
+				logger.http("server << worker: " + msg.method + " " + url.pathname);
 
 				/* check for worker id and it's validity */
 				if( url['query'] == undefined || 

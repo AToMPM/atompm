@@ -105,18 +105,15 @@
 
 
 /**************************** LIBRARIES and GLOBALS ****************************/
-var  _util 	= require('util'),
+let _http 	= require('http'),
+	_do  	= require('./___do'),
+	_fs		= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
+	_utils	= require('./utils'),
+	logger	= require('./logger.js');
 
-	 _path 	= require('path'),
-	 _http 	= require('http'),
-	 _do  	= require('./___do'),
-	 _fs 	 	= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
-	 _fspp	= _do.convert(require('./___fs++'), ['mkdirs']),	 
-	 _siocl	= require('socket.io-client'),
-	 _utils	= require('./utils'),
-	 _styleinfo = require('./styleinfo'),
-	 _svg		= require('./libsvg').SVG,
-	 _wlib,
+logger.set_level(logger.LOG_LEVELS.HTTP)
+
+let	 _wlib,
 	 _mmmk,
 	 _mt,
 	 _plugins,
@@ -307,11 +304,8 @@ function __postInternalErrorMsg(respIndex,reason)
 /* wrapper for all messages */
 function __postMessage(msg) 
 {
-	console.error("w#"+__wid+" << ("+msg.respIndex+") "+msg.statusCode+" "+
-			(msg.reason || 
-			 (typeof msg.data == 'object' ? 
-				  _utils.jsons(msg.data) : 
-				  msg.data)));
+	let s = msg.reason || (typeof msg.data == 'object' ? _utils.jsons(msg.data) : msg.data);
+	logger.http("worker#"+__wid+" (" + __wtype + ") >> RI#" + msg.respIndex + " (" +msg.statusCode+") "+s);
 
 	//make sure that reason is a string
 	if (typeof msg.reason == 'object'){
@@ -483,7 +477,12 @@ function __batchCheckpoint(id,start)
 process.on('message', 
 	function(msg)
 	{
-		console.error(">> "+JSON.stringify(msg));
+		// avoid overly long hitchhikers in logs
+		let log_msg = _utils.clone(msg);
+		if (log_msg["reqData"] && log_msg["reqData"]["hitchhiker"]){
+			log_msg["reqData"]["hitchhiker"] = Object.keys(log_msg["reqData"]["hitchhiker"])
+		}
+		logger.http("worker#"+__wid+" (" + __wtype + ") << "+JSON.stringify(log_msg));
 
 		/* parse msg */
 		var uri 		  = msg['uri'],
@@ -497,9 +496,6 @@ process.on('message',
 		/* initial setup */
 		if( _wlib == undefined )
 		{
-			/** enable/disable debugging messages **/			
-			console.error = function() {};
-
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
 
@@ -533,7 +529,7 @@ process.on('message',
 					}
 					catch(err)
 					{
-						_util.log('failed to load plugin ('+p+') on :: '+err);
+						logger.error('failed to load plugin ('+p+') on :: '+err);
 					}
 				});
 			return;
