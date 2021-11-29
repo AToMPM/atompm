@@ -336,11 +336,31 @@ utils.doAfterUnlessRepeated =
 		__pendingCalls[func] = setTimeout(doIt, ms);
 	};
 
+/**
+ * collapses a changelog for easier printing/logging
+ *
+ */
+utils.collapse_changelog =
+	function(changelog){
+		let log_chs = []
+		for (let entry of changelog){
+			let e = {"op":entry["op"]};
+			if (entry["name"]) {
+				e["name"] = entry["name"]
+			}
+			e["fields"] = Object.keys(entry)
+			log_chs.push(e)
+		}
+		return log_chs;
+	};
+
+
 /* NOTE: 'exports' exists in back-end 'require', but not in browser import...
 			this ensures no errors are reported during browser imports */
 var exports = exports || {};
 exports.buildVobjGeomAttrVal		= utils.buildVobjGeomAttrVal;
 exports.clone	 					= utils.clone;
+exports.collapse_changelog			= utils.collapse_changelog;
 exports.contains	 				= utils.contains;
 exports.extend 						= utils.extend;
 exports.filter 						= utils.filter;

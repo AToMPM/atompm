@@ -83,13 +83,18 @@ function __respond(response, statusCode, reason, data, headers)
 /** Syntactic sugar to build and send a socket.io message **/
 function __send(socket, statusCode, reason, data, headers)
 {
+	let log_data = data
+	// simplify the data before logging
+	if (data && typeof data === 'object'){
+		log_data = Object.keys(data)
+	}
+	logger.http("server >> worker: " + statusCode + " " + JSON.stringify(log_data));
+
 	socket.emit('message',
 			{'statusCode':statusCode,
 			 'reason':reason,
 			 'headers':(headers || {'Content-Type': 'text/plain'}),
 			 'data':data});
-
-	logger.http("server >> worker: " + statusCode + " " + data);
 }
 
 
@@ -100,7 +105,7 @@ var httpserver = _http.createServer(
 			var url = _url.parse(req.url,true);
 			url.pathname = decodeURI(url.pathname);
 
-			logger.http("server << client: " + req.method + " " + url.path);
+			logger.http("client >> server: " + req.method + " " + url.path);
 
 			/* serve client */
 			if( req.method == 'GET' && url.pathname == '/atompm' )
