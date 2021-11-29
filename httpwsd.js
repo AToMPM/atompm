@@ -4,17 +4,18 @@
 */
 
 /*********************************** IMPORTS **********************************/
-var _util	= require("util"),
-	 _fs 		= require('fs'),
-	 _http 	= require('http'),
-	 _path 	= require('path'),
-	 _url 	= require('url'),
-	 _utils 	= require('./utils'),
-	 _sio 	= require('socket.io'),
-	 _cp	 	= require('child_process'),
-	 _fspp	= require('./___fs++'),	 	 
-	 _duri	= require('./___dataurize');
+const _cp = require('child_process'),
+	_fs = require('fs'),
+	_http = require('http'),
+	_path = require('path'),
+	_sio = require('socket.io'),
+	_url = require('url'),
+	_duri = require('./___dataurize'),
+	_fspp = require('./___fs++'),
+	logger = require('./logger'),
+	_utils = require('./utils');
 
+logger.set_level(logger.LOG_LEVELS.INFO);
 
 /*********************************** GLOBALS **********************************/
 /* an array of WebWorkers
@@ -74,6 +75,8 @@ function __respond(response, statusCode, reason, data, headers)
 		response.end(_utils.jsons(content,null,'\t'), encoding);
 	else
 		response.end(content, encoding);
+
+	logger.http("Server resp: " + statusCode);
 }
 
 
@@ -85,6 +88,8 @@ function __send(socket, statusCode, reason, data, headers)
 			 'reason':reason,
 			 'headers':(headers || {'Content-Type': 'text/plain'}),
 			 'data':data});
+
+	logger.http("Server send  to  worker: " + statusCode + " " + data);
 }
 
 
@@ -95,6 +100,7 @@ var httpserver = _http.createServer(
 			var url = _url.parse(req.url,true);
 			url.pathname = decodeURI(url.pathname);
 
+			logger.http("Server recv: " + req.method + " " + url.path);
 
 			/* serve client */
 			if( req.method == 'GET' && url.pathname == '/atompm' )
@@ -747,7 +753,7 @@ var httpserver = _http.createServer(
 
 let port = 8124;
 httpserver.listen(port);
-console.log("AToMPM listening on port: " + port)
+logger.info("AToMPM listening on port: " + port)
 
 let wsserver = new _sio.Server(httpserver);
 
@@ -775,11 +781,13 @@ wsserver.sockets.on('connection',
 		}
 
 		
-		/* onmessage : on reception of data from client */
+		/* onmessage : on reception of data from worker */
 	 	socket.on('message', 
 			function(msg/*{method:_,url:_}*/)		
 			{		
-				var url = _url.parse(msg.url,true);
+				let url = _url.parse(msg.url,true);
+
+				logger.http("Server recv from worker: " + msg.method + " " + url.pathname);
 
 				/* check for worker id and it's validity */
 				if( url['query'] == undefined || 
