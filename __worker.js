@@ -304,8 +304,8 @@ function __postInternalErrorMsg(respIndex,reason)
 /* wrapper for all messages */
 function __postMessage(msg) 
 {
-	let s = msg.reason || (typeof msg.data == 'object' ? _utils.jsons(msg.data) : msg.data);
-	logger.http("worker#"+__wid+" (" + __wtype + ") >> RI#" + msg.respIndex + " (" +msg.statusCode+") "+s);
+	let s = typeof msg.data == 'object' ? _utils.jsons(msg.data) : msg.data;
+	logger.http(__wtype + " (worker#" +__wid+ ") >> RI#" + msg.respIndex + " (" +msg.statusCode+") "+s);
 
 	//make sure that reason is a string
 	if (typeof msg.reason == 'object'){
@@ -482,7 +482,7 @@ process.on('message',
 		if (log_msg["reqData"] && log_msg["reqData"]["hitchhiker"]){
 			log_msg["reqData"]["hitchhiker"] = Object.keys(log_msg["reqData"]["hitchhiker"])
 		}
-		logger.http("worker#"+__wid+" (" + __wtype + ") << "+JSON.stringify(log_msg));
+		logger.http(__wtype + " (worker#" +__wid+ ") << "+JSON.stringify(log_msg));
 
 		/* parse msg */
 		var uri 		  = msg['uri'],

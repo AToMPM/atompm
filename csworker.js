@@ -568,14 +568,14 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 			_do.chain(actions)(
 				function()
 				{
-					let cs_changelog = _utils.flatten(cschangelogs);
-					let log_csc = _utils.jsons(_utils.collapse_changelog(cs_changelog));
+					let cschangelog = _utils.flatten(cschangelogs);
+					let log_csc = _utils.jsons(_utils.collapse_changelog(cschangelog));
 
 					logger.debug('worker#'+__wid+' >> ('+aswSequenceNumber+') '+ log_csc);
 
 					__postMessage(
 							{'statusCode':200,
-							 'changelog':cs_changelog,
+							 'changelog':cschangelog,
 	 						 'sequence#':aswSequenceNumber,
 							 'hitchhiker':cshitchhiker});
 					

@@ -85,10 +85,20 @@ function __send(socket, statusCode, reason, data, headers)
 {
 	let log_data = data
 	// simplify the data before logging
-	if (data && typeof data === 'object'){
-		log_data = Object.keys(data)
+	if (data && typeof data === 'object' && data["changelog"]){
+		log_data = _utils.collapse_changelog(data["changelog"])
 	}
-	logger.http("server >> worker: " + statusCode + " " + JSON.stringify(log_data));
+
+	// detect the worker id for logging
+	let worker_id = -1;
+	for( let wid in workerIds2socketIds ) {
+		for (let socket_id of workerIds2socketIds[wid]) {
+			if (socket_id === socket.id) {
+				worker_id = wid;
+			}
+		}
+	}
+	logger.http("server >> worker #" + worker_id + ": " + statusCode + " " + JSON.stringify(log_data));
 
 	socket.emit('message',
 			{'statusCode':statusCode,
