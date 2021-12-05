@@ -51,7 +51,7 @@ function get_WP() {
     mv WPy*/* ./atompm-portable/platform/WinPython/
     
     #   d. Install dependencies
-    wine atompm-portable/platform/WinPython/python*/python.exe -m pip install python-igraph six python-socketio python-socketio[client] websocket-client
+    wine atompm-portable/platform/WinPython/python*/python.exe -m pip install requests python-igraph six python-socketio python-socketio[client] websocket-client
     
 }
 

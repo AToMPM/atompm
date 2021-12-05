@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:21.10
 
 RUN apt-get update -y && \
 		apt-get upgrade -y
@@ -19,7 +19,7 @@ RUN pip3 install six
 
 RUN pip3 install python-igraph
 
-RUN pip3 install python-socketio python-socketio[client]
+RUN pip3 install requests python-socketio python-socketio[client] websocket-client
 
 RUN apt-get install -y nodejs npm
 
@@ -27,7 +27,7 @@ RUN mkdir /opt/atompm
 
 WORKDIR /opt/atompm/
 
-RUN git clone http://msdl.uantwerpen.be/git/simon/AToMPM.git .
+RUN git clone https://github.com/AToMPM/atompm.git .
 
 RUN npm install
 
