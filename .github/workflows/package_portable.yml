@@ -1,0 +1,43 @@
+name: PackagePortable
+
+on:
+  push:
+#    paths-ignore:
+#      - 'doc/**'
+#      - '**.md'
+    tags:
+      - "v*.*.*"
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: install wine
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wine wine32
+        
+      - name: checkout
+        uses: actions/checkout@v2
+        
+      - name: run package script
+        run: |
+          cd ./packaging
+          ./package.sh
+        
+      - name: Archive atompm-portable file
+        uses: actions/upload-artifact@v2
+        with:
+          name: atompm-portable
+          path: ./packaging/atompm-portable/atompm-portable.zip
+          
+#      - name: create release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: ./packaging/atompm-portable/atompm-portable.zip
+          
+          
+          
+        
