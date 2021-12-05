@@ -1,13 +1,33 @@
-# Workflow
+# Instructions for AToMPM and Docker
 
-## Do Once: Creating the VM
+ 
+## Building the Image
 
-1. Create the VM:
-   1. `docker create --name atompmrun -p 8124:8124 -ti atompmvm` 
-2. Open your browser and navigate to `http://localhost:8124/atompm`
-   1. If there is a problem in this step, it might be because you are running docker on Windows. In that case, use the machine IP instead of `localhost` in the above address. Find the host's IP address by running `docker-machine ip`.
+1. Install [Docker](https://www.docker.com/).
 
-## Starting and Stopping VM
+1. Using docker's console, navigate to the root of this repository.
+
+1. Build the docker image. This will download all dependencies you need to run AToMPM. You might need root access for this and the following commands.
+
+1. `docker build -t atompmvm .`
+
+1. Export the docker image:
+
+   1. `docker save atompmvm | gzip > atompmvm.tar.gz`
+
+## Loading the Image
+
+```
+docker load < atompmvm.tar.gz
+```
+
+## Running the Container
+
+1. Run the docker container (one of the following)
+   1. `docker run --name atompmrun -p 8124:8124 -ti atompmvm` 
+1. Open your browser and navigate to `http://localhost:8124/`
+
+## Starting and Stopping the Container
 
 *You can run docker commands from different terminals.*
 
@@ -31,16 +51,16 @@ List container status
 docker container ls -a
 ```
 
-## Moving files in/out of VM
+## Moving files in/out of the Container
 
 *You can run docker commands from different terminals.*
 
-From VM to host (backup).
+From container to host (backup).
 ```
 docker cp atompmrun:/opt/atompm/users/. ./atompmusers/
 ```
 
-From host to VM (restore):
+From host to container (restore):
 ```
 docker cp ./atompmusers/. atompmrun:/opt/atompm/users/
 ```
