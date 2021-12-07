@@ -12,7 +12,6 @@ jobs:
   package:
     runs-on: ubuntu-latest
     steps:
-    
       - name: install wine
         run: |
           sudo dpkg --add-architecture i386
