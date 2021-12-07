@@ -19,8 +19,8 @@ jobs:
           wget -nc https://dl.winehq.org/wine-builds/winehq.key
           sudo apt-key add winehq.key
           sudo add-apt-repository -y 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main' 
-          sudo apt update
-          sudo DEBIAN_FRONTEND=noninteractive apt install -y --install-recommends winehq-stable
+          sudo apt update && sudo apt upgrade
+          sudo DEBIAN_FRONTEND=noninteractive apt install -y --install-recommends winehq-stable wine-stable
 
         
       - name: checkout
