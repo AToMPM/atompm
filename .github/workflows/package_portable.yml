@@ -20,7 +20,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt update
-          sudo apt install -y wine64 wine32
+          sudo apt install -y wine64 wine32 libwine:i386
         
       - name: checkout
         uses: actions/checkout@v2
