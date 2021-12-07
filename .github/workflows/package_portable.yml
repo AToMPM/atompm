@@ -17,7 +17,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wine wine32
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y wine wine32 libwine:i386
         
       - name: checkout
         uses: actions/checkout@v2
