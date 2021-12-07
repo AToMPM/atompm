@@ -13,15 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: install wine
-        run: |
-          sudo dpkg --add-architecture i386
 #          wget -nc https://dl.winehq.org/wine-builds/winehq.key
 #          sudo apt-key add winehq.key
 #          sudo add-apt-repository -y 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main'
-          sudo apt update
 #          sudo DEBIAN_FRONTEND=noninteractive apt install -y --install-recommends winehq-stable wine-stable wine-stable-i386 libfaudio0:i386 libglib2.0-0:i386 libgstreamer-plugins-base1.0-0:i386 libgstreamer1.0-0:i386 libodbc1:i386 libmount1:i386 libselinux1:i386 libpcre2-8-0:i386
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
           sudo apt install -y wine64 wine32
-
         
       - name: checkout
         uses: actions/checkout@v2
