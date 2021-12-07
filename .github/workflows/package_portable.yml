@@ -20,7 +20,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt update
-          sudo apt install -y wine64 wine32 libwine:i386
+          sudo apt-get install -y wine64 wine32 libwine:i386 libfaudio0:i386 libglib2.0-0:i386 libgstreamer-plugins-base1.0-0:i386 libgstreamer1.0-0:i386 libodbc1:i386 gstreamer1.0-plugins-good:i386
         
       - name: checkout
         uses: actions/checkout@v2
