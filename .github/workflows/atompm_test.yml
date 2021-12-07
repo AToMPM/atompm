@@ -5,14 +5,14 @@ on:
     paths-ignore:
       - 'doc/**'
       - '**.md'
-      - '.github/workflows/make_docker.yml'
-      - '.github/workflows/package_portable.yml'
+      - '**/make_docker.yml'
+      - '**/package_portable.yml'
   pull_request:
     paths-ignore:
       - 'doc/**'
       - '**.md'
-      - '.github/workflows/make_docker.yml'
-      - '.github/workflows/package_portable.yml'
+      - '**/make_docker.yml'
+      - '**/package_portable.yml'
 
 jobs:
   test:
