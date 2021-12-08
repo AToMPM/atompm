@@ -18,7 +18,7 @@ jobs:
           sudo apt update
           sudo apt-get dist-upgrade
           sudo apt-get install aptitude
-          sudo aptitude install -y wine wine32
+          sudo aptitude install -y wine wine32 wine32:i386
         
       - name: checkout
         uses: actions/checkout@v2
