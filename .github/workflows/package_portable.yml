@@ -10,13 +10,15 @@ on:
 
 jobs:
   package:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: install wine
         run: |
           sudo dpkg --add-architecture i386
           sudo apt update
-          sudo apt-get install -y wine-stable wine32
+          sudo apt-get dist-upgrade
+          sudo apt-get install aptitude
+          sudo aptitude install -y wine wine32
         
       - name: checkout
         uses: actions/checkout@v2
