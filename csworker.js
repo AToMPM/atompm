@@ -210,7 +210,7 @@ const _svg = require('./libsvg').SVG;
 const _utils = require('./utils');
 
 const logger = require('./logger.js')
-logger.set_level(logger.LOG_LEVELS.DEBUG)
+logger.set_level(logger.LOG_LEVELS.HTTP)
 
  module.exports = {
 	'__REGEN_ICON_RETRY_DELAY_MS':200,
@@ -644,14 +644,20 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 				io.on('connect',
 					function()
 					{
+						logger.http("socketio _ 'message' <br/> POST" ,{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
+						logger.http("socketio _ 'connect'" ,{'from':"/csworker"+__wid,'to': "/asworker"+aswid});
 						io.emit('message',
 							{'method':'POST','url':'/changeListener?wid='+aswid});
 					});
 				io.on('disconnect',
-					function()	{self.__aswid = undefined;});
+					function()	{
+						logger.http("socketio _ 'disconect'" ,{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
+						self.__aswid = undefined;
+					});
 				io.on('message',
 					function(msg)	
 					{
+						logger.http("socketio _ 'message' <br/> " + msg.statusCode + " <br/> " + msg.data ,{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
 						/* on POST /changeListener response */
 						if( msg.statusCode != undefined )
 						{
@@ -663,6 +669,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 							{
 								var actions = 
 										[__wHttpReq('GET','/internal.state?wid='+cswid)];
+								logger.http("http _ GET" ,{'from':"/csworker"+__wid,'to': "/csworker"+__wid,'type':"-)"});
 											
 								_do.chain(actions)(
 									function(respData) 		
@@ -852,7 +859,8 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 							vobjects['nodes'][vid]['mapper']['value'];
 
 				if( _utils.keys(mappers).length > 0 )
-				{				
+				{
+					logger.http("http _ POST" ,{'from':"/csworker"+__wid,'to': "/asworker"+self.__aswid,'type':"-)"});
 					var actions = 
 							[__wHttpReq(
 									'POST',
@@ -1040,6 +1048,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 	'mtwRequest' :
 		function(resp,method,uri,reqData)
 		{
+			logger.http("http _ " + method + " <br/> mtwRequest" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
 			var actions = [__wHttpReq(
 									method,
 									uri+'?wid='+this.__aswid,
@@ -1117,6 +1126,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 
 			else
 			{
+				logger.http("http _ POST <br/> reqData undefined" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
 				var self	   = this,
 					 actions = 
 						 [__httpReq('POST','/asworker'),
@@ -1232,16 +1242,17 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 			}
 			else
 			{	
-				var self	 	= this,
-					 actions = 
-	 					 [_fs.readFile('./users'+reqData['csmm'],'utf8'),
-					 	  function(csmmData)
-						  {
-	 						  return __wHttpReq(
-										  'PUT',
-										  uri+'?wid='+self.__aswid,
-										  {'mm':reqData['asmm'],
-  										   'hitchhiker':{'csmm':csmmData,'name':csmm}});
+				var self = this,
+					actions = 
+	 					[_fs.readFile('./users'+reqData['csmm'],'utf8'),
+					 	function(csmmData)
+						{
+							logger.http("http _ PUT" ,{'from':"/csworker"+__wid,'to': "/asworker"+self.__aswid,'type':"-)"});
+	 						return __wHttpReq(
+								'PUT',
+								uri+'?wid='+self.__aswid,
+								{'mm':reqData['asmm'],
+  								'hitchhiker':{'csmm':csmmData,'name':csmm}});
 						  }];
 
 				_do.chain(actions)(
@@ -1271,6 +1282,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 			if( ! matches )
 				return __postBadReqErrorMsg(resp,'bad uri for Icons mm :: '+uri);
 
+			logger.http("http _ DELETE" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
 			var asuri   = matches[1]+(matches[2] || '')+'.metamodel',
 				 actions = 
 					 [__wHttpReq('DELETE',asuri+'?wid='+this.__aswid)];
@@ -1338,15 +1350,16 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
                 actions.push(
                     function(m)
                     {
-                         var asmData = _utils.jsons(m['asm']),
+                        var asmData = _utils.jsons(m['asm']),
                               csmData = _utils.jsons(m['csm']);
-                         return __wHttpReq(
-                                      'PUT',
-                                      uri+'?wid='+self.__aswid,
-                                      {'m':asmData,
-                                       'name':reqData['m']+(new Date().getTime()),
-                                        'insert':reqData['insert'],
-                                       'hitchhiker':{'csm':csmData}});						
+						logger.http("http _ PUT" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
+                        return __wHttpReq(
+                            'PUT',
+                            uri+'?wid='+self.__aswid,
+                            {'m':asmData,
+                            'name':reqData['m']+(new Date().getTime()),
+                            'insert':reqData['insert'],
+                            'hitchhiker':{'csm':csmData}});						
                     });
                 _do.chain(actions)(
                     function() 
@@ -1487,6 +1500,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
                                     [{'hitchhiker': hitchhiker}, reqParams]));
                         },
                         function (asreqData) {
+							logger.http("http _ POST" ,{'from':"/csworker"+__wid,'to': "/asworker"+self.__aswid,'type':"-)"});
                             return __wHttpReq(
                                 'POST',
                                 asuri + '?wid=' + self.__aswid,
@@ -1519,16 +1533,17 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 			var self	= this,
  				 actions = 
 					[__successContinuable(),
-					 function()
-					 {
-						 if( (asuri = self.__csuri_to_asuri(uri))['$err'] )
-							 return __errorContinuable(asuri['$err']);
-						 return __successContinuable(asuri);
-					 },
-					 function(asuri)	
-					 {
-						 return __wHttpReq('GET',asuri+'?wid='+self.__aswid);
-					 }];
+					function()
+					{
+						if( (asuri = self.__csuri_to_asuri(uri))['$err'] )
+							return __errorContinuable(asuri['$err']);
+						return __successContinuable(asuri);
+					},
+					function(asuri)	
+					{
+						logger.http("http _ GET" ,{'from':"/csworker"+__wid,'to': "/asworker"+self.__aswid,'type':"-)"});
+						return __wHttpReq('GET',asuri+'?wid='+self.__aswid);
+					}];
 
 			_do.chain(actions)(
 					function(respData) 
@@ -1573,10 +1588,11 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 					 },
 					 function(asuri)	
 					 {
-						 return __wHttpReq(
-									 'PUT',
-									 asuri+'?wid='+self.__aswid,
-									 reqData);
+						logger.http("http _ PUT" ,{'from':"/csworker"+__wid,'to': "/asworker"+self.__aswid,'type':"-)"});
+						return __wHttpReq(
+							'PUT',
+							asuri+'?wid='+self.__aswid,
+							reqData);
 					 }];
 
 			_do.chain(actions)(
@@ -1632,7 +1648,8 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 
 			if( asuri['$err'] )
 				__postMessage({'statusCode':200, 'respIndex':resp});
-			else
+			else {
+				logger.http("http _ DELETE" ,{'from':"/csworker"+__wid,'to': "/asworker"+self.__aswid,'type':"-)"});
 				_do.chain(actions)(
 					function() 
 					{
@@ -1643,6 +1660,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 						__postInternalErrorMsg(resp,err);
 					}
 				);
+			}
 		},
 
 
@@ -1891,24 +1909,26 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
                      asmm       = undefined;
                      aswid      = this.__aswid;
                      actions    = [];
-                 if (asmmPath) {
-                     actions = [
-                            _fs.readFile(asmmPath,'utf8'),
-                            function(data) {
-                               asmm = _utils.jsonp(data);
-                               return __successContinuable();
-                            },
-                            function(result) {
-                                return __wHttpReq('PUT',
-                                           uri+'?wid='+aswid,
-                                           ({'csm':_mmmk.read(), 'asmm': asmm}))
+                if (asmmPath) {
+					actions = [
+						_fs.readFile(asmmPath,'utf8'),
+						function(data) {
+							asmm = _utils.jsonp(data);
+							return __successContinuable();
+						},
+						function(result) {
+							logger.http("http _ PUT" ,{'from':"/csworker"+__wid,'to': "/asworker"+aswid.__aswid,'type':"-)"});
+							return __wHttpReq('PUT',
+								uri+'?wid='+aswid,
+								({'csm':_mmmk.read(), 'asmm': asmm}))
                             }]
-                 } else {
-                     actions = [__wHttpReq('PUT',
-                                           uri+'?wid='+aswid,
-                                           undefined)];
-                 }
-                 _do.chain(actions)(
+                } else {
+					logger.http("http _ PUT" ,{'from':"/csworker"+__wid,'to': "/asworker"+aswid,'type':"-)"});
+                    actions = [__wHttpReq('PUT',
+						uri+'?wid='+aswid,
+                        undefined)];
+                }
+            	_do.chain(actions)(
                     function() { __postMessage({'statusCode':200,'respIndex':resp}); },
                     function(err) {__postInternalErrorMsg(resp,err);}
                  );
@@ -1938,6 +1958,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 			var self		= this,
 				 actions = [__wHttpReq('GET','/current.model?wid='+this.__aswid)];
 
+			logger.http("http _ GET" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
 			_do.chain(actions)(
 					function(asdata)
 					{
@@ -2002,6 +2023,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 		function(resp,uri)
 		{
 			var actions = [__wHttpReq('GET',uri+'?wid='+this.__aswid)];
+			logger.http("http _ GET" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
 
 			_do.chain(actions)(
 					function() 
@@ -2104,7 +2126,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 				}
 				else
 					hitchhiker[func] = sn;					
-
+				logger.http("http _ POST" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
 				_do.chain( actions )(
 					function() 
 					{
@@ -2135,7 +2157,7 @@ logger.set_level(logger.LOG_LEVELS.DEBUG)
 		{
 			var actions = [
 				__wHttpReq('POST',uri+'?wid='+this.__aswid,reqData)];
-
+			logger.http("http _ POST" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
 			_do.chain(actions)(
 					function() 
 					{

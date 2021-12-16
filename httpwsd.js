@@ -76,7 +76,7 @@ function __respond(response, statusCode, reason, data, headers)
 	else
 		response.end(content, encoding);
 
-	logger.http("server >> client: " + statusCode);
+	logger.http("socketio _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
 }
 
 
@@ -98,7 +98,7 @@ function __send(socket, statusCode, reason, data, headers)
 			}
 		}
 	}
-	logger.http("server >> worker #" + worker_id + ": " + statusCode + " " + JSON.stringify(log_data));
+	logger.http("socketio _ 'message' <br/>" + statusCode + "<br/>" + headers + "<br/>" + JSON.stringify(log_data) ,{'from':"server",'to':"worker" + worker_id});
 
 	socket.emit('message',
 			{'statusCode':statusCode,
@@ -115,7 +115,7 @@ var httpserver = _http.createServer(
 			var url = _url.parse(req.url,true);
 			url.pathname = decodeURI(url.pathname);
 
-			logger.http("client >> server: " + req.method + " " + url.path);
+			logger.http("http <br/>" + req.method + "<br/>" + url.path ,{'from':"client",'to':"server",'type':"-)"});
 
 			/* serve client */
 			if( req.method == 'GET' && url.pathname == '/atompm' )
@@ -690,6 +690,7 @@ var httpserver = _http.createServer(
 							workerIds2socketIds[wid].forEach(
 								function(sid)
 								{
+									logger.http("socketio _ 'message' <br/> undefined <br/>" + _msg ,{'from':"server",'to': url.pathname + wid, 'type':"-->>"});	
 									__send(
 										wsserver.sockets.sockets.get(sid),
 										undefined,
@@ -768,7 +769,9 @@ var httpserver = _http.createServer(
 
 let port = 8124;
 httpserver.listen(port);
-logger.info("AToMPM listening on port: " + port)
+logger.info("AToMPM listening on port: " + port);
+logger.info("```mermaid");
+logger.info("sequenceDiagram");
 
 let wsserver = new _sio.Server(httpserver);
 
@@ -779,10 +782,12 @@ wsserver.sockets.on('connection',
 		  	has no more registered sockets, terminate it */
 		function unregister(wid)
 		{
+			logger.http("socketio _ 'connection'" ,{'at':"server"});
 			var i = workerIds2socketIds[wid].indexOf(socket.id);
-			if( i == -1 )
+			if( i == -1 ){
+				logger.http("socketio _ 'connection' <br/> 403 already unregistered from worker" ,{'at':"server"});
 				__send(socket,403,'already unregistered from worker');
-			else
+			}else
 			{
 				workerIds2socketIds[wid].splice(i,1);
 				if( workerIds2socketIds[wid].length == 0 )
@@ -791,6 +796,8 @@ wsserver.sockets.on('connection',
 					workers[wid] = undefined;
 					delete workerIds2socketIds[wid];
 				}
+
+				logger.http("socketio _ 'connection' <br/> 200" ,{'from':"server",'to': "worker" + wid, 'type':"-->>"});
 				__send(socket,200);
 			}
 		}
@@ -802,25 +809,30 @@ wsserver.sockets.on('connection',
 			{		
 				let url = _url.parse(msg.url,true);
 
-				logger.http("server << worker: " + msg.method + " " + url.pathname);
+				logger.http("socketio _ 'message' <br/>" + msg.method + socket ,{'at':"server"});
 
 				/* check for worker id and it's validity */
 				if( url['query'] == undefined || 
-					 url['query']['wid'] == undefined )
+					 url['query']['wid'] == undefined ){
+					logger.http("socketio _ 'message' <br/> 400 'missing worker id'" ,{'at':"server"});
 					return __send(socket,400,'missing worker id');
+				}
 
 				var wid = url['query']['wid'];
-				if( workers[wid] == undefined )
+				if( workers[wid] == undefined ) {
+					logger.http("socketio _ 'message' <br/> 400 unknown worker id" ,{'at':"server"});
 					__send(socket,400,'unknown worker id :: '+wid);
-
+				}
 				/* register socket for requested worker */
 				else if( msg.method == 'POST' && 
 							url.pathname.match(/changeListener$/) )
 				{
-					if( workerIds2socketIds[wid].indexOf(socket.id) > -1 )
+					if( workerIds2socketIds[wid].indexOf(socket.id) > -1 ) {
+						logger.http("socketio _ 'message' <br/> 400 already registered to worker" + wid,{'at':"server"});
 						__send(socket,403,'already registered to worker');
-					else
+					}else
 					{
+						logger.http("socketio _ 'message' <br/> 201 " + url.pathname,{'at':"server"});
 						workerIds2socketIds[wid].push(socket.id);
 						__send(socket,201);
 					}
@@ -832,8 +844,10 @@ wsserver.sockets.on('connection',
 					unregister(wid);
 
 				/* unsupported request */
-				else
+				else {
+					logger.http("socketio _ 'message' <br/> 501 'unsupported request'",{'at':"server"});
 					__send(socket,501);
+				}
 		 	});
 
 
@@ -841,6 +855,7 @@ wsserver.sockets.on('connection',
 		socket.on('disconnect', 
 			function()
 			{
+				logger.http("socketio _ 'disconnect'",{'at':"server"});
 				for( var wid in workerIds2socketIds )
 					for( var i in workerIds2socketIds[wid] )
 						if( workerIds2socketIds[wid][i] == socket.id )

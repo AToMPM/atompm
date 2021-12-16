@@ -52,8 +52,12 @@ function _get_stack_loc() {
     return loc[0] + "(" + loc[1].padStart(4, ' ') + ")"
 }
 
+function _get_postfix() {
+    return _get_stack_loc()
+}
+
 function _get_prefix() {
-    return _get_stack_loc() + "::"
+    return "\%\%\%\%" + _get_stack_loc() + "::"
 }
 
 function error(msg) {
@@ -74,12 +78,25 @@ function info(msg) {
     if (curr_log_level < LOG_LEVELS.INFO) {
         return
     }
-    console.log(_get_prefix() + msg);
+    console.log(msg);
 }
 
 function http(msg) {
     if (curr_log_level < LOG_LEVELS.HTTP) {
         return
+    }
+    if (arguments.length > 1) {
+        if (arguments[1].from != undefined && arguments[1].to != undefined) {
+            let messageType = "  ->>  ";
+            if(arguments[1].type != undefined) {
+                messageType = "  " + arguments[1].type + "  ";
+            }
+            console.log( arguments[1].from + messageType + arguments[1].to + " : " + msg + " <br/> " + _get_postfix());
+            return
+        } else if (arguments[1].at != undefined) {
+            console.log("Note right of " + arguments[1].at + " : " + msg + " <br/> " + _get_postfix());
+            return
+        }
     }
     console.log(_get_prefix() + "%c" + msg, 'color: #006400');
 }

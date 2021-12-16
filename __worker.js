@@ -163,10 +163,13 @@ function __httpReq(method,url,data,port)
 						 function(resp)
 						 {
 							 var resp_data = '';
-							 resp.on('data', 	function(chunk) {resp_data += chunk;});
+							 resp.on('data', 	function(chunk) {
+								logger.http("http _ data" ,{'at':__wtype+__wid});
+								 resp_data += chunk;});
  							 resp.on('end',
 								 function()
 								 {
+									logger.http("http _ end " + resp.statusCode,{'at':__wtype+__wid});
 									 if( _utils.isHttpSuccessCode(resp.statusCode) )
 										 callback(resp_data);
 									 else
@@ -176,6 +179,7 @@ function __httpReq(method,url,data,port)
 				 request.on('error',
 						 function(err)
 						 {
+							logger.http("http _ error <br/> " +url+ "<br/>"+err,{'at':__wtype+__wid});
 						 	 errback('HTTP request ('+method+' '+url+':'+port+') '+
 								 		'failed on ::\n'+err);
 						 });
@@ -305,7 +309,7 @@ function __postInternalErrorMsg(respIndex,reason)
 function __postMessage(msg) 
 {
 	let s = typeof msg.data == 'object' ? _utils.jsons(msg.data) : msg.data;
-	logger.http(__wtype + " (worker#" +__wid+ ") >> RI#" + msg.respIndex + " (" +msg.statusCode+") "+s);
+	logger.http(__wtype + " (worker" +__wid+ ") >> RI#" + msg.respIndex + " (" +msg.statusCode+") "+s);
 
 	//make sure that reason is a string
 	if (typeof msg.reason == 'object'){
@@ -318,6 +322,7 @@ function __postMessage(msg)
 	if( __wtype == '/csworker' && 'changelog' in msg )
 		__urizeChangelog(msg['changelog']);
 
+	logger.http("process _ RI" + msg.respIndex,{'from':__wtype+__wid, 'to': "server", 'type': "-x"});
 	process.send(msg);
 }
 
@@ -482,7 +487,7 @@ process.on('message',
 		if (log_msg["reqData"] && log_msg["reqData"]["hitchhiker"]){
 			log_msg["reqData"]["hitchhiker"] = Object.keys(log_msg["reqData"]["hitchhiker"])
 		}
-		logger.http(__wtype + " (worker#" +__wid+ ") << "+JSON.stringify(log_msg));
+		logger.http("process _ message" + msg.respIndex,{'from':"server", 'to': __wtype+__wid, 'type': "-->>"});
 
 		/* parse msg */
 		var uri 		  = msg['uri'],
