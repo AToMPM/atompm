@@ -4,7 +4,15 @@ AToMPM ("A Tool for Multi-Paradigm Modelling") is a (meta)modelling workbench, w
 
 This documentation serves to introduce AToMPM to the two main user groups: language developers and language users. 
 
-AToMPM Website: https://atompm.github.io/
+For up-to-date installation and usage instructions, please read the README file in the AToMPM root directory, or online at `https://github.com/AToMPM/atompm#readme <https://github.com/AToMPM/atompm#readme>`_
+
+AToMPM Website: `https://atompm.github.io/ <https://atompm.github.io/>`_
+
+Source code: `https://github.com/AToMPM/atompm <https://github.com/AToMPM/atompm>`_
+
+Documentation: `https://atompm.readthedocs.io/ <https://atompm.readthedocs.io/>`_
+
+Issues/Feedback: `https://github.com/AToMPM/atompm/issues <https://github.com/AToMPM/atompm/issues>`_
 
 .. image:: img/instance_tilted_environment.png
     :align: center
@@ -18,7 +26,6 @@ Contents
 .. toctree::
     :maxdepth: 3
 
-    Installation and Usage <installation>
     Overview <overview>
     Creating a Modelling Language <new_language>
     Using a Modelling Language <using_language>
@@ -29,7 +36,9 @@ Contents
     Toolbar/Plugin Documentation <toolbars_and_plugins>
     Troubleshooting <troubleshooting>
 
+Licensing
+---------
 
+The AToMPM project is licensed under the LGPL as stated in COPYING.lesser.
 
-
-
+AToMPM is copyright of the AToMPM team, which includes Raphael Mannadiar, Conner Hansen, Eugene Syriani, Hans Vangheluwe, Simon Van Mierlo, Huseyin Ergin, Jonathan Corley, Yentl Van Tendeloo, Vasco Sousa, and Bentley James Oakes
