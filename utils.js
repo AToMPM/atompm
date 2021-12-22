@@ -338,22 +338,33 @@ utils.doAfterUnlessRepeated =
 
 /**
  * collapses a changelog for easier printing/logging
- *
  */
 utils.collapse_changelog =
 	function(changelog){
 		let log_chs = []
-		for (let entry of changelog){
-			let e = {"op":entry["op"]};
-			if (entry["name"]) {
-				e["name"] = entry["name"]
+		if (changelog !== undefined) {
+			for (let entry of changelog) {
+				let e = {"op": entry["op"]};
+				if (entry["name"]) {
+					e["name"] = entry["name"]
+				}
+				log_chs.push(e)
 			}
-			e["fields"] = Object.keys(entry)
-			log_chs.push(e)
 		}
 		return log_chs;
 	};
 
+/**
+ * collapses a hitchhiker for easier printing/logging
+ */
+utils.collapse_hitchhiker =
+	function(hitchhiker){
+		let k = []
+		if (hitchhiker !== undefined){
+			k = Object.keys(hitchhiker);
+		}
+		return k;
+	};
 
 /* NOTE: 'exports' exists in back-end 'require', but not in browser import...
 			this ensures no errors are reported during browser imports */
@@ -361,6 +372,7 @@ var exports = exports || {};
 exports.buildVobjGeomAttrVal		= utils.buildVobjGeomAttrVal;
 exports.clone	 					= utils.clone;
 exports.collapse_changelog			= utils.collapse_changelog;
+exports.collapse_hitchhiker			= utils.collapse_hitchhiker;
 exports.contains	 				= utils.contains;
 exports.extend 						= utils.extend;
 exports.filter 						= utils.filter;

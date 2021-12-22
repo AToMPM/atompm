@@ -164,12 +164,11 @@ function __httpReq(method,url,data,port)
 						 {
 							 var resp_data = '';
 							 resp.on('data', 	function(chunk) {
-								logger.http("http _ data" ,{'at':__wtype+__wid});
 								 resp_data += chunk;});
  							 resp.on('end',
 								 function()
 								 {
-									logger.http("http _ end " + resp.statusCode,{'at':__wtype+__wid});
+									logger.http("http _ end " + resp.statusCode + "<br/>" + JSON.stringify(resp_data["data"]),{'at':__wtype+__wid});
 									 if( _utils.isHttpSuccessCode(resp.statusCode) )
 										 callback(resp_data);
 									 else
@@ -322,7 +321,7 @@ function __postMessage(msg)
 	if( __wtype == '/csworker' && 'changelog' in msg )
 		__urizeChangelog(msg['changelog']);
 
-	logger.http("process _ RI" + msg.respIndex,{'from':__wtype+__wid, 'to': "server", 'type': "-x"});
+	logger.http("process _ RI" + msg.respIndex + "<br/>changelog: " + JSON.stringify(_utils.collapse_changelog(msg['changelog'])),{'from':__wtype+__wid, 'to': "server", 'type': "-x"});
 	process.send(msg);
 }
 
@@ -482,12 +481,7 @@ function __batchCheckpoint(id,start)
 process.on('message', 
 	function(msg)
 	{
-		// avoid overly long hitchhikers in logs
-		let log_msg = _utils.clone(msg);
-		if (log_msg["reqData"] && log_msg["reqData"]["hitchhiker"]){
-			log_msg["reqData"]["hitchhiker"] = Object.keys(log_msg["reqData"]["hitchhiker"])
-		}
-		logger.http("process _ message" + msg.respIndex,{'from':"server", 'to': __wtype+__wid, 'type': "-->>"});
+		logger.http("process _ message RI" + msg.respIndex + "<br/>" + msg['uri'] ,{'from':"server", 'to': __wtype+__wid, 'type': "-->>"});
 
 		/* parse msg */
 		var uri 		  = msg['uri'],

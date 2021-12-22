@@ -651,21 +651,27 @@ logger.set_level(logger.LOG_LEVELS.HTTP)
 					});
 				io.on('disconnect',
 					function()	{
-						logger.http("socketio _ 'disconect'" ,{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
+						logger.http("socketio _ 'disconnect'" ,{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
 						self.__aswid = undefined;
 					});
 				io.on('message',
 					function(msg)	
 					{
-						logger.http("socketio _ 'message' <br/> " + msg.statusCode + " <br/> " + msg.data ,{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
+						let log_statusCode = (msg.statusCode === undefined)? '': msg.statusCode + "<br/>";
+						let log_data = {};
+						if (msg.data) {
+							log_data = {'changelog': _utils.collapse_changelog(msg.data.changelog)};
+						}
+						logger.http("socketio _ 'message' <br/> " + log_statusCode + JSON.stringify(log_data),{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
+
 						/* on POST /changeListener response */
-						if( msg.statusCode != undefined )
+						if( msg.statusCode !== undefined )
 						{
 							if( ! _utils.isHttpSuccessCode(msg.statusCode) )
 								return errback(msg.statusCode+':'+msg.reason);
 								
 							self.__aswid = aswid;	
-							if( cswid != undefined )
+							if( cswid !== undefined )
 							{
 								var actions = 
 										[__wHttpReq('GET','/internal.state?wid='+cswid)];
@@ -703,7 +709,7 @@ logger.set_level(logger.LOG_LEVELS.HTTP)
 	
 						/* on changelog reception (ignore changelogs while not 
 							subscribed to an asworker... see NOTE) */
-						else if( self.__aswid != undefined )
+						else if( self.__aswid !== undefined )
 							self.__applyASWChanges(
 									msg.data.changelog,
 									msg.data['sequence#'],
@@ -1500,7 +1506,7 @@ logger.set_level(logger.LOG_LEVELS.HTTP)
                                     [{'hitchhiker': hitchhiker}, reqParams]));
                         },
                         function (asreqData) {
-							logger.http("http _ POST" ,{'from':"/csworker"+__wid,'to': "/asworker"+self.__aswid,'type':"-)"});
+							logger.http("http _ POST" + "<br/>" + asuri + "<br/>" + JSON.stringify(asreqData),{'from':"/csworker"+__wid,'to': "/asworker"+self.__aswid,'type':"-)"});
                             return __wHttpReq(
                                 'POST',
                                 asuri + '?wid=' + self.__aswid,

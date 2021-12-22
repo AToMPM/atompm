@@ -85,20 +85,21 @@ function http(msg) {
     if (curr_log_level < LOG_LEVELS.HTTP) {
         return
     }
-    if (arguments.length > 1) {
-        if (arguments[1].from != undefined && arguments[1].to != undefined) {
+    if (arguments.length === 1) {
+        console.log(_get_prefix() + "%c" + msg, 'color: #006400');
+    }
+    else{
+        if (arguments[1].from !== undefined && arguments[1].to !== undefined) {
             let messageType = "  ->>  ";
-            if(arguments[1].type != undefined) {
+            if(arguments[1].type !== undefined) {
                 messageType = "  " + arguments[1].type + "  ";
             }
             console.log( arguments[1].from + messageType + arguments[1].to + " : " + msg + " <br/> " + _get_postfix());
-            return
-        } else if (arguments[1].at != undefined) {
+        } else if (arguments[1].at !== undefined) {
             console.log("Note right of " + arguments[1].at + " : " + msg + " <br/> " + _get_postfix());
-            return
         }
     }
-    console.log(_get_prefix() + "%c" + msg, 'color: #006400');
+
 }
 
 function verbose(msg) {
