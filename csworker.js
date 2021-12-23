@@ -646,6 +646,7 @@ logger.set_level(logger.LOG_LEVELS.HTTP)
 					{
 						logger.http("socketio _ 'message' <br/> POST" ,{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
 						logger.http("socketio _ 'connect'" ,{'from':"/csworker"+__wid,'to': "/asworker"+aswid});
+						logger.http("Sending changeListener", {'at':"/csworker"+__wid})
 						io.emit('message',
 							{'method':'POST','url':'/changeListener?wid='+aswid});
 					});
@@ -1132,9 +1133,9 @@ logger.set_level(logger.LOG_LEVELS.HTTP)
 
 			else
 			{
-				logger.http("http _ POST <br/> reqData undefined" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
-				var self	   = this,
-					 actions = 
+				//logger.http("http _ POST <br/> reqData undefined" ,{'from':"/csworker"+__wid,'to': "/asworker"+this.__aswid,'type':"-)"});
+				let self = this;
+				let actions =
 						 [__httpReq('POST','/asworker'),
 						  function(aswid)	  {return self.__aswSubscribe(aswid);}];
 		

@@ -145,20 +145,21 @@ function __successContinuable(arg)
 /* make an HTTP request to 127.0.0.1:port */
 function __httpReq(method,url,data,port)
 {
-	if( port == undefined )
+	if( port === undefined )
 		port = 8124;
 
 	return function(callback,errback)
 			 {
-				 var options = {'port': port, 'path': url, 'method': method, 'agent': keepaliveAgent}; // agent proposed by yentl to improve performance
-				 if( data != undefined )
+				 let options = {'port': port, 'path': url, 'method': method, 'agent': keepaliveAgent}; // agent proposed by yentl to improve performance
+				 if( data !== undefined )
 				 {
 					 data = _utils.jsons(data);
 					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length,
 					 'Access-Control-Allow-Origin': '*'};
 				 }
+				 logger.http("http _ request " + "<br/>" + method + " " + url + "<br/>" + JSON.stringify(data),{'from':__wtype+__wid, 'to':'server'});
 
-				 var request = 
+				 let request =
 					 _http.request(options, 
 						 function(resp)
 						 {
@@ -168,7 +169,6 @@ function __httpReq(method,url,data,port)
  							 resp.on('end',
 								 function()
 								 {
-									logger.http("http _ end " + resp.statusCode + "<br/>" + JSON.stringify(resp_data["data"]),{'at':__wtype+__wid});
 									 if( _utils.isHttpSuccessCode(resp.statusCode) )
 										 callback(resp_data);
 									 else
@@ -481,26 +481,24 @@ function __batchCheckpoint(id,start)
 process.on('message', 
 	function(msg)
 	{
-		logger.http("process _ message RI" + msg.respIndex + "<br/>" + msg['uri'] ,{'from':"server", 'to': __wtype+__wid, 'type': "-->>"});
+		let log_id = __wtype+__wid;
+		if (_wlib === undefined){
+			log_id = msg['workerType'] + msg['workerId'];
+		}
 
-		/* parse msg */
-		var uri 		  = msg['uri'],
-			 method 	  = msg['method'],
-			 uriData	  = msg['uriData'],
-			 reqData   = msg['reqData'],
-			 respIndex = msg['respIndex'];
 
+		//logger.http("process _ worker creation", {'at': log_id});
 
 
 		/* initial setup */
-		if( _wlib == undefined )
+		if( _wlib === undefined )
 		{
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
 
-			if (__wtype == "/asworker") {
+			if (__wtype === "/asworker") {
 				_wlib = require("./asworker");
-			}else if (__wtype == "/csworker") {
+			}else if (__wtype === "/csworker") {
 				_wlib = require("./csworker");
 			}else {
 				 throw "Error! Unknown worker type: " + __wtype;
@@ -534,6 +532,16 @@ process.on('message',
 			return;
 		}
 
+		/* parse msg */
+		let uri 	  = msg['uri'];
+		let method 	  = msg['method'];
+		let uriData	  = msg['uriData'];
+		let reqData   = msg['reqData'];
+		let respIndex = msg['respIndex'];
+
+		logger.http("process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri  + "<br/>" + (method === 'GET' ? uriData : reqData),
+			{'from':"server", 'to': log_id, 'type': "-->>"});
+
 
 		/* concurrent access control */
 		if( uriData != undefined && uriData['backstagePass'] != undefined )
@@ -545,7 +553,7 @@ process.on('message',
 			return __queueRequest(
 							uri,
 							method,
-							(method == 'GET' ? uriData : reqData),
+							(method === 'GET' ? uriData : reqData),
 							respIndex);
 
 		/* handle client requests 

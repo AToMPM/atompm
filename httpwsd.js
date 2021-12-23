@@ -686,8 +686,10 @@ var httpserver = _http.createServer(
 						&& req.method == 'POST' )
 			{
 				/* setup and store new worker */
-				var worker = _cp.fork(_path.join(__dirname, '__worker.js')),
-					 wid 	  = workers.push(worker)-1;
+				let worker = _cp.fork(_path.join(__dirname, '__worker.js'));
+
+				let wid = workers.push(worker)-1;
+
 				workerIds2socketIds[wid] = [];
 				workerIds2workerType[wid] = url.pathname;
 
@@ -704,13 +706,12 @@ var httpserver = _http.createServer(
 										  'hitchhiker':msg['hitchhiker']};
 
 							// simplify the msg for logging
-							// let log_data = {'changelog':_utils.collapse_changelog(msg["changelog"]),
-							//	'hitchhiker':msg['hitchhiker']};
+							let log_data = {'changelog':_utils.collapse_changelog(msg["changelog"]), 'hitchhiker':msg['hitchhiker']};
 
 							workerIds2socketIds[wid].forEach(
 								function(sid)
 								{
-									// logger.http("socketio _ 'message'+ <br/>" + JSON.stringify(log_data) ,{'from':"server",'to': workerIds2workerType[wid] + wid, 'type':"-->>"});
+									logger.http("socketio _ 'sending message'+ <br/>" + JSON.stringify(log_data) ,{'at': workerIds2workerType[wid] + wid});
 									__send(
 										wsserver.sockets.sockets.get(sid),
 										undefined,
@@ -734,9 +735,10 @@ var httpserver = _http.createServer(
 									 'sequence#':msg['sequence#']}),
 								{'Content-Type': 'application/json'});
 					});
-				worker.send(
-						{'workerType':url.pathname,
-						 'workerId':wid});		
+
+				let msg = {'workerType':url.pathname, 'workerId':wid};
+				logger.http("process _ 'message'+ <br/>" + JSON.stringify(msg),{'from':"server",'to': url.pathname + wid, 'type':"-)"});
+				worker.send(msg);
 
 				/* respond worker id (used to identify associated worker) */
 				__respond(
@@ -744,7 +746,6 @@ var httpserver = _http.createServer(
 					201, 
 					'', 
 					''+wid);
-				return;
 			}
 
 
@@ -829,7 +830,6 @@ wsserver.sockets.on('connection',
 			{		
 				let url = _url.parse(msg.url,true);
 
-				logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) ,{'at':"server"});
 
 				/* check for worker id and it's validity */
 				if( url['query'] === undefined ||
@@ -839,6 +839,10 @@ wsserver.sockets.on('connection',
 				}
 
 				let wid = url['query']['wid'];
+
+				let from_worker = workerIds2workerType[wid] + wid;
+				logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':from_worker,'to':"server"});
+
 				if( workers[wid] === undefined ) {
 					logger.http("socketio _ 'message' <br/> 400 unknown worker id" ,{'at':"server"});
 					__send(socket,400,'unknown worker id :: '+wid);
@@ -852,7 +856,7 @@ wsserver.sockets.on('connection',
 						__send(socket,403,'already registered to worker');
 					}else
 					{
-						logger.http("socketio _ 'message' <br/> 201 " + url.pathname,{'at':"server"});
+						//logger.http("socketio _ 'message' <br/> 201 " + url.pathname,{'at':"server"});
 						workerIds2socketIds[wid].push(socket.id);
 						__send(socket,201);
 					}
