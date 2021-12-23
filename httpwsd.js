@@ -103,16 +103,7 @@ function __send(socket, statusCode, reason, data, headers)
 	let log_statusCode = (statusCode === undefined)? "": statusCode + "<br/>";
 	let log_headers = (headers === undefined)? "": headers + "<br/>";
 
-	// detect the worker id for logging
-	let worker_id = -1;
-	for( let wid in workerIds2socketIds ) {
-		for (let socket_id of workerIds2socketIds[wid]) {
-			if (socket_id === socket.id) {
-				worker_id = wid;
-			}
-		}
-	}
-	logger.http("socketio _ 'message' <br/>" + log_statusCode + log_headers + JSON.stringify(log_data) ,{'from':"server",'to':workerIds2workerType[worker_id] + worker_id});
+	//logger.http("socketio _ 'message' <br/>" + log_statusCode + log_headers + JSON.stringify(log_data) ,{'from':"server",'to':'client'});
 
 	socket.emit('message',
 			{'statusCode':statusCode,
@@ -706,12 +697,12 @@ var httpserver = _http.createServer(
 										  'hitchhiker':msg['hitchhiker']};
 
 							// simplify the msg for logging
-							let log_data = {'changelog':_utils.collapse_changelog(msg["changelog"]), 'hitchhiker':msg['hitchhiker']};
+							let log_data = {'changelog':_utils.collapse_changelog(msg["changelog"]), 'hitchhiker':_utils.collapse_hitchhiker(msg['hitchhiker'])};
 
 							workerIds2socketIds[wid].forEach(
 								function(sid)
 								{
-									logger.http("socketio _ 'sending message'+ <br/>" + JSON.stringify(log_data) ,{'at': workerIds2workerType[wid] + wid});
+									logger.http("socketio _ 'sending chglg'+ <br/>" + JSON.stringify(log_data) ,{'from': 'server', 'to': 'client'});
 									__send(
 										wsserver.sockets.sockets.get(sid),
 										undefined,
@@ -824,7 +815,7 @@ wsserver.sockets.on('connection',
 		}
 
 		
-		/* onmessage : on reception of data from worker */
+		/* onmessage : on reception of data from client */
 	 	socket.on('message', 
 			function(msg/*{method:_,url:_}*/)		
 			{		
@@ -839,9 +830,7 @@ wsserver.sockets.on('connection',
 				}
 
 				let wid = url['query']['wid'];
-
-				let from_worker = workerIds2workerType[wid] + wid;
-				logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':from_worker,'to':"server"});
+				logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':'client','to':"server"});
 
 				if( workers[wid] === undefined ) {
 					logger.http("socketio _ 'message' <br/> 400 unknown worker id" ,{'at':"server"});

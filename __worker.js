@@ -157,7 +157,8 @@ function __httpReq(method,url,data,port)
 					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length,
 					 'Access-Control-Allow-Origin': '*'};
 				 }
-				 logger.http("http _ request " + "<br/>" + method + " " + url + "<br/>" + JSON.stringify(data),{'from':__wtype+__wid, 'to':'server'});
+				 logger.http("http _ request " + "<br/>" + method + " " + url,{'from':__wtype+__wid, 'to':'server'});
+				 logger.http("Message below from client is wrong. This worker sent an HTTP message.", {'at': __wtype+__wid});
 
 				 let request =
 					 _http.request(options, 
