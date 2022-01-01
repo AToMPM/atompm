@@ -308,9 +308,6 @@ function __postInternalErrorMsg(respIndex,reason)
 /* wrapper for all messages */
 function __postMessage(msg) 
 {
-	let s = typeof msg.data == 'object' ? _utils.jsons(msg.data) : msg.data;
-	logger.http(__wtype + " (worker" +__wid+ ") >> RI#" + msg.respIndex + " (" +msg.statusCode+") "+s);
-
 	//make sure that reason is a string
 	if (typeof msg.reason == 'object'){
 		msg.reason = _utils.jsons(msg.reason);
