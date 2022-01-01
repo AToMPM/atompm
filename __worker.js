@@ -111,7 +111,7 @@ let _http 	= require('http'),
 	_utils	= require('./utils'),
 	logger	= require('./logger.js');
 
-logger.set_level(logger.LOG_LEVELS.HTTP)
+logger.set_level(logger.LOG_LEVELS.INFO);
 
 let	 _wlib,
 	 _mmmk,

@@ -15,7 +15,7 @@ const _cp = require('child_process'),
 	logger = require('./logger'),
 	_utils = require('./utils');
 
-logger.set_level(logger.LOG_LEVELS.HTTP);
+logger.set_level(logger.LOG_LEVELS.INFO);
 
 /*********************************** GLOBALS **********************************/
 /* an array of WebWorkers
