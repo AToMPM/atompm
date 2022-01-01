@@ -105,18 +105,15 @@
 
 
 /**************************** LIBRARIES and GLOBALS ****************************/
-var  _util 	= require('util'),
+let _http 	= require('http'),
+	_do  	= require('./___do'),
+	_fs		= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
+	_utils	= require('./utils'),
+	logger	= require('./logger.js');
 
-	 _path 	= require('path'),
-	 _http 	= require('http'),
-	 _do  	= require('./___do'),
-	 _fs 	 	= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
-	 _fspp	= _do.convert(require('./___fs++'), ['mkdirs']),	 
-	 _siocl	= require('socket.io-client'),
-	 _utils	= require('./utils'),
-	 _styleinfo = require('./styleinfo'),
-	 _svg		= require('./libsvg').SVG,
-	 _wlib,
+logger.set_level(logger.LOG_LEVELS.INFO);
+
+let	 _wlib,
 	 _mmmk,
 	 _mt,
 	 _plugins,
@@ -148,25 +145,28 @@ function __successContinuable(arg)
 /* make an HTTP request to 127.0.0.1:port */
 function __httpReq(method,url,data,port)
 {
-	if( port == undefined )
+	if( port === undefined )
 		port = 8124;
 
 	return function(callback,errback)
 			 {
-				 var options = {'port': port, 'path': url, 'method': method, 'agent': keepaliveAgent}; // agent proposed by yentl to improve performance
-				 if( data != undefined )
+				 let options = {'port': port, 'path': url, 'method': method, 'agent': keepaliveAgent}; // agent proposed by yentl to improve performance
+				 if( data !== undefined )
 				 {
 					 data = _utils.jsons(data);
 					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length,
 					 'Access-Control-Allow-Origin': '*'};
 				 }
+				 logger.http("http _ request " + "<br/>" + method + " " + url,{'from':__wtype+__wid, 'to':'server'});
+				 logger.http("Message below from client is wrong. This worker sent an HTTP message.", {'at': __wtype+__wid});
 
-				 var request = 
+				 let request =
 					 _http.request(options, 
 						 function(resp)
 						 {
 							 var resp_data = '';
-							 resp.on('data', 	function(chunk) {resp_data += chunk;});
+							 resp.on('data', 	function(chunk) {
+								 resp_data += chunk;});
  							 resp.on('end',
 								 function()
 								 {
@@ -179,6 +179,7 @@ function __httpReq(method,url,data,port)
 				 request.on('error',
 						 function(err)
 						 {
+							logger.http("http _ error <br/> " +url+ "<br/>"+err,{'at':__wtype+__wid});
 						 	 errback('HTTP request ('+method+' '+url+':'+port+') '+
 								 		'failed on ::\n'+err);
 						 });
@@ -307,12 +308,6 @@ function __postInternalErrorMsg(respIndex,reason)
 /* wrapper for all messages */
 function __postMessage(msg) 
 {
-	console.error("w#"+__wid+" << ("+msg.respIndex+") "+msg.statusCode+" "+
-			(msg.reason || 
-			 (typeof msg.data == 'object' ? 
-				  _utils.jsons(msg.data) : 
-				  msg.data)));
-
 	//make sure that reason is a string
 	if (typeof msg.reason == 'object'){
 		msg.reason = _utils.jsons(msg.reason);
@@ -324,6 +319,7 @@ function __postMessage(msg)
 	if( __wtype == '/csworker' && 'changelog' in msg )
 		__urizeChangelog(msg['changelog']);
 
+	logger.http("process _ RI" + msg.respIndex + "<br/>changelog: " + JSON.stringify(_utils.collapse_changelog(msg['changelog'])),{'from':__wtype+__wid, 'to': "server", 'type': "-x"});
 	process.send(msg);
 }
 
@@ -483,29 +479,24 @@ function __batchCheckpoint(id,start)
 process.on('message', 
 	function(msg)
 	{
-		console.error(">> "+JSON.stringify(msg));
+		let log_id = __wtype+__wid;
+		if (_wlib === undefined){
+			log_id = msg['workerType'] + msg['workerId'];
+		}
 
-		/* parse msg */
-		var uri 		  = msg['uri'],
-			 method 	  = msg['method'],
-			 uriData	  = msg['uriData'],
-			 reqData   = msg['reqData'],
-			 respIndex = msg['respIndex'];
 
+		//logger.http("process _ worker creation", {'at': log_id});
 
 
 		/* initial setup */
-		if( _wlib == undefined )
+		if( _wlib === undefined )
 		{
-			/** enable/disable debugging messages **/			
-			console.error = function() {};
-
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
 
-			if (__wtype == "/asworker") {
+			if (__wtype === "/asworker") {
 				_wlib = require("./asworker");
-			}else if (__wtype == "/csworker") {
+			}else if (__wtype === "/csworker") {
 				_wlib = require("./csworker");
 			}else {
 				 throw "Error! Unknown worker type: " + __wtype;
@@ -533,11 +524,21 @@ process.on('message',
 					}
 					catch(err)
 					{
-						_util.log('failed to load plugin ('+p+') on :: '+err);
+						logger.error('failed to load plugin ('+p+') on :: '+err);
 					}
 				});
 			return;
 		}
+
+		/* parse msg */
+		let uri 	  = msg['uri'];
+		let method 	  = msg['method'];
+		let uriData	  = msg['uriData'];
+		let reqData   = msg['reqData'];
+		let respIndex = msg['respIndex'];
+
+		logger.http("process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri  + "<br/>" + (method === 'GET' ? uriData : reqData),
+			{'from':"server", 'to': log_id, 'type': "-->>"});
 
 
 		/* concurrent access control */
@@ -550,7 +551,7 @@ process.on('message',
 			return __queueRequest(
 							uri,
 							method,
-							(method == 'GET' ? uriData : reqData),
+							(method === 'GET' ? uriData : reqData),
 							respIndex);
 
 		/* handle client requests 

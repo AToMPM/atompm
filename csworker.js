@@ -197,16 +197,20 @@ const {
 	__uri_to_id
 } = require("./__worker");
 
-const _do = require("./___do");
-const _utils = require('./utils');
-const _mmmk = require("./mmmk");
-const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
 const _path = require('path');
-const _fspp	= _do.convert(require('./___fs++'), ['mkdirs']);
-const _svg = require('./libsvg').SVG;
-const _mt = require('./libmt');
-
 const _siocl = require('socket.io-client');
+
+const _do = require("./___do");
+const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
+const _fspp	= _do.convert(require('./___fs++'), ['mkdirs']);
+
+const _mmmk = require("./mmmk");
+const _mt = require('./libmt');
+const _svg = require('./libsvg').SVG;
+const _utils = require('./utils');
+
+const logger = require('./logger.js')
+logger.set_level(logger.LOG_LEVELS.INFO);
 
  module.exports = {
 	'__REGEN_ICON_RETRY_DELAY_MS':200,
@@ -243,8 +247,8 @@ const _siocl = require('socket.io-client');
 	'__applyASWChanges' :
 		function(changelog,aswSequenceNumber,hitchhiker)
 		{
-			console.error('w#'+__wid+' ++ ('+aswSequenceNumber+') '+
-							_utils.jsons(changelog));
+			let log_chs = _utils.collapse_changelog(changelog);
+			logger.debug('worker#'+__wid+' << ('+aswSequenceNumber+') ' + _utils.jsons(log_chs));
 
 
 			if( _utils.sn2int(aswSequenceNumber) > 
@@ -522,7 +526,7 @@ const _siocl = require('socket.io-client');
                                         var mm = _csm.metamodels[i];
 
                                         if (!(_mmmk.model.metamodels.includes(mm))) {
-                                            console.error("Last-minute loading for CS metamodel: " + mm);
+                                            logger.error("Last-minute loading for CS metamodel: " + mm);
 
                                             var csmm = _fs.readFile('./users/' + mm, 'utf8');
                                             _mmmk.loadMetamodel(mm, csmm);
@@ -564,10 +568,10 @@ const _siocl = require('socket.io-client');
 			_do.chain(actions)(
 				function()
 				{
-					var cschangelog = _utils.flatten(cschangelogs);
+					let cschangelog = _utils.flatten(cschangelogs);
+					let log_csc = _utils.jsons(_utils.collapse_changelog(cschangelog));
 
-					console.error('w#'+__wid+' -- ('+aswSequenceNumber+') '+
-						_utils.jsons(cschangelog));
+					logger.debug('worker#'+__wid+' >> ('+aswSequenceNumber+') '+ log_csc);
 
 					__postMessage(
 							{'statusCode':200,
@@ -640,25 +644,38 @@ const _siocl = require('socket.io-client');
 				io.on('connect',
 					function()
 					{
+						logger.http("socketio _ 'connect'" ,{'from':"/csworker"+__wid,'to': "/asworker"+aswid,'type':"-->>"});
+						logger.http("Sending changeListener. Below message comes from this worker", {'at':"/csworker"+__wid})
 						io.emit('message',
 							{'method':'POST','url':'/changeListener?wid='+aswid});
 					});
 				io.on('disconnect',
-					function()	{self.__aswid = undefined;});
+					function()	{
+						logger.http("socketio _ 'disconnect'" ,{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
+						self.__aswid = undefined;
+					});
 				io.on('message',
 					function(msg)	
 					{
+						let log_statusCode = (msg.statusCode === undefined)? '': msg.statusCode + "<br/>";
+						let log_data = {};
+						if (msg.data) {
+							log_data = {'changelog': _utils.collapse_changelog(msg.data.changelog)};
+						}
+						logger.http("socketio _ 'recv chglg' <br/> " + log_statusCode + JSON.stringify(log_data),{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
+
 						/* on POST /changeListener response */
-						if( msg.statusCode != undefined )
+						if( msg.statusCode !== undefined )
 						{
 							if( ! _utils.isHttpSuccessCode(msg.statusCode) )
 								return errback(msg.statusCode+':'+msg.reason);
 								
 							self.__aswid = aswid;	
-							if( cswid != undefined )
+							if( cswid !== undefined )
 							{
 								var actions = 
 										[__wHttpReq('GET','/internal.state?wid='+cswid)];
+								logger.http("http _ GET" ,{'from':"/csworker"+__wid,'to': "/csworker"+__wid,'type':"-)"});
 											
 								_do.chain(actions)(
 									function(respData) 		
@@ -692,7 +709,7 @@ const _siocl = require('socket.io-client');
 	
 						/* on changelog reception (ignore changelogs while not 
 							subscribed to an asworker... see NOTE) */
-						else if( self.__aswid != undefined )
+						else if( self.__aswid !== undefined )
 							self.__applyASWChanges(
 									msg.data.changelog,
 									msg.data['sequence#'],
@@ -848,8 +865,8 @@ const _siocl = require('socket.io-client');
 							vobjects['nodes'][vid]['mapper']['value'];
 
 				if( _utils.keys(mappers).length > 0 )
-				{				
-					var actions = 
+				{
+					var actions =
 							[__wHttpReq(
 									'POST',
 									'/GET/'+asuri+'.mappings?wid='+self.__aswid,
@@ -881,7 +898,7 @@ const _siocl = require('socket.io-client');
 						 failuref = 
 	 						 function(err) 
 	 						 {
-	 							 console.error('"POST *.mappings" failed on :: '+err+
+	 							 logger.error('"POST *.mappings" failed on :: '+err+
 										 		'\n(will try again soon)');
 	 							 setTimeout(
 		 								 _do.chain(actions),
@@ -1113,8 +1130,8 @@ const _siocl = require('socket.io-client');
 
 			else
 			{
-				var self	   = this,
-					 actions = 
+				let self = this;
+				let actions =
 						 [__httpReq('POST','/asworker'),
 						  function(aswid)	  {return self.__aswSubscribe(aswid);}];
 		
@@ -1228,16 +1245,16 @@ const _siocl = require('socket.io-client');
 			}
 			else
 			{	
-				var self	 	= this,
-					 actions = 
-	 					 [_fs.readFile('./users'+reqData['csmm'],'utf8'),
-					 	  function(csmmData)
-						  {
-	 						  return __wHttpReq(
-										  'PUT',
-										  uri+'?wid='+self.__aswid,
-										  {'mm':reqData['asmm'],
-  										   'hitchhiker':{'csmm':csmmData,'name':csmm}});
+				var self = this,
+					actions = 
+	 					[_fs.readFile('./users'+reqData['csmm'],'utf8'),
+					 	function(csmmData)
+						{
+							return __wHttpReq(
+								'PUT',
+								uri+'?wid='+self.__aswid,
+								{'mm':reqData['asmm'],
+  								'hitchhiker':{'csmm':csmmData,'name':csmm}});
 						  }];
 
 				_do.chain(actions)(
@@ -1334,15 +1351,15 @@ const _siocl = require('socket.io-client');
                 actions.push(
                     function(m)
                     {
-                         var asmData = _utils.jsons(m['asm']),
+                        var asmData = _utils.jsons(m['asm']),
                               csmData = _utils.jsons(m['csm']);
-                         return __wHttpReq(
-                                      'PUT',
-                                      uri+'?wid='+self.__aswid,
-                                      {'m':asmData,
-                                       'name':reqData['m']+(new Date().getTime()),
-                                        'insert':reqData['insert'],
-                                       'hitchhiker':{'csm':csmData}});						
+						return __wHttpReq(
+                            'PUT',
+                            uri+'?wid='+self.__aswid,
+                            {'m':asmData,
+                            'name':reqData['m']+(new Date().getTime()),
+                            'insert':reqData['insert'],
+                            'hitchhiker':{'csm':csmData}});						
                     });
                 _do.chain(actions)(
                     function() 
@@ -1483,7 +1500,7 @@ const _siocl = require('socket.io-client');
                                     [{'hitchhiker': hitchhiker}, reqParams]));
                         },
                         function (asreqData) {
-                            return __wHttpReq(
+							return __wHttpReq(
                                 'POST',
                                 asuri + '?wid=' + self.__aswid,
                                 asreqData);
@@ -1515,16 +1532,16 @@ const _siocl = require('socket.io-client');
 			var self	= this,
  				 actions = 
 					[__successContinuable(),
-					 function()
-					 {
-						 if( (asuri = self.__csuri_to_asuri(uri))['$err'] )
-							 return __errorContinuable(asuri['$err']);
-						 return __successContinuable(asuri);
-					 },
-					 function(asuri)	
-					 {
-						 return __wHttpReq('GET',asuri+'?wid='+self.__aswid);
-					 }];
+					function()
+					{
+						if( (asuri = self.__csuri_to_asuri(uri))['$err'] )
+							return __errorContinuable(asuri['$err']);
+						return __successContinuable(asuri);
+					},
+					function(asuri)	
+					{
+						return __wHttpReq('GET',asuri+'?wid='+self.__aswid);
+					}];
 
 			_do.chain(actions)(
 					function(respData) 
@@ -1569,10 +1586,10 @@ const _siocl = require('socket.io-client');
 					 },
 					 function(asuri)	
 					 {
-						 return __wHttpReq(
-									 'PUT',
-									 asuri+'?wid='+self.__aswid,
-									 reqData);
+						return __wHttpReq(
+							'PUT',
+							asuri+'?wid='+self.__aswid,
+							reqData);
 					 }];
 
 			_do.chain(actions)(
@@ -1628,7 +1645,7 @@ const _siocl = require('socket.io-client');
 
 			if( asuri['$err'] )
 				__postMessage({'statusCode':200, 'respIndex':resp});
-			else
+			else {
 				_do.chain(actions)(
 					function() 
 					{
@@ -1639,6 +1656,7 @@ const _siocl = require('socket.io-client');
 						__postInternalErrorMsg(resp,err);
 					}
 				);
+			}
 		},
 
 
@@ -1887,24 +1905,24 @@ const _siocl = require('socket.io-client');
                      asmm       = undefined;
                      aswid      = this.__aswid;
                      actions    = [];
-                 if (asmmPath) {
-                     actions = [
-                            _fs.readFile(asmmPath,'utf8'),
-                            function(data) {
-                               asmm = _utils.jsonp(data);
-                               return __successContinuable();
-                            },
-                            function(result) {
-                                return __wHttpReq('PUT',
-                                           uri+'?wid='+aswid,
-                                           ({'csm':_mmmk.read(), 'asmm': asmm}))
+                if (asmmPath) {
+					actions = [
+						_fs.readFile(asmmPath,'utf8'),
+						function(data) {
+							asmm = _utils.jsonp(data);
+							return __successContinuable();
+						},
+						function(result) {
+							return __wHttpReq('PUT',
+								uri+'?wid='+aswid,
+								({'csm':_mmmk.read(), 'asmm': asmm}))
                             }]
-                 } else {
-                     actions = [__wHttpReq('PUT',
-                                           uri+'?wid='+aswid,
-                                           undefined)];
-                 }
-                 _do.chain(actions)(
+                } else {
+					actions = [__wHttpReq('PUT',
+						uri+'?wid='+aswid,
+                        undefined)];
+                }
+            	_do.chain(actions)(
                     function() { __postMessage({'statusCode':200,'respIndex':resp}); },
                     function(err) {__postInternalErrorMsg(resp,err);}
                  );
@@ -2100,7 +2118,6 @@ const _siocl = require('socket.io-client');
 				}
 				else
 					hitchhiker[func] = sn;					
-
 				_do.chain( actions )(
 					function() 
 					{
@@ -2131,7 +2148,6 @@ const _siocl = require('socket.io-client');
 		{
 			var actions = [
 				__wHttpReq('POST',uri+'?wid='+this.__aswid,reqData)];
-
 			_do.chain(actions)(
 					function() 
 					{
