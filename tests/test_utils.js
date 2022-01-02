@@ -1,4 +1,4 @@
-let model_building_utils = require('./model_building_utils');
+const div_utils = require('./div_utils');
 
 function login(client) {
     client.execute(
@@ -16,7 +16,7 @@ function login(client) {
 
 function load_model(client, fnames) {
 
-    client.waitForElementPresent(model_building_utils.canvas, 2000, "Canvas loaded");
+    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
 
     client.pause(500);
     
@@ -53,7 +53,7 @@ function load_model(client, fnames) {
 
 function load_toolbar(client, fnames) {
 
-    client.waitForElementPresent(model_building_utils.canvas, 2000, "Canvas loaded");
+    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
 
     for (let name of fnames) {
 
@@ -95,7 +95,7 @@ let getFiles = function (client, dir, pattern, load_function, files_to_skip) {
 function callback(client, load_function, files_to_skip) {
     return function (err, res) {
         if (err) {
-            assert(false, "Error in reading directory: " + user + "Toolbars");
+            client.assert(false, "Error in reading directory: " + user + "Toolbars");
         } else {
 
             let filenames = [];

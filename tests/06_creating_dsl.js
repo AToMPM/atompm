@@ -1,5 +1,6 @@
 let test_utils = require('./test_utils');
 let model_building_utils = require('./model_building_utils');
+const div_utils = require("./div_utils");
 let user = "./users/testuser/";
 
 function get_all_attrs() {
@@ -132,8 +133,7 @@ module.exports = {
         client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
         client.click(classIcon);
 
-        let canvas = "#div_canvas";
-        client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
+        client.waitForElementPresent(div_utils.canvas, 1000, "Checking for canvas...");
 
         let test_folder = "autotest";
         let name_field = "#tr_name > td:nth-child(2) > textarea";
@@ -162,7 +162,7 @@ module.exports = {
 
         // SET ATTRIBUTES
         //TODO: Use modelbuildingutils.set_attribs
-        let class_div = model_building_utils.get_class_div(8);
+        let class_div = div_utils.get_class_div(8);
         let attrib_field = "#tr_attributes > td:nth-child(2) > textarea";
         client.moveToElement(class_div, 10, 10)
             .mouseButtonClick('middle')
@@ -171,12 +171,12 @@ module.exports = {
             .setValue(attrib_field, get_all_attrs())
             .click("#dialog_btn")
             .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
-            .moveToElement(canvas, 0, 100)
+            .moveToElement(div_utils.canvas, 0, 100)
             .mouseButtonClick('left')
             .pause(100)
         ;
 
-        let class_div3 = model_building_utils.get_class_div(0);
+        let class_div3 = div_utils.get_class_div(0);
         client.moveToElement(class_div3, 10, 10)
             .mouseButtonClick('middle')
             .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
@@ -184,14 +184,14 @@ module.exports = {
             .setValue(attrib_field, get_all_attrs3())
             .click("#dialog_btn")
             .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
-            .moveToElement(canvas, 0, 100)
+            .moveToElement(div_utils.canvas, 0, 100)
             .mouseButtonClick('left')
             .pause(100)
         ;
 
 
         let abstract_class = 4;
-        let class_div2 = model_building_utils.get_class_div(abstract_class);
+        let class_div2 = div_utils.get_class_div(abstract_class);
         let checkbox = "#tr_abstract > td:nth-child(2) > input[type=\"checkbox\"]";
         model_building_utils.move_to_element_ratio(client, class_div2, 50, 50);
         client.mouseButtonClick('middle')
@@ -202,7 +202,7 @@ module.exports = {
             .mouseButtonClick('left')
             .click("#dialog_btn")
             .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
-            .moveToElement(canvas, 0, 100)
+            .moveToElement(div_utils.canvas, 0, 100)
             .mouseButtonClick('left')
             .pause(100)
         ;
@@ -213,8 +213,8 @@ module.exports = {
             [abstract_class, abstract_class + 3]];
 
         for (let inheri_set of inheri_classes) {
-            let sup = model_building_utils.get_class_div(inheri_set[0]);
-            let sub = model_building_utils.get_class_div(inheri_set[1]);
+            let sup = div_utils.get_class_div(inheri_set[0]);
+            let sub = div_utils.get_class_div(inheri_set[1]);
 
             let inheri_relation = "#div_dialog_0 > select > option:nth-child(2)";
             //tiny offset to not hit other arrows
@@ -230,7 +230,7 @@ module.exports = {
                 .click("#dialog_btn")
                 .pause(100)
                 .waitForElementNotPresent("#dialog_btn", 1000, "Inheri menu closes")
-                .moveToElement(canvas, 0, 100)
+                .moveToElement(div_utils.canvas, 0, 100)
                 .mouseButtonClick('left')
                 .pause(100)
             ;
@@ -244,8 +244,8 @@ module.exports = {
         let assoc_num = 0;
         for (let assoc of assocs) {
 
-            let from_ele = model_building_utils.get_class_div(assoc[0]);
-            let to_ele = model_building_utils.get_class_div(assoc[1]);
+            let from_ele = div_utils.get_class_div(assoc[0]);
+            let to_ele = div_utils.get_class_div(assoc[1]);
             let name = assoc[2];
             let isContain = assoc[3];
             let out_card = assoc[4];
@@ -253,7 +253,7 @@ module.exports = {
 
             let cardinality_field = "#tr_cardinalities > td:nth-child(2) > textarea";
 
-            let assoc_div = model_building_utils.get_assoc_div(num_elements);
+            let assoc_div = div_utils.get_assoc_div(num_elements);
             assoc_num++;
             num_elements++;
 
@@ -274,7 +274,7 @@ module.exports = {
                 .click("#dialog_btn")
                 .pause(100)
                 .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes")
-                .moveToElement(canvas, 0, 100)
+                .moveToElement(div_utils.canvas, 0, 100)
                 .mouseButtonClick('left')
                 .pause(100)
                 .waitForElementPresent(assoc_div, 1000, "Assoc name present: " + assoc_div);
@@ -288,7 +288,7 @@ module.exports = {
                     .setValue(cardinality_field, JSON.stringify(out_card))
                     .click("#dialog_btn")
                     .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
-                    .moveToElement(canvas, 0, 100)
+                    .moveToElement(div_utils.canvas, 0, 100)
                     .mouseButtonClick('left')
                     .pause(100);
             }
@@ -301,7 +301,7 @@ module.exports = {
                     .setValue(cardinality_field, JSON.stringify(in_card))
                     .click("#dialog_btn")
                     .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
-                    .moveToElement(canvas, 0, 100)
+                    .moveToElement(div_utils.canvas, 0, 100)
                     .mouseButtonClick('left')
                     .pause(100);
             }
@@ -324,21 +324,21 @@ module.exports = {
                 client
                     .click("#dialog_btn")
                     .waitForElementNotPresent("#dialog_btn", 1000, "Editing assoc name closes")
-                    .moveToElement(canvas, 0, 100)
+                    .moveToElement(div_utils.canvas, 0, 100)
                     .mouseButtonClick('left')
                     .pause(100);
             });
         }
 
         //CREATE CONSTRAINT
-        let constraint_div = model_building_utils.get_element_div("GlobalConstraintIcon", num_elements);
+        let constraint_div = div_utils.get_element_div("GlobalConstraintIcon", num_elements);
 
         let constraintIcon = "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2e metamodel\\2f GlobalConstraintIcon";
         client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
         client.click(constraintIcon);
 
         client
-            .moveToElement(canvas, start_x + 3 * x_diff, start_y)
+            .moveToElement(div_utils.canvas, start_x + 3 * x_diff, start_y)
             .mouseButtonClick('right')
             .pause(100)
             .waitForElementPresent(constraint_div, 500, "Created class: " + constraint_div);
@@ -362,7 +362,7 @@ module.exports = {
             .setValue(code_field, constraint_code)
             .click("#dialog_btn")
             .waitForElementNotPresent("#dialog_btn", 1000, "Constraint menu closes")
-            .moveToElement(canvas, 0, 100)
+            .moveToElement(div_utils.canvas, 0, 100)
             .mouseButtonClick('left')
             .pause(100);
 
@@ -433,8 +433,8 @@ module.exports = {
 
             let text = "Class" + String.fromCharCode(65 + i);
 
-            let textDiv = model_building_utils.build_div(textType, num_elements);
-            let iconDiv = model_building_utils.build_div(icon_type, i);
+            let textDiv = div_utils.build_div(textType, num_elements);
+            let iconDiv = div_utils.build_div(icon_type, i);
 
             let attrs = {};
             attrs[textContent_field] = text;
@@ -482,8 +482,8 @@ module.exports = {
             client.click(getIcon(currSymbol));
 
 
-            let symbolDiv = model_building_utils.build_div(getType(currSymbol), num_elements);
-            let iconDiv = model_building_utils.build_div(icon_type, i);
+            let symbolDiv = div_utils.build_div(getType(currSymbol), num_elements);
+            let iconDiv = div_utils.build_div(icon_type, i);
 
 
             client
@@ -540,8 +540,8 @@ module.exports = {
         }
 
         //remove unneeded elements
-        model_building_utils.delete_element(client, model_building_utils.build_div(icon_type, 4));
-        model_building_utils.delete_element(client, model_building_utils.build_div(linkType, 50));
+        model_building_utils.delete_element(client, div_utils.build_div(icon_type, 4));
+        model_building_utils.delete_element(client, div_utils.build_div(linkType, 50));
 
 
         let folder_name = "autotest";
