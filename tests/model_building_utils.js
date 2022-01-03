@@ -253,6 +253,78 @@ function rename_model(client, folder_name, old_filename, new_filename) {
     );
 }
 
+function load_multiple_models(client, fnames) {
+
+    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
+
+    client.pause(500);
+
+    for (const name of fnames) {
+
+        client.execute(
+            function (fname) {
+                _loadModel(fname);
+            }, [name], null
+        );
+
+        client.pause(1000);
+
+        client.element('css selector', '#dialog_btn', function (result) {
+            if (result.status != -1) {
+                //Dialog has popped up, so check the text and click the button
+                client.assert.containsText("#div_dialog_0", "File not found");
+                client.click("#dialog_btn");
+
+                //client.verify.ok(false, "File: " + name + " failed to load!"); //don't stop testing
+                console.error("File: " + name + " failed to load!");
+
+            } else {
+                //Model loaded, so check the title
+                client.getTitle(function (title) {
+                    this.assert.ok(title.includes(name), "Check for model: " + name);
+                });
+            }
+        });
+
+    }
+
+}
+
+function load_toolbar(client, fnames) {
+
+    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
+
+    for (let name of fnames) {
+
+        client.execute(
+            function (fname) {
+                _loadToolbar(fname);
+            }, [name], null
+        );
+
+        let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
+        toolbar_name = "#div_toolbar_" + toolbar_name;
+
+        //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
+
+        client.element('css selector', '#dialog_btn', function (result) {
+            if (result.status != -1) {
+                //Dialog has popped up, so check the text and click the button
+                client.assert.containsText("#div_dialog_0", "File not found");
+                client.click("#dialog_btn");
+
+                client.verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
+            } else {
+                //Toolbar loaded, so check for it
+                client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
+            }
+        });
+
+    }
+
+}
+
+
 function load_transformation(client, folder_name, model_name) {
     compile_model(client, "transform", folder_name, model_name);
 }
@@ -340,8 +412,10 @@ module.exports = {
     click_off,
     save_model,
     load_model,
+    load_multiple_models,
     rename_model,
     compile_model,
+    load_toolbar,
     load_transformation,
     scroll_geometry_element,
     move_element

@@ -1,4 +1,4 @@
-let test_utils = require('./test_utils');
+let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
 let user = "./users/testuser/";
 
@@ -9,12 +9,12 @@ module.exports = {
     },
 
     'Login' : function (client) {
-        test_utils.login(client);
+        user_utils.login(client);
     },
 
     'Check undo of deletion' : function (client) {
         let filename = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons.metamodel';
-        test_utils.load_toolbar(client, [filename]);
+        model_building_utils.load_toolbar(client, [filename]);
 
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/SimpleClassDiagram\\/SimpleClassDiagram\\.umlIcons\\.metamodel\\/ClassIcon";

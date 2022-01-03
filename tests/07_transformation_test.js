@@ -1,6 +1,6 @@
 //NOTE: REQUIRES DSL FROM PREVIOUS TEST
 
-let test_utils = require('./test_utils');
+let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
 let user = "./users/testuser/";
 
@@ -17,7 +17,7 @@ module.exports = {
 
     'Login': function (client) {
 
-        test_utils.login(client);
+        user_utils.login(client);
     },
 
     'Compile Pattern MM': function (client) {
@@ -31,7 +31,7 @@ module.exports = {
 
         let trans_formalism = "/Formalisms/__Transformations__/Transformation/MoTif.defaultIcons.metamodel";
 
-        test_utils.load_toolbar(client, [trans_formalism]);
+        model_building_utils.load_toolbar(client, [trans_formalism]);
 
 
         //BUILD ELEMENTS
@@ -109,7 +109,7 @@ module.exports = {
 
     'Create Rule 1': function (client) {
 
-        test_utils.load_toolbar(client, rule_toolbars);
+        model_building_utils.load_toolbar(client, rule_toolbars);
 
         // BUILD LHS AND RHS
         let LHS_btn = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2e metamodel\\2f LHSIcon";
@@ -148,7 +148,7 @@ module.exports = {
 
     'Create Rule 2': function (client) {
 
-        test_utils.load_toolbar(client, rule_toolbars);
+        model_building_utils.load_toolbar(client, rule_toolbars);
 
         // BUILD LHS AND RHS
         let LHS_btn = "#\\2f Formalisms\\2f __Transformations__\\2f TransformationRule\\2f TransformationRule\\2e defaultIcons\\2e metamodel\\2f LHSIcon";

@@ -1,4 +1,4 @@
-let test_utils = require('./test_utils');
+let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
 let user = "./users/testuser/";
 
@@ -14,14 +14,14 @@ module.exports = {
     },
 
     'Login' : function (client) {
-        test_utils.login(client);
+        user_utils.login(client);
     },
 
 
     'Export MM test': function (client) {
         model_building_utils.load_model(client, "autotest", "autotest.model");
 
-        test_utils.load_toolbar(client, ["Toolbars/Ecore/Export2Ecore.buttons.model"]);
+        model_building_utils.load_toolbar(client, ["Toolbars/Ecore/Export2Ecore.buttons.model"]);
 
         let MMbutton = "#Toolbars\\2f Ecore\\2f Export2Ecore\\2e buttons\\2e model\\2f ExportMM2Ecore";
         client.waitForElementPresent(MMbutton, 2000, "Load MM Button");
@@ -44,7 +44,7 @@ module.exports = {
     'Export M test': function (client) {
         model_building_utils.load_model(client, "autotest", "autotest_instance.model");
 
-        test_utils.load_toolbar(client, ["Toolbars/Ecore/Export2Ecore.buttons.model"]);
+        model_building_utils.load_toolbar(client, ["Toolbars/Ecore/Export2Ecore.buttons.model"]);
 
         let Mbutton = "#Toolbars\\2f Ecore\\2f Export2Ecore\\2e buttons\\2e model\\2f ExportM2Ecore";
         client.waitForElementPresent(Mbutton, 2000, "Load M Button");

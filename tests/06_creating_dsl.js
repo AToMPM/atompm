@@ -1,4 +1,4 @@
-let test_utils = require('./test_utils');
+let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
 const div_utils = require("./div_utils");
 let user = "./users/testuser/";
@@ -122,12 +122,12 @@ module.exports = {
 
     'Login': function (client) {
 
-        test_utils.login(client);
+        user_utils.login(client);
     },
 
     'Create AS model': function (client) {
         let filename = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons.metamodel';
-        test_utils.load_toolbar(client, [filename]);
+        model_building_utils.load_toolbar(client, [filename]);
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/SimpleClassDiagram\\/SimpleClassDiagram\\.umlIcons\\.metamodel\\/ClassIcon";
         client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
@@ -385,7 +385,7 @@ module.exports = {
     'Create CS model': function (client) {
 
         let filename = '/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax.defaultIcons.metamodel';
-        test_utils.load_toolbar(client, [filename]);
+        model_building_utils.load_toolbar(client, [filename]);
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/IconIcon";
         client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
@@ -556,7 +556,7 @@ module.exports = {
     'Create model': function (client) {
 
         let test_toolbar = '/autotest/autotest.defaultIcons.metamodel';
-        test_utils.load_toolbar(client, [test_toolbar]);
+        model_building_utils.load_toolbar(client, [test_toolbar]);
 
         let class_names = [];
         for (let i = 0; i < 9; i++) {
