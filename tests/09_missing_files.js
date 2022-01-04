@@ -1,4 +1,5 @@
 let _fs = require('fs');
+const user_utils = require("./user_utils");
 
 let deleteFolderRecursive = function (path) {
     if (_fs.existsSync(path)) {
@@ -19,46 +20,22 @@ let deleteFolderRecursive = function (path) {
 module.exports = {
 
 
-    'Signup user': function (client) {
+    'Signup userremove user': function (client) {
 
         client.url('http://localhost:8124/atompm').pause(300);
 
-        client.execute(
-            function () {
-                UserManagement.validateCredentials('userremove', 'test');
-            }, [], null
-        );
+        let username = 'userremove';
+        let user_pass = 'test';
 
-        client.pause(500);
-
-        let user_exists = false;
-        client.getText('div[id=div_login_error]', function (result) {
-            user_exists = result.value.includes('login failed');
-
-        });
-
-        if (user_exists == false) {
-            client.execute(
-                function () {
-                    UserManagement.signup('userremove', 'test');
-                }, [], null
-            );
-
+        let user_exists = user_utils.user_exists(client, username, user_pass);
+        if (!user_exists) {
+            user_utils.create_user(client, username, user_pass);
         }
 
+        user_utils.login(client, username);
+
+        //needed to ensure everything is loaded
         client.pause(500);
-
-        client.execute(
-            function () {
-                UserManagement.login('userremove');
-            }, [], null
-        );
-
-        client.pause(500);
-        client.getTitle(function (title) {
-            this.assert.ok(title.includes("AToMPM - [Unnamed]"), "AToMPM is opened");
-        });
-
     },
 
     'Load Missing Toolbar': function (client) {

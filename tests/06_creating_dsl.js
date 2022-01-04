@@ -1,7 +1,6 @@
 let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
 const div_utils = require("./div_utils");
-let user = "./users/testuser/";
 
 function get_all_attrs() {
     return "[\n" +

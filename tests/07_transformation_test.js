@@ -2,7 +2,6 @@
 
 let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
-let user = "./users/testuser/";
 
 let rule_toolbars = [
     "/Formalisms/__Transformations__/TransformationRule/TransformationRule.defaultIcons.metamodel",

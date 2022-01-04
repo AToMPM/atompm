@@ -2,8 +2,6 @@
 let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils')
 
-let user = "./users/testuser/";
-
 module.exports = {
 
     beforeEach: function (client) {

@@ -1,6 +1,5 @@
 let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
-let user = "./users/testuser/";
 
 let folder_name = "Formalisms/__LanguageSyntax__/SimpleClassDiagram";
 
