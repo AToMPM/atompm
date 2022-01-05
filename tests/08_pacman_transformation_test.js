@@ -1,6 +1,6 @@
 //NOTE: REQUIRES DSL FROM PREVIOUS TEST
 
-let test_utils = require('./test_utils');
+let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
 
     'Login': function (client) {
 
-        test_utils.login(client);
+        user_utils.login(client);
     },
 
     'Execute Transformation': function (client) {

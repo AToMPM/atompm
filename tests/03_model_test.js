@@ -1,6 +1,5 @@
-let test_utils = require('./test_utils');
+let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
-let user = "./users/testuser/";
 
 module.exports = {
 
@@ -9,20 +8,20 @@ module.exports = {
     },
 
     'Login' : function (client) {
-        test_utils.login(client);
+        user_utils.login(client);
     },
 
     'Load model' : function (client) {
 
         let filename = 'Formalisms/ClassicDEVS/ClassicDEVS.model';
-        test_utils.load_model(client, [filename]);
+        model_building_utils.load_multiple_models(client, [filename]);
     },
 
     'Load and save model' : function (client) {
 
         let filename = 'Formalisms/ClassicDEVS/ClassicDEVS.model';
         let new_filename = 'ClassicDEVS2.model';
-        test_utils.load_model(client, [filename]);
+        model_building_utils.load_multiple_models(client, [filename]);
         model_building_utils.save_model(client, "Models", new_filename)
     },
 
@@ -33,7 +32,7 @@ module.exports = {
             'Formalisms/Annotation/AnnotationMM.model'
         ];
 
-        test_utils.load_model(client, filenames);
+        model_building_utils.load_multiple_models(client, filenames);
     },
 
     'Rename model' : function (client) {
@@ -41,7 +40,7 @@ module.exports = {
         let filename = 'Formalisms/ClassicDEVS/ClassicDEVS.model';
         let old_filename = 'Test.model';
         let new_filename = 'Test2.model';
-        test_utils.load_model(client, [filename]);
+        model_building_utils.load_multiple_models(client, [filename]);
         model_building_utils.save_model(client, "~", old_filename)
         model_building_utils.rename_model(client, "~", old_filename, new_filename)
     },

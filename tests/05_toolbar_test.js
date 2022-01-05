@@ -1,6 +1,6 @@
 
-let test_utils = require('./test_utils');
-let user = "./users/testuser/";
+let user_utils = require('./user_utils');
+let model_building_utils = require('./model_building_utils')
 
 module.exports = {
 
@@ -10,12 +10,12 @@ module.exports = {
 
     'Login': function (client) {
 
-        test_utils.login(client);
+        user_utils.login(client);
     },
 
     'Load main menu toolbar': function (client) {
         let filename = 'Toolbars/MainMenu/MainMenu.buttons.model';
-        test_utils.load_toolbar(client, [filename]);
+        model_building_utils.load_toolbar(client, [filename]);
     },
 
     after: function (client) {

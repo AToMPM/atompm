@@ -1,37 +1,17 @@
-let canvas = "#div_canvas";
-
-function build_div(element_type, num) {
-    return element_type + (num) + "\\2e instance";
-}
-
-function get_element_div(type, num) {
-    return "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2f " + (type) + "\\2f " + (num) + "\\2e instance";
-}
-
-function get_class_div(num) {
-    return get_element_div("ClassIcon", num);
-}
-
-function get_assoc_div(num) {
-
-    return get_element_div("AssociationLink", num) + " > text:nth-child(1)";
-}
-
-function fix_selector(name) {
-    return name.replace(".", "\\.");
-}
+const div_utils = require('./div_utils');
+const {fix_selector} = require("./div_utils");
 
 function create_class(client, x, y, i, element_type) {
 
     let class_div = "";
     if (element_type != undefined) {
-        class_div = this.build_div(element_type, i);
+        class_div = div_utils.build_div(element_type, i);
     } else {
-        class_div = this.get_class_div(i);
+        class_div = div_utils.get_class_div(i);
     }
 
     client
-        .moveToElement(canvas, x, y)
+        .moveToElement(div_utils.canvas, x, y)
         .mouseButtonClick('right')
         .pause(300)
         .waitForElementPresent(class_div, 500, "Created class: " + class_div);
@@ -90,9 +70,9 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
 
     let element_div = "";
     if (element_type != undefined) {
-        element_div = this.build_div(element_type, num);
+        element_div = div_utils.build_div(element_type, num);
     } else {
-        element_div = this.get_class_div(num);
+        element_div = div_utils.get_class_div(num);
     }
 
     if (div_suffix != undefined) {
@@ -129,7 +109,7 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
     client
         .click("#dialog_btn")
         .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
-        .moveToElement(canvas, 0, 100)
+        .moveToElement(div_utils.canvas, 0, 100)
         .mouseButtonClick('left')
         .pause(300)
     ;
@@ -147,7 +127,7 @@ function move_to_element_ratio(client, element, x_ratio, y_ratio) {
 
 function click_off(client) {
     client
-        .moveToElement(canvas, 0, 100)
+        .moveToElement(div_utils.canvas, 0, 100)
         .mouseButtonClick('left');
 }
 
@@ -195,7 +175,7 @@ function load_model(client, folder_name, model_name) {
 
     navigate_to_folder(client, folder_name);
 
-    let model_name_div = "#" + fix_selector(model_name);
+    let model_name_div = "#" + div_utils.fix_selector(model_name);
     client.waitForElementPresent(model_name_div, 2000, "Looking for model: " + model_name_div)
         .click(model_name_div);
     client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
@@ -272,6 +252,78 @@ function rename_model(client, folder_name, old_filename, new_filename) {
         }
     );
 }
+
+function load_multiple_models(client, fnames) {
+
+    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
+
+    client.pause(500);
+
+    for (const name of fnames) {
+
+        client.execute(
+            function (fname) {
+                _loadModel(fname);
+            }, [name], null
+        );
+
+        client.pause(1000);
+
+        client.element('css selector', '#dialog_btn', function (result) {
+            if (result.status != -1) {
+                //Dialog has popped up, so check the text and click the button
+                client.assert.containsText("#div_dialog_0", "File not found");
+                client.click("#dialog_btn");
+
+                //client.verify.ok(false, "File: " + name + " failed to load!"); //don't stop testing
+                console.error("File: " + name + " failed to load!");
+
+            } else {
+                //Model loaded, so check the title
+                client.getTitle(function (title) {
+                    this.assert.ok(title.includes(name), "Check for model: " + name);
+                });
+            }
+        });
+
+    }
+
+}
+
+function load_toolbar(client, fnames) {
+
+    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
+
+    for (let name of fnames) {
+
+        client.execute(
+            function (fname) {
+                _loadToolbar(fname);
+            }, [name], null
+        );
+
+        let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
+        toolbar_name = "#div_toolbar_" + toolbar_name;
+
+        //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
+
+        client.element('css selector', '#dialog_btn', function (result) {
+            if (result.status != -1) {
+                //Dialog has popped up, so check the text and click the button
+                client.assert.containsText("#div_dialog_0", "File not found");
+                client.click("#dialog_btn");
+
+                client.verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
+            } else {
+                //Toolbar loaded, so check for it
+                client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
+            }
+        });
+
+    }
+
+}
+
 
 function load_transformation(client, folder_name, model_name) {
     compile_model(client, "transform", folder_name, model_name);
@@ -351,11 +403,6 @@ function scroll_geometry_element(client, element, scrollAmount, scrollTimes) {
 
 module.exports = {
     '@disabled': true,
-    canvas,
-    get_element_div,
-    get_assoc_div,
-    get_class_div,
-    build_div,
     create_class,
     create_classes,
     create_assoc,
@@ -365,8 +412,10 @@ module.exports = {
     click_off,
     save_model,
     load_model,
+    load_multiple_models,
     rename_model,
     compile_model,
+    load_toolbar,
     load_transformation,
     scroll_geometry_element,
     move_element
