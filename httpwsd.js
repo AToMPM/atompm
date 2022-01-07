@@ -36,50 +36,11 @@ var workerIds2socketIds = {};
  */
 let workerIds2workerType = {};
 
-/************************************ UTILS ***********************************/
-
-/** Remove invalid characters from a string. **/
-function __clean_string(s)
-{
-	if (s == undefined) {
-        return s;
-    }
-
-	s = JSON.stringify(s);
-	s = s.replace(/'/g, '');
-	s = s.replace(/"/g, '');
-	s = s.replace(/‘/g, '');
-	s = s.replace(/’/g, '');
-	s = s.replace(/\\/g, '\\');
-	s = s.replace(/\//g, '\/');
-	s = s.replace(/\\n/g, ' ');
-	return s;
-}
-
-/** Syntactic sugar to build and send HTTP responses **/
+/** Wrapper function to log HTTP messages from the server **/
 function __respond(response, statusCode, reason, data, headers)
 {
-	response.writeHead(
-			statusCode,
-			__clean_string(reason),
-			(headers || {'Content-Type': 'text/plain',
-			'Access-Control-Allow-Origin': '*'}));
-
-	var encoding = 
-		(headers && 
-		 	(headers['Content-Type'].match(/image/) ||
-			 headers['Content-Type'].match(/pdf/) 	 ||
-			 headers['Content-Type'].match(/zip/) 	 ) ? 
-			 	'binary' :
-				'utf8'),
-		 content = reason || data;
-
-	if( _utils.isObject(content) )
-		response.end(_utils.jsons(content,null,'\t'), encoding);
-	else
-		response.end(content, encoding);
-
-	logger.http("socketio _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
+	logger.http("http _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
+	_utils.respond(response, statusCode, reason, data, headers);
 }
 
 
