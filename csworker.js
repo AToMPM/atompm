@@ -38,7 +38,7 @@
 				internal CS models are adjusted to reflect AS changes... finally,
 				the result of these CS model modifications are themselves bundled
 			  	into changelogs that are forwarded to all subscribed clients 
-				(subscription managment is performed in httpwsd.js)
+				(subscription managment is performed in session_manager.js)
 		2. on failure, the asworker
 			a) returns a 40x|50x status code to the csworker...
 	so basically, when a client asks a csworker to change something, all that
@@ -632,7 +632,7 @@ logger.set_level(logger.LOG_LEVELS.INFO);
 				 between the moment where the socket is created and the moment
 				 where we receive the response to our subscription attempt, we
 				 will receive *all* messages broadcasted by the websocket server
-				 in httpwsd.js... these are detected and discarded */
+				 in session_manager.js... these are detected and discarded */
 	'__aswSubscribe' :
 		function(aswid,cswid)
 		{
