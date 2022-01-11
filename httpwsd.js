@@ -7,7 +7,6 @@
 const _cp = require('child_process'),
 	_fs = require('fs'),
 	_http = require('http'),
-	_path = require('path'),
 	_url = require('url'),
 	_duri = require('./___dataurize'),
 	_fspp = require('./___fs++'),
@@ -583,100 +582,11 @@ let httpserver = _http.createServer(
 						});
 			}
 
-
-
-			/* spawn new worker */
-			else if( (url.pathname == '/csworker' || url.pathname == '/asworker') 
-						&& req.method == 'POST' )
-			{
-				/* setup and store new worker */
-				let worker = _cp.fork(_path.join(__dirname, '__worker.js'));
-
-				let wid = session_manager.workers.push(worker)-1;
-
-				session_manager.workerIds2socketIds[wid] = [];
-				session_manager.workerIds2workerType[wid] = url.pathname;
-
-				worker.on('message',
-					function(msg) 
-					{
-						/* push changes (if any) to registered sockets... even empty 
-							changelogs are pushed to facilitate sequence number-based
-							ordering */
-						if( msg['changelog'] !== undefined )
-						{
-							session_manager.send_to_all(wid, msg);
-						}
-
-						/* respond to a request */
-						if( msg['respIndex'] !== undefined )
-							__respond(
-								session_manager.responses[msg['respIndex']],
-								msg['statusCode'],
-								msg['reason'],
-								JSON.stringify(
-									{'headers':
-										(msg['headers'] || 
-										 {'Content-Type': 'text/plain',
-										 'Access-Control-Allow-Origin': '*'}),
-									 'data':msg['data'],
-									 'sequence#':msg['sequence#']}),
-								{'Content-Type': 'application/json'});
-					});
-
-				let msg = {'workerType':url.pathname, 'workerId':wid};
-				logger.http("process _ 'message'+ <br/>" + JSON.stringify(msg),{'from':"server",'to': url.pathname + wid, 'type':"-)"});
-				worker.send(msg);
-
-				/* respond worker id (used to identify associated worker) */
-				__respond(
-					resp, 
-					201, 
-					'', 
-					''+wid);
+			else{
+				session_manager.handle_http_message(url, req, resp);
 			}
 
 
-			/* check for worker id and it's validity */
-			else if( url['query'] == undefined || 
-						url['query']['wid'] == undefined )
-				__respond(resp, 400, 'missing worker id');
-			else if( session_manager.workers[url['query']['wid']] == undefined )
-				__respond(resp, 400, 'invalid worker id :: '+url['query']['wid']);
-
-			
-			/* save resp object and forward request to worker (if request is PUT or
-			  	POST, recover request data first)
-			
-				TBI:: only registered sockets should be allowed to speak to worker
-						... one way of doing this is forcing request urls to contain 
-						cid=socket.id## */
-			else if( req.method == 'PUT' || req.method == 'POST' )
-			{
-				var reqData = '';
-				req.addListener("data", function(chunk) {reqData += chunk;});
-				req.addListener("end", 
-					function() 
-					{
-						session_manager.workers[url['query']['wid']].send(
-								{'method':req.method,
-								 'uri':url.pathname,
-								 'reqData':(reqData == '' ? 
-									 				undefined : 
-													eval('('+reqData+')')),
-								 'uriData':url['query'],
-								 'respIndex':session_manager.responses.push(resp)-1});
-					});
-			}
-			else {
-				session_manager.workers[url['query']['wid']].send(
-					{
-						'method': req.method,
-						'uri': url.pathname,
-						'uriData': url['query'],
-						'respIndex': session_manager.responses.push(resp) - 1
-					});
-			}
 		});
 
 session_manager.init_session_manager(httpserver);

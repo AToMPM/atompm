@@ -9,7 +9,10 @@ const _utils = require("./utils");
 const _sio = require("socket.io");
 const logger = require("./logger");
 const _url = require("url");
+const _cp = require("child_process");
+const _path = require("path");
 
+logger.set_level(logger.LOG_LEVELS.INFO);
 
 /* an array of WebWorkers
 	... each has its own mmmk instance */
@@ -35,25 +38,6 @@ let socket_server = null;
 /** Syntactic sugar to build and send a socket.io message **/
 function __send(socket, statusCode, reason, data, headers)
 {
-    // let log_data = _utils.clone(data);
-
-    // simplify the data before logging
-    // if (data && typeof data === 'object'){
-    //     if ("changelog" in data) {
-    //         log_data['changelog'] = _utils.collapse_changelog(data["changelog"])
-    //     }
-    //     if ("sequence#" in data){
-    //         delete log_data["sequence#"];
-    //     }
-    //     if ("hitchhiker" in data){
-    //         log_data['hitchhiker'] = _utils.collapse_hitchhiker(data['hitchhiker'])
-    //     }
-    // }
-    // let log_statusCode = (statusCode === undefined)? "": statusCode + "<br/>";
-    // let log_headers = (headers === undefined)? "": headers + "<br/>";
-
-    // logger.http("socketio _ 'message' <br/>" + log_statusCode + log_headers + JSON.stringify(log_data) ,{'from':"server",'to':'client'});
-
     socket.emit('message',
         {'statusCode':statusCode,
             'reason':reason,
@@ -148,6 +132,104 @@ function init_session_manager(httpserver){
         });
 }
 
+function handle_http_message(url, req, resp){
+
+    logger.http("http _ 'message'",{'from': 'server', 'to':"session_mngr"});
+
+    /* spawn new worker */
+    if( (url.pathname == '/csworker' || url.pathname == '/asworker')
+        && req.method == 'POST' )
+    {
+        /* setup and store new worker */
+        let worker = _cp.fork(_path.join(__dirname, '__worker.js'));
+
+        let wid = workers.push(worker)-1;
+
+        workerIds2socketIds[wid] = [];
+        workerIds2workerType[wid] = url.pathname;
+
+        worker.on('message',
+            function(msg)
+            {
+                /* push changes (if any) to registered sockets... even empty
+                    changelogs are pushed to facilitate sequence number-based
+                    ordering */
+                if( msg['changelog'] !== undefined )
+                {
+                    send_to_all(wid, msg);
+                }
+
+                /* respond to a request */
+                if( msg['respIndex'] !== undefined )
+                    _utils.respond(
+                        responses[msg['respIndex']],
+                        msg['statusCode'],
+                        msg['reason'],
+                        JSON.stringify(
+                            {'headers':
+                                    (msg['headers'] ||
+                                        {'Content-Type': 'text/plain',
+                                            'Access-Control-Allow-Origin': '*'}),
+                                'data':msg['data'],
+                                'sequence#':msg['sequence#']}),
+                        {'Content-Type': 'application/json'});
+            });
+
+        let msg = {'workerType':url.pathname, 'workerId':wid};
+        logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': url.pathname + wid, 'type':"-)"});
+        worker.send(msg);
+
+        /* respond worker id (used to identify associated worker) */
+        _utils.respond(
+            resp,
+            201,
+            '',
+            ''+wid);
+    }
+
+    /* check for worker id and it's validity */
+    else if( url['query'] == undefined ||
+        url['query']['wid'] == undefined )
+        _utils.respond(resp, 400, 'missing worker id');
+
+    else if( workers[url['query']['wid']] == undefined )
+        _utils.respond(resp, 400, 'invalid worker id :: '+url['query']['wid']);
+
+    /* save resp object and forward request to worker (if request is PUT or
+          POST, recover request data first)
+
+        TBI:: only registered sockets should be allowed to speak to worker
+                ... one way of doing this is forcing request urls to contain
+                cid=socket.id## */
+    else if( req.method == 'PUT' || req.method == 'POST' )
+    {
+        let reqData = '';
+        req.addListener("data", function(chunk) {reqData += chunk;});
+        req.addListener("end",
+            function()
+            {
+                workers[url['query']['wid']].send(
+                    {'method':req.method,
+                        'uri':url.pathname,
+                        'reqData':(reqData == '' ?
+                            undefined :
+                            eval('('+reqData+')')),
+                        'uriData':url['query'],
+                        'respIndex':responses.push(resp)-1});
+            });
+    }
+    else {
+        workers[url['query']['wid']].send(
+            {
+                'method': req.method,
+                'uri': url.pathname,
+                'uriData': url['query'],
+                'respIndex': responses.push(resp) - 1
+            });
+    }
+}
+
+
 function send_to_all(wid, msg){
     let _msg = {'changelog':msg['changelog'],
         'sequence#':msg['sequence#'],
@@ -175,5 +257,6 @@ module.exports = {
     workerIds2workerType,
     socket_server,
     init_session_manager,
+    handle_http_message,
     send_to_all,
 }

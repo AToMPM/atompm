@@ -538,7 +538,7 @@ process.on('message',
 		let respIndex = msg['respIndex'];
 
 		logger.http("process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri  + "<br/>" + (method === 'GET' ? uriData : reqData),
-			{'from':"server", 'to': log_id, 'type': "-->>"});
+			{'from':"session_mngr", 'to': log_id, 'type': "-->>"});
 
 
 		/* concurrent access control */
