@@ -158,7 +158,7 @@ function __httpReq(method,url,data,port)
 					 'Access-Control-Allow-Origin': '*'};
 				 }
 				 logger.http("http _ request " + "<br/>" + method + " " + url,{'from':__wtype+__wid, 'to':'server'});
-				 logger.http("Message below from client is wrong. This worker sent an HTTP message.", {'at': __wtype+__wid});
+				 logger.http("Message below from client is wrong.<br/>This worker sent an HTTP message.", {'at': __wtype+__wid});
 
 				 let request =
 					 _http.request(options, 
@@ -319,7 +319,8 @@ function __postMessage(msg)
 	if( __wtype == '/csworker' && 'changelog' in msg )
 		__urizeChangelog(msg['changelog']);
 
-	logger.http("process _ RI" + msg.respIndex + "<br/>changelog: " + JSON.stringify(_utils.collapse_changelog(msg['changelog'])),{'from':__wtype+__wid, 'to': "server", 'type': "-x"});
+	logger.http("process _ RI" + msg.respIndex + "<br/>changelog: " + JSON.stringify(_utils.collapse_changelog(msg['changelog'])),{'from':__wtype+__wid, 'to': "session_mngr", 'type': "-x"});
+
 	process.send(msg);
 }
 
@@ -480,19 +481,15 @@ process.on('message',
 	function(msg)
 	{
 		let log_id = __wtype+__wid;
-		if (_wlib === undefined){
-			log_id = msg['workerType'] + msg['workerId'];
-		}
-
-
-		//logger.http("process _ worker creation", {'at': log_id});
-
 
 		/* initial setup */
 		if( _wlib === undefined )
 		{
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
+
+			log_id = msg['workerType'] + msg['workerId'];
+			logger.http("process _ worker creation", {'at': log_id});
 
 			if (__wtype === "/asworker") {
 				_wlib = require("./asworker");

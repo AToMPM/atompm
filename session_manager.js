@@ -95,6 +95,8 @@ function init_session_manager(httpserver){
                     /* register socket for requested worker */
                     else if( msg.method === 'POST' && url.pathname.match(/changeListener$/) )
                     {
+                        logger.http("Socket " + socket.id + " now listening to worker " + wid, {'at': 'session_mngr'});
+
                         if( workerIds2socketIds[wid].indexOf(socket.id) > -1 ) {
                             __send(socket,403,'already registered to worker');
                         }else
@@ -134,7 +136,7 @@ function init_session_manager(httpserver){
 
 function handle_http_message(url, req, resp){
 
-    logger.http("http _ 'message'",{'from': 'server', 'to':"session_mngr"});
+    logger.http("fcn call _ 'message'",{'from': 'server', 'to':"session_mngr"});
 
     /* spawn new worker */
     if( (url.pathname == '/csworker' || url.pathname == '/asworker')
@@ -178,6 +180,8 @@ function handle_http_message(url, req, resp){
         let msg = {'workerType':url.pathname, 'workerId':wid};
         logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': url.pathname + wid, 'type':"-)"});
         worker.send(msg);
+
+        logger.http("http _ 'resp on worker creation: wid:'"+ wid, {'at':"session_mngr"});
 
         /* respond worker id (used to identify associated worker) */
         _utils.respond(
