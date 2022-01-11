@@ -7,114 +7,26 @@
 const _cp = require('child_process'),
 	_fs = require('fs'),
 	_http = require('http'),
-	_path = require('path'),
-	_sio = require('socket.io'),
 	_url = require('url'),
 	_duri = require('./___dataurize'),
 	_fspp = require('./___fs++'),
 	logger = require('./logger'),
 	_utils = require('./utils');
+const session_manager = require("./session_manager");
 
 logger.set_level(logger.LOG_LEVELS.INFO);
 
-/*********************************** GLOBALS **********************************/
-/* an array of WebWorkers
-	... each has its own mmmk instance */
-var workers = new Array();			
 
-/* an array of response objects
-  ...	for workers to write on when they complete requests */
-var responses = new Array();		
-
-/* a map of worker ids to socket.io socket session ids
-	... each socket is registered to exactly one worker 
- 	... several sockets may be registered to the same worker */
-var workerIds2socketIds = {};			
-
-/* a map of worker ids to the type of worker
- * used for logging
- */
-let workerIds2workerType = {};
-
-/************************************ UTILS ***********************************/
-
-/** Remove invalid characters from a string. **/
-function __clean_string(s)
-{
-	if (s == undefined) {
-        return s;
-    }
-
-	s = JSON.stringify(s);
-	s = s.replace(/'/g, '');
-	s = s.replace(/"/g, '');
-	s = s.replace(/‘/g, '');
-	s = s.replace(/’/g, '');
-	s = s.replace(/\\/g, '\\');
-	s = s.replace(/\//g, '\/');
-	s = s.replace(/\\n/g, ' ');
-	return s;
-}
-
-/** Syntactic sugar to build and send HTTP responses **/
+/** Wrapper function to log HTTP messages from the server **/
 function __respond(response, statusCode, reason, data, headers)
 {
-	response.writeHead(
-			statusCode,
-			__clean_string(reason),
-			(headers || {'Content-Type': 'text/plain',
-			'Access-Control-Allow-Origin': '*'}));
-
-	var encoding = 
-		(headers && 
-		 	(headers['Content-Type'].match(/image/) ||
-			 headers['Content-Type'].match(/pdf/) 	 ||
-			 headers['Content-Type'].match(/zip/) 	 ) ? 
-			 	'binary' :
-				'utf8'),
-		 content = reason || data;
-
-	if( _utils.isObject(content) )
-		response.end(_utils.jsons(content,null,'\t'), encoding);
-	else
-		response.end(content, encoding);
-
-	logger.http("socketio _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
-}
-
-
-/** Syntactic sugar to build and send a socket.io message **/
-function __send(socket, statusCode, reason, data, headers)
-{
-	let log_data = _utils.clone(data);
-
-	// simplify the data before logging
-	if (data && typeof data === 'object'){
-		if ("changelog" in data) {
-			log_data['changelog'] = _utils.collapse_changelog(data["changelog"])
-		}
-		if ("sequence#" in data){
-			delete log_data["sequence#"];
-		}
-		if ("hitchhiker" in data){
-			log_data['hitchhiker'] = _utils.collapse_hitchhiker(data['hitchhiker'])
-		}
-	}
-	let log_statusCode = (statusCode === undefined)? "": statusCode + "<br/>";
-	let log_headers = (headers === undefined)? "": headers + "<br/>";
-
-	//logger.http("socketio _ 'message' <br/>" + log_statusCode + log_headers + JSON.stringify(log_data) ,{'from':"server",'to':'client'});
-
-	socket.emit('message',
-			{'statusCode':statusCode,
-			 'reason':reason,
-			 'headers':(headers || {'Content-Type': 'text/plain'}),
-			 'data':data});
+	logger.http("http _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
+	_utils.respond(response, statusCode, reason, data, headers);
 }
 
 
 /************************************ LOGIC ***********************************/
-var httpserver = _http.createServer( 
+let httpserver = _http.createServer(
 		function(req, resp) 
 		{
 			var url = _url.parse(req.url,true);
@@ -670,211 +582,19 @@ var httpserver = _http.createServer(
 						});
 			}
 
-
-
-			/* spawn new worker */
-			else if( (url.pathname == '/csworker' || url.pathname == '/asworker') 
-						&& req.method == 'POST' )
-			{
-				/* setup and store new worker */
-				let worker = _cp.fork(_path.join(__dirname, '__worker.js'));
-
-				let wid = workers.push(worker)-1;
-
-				workerIds2socketIds[wid] = [];
-				workerIds2workerType[wid] = url.pathname;
-
-				worker.on('message',
-					function(msg) 
-					{
-						/* push changes (if any) to registered sockets... even empty 
-							changelogs are pushed to facilitate sequence number-based
-							ordering */
-						if( msg['changelog'] !== undefined )
-						{
-							let _msg = {'changelog':msg['changelog'],
-									 	  'sequence#':msg['sequence#'],
-										  'hitchhiker':msg['hitchhiker']};
-
-							// simplify the msg for logging
-							let log_data = {'changelog':_utils.collapse_changelog(msg["changelog"]), 'hitchhiker':_utils.collapse_hitchhiker(msg['hitchhiker'])};
-
-							workerIds2socketIds[wid].forEach(
-								function(sid)
-								{
-									logger.http("socketio _ 'sending chglg'+ <br/>" + JSON.stringify(log_data) ,{'from': 'server', 'to': 'client'});
-									__send(
-										wsserver.sockets.sockets.get(sid),
-										undefined,
-										undefined,
-										_msg);
-								});
-						}
-
-						/* respond to a request */
-						if( msg['respIndex'] !== undefined )
-							__respond(
-								responses[msg['respIndex']], 
-								msg['statusCode'],
-								msg['reason'],
-								JSON.stringify(
-									{'headers':
-										(msg['headers'] || 
-										 {'Content-Type': 'text/plain',
-										 'Access-Control-Allow-Origin': '*'}),
-									 'data':msg['data'],
-									 'sequence#':msg['sequence#']}),
-								{'Content-Type': 'application/json'});
-					});
-
-				let msg = {'workerType':url.pathname, 'workerId':wid};
-				logger.http("process _ 'message'+ <br/>" + JSON.stringify(msg),{'from':"server",'to': url.pathname + wid, 'type':"-)"});
-				worker.send(msg);
-
-				/* respond worker id (used to identify associated worker) */
-				__respond(
-					resp, 
-					201, 
-					'', 
-					''+wid);
+			else{
+				session_manager.handle_http_message(url, req, resp);
 			}
 
 
-			/* check for worker id and it's validity */
-			else if( url['query'] == undefined || 
-						url['query']['wid'] == undefined )
-				__respond(resp, 400, 'missing worker id');
-			else if( workers[url['query']['wid']] == undefined )
-				__respond(resp, 400, 'invalid worker id :: '+url['query']['wid']);
-
-			
-			/* save resp object and forward request to worker (if request is PUT or
-			  	POST, recover request data first)
-			
-				TBI:: only registered sockets should be allowed to speak to worker
-						... one way of doing this is forcing request urls to contain 
-						cid=socket.id## */
-			else if( req.method == 'PUT' || req.method == 'POST' )
-			{
-				var reqData = '';
-				req.addListener("data", function(chunk) {reqData += chunk;});
-				req.addListener("end", 
-					function() 
-					{
-						workers[url['query']['wid']].send(
-								{'method':req.method,
-								 'uri':url.pathname,
-								 'reqData':(reqData == '' ? 
-									 				undefined : 
-													eval('('+reqData+')')),
-								 'uriData':url['query'],
-								 'respIndex':responses.push(resp)-1});
-					});
-			}
-			else
-				workers[url['query']['wid']].send(
-						{'method':req.method,
-						 'uri':url.pathname,
-						 'uriData':url['query'],
-						 'respIndex':responses.push(resp)-1});
 		});
+
+session_manager.init_session_manager(httpserver);
 
 let port = 8124;
 httpserver.listen(port);
+
 logger.info("AToMPM listening on port: " + port);
 logger.info("```mermaid");
 logger.info("sequenceDiagram");
 
-let wsserver = new _sio.Server(httpserver);
-
-wsserver.sockets.on('connection',
-	function(socket)
-	{
-		/* unregister this socket from the specified worker ... when a worker
-		  	has no more registered sockets, terminate it */
-		function unregister(wid)
-		{
-			logger.http("socketio _ 'connection'" ,{'at':"server"});
-			let i = workerIds2socketIds[wid].indexOf(socket.id);
-			if( i === -1 ){
-				logger.http("socketio _ 'connection' <br/> 403 already unregistered from worker" ,{'at':"server"});
-				__send(socket,403,'already unregistered from worker');
-			}else
-			{
-				workerIds2socketIds[wid].splice(i,1);
-				if( workerIds2socketIds[wid].length === 0 )
-				{								
-					workers[wid].kill();
-					workers[wid] = undefined;
-					delete workerIds2socketIds[wid];
-				}
-
-				logger.http("socketio _ 'connection' <br/> 200" ,{'from':"server",'to': "worker" + wid, 'type':"-->>"});
-				__send(socket,200);
-			}
-		}
-
-		
-		/* onmessage : on reception of data from client */
-	 	socket.on('message', 
-			function(msg/*{method:_,url:_}*/)		
-			{		
-				let url = _url.parse(msg.url,true);
-
-
-				/* check for worker id and it's validity */
-				if( url['query'] === undefined ||
-					 url['query']['wid'] === undefined ){
-					logger.http("socketio _ 'message' <br/> 400 'missing worker id'" ,{'at':"server"});
-					return __send(socket,400,'missing worker id');
-				}
-
-				let wid = url['query']['wid'];
-				logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':'client','to':"server"});
-
-				if( workers[wid] === undefined ) {
-					logger.http("socketio _ 'message' <br/> 400 unknown worker id" ,{'at':"server"});
-					__send(socket,400,'unknown worker id :: '+wid);
-				}
-				/* register socket for requested worker */
-				else if( msg.method === 'POST' &&
-							url.pathname.match(/changeListener$/) )
-				{
-					if( workerIds2socketIds[wid].indexOf(socket.id) > -1 ) {
-						logger.http("socketio _ 'message' <br/> 403 already registered to worker" + wid,{'at':"server"});
-						__send(socket,403,'already registered to worker');
-					}else
-					{
-						//logger.http("socketio _ 'message' <br/> 201 " + url.pathname,{'at':"server"});
-						workerIds2socketIds[wid].push(socket.id);
-						__send(socket,201);
-					}
-				}
-					
-				/* unregister socket for requested worker */				
-				else if( msg.method === 'DELETE' &&
-							url.pathname.match(/changeListener$/) )
-					unregister(wid);
-
-				/* unsupported request */
-				else {
-					logger.http("socketio _ 'message' <br/> 501 'unsupported request'",{'at':"server"});
-					__send(socket,501);
-				}
-		 	});
-
-
-		/* ondisconnect : on disconnection of socket */		
-		socket.on('disconnect', 
-			function()
-			{
-				logger.http("socketio _ 'disconnect'",{'at':"server"});
-				for( let wid in workerIds2socketIds )
-					for( let i in workerIds2socketIds[wid] )
-						if( workerIds2socketIds[wid][i] === socket.id )
-						{
-							unregister(wid);
-							return;
-						}
-			});
-		});

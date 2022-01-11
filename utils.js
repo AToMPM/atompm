@@ -366,6 +366,48 @@ utils.collapse_hitchhiker =
 		return k;
 	};
 
+/** Remove invalid characters from a string. **/
+utils.__clean_string = function(s)
+{
+	if (s === undefined) {
+		return s;
+	}
+
+	s = JSON.stringify(s);
+	s = s.replace(/'/g, '');
+	s = s.replace(/"/g, '');
+	s = s.replace(/‘/g, '');
+	s = s.replace(/’/g, '');
+	s = s.replace(/\\/g, '\\');
+	s = s.replace(/\//g, '\/');
+	s = s.replace(/\\n/g, ' ');
+	return s;
+}
+
+/** Syntactic sugar to build and send HTTP responses **/
+utils.respond = function(response, statusCode, reason, data, headers)
+{
+	response.writeHead(
+		statusCode,
+		utils.__clean_string(reason),
+		(headers || {'Content-Type': 'text/plain',
+			'Access-Control-Allow-Origin': '*'}));
+
+	let encoding =
+			(headers &&
+			(headers['Content-Type'].match(/image/) ||
+				headers['Content-Type'].match(/pdf/) 	 ||
+				headers['Content-Type'].match(/zip/) 	 ) ?
+				'binary' :
+				'utf8'),
+		content = reason || data;
+
+	if( this.isObject(content) )
+		response.end(this.jsons(content,null,'\t'), encoding);
+	else
+		response.end(content, encoding);
+}
+
 /* NOTE: 'exports' exists in back-end 'require', but not in browser import...
 			this ensures no errors are reported during browser imports */
 var exports = exports || {};
@@ -390,6 +432,7 @@ exports.keys						= utils.keys;
 exports.max							= utils.max;
 exports.mergeDicts					= utils.mergeDicts;
 exports.regexpe						= utils.regexpe;
+exports.respond						= utils.respond;
 exports.sortDict					= utils.sortDict;
 exports.splitDict					= utils.splitDict;
 exports.sn2int 						= utils.sn2int;

@@ -38,7 +38,7 @@
 				internal CS models are adjusted to reflect AS changes... finally,
 				the result of these CS model modifications are themselves bundled
 			  	into changelogs that are forwarded to all subscribed clients 
-				(subscription managment is performed in httpwsd.js)
+				(subscription managment is performed in session_manager.js)
 		2. on failure, the asworker
 			a) returns a 40x|50x status code to the csworker...
 	so basically, when a client asks a csworker to change something, all that
@@ -632,11 +632,11 @@ logger.set_level(logger.LOG_LEVELS.INFO);
 				 between the moment where the socket is created and the moment
 				 where we receive the response to our subscription attempt, we
 				 will receive *all* messages broadcasted by the websocket server
-				 in httpwsd.js... these are detected and discarded */
+				 in session_manager.js... these are detected and discarded */
 	'__aswSubscribe' :
 		function(aswid,cswid)
 		{
-			var self = this;
+			let self = this;
 			return function(callback,errback)
 			{
 				let io = _siocl('http://localhost:8124');
@@ -645,7 +645,7 @@ logger.set_level(logger.LOG_LEVELS.INFO);
 					function()
 					{
 						logger.http("socketio _ 'connect'" ,{'from':"/csworker"+__wid,'to': "/asworker"+aswid,'type':"-->>"});
-						logger.http("Sending changeListener. Below message comes from this worker", {'at':"/csworker"+__wid})
+						logger.http("Sending changeListener to session_mngr for /asworker" + aswid + ".<br/>Below message comes from this worker", {'at':"/csworker"+__wid})
 						io.emit('message',
 							{'method':'POST','url':'/changeListener?wid='+aswid});
 					});
@@ -658,24 +658,21 @@ logger.set_level(logger.LOG_LEVELS.INFO);
 					function(msg)	
 					{
 						let log_statusCode = (msg.statusCode === undefined)? '': msg.statusCode + "<br/>";
-						let log_data = {};
-						if (msg.data) {
-							log_data = {'changelog': _utils.collapse_changelog(msg.data.changelog)};
-						}
-						logger.http("socketio _ 'recv chglg' <br/> " + log_statusCode + JSON.stringify(log_data),{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
 
 						/* on POST /changeListener response */
 						if( msg.statusCode !== undefined )
 						{
+							logger.http("socketio _ 'POST /changeListener resp' <br/> " + log_statusCode, {'from':"session_mngr",'to': "/csworker"+__wid,'type':"-->>"});
+
 							if( ! _utils.isHttpSuccessCode(msg.statusCode) )
 								return errback(msg.statusCode+':'+msg.reason);
 								
 							self.__aswid = aswid;	
 							if( cswid !== undefined )
 							{
-								var actions = 
+								let actions =
 										[__wHttpReq('GET','/internal.state?wid='+cswid)];
-								logger.http("http _ GET" ,{'from':"/csworker"+__wid,'to': "/csworker"+__wid,'type':"-)"});
+								logger.http("http _ GET internal.state" ,{'from':"/csworker"+__wid,'to': "/csworker"+cswid,'type':"-)"});
 											
 								_do.chain(actions)(
 									function(respData) 		
@@ -709,11 +706,18 @@ logger.set_level(logger.LOG_LEVELS.INFO);
 	
 						/* on changelog reception (ignore changelogs while not 
 							subscribed to an asworker... see NOTE) */
-						else if( self.__aswid !== undefined )
+						else if( self.__aswid !== undefined ) {
+							let log_data = {};
+							if (msg.data) {
+								log_data = {'changelog': _utils.collapse_changelog(msg.data.changelog)};
+							}
+							logger.http("socketio _ 'recv chglg' <br/> " + log_statusCode + JSON.stringify(log_data),{'from':"/asworker"+aswid,'to': "/csworker"+__wid,'type':"-->>"});
 							self.__applyASWChanges(
-									msg.data.changelog,
-									msg.data['sequence#'],
-									msg.data.hitchhiker);
+								msg.data.changelog,
+								msg.data['sequence#'],
+								msg.data.hitchhiker);
+
+						}
 					});
 			};
 		},
@@ -1115,9 +1119,8 @@ logger.set_level(logger.LOG_LEVELS.INFO);
 					 reqData['cswid'] == undefined )
 					return __postInternalErrorMsg(resp, 'missing AS and/or CS wid');
 
-				var self	   = this,
-					 actions = 
-	 					 [this.__aswSubscribe(reqData['aswid'],reqData['cswid'])];
+				logger.info("/csworker" + __wid + " attaching to /asworker" + reqData['aswid'] + " and cloning /csworker" + reqData['cswid']);
+				let actions = [this.__aswSubscribe(reqData['aswid'],reqData['cswid'])];
 		
 				_do.chain(actions)(
 						function() 
@@ -1130,10 +1133,17 @@ logger.set_level(logger.LOG_LEVELS.INFO);
 
 			else
 			{
+				logger.http("/csworker" + __wid + " creating /asworker", {'at': '/csworker'+__wid});
+
 				let self = this;
-				let actions =
-						 [__httpReq('POST','/asworker'),
-						  function(aswid)	  {return self.__aswSubscribe(aswid);}];
+				let actions = [
+                    __httpReq("POST", "/asworker"),
+                    function (aswid) {
+                        logger.http(
+                            "/csworker" + __wid + " subscribing to /asworker" + aswid, {'at': '/csworker'+__wid});
+                        return self.__aswSubscribe(aswid);
+                    },
+                ];
 		
 				_do.chain(actions)(
 						function() 
