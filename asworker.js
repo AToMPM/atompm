@@ -36,18 +36,17 @@ module.exports = {
 	'mtwRequest' :
 		function(resp,method,uri,reqData)
 		{
-			var self	   = this,
-				 actions = 
-				 	[__successContinuable(),
-	 				 function()
-	 				 {
-						 uri = uri.substring('/__mt'.length);
-	 					 return __httpReq(
-								 		method,
-										uri+'?wid='+self.__mtwid,
-										reqData,
-										8125);
-	 				 }];
+			let self = this;
+			let actions =
+				[__successContinuable(),
+					function () {
+						uri = uri.substring('/__mt'.length);
+						return __httpReq(
+							method,
+							uri + '?wid=' + self.__mtwid,
+							reqData,
+							8125);
+					}];
 
 			if( this.__mtwid == undefined )
 			{
@@ -55,8 +54,7 @@ module.exports = {
 					 reqData['transfs'] == undefined ||
 					 reqData['transfs'].length == 0 )
 					return __postInternalErrorMsg(resp,'missing transformations');
-				else if( reqData == undefined || 
-  							reqData['username'] == undefined ||
+				else if( reqData['username'] == undefined ||
 	  						reqData['username'].length == 0 )
 					return __postInternalErrorMsg(resp,'missing username');
 
@@ -106,18 +104,22 @@ module.exports = {
 	  					},
   						function()
   						{
-							if( (mms = _mmmk.readMetamodels())['$err'] )
+							let mms = _mmmk.readMetamodels();
+							if (mms['$err'])
 								return __errorContinuable(mms['$err']);
-	  						else if( (m = _mmmk.read())['$err'] )
+							let m = _mmmk.read();
+							if (m['$err'])
 								return __errorContinuable(m['$err']);
-								
-  							return __httpReq(
-										'PUT',
-  										'/current.model?wid='+self.__mtwid,
-										{'mms':mms,
-										 'm':m, 
-										 'sequence#':__sequenceNumber(0)},
-  										8125);
+
+							return __httpReq(
+								'PUT',
+								'/current.model?wid=' + self.__mtwid,
+								{
+									'mms': mms,
+									'm': m,
+									'sequence#': __sequenceNumber(0)
+								},
+								8125);
   						},
   						function()
   						{
@@ -167,22 +169,25 @@ module.exports = {
 	'PUT /current.metamodels' :
 		function(resp,uri,reqData/*mm,hitchhiker*/)
 		{
-			var actions = [__successContinuable()]; 
+			let actions = [__successContinuable()];
 
 			if( reqData['hitchhiker'] == undefined ||
 				 'path' in reqData['hitchhiker'] )
 				actions.push(
 					function()
 					{
-						var ext  = (reqData['mm'].match(/\.pattern\.metamodel$/) ?
-											'.pattern.metamodel' :
-											'.metamodel'),
-							 path = 
-							(reqData['hitchhiker'] && 'path' in reqData['hitchhiker'] ?
-								reqData['hitchhiker']['path'] :
-								reqData['mm'].match(/(.*)\.metamodel/)[1]+
-										'.defaultIcons'+ext),
-							 name = path.match(/.+?(\/.*)\.metamodel/)[1];
+						let ext;
+						if (reqData['mm'].match(/\.pattern\.metamodel$/))
+							ext = '.pattern.metamodel';
+						else
+							ext = '.metamodel';
+
+						let path;
+						if (reqData['hitchhiker'] && 'path' in reqData['hitchhiker'])
+							path = reqData['hitchhiker']['path'];
+						else
+							path = reqData['mm'].match(/(.*)\.metamodel/)[1] + '.defaultIcons' + ext;
+						let name = path.match(/.+?(\/.*)\.metamodel/)[1];
 
 						reqData['hitchhiker'] = {};											
 						reqData['hitchhiker']['name'] = name;
@@ -203,8 +208,8 @@ module.exports = {
 			_do.chain(actions)(
 					function(asmmData) 
 					{
-  						var mm  = reqData['mm'].match(/.+?(\/.*)\.metamodel/)[1],
-							 res = _mmmk.loadMetamodel(mm,asmmData);
+						let mm = reqData['mm'].match(/.+?(\/.*)\.metamodel/)[1];
+						let res = _mmmk.loadMetamodel(mm, asmmData);
 						__postMessage(
 							{'statusCode':200, 
 	  						 'changelog':res['changelog'],
@@ -227,8 +232,8 @@ module.exports = {
 	'DELETE *.metamodel' :
 		function(resp,uri)
 		{
-			var mm  = uri.match(/(.*)\.metamodel/)[1],
-				 res = _mmmk.unloadMetamodel(mm);
+			let mm  = uri.match(/(.*)\.metamodel/)[1];
+			let res = _mmmk.unloadMetamodel(mm);
 			__postMessage(
 					{'statusCode':200, 
 					 'changelog':res['changelog'],
@@ -239,20 +244,19 @@ module.exports = {
 
 	/* load a model */
 	'PUT /current.model' :
-		function(resp,uri,reqData/*m,name,insert,hitchhiker*/)
-		{
-			if( (res = _mmmk.loadModel(
-										reqData['name'],
-										reqData['m'],
-										reqData['insert']))['$err'] )
-				__postInternalErrorMsg(resp,res['$err']);
+		function (resp, uri, reqData/*m,name,insert,hitchhiker*/) {
+			let res = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
+			if (res['$err'])
+				__postInternalErrorMsg(resp, res['$err']);
 			else
 				__postMessage(
-						{'statusCode':200, 
-  						 'changelog':res['changelog'],	
-					 	 'sequence#':__sequenceNumber(),
-						 'hitchhiker':reqData['hitchhiker'],
-						 'respIndex':resp});
+					{
+						'statusCode': 200,
+						'changelog': res['changelog'],
+						'sequence#': __sequenceNumber(),
+						'hitchhiker': reqData['hitchhiker'],
+						'respIndex': resp
+					});
 		},
 
 
@@ -272,15 +276,18 @@ module.exports = {
 	'POST *.type' :
 		function(resp,uri,reqData/*[src,dest],hitchhiker,attrs*/)
 		{
-			var matches 	= uri.match(/(.*)\.type/),
-				 fulltype 	= matches[1],
-				 res  		= (reqData == undefined || reqData['src'] == undefined ?
-									 _mmmk.create(fulltype,reqData['attrs']) :
-									 _mmmk.connect(
-										 __uri_to_id(reqData['src']),
-										 __uri_to_id(reqData['dest']),
-										 fulltype,
-										 reqData['attrs']));
+			let matches 	= uri.match(/(.*)\.type/);
+			let fulltype 	= matches[1];
+			let res;
+			if (reqData == undefined || reqData['src'] == undefined) {
+				res = _mmmk.create(fulltype, reqData['attrs']);
+			} else {
+				res = _mmmk.connect(
+					__uri_to_id(reqData['src']),
+					__uri_to_id(reqData['dest']),
+					fulltype,
+					reqData['attrs']);
+			}
 
 			if( '$err' in res )
 				__postInternalErrorMsg(resp,res['$err']);
@@ -299,9 +306,9 @@ module.exports = {
 	'GET *.instance' :
 		function(resp,uri)
 		{
-			var id = __uri_to_id(uri);
-
-			if( (res = _mmmk.read(id))['$err'] )
+			let id = __uri_to_id(uri);
+			let res = _mmmk.read(id)
+			if( res['$err'] )
 				__postInternalErrorMsg(resp,res['$err']);
 			else
 				__postMessage(
@@ -318,24 +325,24 @@ module.exports = {
 				 bundled, we return a dummy changelog that ensures the said to-do-
 				 cschanges get handled by csworker.__applyASWChanges().CHATTR */
 	'PUT *.instance' :
-		function(resp,uri,reqData/*changes[,hitchhiker]*/)
-		{
-			var id = __uri_to_id(uri);
-
-			if( (res = _mmmk.update(id,reqData['changes']))['$err'] )
-				__postInternalErrorMsg(resp,res['$err']);
-			else
-			{
-				var changelog = 
-						(res['changelog'].length == 0 && reqData['hitchhiker'] ?
-						 	[{'op':'CHATTR','id':id}] :
-							res['changelog']);
+		function (resp, uri, reqData/*changes[,hitchhiker]*/) {
+			let id = __uri_to_id(uri);
+			let res = _mmmk.update(id, reqData['changes']);
+			if (res['$err'])
+				__postInternalErrorMsg(resp, res['$err']);
+			else {
+				let changelog = res['changelog'];
+				if (res['changelog'].length == 0 && reqData['hitchhiker']) {
+					changelog = [{'op': 'CHATTR', 'id': id}];
+				}
 				__postMessage(
-					{'statusCode':200, 
-					 'changelog':changelog,
-					 'sequence#':__sequenceNumber(),
-					 'hitchhiker':reqData['hitchhiker'],
-					 'respIndex':resp});
+					{
+						'statusCode': 200,
+						'changelog': changelog,
+						'sequence#': __sequenceNumber(),
+						'hitchhiker': reqData['hitchhiker'],
+						'respIndex': resp
+					});
 			}
 		},
 
@@ -352,19 +359,26 @@ module.exports = {
 				 NOTE for csworker.DELETE *.instance with the difference that in 
 				 this context, the client is the mtworker) */
 	'DELETE *.instance' :
-		function(resp,uri)
-		{
-			var id = __uri_to_id(uri);
-			if( (res = _mmmk.read(id))['$err'] )
-				__postMessage({'statusCode':200, 'respIndex':resp});
-			else if( (res = _mmmk['delete'](id))['$err'] )
-				__postInternalErrorMsg(resp,res['$err']);
-			else
-				__postMessage(
-					{'statusCode':200, 
-					 'changelog':res['changelog'],
-					 'sequence#':__sequenceNumber(),
-					 'respIndex':resp});
+		function (resp, uri) {
+			let id = __uri_to_id(uri);
+			let res = _mmmk.read(id)
+			if (res['$err']) {
+				__postMessage({'statusCode': 200, 'respIndex': resp});
+				return;
+			}
+			res = _mmmk['delete'](id);
+			if (res['$err']) {
+				__postInternalErrorMsg(resp, res['$err']);
+				return;
+			}
+
+			__postMessage(
+				{
+					'statusCode': 200,
+					'changelog': res['changelog'],
+					'sequence#': __sequenceNumber(),
+					'respIndex': resp
+				});
 		},
 
 
@@ -377,27 +391,33 @@ module.exports = {
 	'PUT *.metamodel' :
 		function(resp,uri,reqData/*[csm]*/)
 		{
-			if( uri.match(/(.*)\..*Icons\.metamodel/) && 
-				 (res = _mmmk.
-						compileToIconDefinitionMetamodel(reqData['csm'], reqData['asmm']))['$err'] )
-				__postInternalErrorMsg(resp,res['$err']);
-			else if( ! uri.match(/(.*)\..*Icons\.metamodel/) &&
-						(res = _mmmk.compileToMetamodel())['$err'] )
-				__postInternalErrorMsg(resp,res['$err']);
-			else
-			{
-				var uri 		= uri.substring('/GET'.length),
-					 actions = [_fs.writeFile('./users'+uri,res)];
-				_do.chain(actions)(
-						function() 
-						{
-							__postMessage(
-								{'statusCode':200, 
-								 'respIndex':resp});
-						},
-						function(err) 	{__postInternalErrorMsg(resp,err);}
-				);
+			let res;
+			if (uri.match(/(.*)\..*Icons\.metamodel/)) {
+				res = _mmmk.compileToIconDefinitionMetamodel(reqData['csm'], reqData['asmm'])
+			} else {
+				res = _mmmk.compileToMetamodel();
 			}
+
+			if (res['$err']) {
+				__postInternalErrorMsg(resp, res['$err']);
+				return;
+			}
+
+			let uri2 = uri.substring('/GET'.length);
+			let actions = [_fs.writeFile('./users' + uri2, res)];
+			_do.chain(actions)(
+				function () {
+					__postMessage(
+						{
+							'statusCode': 200,
+							'respIndex': resp
+						});
+				},
+				function (err) {
+					__postInternalErrorMsg(resp, err);
+				}
+			);
+
 		},
 
 
@@ -405,7 +425,7 @@ module.exports = {
 	'GET /validatem' :
 		function(resp)
 		{
-			var err = _mmmk.validateModel();
+			let err = _mmmk.validateModel();
 			if( err )
 				__postInternalErrorMsg(resp,err['$err']);
 			else
@@ -456,40 +476,38 @@ module.exports = {
 			however, due to the possibly large amount of reqData it requires, we're
 			forced to make it a POST */
 	'POST *.mappings' :
-		function(resp,uri,reqData/*{...,fullvid:mapper,...}*/)
-		{
-			var id  		 = __uri_to_id(uri),
-				 attrVals = {};
+		function (resp, uri, reqData/*{...,fullvid:mapper,...}*/) {
+			let id = __uri_to_id(uri);
+			let attrVals = {};
 
-			for( var fullvid in reqData )
-			{
-				var res = _mmmk.runDesignerAccessorCode(
-									 reqData[fullvid],
-									 'mapper evaluation ('+uri+')',
- 									 id);
-				if( res == undefined )
-					continue; 
-				else if( !_utils.isObject(res) )
-				{
-					attrVals = 
-						{'$err':
-						 'mapper returned non-dictionary type :: '+(typeof res)};
+			for (let fullvid in reqData) {
+				let res = _mmmk.runDesignerAccessorCode(
+					reqData[fullvid],
+					'mapper evaluation (' + uri + ')',
+					id);
+				if (res == undefined)
+					continue;
+				else if (!_utils.isObject(res)) {
+					attrVals =
+						{
+							'$err':
+								'mapper returned non-dictionary type :: ' + (typeof res)
+						};
 					break;
-				}
-				else if( '$err' in res )
-				{
+				} else if ('$err' in res) {
 					attrVals = res;
 					break;
-				}
-				else
-					for( var attr in res )
-						attrVals[fullvid+attr] = res[attr];
+				} else
+					for (let attr in res)
+						attrVals[fullvid + attr] = res[attr];
 			}
 
 			__postMessage(
-					{'statusCode':200,
-					 'data':attrVals,
-					 'respIndex':resp});
+				{
+					'statusCode': 200,
+					'data': attrVals,
+					'respIndex': resp
+				});
 		},
 
 

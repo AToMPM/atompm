@@ -122,7 +122,7 @@ let	 _wlib,
 //have worker id global so that workers can detect it when loaded
 global.__wid = null;
 
-var keepaliveAgent = new _http.Agent({keepAlive: true, maxSockets: 10, maxFreeSockets: 5}); // proposed by yentl to improve performance
+let keepaliveAgent = new _http.Agent({keepAlive: true, maxSockets: 10, maxFreeSockets: 5}); // proposed by yentl to improve performance
 
 
 /*********************************** UTILS ************************************/
@@ -164,7 +164,7 @@ function __httpReq(method,url,data,port)
 					 _http.request(options, 
 						 function(resp)
 						 {
-							 var resp_data = '';
+							 let resp_data = '';
 							 resp.on('data', 	function(chunk) {
 								 resp_data += chunk;});
  							 resp.on('end',
@@ -215,20 +215,22 @@ function __wHttpReq(method,url,data,port)
 
 /******************************* URI PROCESSING *******************************/
 /* optimize __id_to_uri() by remembering computed mappings */
-var __ids2uris = {};
+let __ids2uris = {};
 
 
 /* try to construct a uri from an instance id */
 function __id_to_uri(id)
 {
-	if( id == undefined )
+	if (id == undefined)
 		return undefined;
-	else if( id in __ids2uris )
+	else if (id in __ids2uris)
 		return __ids2uris[id];
-	else if( (res =_mmmk.read(id))['$err'] )
+
+	let res = _mmmk.read(id);
+	if (res['$err'])
 		return res;
 
-	var uri = _utils.jsonp(res)['$type']+'/'+id+'.instance';
+	let uri = _utils.jsonp(res)['$type'] + '/' + id + '.instance';
 	__ids2uris[id] = uri;
 	return uri;
 }
@@ -237,7 +239,7 @@ function __id_to_uri(id)
 /* try to extract an instance id from a uri */
 function __uri_to_id(uri)
 {
-	var matches = uri.match(/.*\/(.*).instance/);
+	let matches = uri.match(/.*\/(.*).instance/);
 	if( matches != null )
 		return matches[1];
 	return {'$err':'bad instance uri :: '+uri};
@@ -257,8 +259,8 @@ function __urizeChangelog(chlog)
 			if( step['op'] == 'RESETM' )
 			{
 				__ids2uris = {};
-				var newModel = _utils.jsonp(step['new_model']);
-				for( var id in newModel.nodes )
+				let newModel = _utils.jsonp(step['new_model']);
+				for( let id in newModel.nodes )
 				{
 					newModel.nodes[__id_to_uri(id)] = newModel.nodes[id];
 					delete newModel.nodes[id];
@@ -333,16 +335,17 @@ function __postUnsupportedErrorMsg(respIndex)
 
 
 /********************************** LOCKING ***********************************/
-var __wLocked    		  = false,
-	 __rLocks 	  		  = 0,
-	 __numWriters 		  = 0,
-	 __numReaders 		  = 0,
-	 __reqs2lockInfo 	  = {},
-	 __reqQueue			  = [],
-	 __NO_LOCK			  = 0,
-	 __LOCK				  = 1,
-	 __WLOCK				  = __LOCK | 2,
-	 __RLOCK				  = __LOCK | 4;
+let __wLocked = false,
+	__rLocks = 0,
+	__numWriters = 0,
+	__numReaders = 0,
+	__reqs2lockInfo = {},
+	__reqQueue = [];
+
+const __NO_LOCK = 0,
+	__LOCK = 1,
+	__WLOCK = __LOCK | 2,
+	__RLOCK = __LOCK | 4;
 
 /* determine whether this worker can proceed with the specified request given 
 	its current readers/writers/locks/queue... returns false if the worker can't
@@ -368,8 +371,8 @@ function __canProceed(method,uri,respIndex,ignoreQueue)
 	}
 
 
-	var isReader  = __isRead(method,uri),
-		 needsLock = __needsLock(method,uri);
+	let isReader  = __isRead(method,uri);
+	let needsLock = __needsLock(method,uri);
 
 	/* disallow concurrent writes and queue if queue (see NOTES above) */	
 	if( (!isReader && __numWriters > 0) ||
@@ -403,19 +406,20 @@ function __canProceed(method,uri,respIndex,ignoreQueue)
 	writers, and launch queued requests, if any... ignore requests that have no
   	entry in __reqs2lockInfo (i.e., requests with backstage passes) */
 function __onRequestResponse(respIndex)
-{	
-	if( (li = __reqs2lockInfo[respIndex]) == undefined )
+{
+	let li = __reqs2lockInfo[respIndex];
+	if (li == undefined)
 		return;
 
-	if( li['needsLock'] & __RLOCK )			
-		__rLocks = Math.max(--__rLocks,0);
-	else if( li['needsLock'] & __WLOCK )	
+	if (li['needsLock'] & __RLOCK)
+		__rLocks = Math.max(--__rLocks, 0);
+	else if (li['needsLock'] & __WLOCK)
 		__wLocked = false;
 
-	if( li['isReader'])		
-		__numReaders = Math.max(--__numReaders,0);
-	else							
-		__numWriters = Math.max(--__numWriters,0);
+	if (li['isReader'])
+		__numReaders = Math.max(--__numReaders, 0);
+	else
+		__numWriters = Math.max(--__numWriters, 0);
 
 	__runQueuedRequests();
 }
@@ -429,18 +433,16 @@ function __onRequestResponse(respIndex)
 			 all s.t. they can all be handled in parallel */
 function __runQueuedRequests()
 {
-	if( __reqQueue.length > 0 )
-	{
-		var head 	  = __reqQueue[0],
-			 uri		  = head['uri'],
-			 method	  = head['method'],
-			 reqData   = head['reqData'],
-			 respIndex = head['respIndex'];
+	if (__reqQueue.length > 0) {
+		let head = __reqQueue[0],
+			uri = head['uri'],
+			method = head['method'],
+			reqData = head['reqData'],
+			respIndex = head['respIndex'];
 
-		if( __canProceed(method,uri,respIndex,true) )
-		{
+		if (__canProceed(method, uri, respIndex, true)) {
 			__reqQueue.shift();
-			__handleClientRequest(uri,method,reqData,respIndex);
+			__handleClientRequest(uri, method, reqData, respIndex);
 			__runQueuedRequests();
 		}
 	}
@@ -460,7 +462,7 @@ function __queueRequest(uri,method,reqData,respIndex)
 
 
 /****************************** SEQUENCE NUMBERS ******************************/
-var __nextSequenceNumber = 0;
+let __nextSequenceNumber = 0;
 
 function __sequenceNumber(inc)
 {
@@ -593,7 +595,7 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 				(method == 'PUT' 		&& uri.match(/^\/GET\/.*\.metamodel$/))	||
 				(method == 'PUT' 		&& uri.match(/^\/GET\/.*\.model$/))			)
 	{
-		var func = method+' *'+uri.match(/.*(\..*)$/)[1];
+		let func = method+' *'+uri.match(/.*(\..*)$/)[1];
 		if( _wlib[func] == undefined )
 			return __postUnsupportedErrorMsg(respIndex);
 		_wlib[func](respIndex,uri,reqData);
@@ -609,7 +611,7 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 				(method == 'PUT'  && uri.match(/^\/GET\/console$/))		 	||
 				(method == 'POST' && uri.match(/^\/batchCheckpoint$/))		)
 	{
-		var func = method+' '+uri;
+		let func = method+' '+uri;
 		if( _wlib[func] == undefined )
 			return __postUnsupportedErrorMsg(respIndex);
 		_wlib[func](respIndex,uri,reqData);
@@ -621,10 +623,9 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 	/* plugin request */
 	else if( uri.match(/^\/plugins\/.*$/) )
 	{
-		var matches = uri.match(/^\/plugins\/(.*?)(\/.*)$/),
+		let matches = uri.match(/^\/plugins\/(.*?)(\/.*)$/),
 			 plugin	= matches[1],
-			 requrl	= matches[2],
-			 self    = this;
+			 requrl	= matches[2];
 
 		if( ! (plugin in _plugins) ||
 			 ! _plugins[plugin].interfaces.some(
@@ -658,14 +659,17 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 	2. return said copy to the querier */
 function GET__current_model(resp)
 {
-	if( (res = _mmmk.read())['$err'] )
-		__postInternalErrorMsg(resp,res['$err']);
+	let res = _mmmk.read();
+	if (res['$err'])
+		__postInternalErrorMsg(resp, res['$err']);
 	else
 		__postMessage(
-			{'statusCode':200,
-			 'data':res,
-			 'sequence#':__sequenceNumber(0),					 
-			 'respIndex':resp});
+			{
+				'statusCode': 200,
+				'data': res,
+				'sequence#': __sequenceNumber(0),
+				'respIndex': resp
+			});
 }
 
 /*	returns the current 'state' of this *worker's _mmmk (i.e., its model,
@@ -675,28 +679,37 @@ function GET__current_model(resp)
 	2. return said copies to the querier */
 function GET__current_state(resp)
 {
-	if( (mms = _mmmk.readMetamodels())['$err'] )
-		__postInternalErrorMsg(resp,mms['$err']);
-	else if( (m = _mmmk.read())['$err'] )
-		__postInternalErrorMsg(resp,m['$err']);
-	else
-		__postMessage(
-			{'statusCode':200,
-			 'data':{'mms':mms,
-						'm':m,
-						'name':_mmmk.readName(),
-						'asn':_wlib['__nextASWSequenceNumber'],
-						'asw':_wlib['__aswid']},
-			 'sequence#':__sequenceNumber(0),
-			 'respIndex':resp});
+	let mms = _mmmk.readMetamodels();
+	if (mms['$err']) {
+		__postInternalErrorMsg(resp, mms['$err']);
+		return;
+	}
+	let m = _mmmk.read();
+	if (m['$err']) {
+		__postInternalErrorMsg(resp, m['$err']);
+		return;
+	}
+	__postMessage(
+		{
+			'statusCode': 200,
+			'data': {
+				'mms': mms,
+				'm': m,
+				'name': _mmmk.readName(),
+				'asn': _wlib['__nextASWSequenceNumber'],
+				'asw': _wlib['__aswid']
+			},
+			'sequence#': __sequenceNumber(0),
+			'respIndex': resp
+		});
 }
 
 /*	returns an array containing the results of a number of bundled read
   	requests */
 function POST_GET_batchread(resp,reqData)
 {
-	var actions = [__successContinuable()],
-		 results = [];
+	let actions = [__successContinuable()];
+	let results = [];
 		
 	reqData.forEach(
 			function(r)
@@ -742,30 +755,27 @@ function POST_GET_batchread(resp,reqData)
  	NOTE:	nested batchEdits are not supported */
 function POST_batchedit(resp,reqData)
 {
-	for( var i in reqData )
-		if( reqData[i]['method'] == 'POST' && 
-			 reqData[i]['uri'].match(/^\/batchEdit$/) )
-			return __postBadReqErrorMsg(
-				'nested batchEdit requests are not supported');
+	for (let i in reqData)
+		if (reqData[i]['method'] == 'POST' && reqData[i]['uri'].match(/^\/batchEdit$/))
+			return __postBadReqErrorMsg('nested batchEdit requests are not supported');
 
-	var results    = [],
-		 currtime   = Date.now(),
-		 startchkpt = __batchCheckpoint(currtime,true),
-		 endchkpt   = __batchCheckpoint(currtime),
-		 setbchkpt  = 
-			 function(name)
- 			 {
-				 return function()
-					 	  {
-			 				  __backstagePass = Math.random();
-			 				  return __wHttpReq(
-		 								  'POST',
-			 							  '/batchCheckpoint?wid='+__wid+
-	  										  '&backstagePass='+__backstagePass,
-				 						  {'name':name});
-						  };
-	 		 },
-		 actions = [__successContinuable(), setbchkpt(startchkpt)];
+	let results = [];
+	let currtime = Date.now();
+	let startchkpt = __batchCheckpoint(currtime, true);
+	let endchkpt = __batchCheckpoint(currtime);
+
+	let setbchkpt =
+			function (name) {
+				return function () {
+					__backstagePass = Math.random();
+					return __wHttpReq(
+						'POST',
+						'/batchCheckpoint?wid=' + __wid +
+						'&backstagePass=' + __backstagePass,
+						{'name': name});
+				};
+			},
+		actions = [__successContinuable(), setbchkpt(startchkpt)];
 
 	reqData.forEach(
 		function(r)
@@ -774,18 +784,19 @@ function POST_batchedit(resp,reqData)
 				function()		
 				{
 					__backstagePass = Math.random();
-					var replace = function(s,p1) {return results[p1]['data'];},
-						 uri 		= r['uri'].replace(/\$(\d+)\$/g,replace);
-					if( r['reqData'] != undefined )
-						var reqData = 
-								_utils.jsonp(
-									_utils.jsons(r['reqData']).
-										replace(/\$(\d+)\$/g,replace) );
+					let replace = function (s, p1) {
+						return results[p1]['data'];
+					};
+					let uri = r['uri'].replace(/\$(\d+)\$/g, replace);
+					if (r['reqData'] != undefined)
+						var reqData =
+							_utils.jsonp(
+								_utils.jsons(r['reqData']).replace(/\$(\d+)\$/g, replace));
 					return __wHttpReq(
-									r['method'],
-									uri+'?wid='+__wid+
-												'&backstagePass='+__backstagePass,
-									reqData);
+						r['method'],
+						uri + '?wid=' + __wid +
+						'&backstagePass=' + __backstagePass,
+						reqData);
 				},
 				function(res)
 				{
@@ -807,7 +818,7 @@ function POST_batchedit(resp,reqData)
 			},
 			function(err) 
 			{
-				var undoActions = 
+				let undoActions =
 					[__successContinuable(),
 					 function()		
 					 {
