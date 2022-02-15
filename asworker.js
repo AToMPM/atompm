@@ -14,6 +14,7 @@ const {
 const _do = require("./___do");
 const _utils = require('./utils');
 const _mmmk = require("./mmmk");
+const _libcompile = require("./libcompile");
 const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
 
 
@@ -392,10 +393,12 @@ module.exports = {
 		function(resp,uri,reqData/*[csm]*/)
 		{
 			let res;
+			let model = _utils.jsonp(_mmmk.read());
+			let metamodels = _mmmk.readMetamodels();
 			if (uri.match(/(.*)\..*Icons\.metamodel/)) {
-				res = _mmmk.compileToIconDefinitionMetamodel(reqData['csm'], reqData['asmm'])
+				res = _libcompile.compileToIconDefinitionMetamodel(model, metamodels, reqData['csm'], reqData['asmm'])
 			} else {
-				res = _mmmk.compileToMetamodel();
+				res = _libcompile.compileToMetamodel(model);
 			}
 
 			if (res['$err']) {
