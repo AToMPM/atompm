@@ -13,8 +13,6 @@
 
 const _utils = require('./utils');
 const _util = require("util");
-const _mt = require("./libmt");
-const _styleinfo = require('./styleinfo');
 
 module.exports = {
     /********************************* GLOBALS *********************************/
