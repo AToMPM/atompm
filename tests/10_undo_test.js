@@ -7,29 +7,26 @@ module.exports = {
         client.url('http://localhost:8124/atompm').pause(300);
     },
 
-    'Login' : function (client) {
+    'Login' : async function (client) {
         user_utils.login(client);
+        let canvas = "#div_canvas";
+        await client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
     },
 
-    'Check undo of deletion' : function (client) {
+    'Check undo of deletion' : async function (client) {
         let filename = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons.metamodel';
         model_building_utils.load_toolbar(client, [filename]);
 
-
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/SimpleClassDiagram\\/SimpleClassDiagram\\.umlIcons\\.metamodel\\/ClassIcon";
-        client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
-        client.click(classIcon);
-
-        let canvas = "#div_canvas";
-        client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
-
-        let num_elements = 0;
+        client
+            .waitForElementPresent(classIcon, 2000, "Check for class icon...")
+            .click(classIcon);
 
         //BUILD CLASS
-        let class_div = model_building_utils.create_class(client, 50, 200, 0);
+        let class_div = await model_building_utils.create_class(client, 50, 200, 0);
 
         //DELETE CLASS
-        model_building_utils.delete_element(client, class_div);
+        await model_building_utils.delete_element(client, class_div);
 
         //CHECK FOR PRESENCE
         client.waitForElementNotPresent(class_div, 1000, "Class deleted");
@@ -41,7 +38,7 @@ module.exports = {
         client.waitForElementPresent(class_div, 1000, "Class restored");
 
         //SECOND DELETE
-        model_building_utils.delete_element(client, class_div);
+        await model_building_utils.delete_element(client, class_div);
 
         //SECOND CHECK FOR PRESENCE
         client.waitForElementNotPresent(class_div, 1000, "Class deleted for second time")

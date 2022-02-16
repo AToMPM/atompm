@@ -24,9 +24,8 @@ module.exports = {
 
         client.pause(5000);
 
-        let pacman = "html body.default_style div#rootDiv.rootDiv div#contentDiv.contentDiv div#div_container.container div#div_canvas.canvas svg g#/Formalisms/Pacman/Pacman.defaultIcons/PacmanIcon/55.instance.clickable";
-
-        client.waitForElementNotPresent(pacman, 60000, "Pacman killed");
+        let pacman = "//*[@id=\"/Formalisms/Pacman/Pacman.defaultIcons/PacmanIcon/55.instance\"]";
+        client.waitForElementNotPresent("xpath", pacman, 60000, "Pacman killed");
 
     },
 

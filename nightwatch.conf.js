@@ -3,67 +3,26 @@
 *  See COPYING, COPYING.lesser, and README.md for full details
 */
 
-const chromedriver = require("chromedriver");
-const selenium_server = require("selenium-server");
-
-
 module.exports = {
-  "src_folders" : ["tests"],
-  "output_folder" : false,
-  "custom_commands_path" : "",
-  "custom_assertions_path" : "",
-  "page_objects_path" : "",
-  "globals_path" : "",
-
-  "selenium" : {
-    "start_process" : true,
-    "server_path" : selenium_server.path,
-    "log_path" : "",
-    "port" : 4444,
-    "check_process_delay": 2000,
-    "cli_args" : {
-      "webdriver.chrome.driver" : chromedriver.path,
-      "webdriver.gecko.driver" : "",
-      "webdriver.edge.driver" : ""
-    }
-  },
-
-  "test_settings" : {
-    "default" : {
-      "launch_url" : "http://localhost",
-      "selenium_port"  : 4444,
-      "selenium_host"  : "localhost",
-      "silent": true,
-      "screenshots" : {
-        "enabled" : false,
-        "path" : ""
-      },
-      "globals": {
-        "waitForConditionTimeout": 5000 // sometimes internet is slow so wait.
-      },
-      "desiredCapabilities": {
-        "browserName": "chrome",
-        "javascriptEnabled": true,
-        "marionette": true,
-        "chromeOptions": {
-            "args" : ["--no-sandbox"],
-            "w3c": false
-          },
-      }
+    "src_folders": ["tests"],
+    webdriver: {
+        start_process: true,
+        port: 4444,
+        server_path: require('chromedriver').path,
+        cli_args: [
+            // very verbose logs
+            // '-vv'
+        ]
     },
 
-    "chrome" : {
-      "desiredCapabilities": {
-        "browserName": "chrome"
-      }
+    test_settings: {
+        default: {
+            launch_url: 'http://localhost:8124/atompm',
+            desiredCapabilities: {
+                browserName: 'chrome'
+            }
+        }
     },
-
-    "edge" : {
-      "desiredCapabilities": {
-        "browserName": "MicrosoftEdge"
-      }
-    }
-  }
 };
 
 

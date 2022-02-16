@@ -5,7 +5,7 @@ let deleteFolderRecursive = function (path) {
     if (_fs.existsSync(path)) {
         _fs.readdirSync(path).forEach(function (file, index) {
             let curPath = path + "/" + file;
-            console.log("Deleting: " + curPath);
+            // console.log("Deleting: " + curPath);
 
             if (_fs.lstatSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
@@ -31,11 +31,12 @@ module.exports = {
         if (!user_exists) {
             user_utils.create_user(client, username, user_pass);
         }
+        client.pause(1000);
 
         user_utils.login(client, username);
 
         //needed to ensure everything is loaded
-        client.pause(500);
+        client.pause(1000);
     },
 
     'Load Missing Toolbar': function (client) {
@@ -47,16 +48,20 @@ module.exports = {
             }, [], null
         );
 
+        client.pause(1000);
         client.waitForElementPresent("#dialog_btn", 2000, "Check for toolbar loading error: " + filename);
+
         client.element('css selector', '#dialog_btn', function (result) {
             if (result.status != -1) {
                 //Dialog has popped up, so check the text and click the button
-                client.assert.containsText("#div_dialog_0", "File not found");
+                client.assert.textContains("#div_dialog_0", "File not found");
                 client.click("#dialog_btn");
 
                 client.verify.ok(true, "Toolbar: " + filename + " failed to load!"); //don't stop testing
             }
         });
+
+        client.pause(1000);
 
     },
 
@@ -73,7 +78,7 @@ module.exports = {
         client.element('css selector', '#dialog_btn', function (result) {
             if (result.status != -1) {
                 //Dialog has popped up, so check the text and click the button
-                client.assert.containsText("#div_dialog_0", "File cannot be read");
+                client.assert.textContains("#div_dialog_0", "File cannot be read");
                 client.click("#dialog_btn");
 
                 client.verify.ok(true, "Model: " + filename + " failed to load!"); //don't stop testing
@@ -84,9 +89,11 @@ module.exports = {
 
     'Delete and Click Toolbar': function (client) {
         client.pause(500);
-        deleteFolderRecursive("./users/userremove");
+        let path = "./users/userremove";
+        console.log("Deleting: " + path);
+        deleteFolderRecursive(path);
 
-        client.pause(1000);
+        client.pause(2000);
 
         let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
         client.waitForElementPresent(load_button, 1000, "Looking for load button")
@@ -98,7 +105,7 @@ module.exports = {
         client.element('css selector', '#dialog_btn', function (result) {
             if (result.status != -1) {
                 //Dialog has popped up, so check the text and click the button
-                client.assert.containsText("#div_dialog_0", "Cannot load file list");
+                client.assert.textContains("#div_dialog_0", "Cannot load file list");
                 client.click("#dialog_btn");
 
                 client.verify.ok(true, "File list failed to load!"); //don't stop testing

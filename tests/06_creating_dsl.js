@@ -78,9 +78,9 @@ function get_all_attrs3() {
 }
 
 let assocs = [
-    //from, to, name, isContain, out_card, in_card
+    //from, to, name, isContain, out_card, in_card, offset, offset2
 
-    [0, 1, "testAssoc", false, null, null],
+
     [1, 3, "oneToOne", false,
         [{
             "dir": "out",
@@ -93,8 +93,10 @@ let assocs = [
             "type": "oneToOne",
             "min": "1",
             "max": "1"
-        }]
+        }],
+        [3, 3], [0, 0]
     ],
+    [0, 1, "testAssoc", false, null, null, [0, 0], [-3, -3]],
     [4, 5, "ManyToOne", false,
         null,
         [{
@@ -102,13 +104,16 @@ let assocs = [
             "type": "ManyToOne",
             "min": "0",
             "max": "1"
-        }]
+        }],
+        [0, 0], [0, 0]
     ],
     [6, 7, "Containment", true,
-        null, null
+        null, null,
+        [0, 0], [0, 0]
     ],
     [8, 8, "self", false,
-        null, null
+        null, null,
+        [-3, -3], [3, 3]
     ]
 ];
 
@@ -124,7 +129,8 @@ module.exports = {
         user_utils.login(client);
     },
 
-    'Create AS model': function (client) {
+    'Create AS model': async function (client) {
+
         let filename = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons.metamodel';
         model_building_utils.load_toolbar(client, [filename]);
 
@@ -134,237 +140,155 @@ module.exports = {
 
         client.waitForElementPresent(div_utils.canvas, 1000, "Checking for canvas...");
 
-        let test_folder = "autotest";
         let name_field = "#tr_name > td:nth-child(2) > textarea";
         let num_elements = 0;
 
         //BUILD CLASSES
-        let start_x = 50;
+        let start_x = 30;
         let x_diff = 350;
         let x_coords = [start_x, start_x + x_diff, start_x + 2 * x_diff];
 
-        let start_y = 200;
+        let start_y = 100;
         let y_diff = 150;
         let y_coords = [start_y, start_y + y_diff, start_y + 2 * y_diff];
 
         let num_classes = x_coords.length * y_coords.length;
 
-        num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements);
-
-        // SET NAMES FOR CLASSES
-        for (let i = 0; i < num_classes; i++) {
-            let class_name = "Class" + String.fromCharCode(65 + i);
-            let attrs = {};
-            attrs[name_field] = class_name;
-            model_building_utils.set_attribs(client, i, attrs);
-        }
-
-        // SET ATTRIBUTES
-        //TODO: Use modelbuildingutils.set_attribs
-        let class_div = div_utils.get_class_div(8);
-        let attrib_field = "#tr_attributes > td:nth-child(2) > textarea";
-        client.moveToElement(class_div, 10, 10)
-            .mouseButtonClick('middle')
-            .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
-            .clearValue(attrib_field)
-            .setValue(attrib_field, get_all_attrs())
-            .click("#dialog_btn")
-            .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
-            .moveToElement(div_utils.canvas, 0, 100)
-            .mouseButtonClick('left')
-            .pause(100)
-        ;
-
-        let class_div3 = div_utils.get_class_div(0);
-        client.moveToElement(class_div3, 10, 10)
-            .mouseButtonClick('middle')
-            .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
-            .clearValue(attrib_field)
-            .setValue(attrib_field, get_all_attrs3())
-            .click("#dialog_btn")
-            .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
-            .moveToElement(div_utils.canvas, 0, 100)
-            .mouseButtonClick('left')
-            .pause(100)
-        ;
-
+        num_elements = await model_building_utils.create_classes(client, x_coords, y_coords, num_elements);
 
         let abstract_class = 4;
-        let class_div2 = div_utils.get_class_div(abstract_class);
-        let checkbox = "#tr_abstract > td:nth-child(2) > input[type=\"checkbox\"]";
-        model_building_utils.move_to_element_ratio(client, class_div2, 50, 50);
-        client.mouseButtonClick('middle')
-            .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
-            .clearValue(attrib_field)
-            .setValue(attrib_field, get_all_attrs2())
-            .moveToElement(checkbox, 0, 0)
-            .mouseButtonClick('left')
-            .click("#dialog_btn")
-            .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
-            .moveToElement(div_utils.canvas, 0, 100)
-            .mouseButtonClick('left')
-            .pause(100)
-        ;
 
-        //CREATE INHERITANCE
-        let inheri_classes = [
-            [abstract_class, abstract_class + 1],
-            [abstract_class, abstract_class + 3]];
+        // for speedup of testing
+        let skip_attribs = false;
+        if (!skip_attribs) {
+            // SET NAMES FOR CLASSES
+            for (let i = 0; i < num_classes; i++) {
+                let class_name = "Class" + String.fromCharCode(65 + i);
+                let attrs = {};
+                attrs[name_field] = class_name;
+                await model_building_utils.set_attribs(client, i, attrs);
+            }
 
-        for (let inheri_set of inheri_classes) {
-            let sup = div_utils.get_class_div(inheri_set[0]);
-            let sub = div_utils.get_class_div(inheri_set[1]);
+            // SET ATTRIBUTES
+            //let class_div = div_utils.get_class_div(8);
+            let attr_div = "#tr_attributes > td:nth-child(2) > textarea";
+            let attrs = {}
+            attrs[attr_div] = get_all_attrs();
+            await model_building_utils.set_attribs(client, 8, attrs);
 
-            let inheri_relation = "#div_dialog_0 > select > option:nth-child(2)";
-            //tiny offset to not hit other arrows
-            let offset = 2 * inheri_set[1];
-            client
-                .moveToElement(sub, 50, 50)
-                .mouseButtonDown('right')
-                .moveToElement(sup, 50 + offset, 50 + offset)
-                .mouseButtonUp('right')
-                .pause(100)
-                .click(inheri_relation)
-                .waitForElementPresent("#dialog_btn", 1000, "Inheri menu opens")
-                .click("#dialog_btn")
-                .pause(100)
-                .waitForElementNotPresent("#dialog_btn", 1000, "Inheri menu closes")
-                .moveToElement(div_utils.canvas, 0, 100)
-                .mouseButtonClick('left')
-                .pause(100)
-            ;
+            attrs[attr_div] = get_all_attrs3();
+            await model_building_utils.set_attribs(client, 0, attrs);
 
-            num_elements++;
+            let checkbox_div = "#tr_abstract > td:nth-child(2) > input[type=\"checkbox\"]";
+            attrs = {};
+            attrs[attr_div] = get_all_attrs2();
+            attrs[checkbox_div] = "";
+            await model_building_utils.set_attribs(client, abstract_class, attrs);
         }
+
 
         //SET ASSOCS
         client.pause(100);
 
-        let assoc_num = 0;
-        for (let assoc of assocs) {
+        // for debugging
+        let skip_assocs = false;
+        if (!skip_assocs) {
 
-            let from_ele = div_utils.get_class_div(assoc[0]);
-            let to_ele = div_utils.get_class_div(assoc[1]);
-            let name = assoc[2];
-            let isContain = assoc[3];
-            let out_card = assoc[4];
-            let in_card = assoc[5];
+            //CREATE INHERITANCE
+            let inheri_classes = [
+                [abstract_class, abstract_class + 1],
+                [abstract_class, abstract_class + 3]];
 
-            let cardinality_field = "#tr_cardinalities > td:nth-child(2) > textarea";
+            for (let inheri_set of inheri_classes) {
+                //tiny offset to not hit other arrows
+                let offset = [4 * inheri_set[0], 5 * inheri_set[0]];
+                let offset2 = [4 * inheri_set[1], 5 * inheri_set[1]];
 
-            let assoc_div = div_utils.get_assoc_div(num_elements);
-            assoc_num++;
-            num_elements++;
+                let sup = div_utils.get_class_div(inheri_set[0]);
+                let sub = div_utils.get_class_div(inheri_set[1]);
 
-            let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
-            //tiny offset to not hit other arrows
-            let offset = 3 * assoc[0] + 3 * assoc[1];
+                let inheri_relation = "#div_dialog_0 > select > option:nth-child(2)";
 
-            //TODO: Change to
-            // model_building_utils.create_assoc(client, from_ele, to_ele, assoc_relation, offset);
-            client
-                .moveToElement(from_ele, 20, 20)
-                .mouseButtonDown('right')
-                .moveToElement(to_ele, 20 + offset, 20 + offset)
-                .mouseButtonUp('right')
-                .pause(100)
-                .click(assoc_relation)
-                .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
-                .click("#dialog_btn")
-                .pause(100)
-                .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes")
-                .moveToElement(div_utils.canvas, 0, 100)
-                .mouseButtonClick('left')
-                .pause(100)
-                .waitForElementPresent(assoc_div, 1000, "Assoc name present: " + assoc_div);
+                await model_building_utils.create_assoc(client, sub, sup, inheri_relation, offset, offset2);
 
-            if (out_card) {
-
-                model_building_utils.move_to_element_ratio(client, from_ele, 50, 50);
-                client.mouseButtonClick('middle')
-                    .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
-                    .clearValue(cardinality_field)
-                    .setValue(cardinality_field, JSON.stringify(out_card))
-                    .click("#dialog_btn")
-                    .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
-                    .moveToElement(div_utils.canvas, 0, 100)
-                    .mouseButtonClick('left')
-                    .pause(100);
+                num_elements++;
             }
 
-            if (in_card) {
-                model_building_utils.move_to_element_ratio(client, to_ele, 50, 50);
-                client.mouseButtonClick('middle')
-                    .waitForElementPresent("#dialog_btn", 1000, "Out card menu opens")
-                    .clearValue(cardinality_field)
-                    .setValue(cardinality_field, JSON.stringify(in_card))
-                    .click("#dialog_btn")
-                    .waitForElementNotPresent("#dialog_btn", 1000, "Out card menu closes")
-                    .moveToElement(div_utils.canvas, 0, 100)
-                    .mouseButtonClick('left')
-                    .pause(100);
-            }
-            client.getElementSize(assoc_div, function (result) {
+            let assoc_num = 0;
+            for (let assoc of assocs) {
 
-                model_building_utils.move_to_element_ratio(client, assoc_div, 50, 50);
-                client.mouseButtonClick('middle')
-                    .waitForElementPresent("#dialog_btn", 1000, "Editing assoc name opens")
-                    .clearValue(name_field)
-                    .setValue(name_field, name);
+                // console.log("Creating assoc:");
+                // console.log(assoc);
 
-                if (isContain) {
-                    let contain_opt = "#tr_linktype > td:nth-child(2) > select > option:nth-child(2)";
+                let from_ele = div_utils.get_class_div(assoc[0]);
+                let to_ele = div_utils.get_class_div(assoc[1]);
+                let name = assoc[2];
+                let isContain = assoc[3];
+                let out_card = assoc[4];
+                let in_card = assoc[5];
 
-                    client
-                        .moveToElement(contain_opt, 0, 0)
-                        .mouseButtonClick('left');
+                let cardinality_field = "#tr_cardinalities > td:nth-child(2) > textarea";
+
+                let assoc_div = div_utils.get_assoc_div(num_elements);
+                assoc_num++;
+                num_elements++;
+
+                let attrib_offset = [4, 4];
+                if (out_card) {
+                    let attrs = {};
+                    attrs[cardinality_field] = JSON.stringify(out_card);
+                    await model_building_utils.set_attribs(client, 0, attrs, from_ele, undefined, attrib_offset);
                 }
 
-                client
-                    .click("#dialog_btn")
-                    .waitForElementNotPresent("#dialog_btn", 1000, "Editing assoc name closes")
-                    .moveToElement(div_utils.canvas, 0, 100)
-                    .mouseButtonClick('left')
-                    .pause(100);
-            });
+                if (in_card) {
+                    let attrs = {};
+                    attrs[cardinality_field] = JSON.stringify(in_card);
+                    await model_building_utils.set_attribs(client, 0, attrs, to_ele, undefined, attrib_offset);
+                }
+
+                client.pause(300);
+
+                let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
+                //tiny offset to not hit other arrows
+                let offset = [3 * assoc[0], 5 * assoc[1]];
+                let offset2 = [4 * assoc[1], 5 * assoc[1]];
+
+                await model_building_utils.create_assoc(client, from_ele, to_ele, assoc_relation, offset, offset2);
+
+                let attrs = {};
+                attrs[name_field] = name;
+                if (isContain) {
+                    let contain_opt = "#choice_containment";
+                    attrs[contain_opt] = "";
+                }
+
+                await model_building_utils.set_attribs(client, 0, attrs, assoc_div, undefined, attrib_offset);
+
+
+
+            }
         }
 
         //CREATE CONSTRAINT
-        let constraint_div = div_utils.get_element_div("GlobalConstraintIcon", num_elements);
-
+        let constraint_type = "GlobalConstraintIcon";
+        let constraint_div = div_utils.get_element_div(constraint_type, num_elements);
         let constraintIcon = "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2e metamodel\\2f GlobalConstraintIcon";
         client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
         client.click(constraintIcon);
 
-        client
-            .moveToElement(div_utils.canvas, start_x + 3 * x_diff, start_y)
-            .mouseButtonClick('right')
-            .pause(100)
-            .waitForElementPresent(constraint_div, 500, "Created class: " + constraint_div);
+        await model_building_utils.create_class(client, start_x + 3 * x_diff, start_y, num_elements, constraint_type);
 
-        let pre_create_opt = "#tr_event > td:nth-child(2) > select > option:nth-child(2)";
+        //let pre_create_opt = "#tr_event > td:nth-child(2) > select > option:nth-child(2)";
         let code_field = "#tr_code > td:nth-child(2) > textarea";
         let validate_choice = "#choice_validate";
         let constraint_code = "let C_classes = getAllNodes(['/autotest/autotest/ClassC']);\n" +
             "C_classes.length <= 2;";
-        client
-            .moveToElement(constraint_div, 10, 10)
-            .mouseButtonClick('middle')
-            .waitForElementPresent("#dialog_btn", 1000, "Constraint menu opens")
-            .clearValue(name_field)
-            .setValue(name_field, "max-two-instances")
-            .waitForElementPresent(validate_choice, 2000, "Find validate option")
-            .click(validate_choice)
-            .moveToElement(pre_create_opt, 0, 0)
-            .mouseButtonClick('left')
-            .clearValue(code_field)
-            .setValue(code_field, constraint_code)
-            .click("#dialog_btn")
-            .waitForElementNotPresent("#dialog_btn", 1000, "Constraint menu closes")
-            .moveToElement(div_utils.canvas, 0, 100)
-            .mouseButtonClick('left')
-            .pause(100);
 
+        let attrs = {};
+        attrs[name_field] = "max-two-instances";
+        attrs[validate_choice] = "";
+        attrs[code_field] = constraint_code;
+        await model_building_utils.set_attribs(client, 0, attrs, constraint_div);
 
         //SAVE MODEL
         let model_name = "autotest.model";
@@ -373,16 +297,14 @@ module.exports = {
 
 
         //COMPILE TO ASMM
-
         let metamodel_name = "autotest.metamodel";
         model_building_utils.compile_model(client, "AS", folder_name, metamodel_name);
 
-        client.pause(500);
+        client.pause(300);
     },
 
 
-    'Create CS model': function (client) {
-
+    'Create CS model': async function (client) {
         let filename = '/Formalisms/__LanguageSyntax__/ConcreteSyntax/ConcreteSyntax.defaultIcons.metamodel';
         model_building_utils.load_toolbar(client, [filename]);
 
@@ -393,7 +315,6 @@ module.exports = {
         let canvas = "#div_canvas";
         client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
 
-        let test_folder = "autotest";
         let name_field = "#tr_typename > td:nth-child(2) > textarea";
         let num_elements = 0;
 
@@ -410,14 +331,14 @@ module.exports = {
 
         let num_classes = x_coords.length * y_coords.length;
 
-        num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements, icon_type);
+        num_elements = await model_building_utils.create_classes(client, x_coords, y_coords, num_elements, icon_type);
 
         //SET NAMES FOR CLASSES
         for (let i = 0; i < num_classes; i++) {
             let class_name = "Class" + String.fromCharCode(65 + i) + "Icon";
             let attrs = {};
             attrs[name_field] = class_name;
-            model_building_utils.set_attribs(client, i, attrs, icon_type);
+            await model_building_utils.set_attribs(client, i, attrs, icon_type);
         }
 
         // BUILD TEXT FOR ICONS
@@ -438,27 +359,12 @@ module.exports = {
             let attrs = {};
             attrs[textContent_field] = text;
 
-            client
-                .pause(100)
-                .moveToElement(canvas, 20, 200)
-                .mouseButtonClick('right')
-                .pause(100)
-                .waitForElementPresent(textDiv, 500, "Created text: " + textDiv);
-
-            model_building_utils.set_attribs(client, num_elements, attrs, textType);
+            await model_building_utils.create_class(client, 20, 200, num_elements, textType);
+            await model_building_utils.set_attribs(client, num_elements, attrs, textType);
 
             num_elements++;
 
-            client.moveToElement(textDiv, 10, 10)
-                .mouseButtonClick('left')
-                .pause(100)
-                .mouseButtonDown('left')
-                .pause(100);
-
-            model_building_utils.move_to_element_ratio(client, iconDiv, 35, 15);
-            client.mouseButtonUp('left');
-
-            model_building_utils.click_off(client);
+            await model_building_utils.move_element(client, textDiv, iconDiv, [0, 0], [0, 40]);
 
             //inner link counts as an element
             num_elements++;
@@ -480,36 +386,20 @@ module.exports = {
             client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...");
             client.click(getIcon(currSymbol));
 
-
             let symbolDiv = div_utils.build_div(getType(currSymbol), num_elements);
             let iconDiv = div_utils.build_div(icon_type, i);
 
-
-            client
-                .pause(100)
-                .moveToElement(canvas, 50, 200)
-                .mouseButtonClick('right')
-                .pause(100)
-                .waitForElementPresent(symbolDiv, 500, "Created symbol: " + symbolDiv);
-
-            model_building_utils.click_off(client);
+            await model_building_utils.create_class(client, 20, 200, num_elements, getType(currSymbol));
+            await model_building_utils.deselect_all(client);
 
             num_elements++;
 
-            model_building_utils.move_to_element_ratio(client, symbolDiv, 50, 50);
-            client
-                .mouseButtonClick('left')
-                .pause(100)
-                .mouseButtonDown('left')
-                .pause(100);
-
-            model_building_utils.move_to_element_ratio(client, iconDiv, 50, 55);
-            client.pause(100).mouseButtonUp('left');
-
-            model_building_utils.click_off(client);
+            await model_building_utils.move_element(client, symbolDiv, iconDiv, [0, 0], [0, -40]);
 
             //inner link counts as an element
             num_elements++;
+
+            client.pause(200);
         }
 
         // BUILD LINKS
@@ -528,19 +418,20 @@ module.exports = {
         client.click(linkIcon);
 
         let num_elements_before = num_elements;
-        model_building_utils.create_classes(client, link_x_coords, link_y_coords, num_elements, linkType);
+        await model_building_utils.create_classes(client, link_x_coords, link_y_coords, num_elements, linkType);
 
         //SET NAMES FOR LINKS
         for (let i = 0; i < assocs.length; i++) {
             let link_name = assocs[i][2] + "Link";
             let attrs = {};
             attrs[link_typename_field] = link_name;
-            model_building_utils.set_attribs(client, num_elements_before + i, attrs, linkType);
+            await model_building_utils.set_attribs(client, num_elements_before + i, attrs, linkType);
         }
 
         //remove unneeded elements
-        model_building_utils.delete_element(client, div_utils.build_div(icon_type, 4));
-        model_building_utils.delete_element(client, div_utils.build_div(linkType, 50));
+        await model_building_utils.delete_element(client, div_utils.build_div(icon_type, 4));
+
+        await model_building_utils.delete_element(client, div_utils.build_div(linkType, 50));
 
 
         let folder_name = "autotest";
@@ -548,11 +439,9 @@ module.exports = {
 
         model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
 
-        client.pause(1000);
-
     },
 
-    'Create model': function (client) {
+    'Create model': async function (client) {
 
         let test_toolbar = '/autotest/autotest.defaultIcons.metamodel';
         model_building_utils.load_toolbar(client, [test_toolbar]);
@@ -597,16 +486,13 @@ module.exports = {
             client.click(class_btn);
 
             let class_div = class_type + class_name + "\\2f ";
-
-            let built_class_div = model_building_utils.create_class(client, coords[i][0], coords[i][1], num_elements, class_div);
-
-            element_map[class_name] = built_class_div;
+            element_map[class_name] = await model_building_utils.create_class(client, coords[i][0], coords[i][1], num_elements, class_div);
 
             num_elements++;
 
         }
 
-        model_building_utils.click_off(client);
+        await model_building_utils.deselect_all(client);
 
         // BUILD ASSOCIATIONS
         for (let assoc of assocs) {
@@ -632,34 +518,33 @@ module.exports = {
 
             let isContainAssoc = assoc[3];
             if (!isContainAssoc) {
-                model_building_utils.move_to_element_ratio(client, from_class_div, 20, 50);
-                client.mouseButtonDown('right');
-                model_building_utils.move_to_element_ratio(client, to_class_div, 80, 50);
-                client.mouseButtonUp('right').pause(300);
+                //let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
+                //tiny offset to not hit other arrows
+                let offset = assoc[6];
+                let offset2 = assoc[7];
+
+                await model_building_utils.create_assoc(client, from_class_div, to_class_div, undefined, offset, offset2);
             } else {
-                model_building_utils.move_to_element_ratio(client, to_class_div, 30, 50);
-                client.mouseButtonClick('left').pause(300);
-                client.mouseButtonDown('left');
-                model_building_utils.move_to_element_ratio(client, from_class_div, 50, 120);
-                client.mouseButtonUp('left').pause(300);
+                await model_building_utils.move_element(client, to_class_div, from_class_div, [0, 0], [0, 0])
             }
 
             num_elements++;
 
-            model_building_utils.click_off(client);
+            await model_building_utils.deselect_all(client);
 
         }
 
+
+
         //SCALE AND ROTATE TESTS
         let scale_element_div = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassDIcon\\/3\\.instance";
-        model_building_utils.move_to_element_ratio(client, scale_element_div, 50, 50);
-        client.mouseButtonClick('left').pause(300);
+        await model_building_utils.hit_control_element(client, scale_element_div);
+        //client.mouseButtonClick('left').pause(300);
         //client.setValue(scale_element_div, client.Keys.CONTROL);
-
         //TODO: Can't send CONTROL key
-        client.execute(function () {
-            GeometryUtils.showGeometryControlsOverlay();
-        }, [], null);
+        // client.execute(function () {
+        //     GeometryUtils.showGeometryControlsOverlay();
+        // }, [], null);
 
 
         let resize_btn_div = "#resize_btn";
@@ -674,7 +559,7 @@ module.exports = {
         model_building_utils.scroll_geometry_element(client, rotate_btn_div, 120, 8);
         client.click(ok_btn_div).pause(500);
 
-        model_building_utils.click_off(client);
+        await model_building_utils.deselect_all(client);
 
         //SET ATTRIBUTES
 
@@ -688,13 +573,16 @@ module.exports = {
 
         let attribs = {};
         for (let [key, value] of Object.entries(AAttribs)) {
-            let new_key = "#tr_" + key + " > td:nth-child(2) > textarea:nth-child(1)";
+            let attrib_type = "textarea";
+            if (key == "boolean") attrib_type = "input";
+            let new_key = "#tr_" + key + " > td:nth-child(2) > "+attrib_type+":nth-child(1)";
             attribs[new_key] = value;
         }
         //TODO: Set other attribs
         let div_suffix = " > text";
-        model_building_utils.set_attribs(client, 7, attribs, IClass, div_suffix, [1, 1]);
+        await model_building_utils.set_attribs(client, 7, attribs, IClass, div_suffix, [5, 5]);
 
+        //client.pause(500000)
 
         // VERIFY MODEL
         let verify_btn = "#\\/Toolbars\\/MainMenu\\/MainMenu\\.buttons\\.model\\/validateM";
@@ -702,32 +590,32 @@ module.exports = {
 
         client.waitForElementPresent(verify_btn, 2000, "Find verify button")
             .click(verify_btn)
-            .waitForElementNotPresent(dialog_btn, 2000, "No constraint violation");
+            .waitForElementNotPresent(dialog_btn, 500, "No constraint violation");
 
         let new_x = start_x + 3 * x_diff;
         let class_btn = class_icon + "ClassCIcon";
         let CClass_type = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassCIcon\\/";
-        client.click(class_btn);
+        client.click(class_btn).pause(100);
 
-        model_building_utils.create_class(client, new_x, start_y, num_elements, CClass_type);
-        model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
+        await model_building_utils.create_class(client, new_x, start_y, num_elements, CClass_type);
+        await model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
 
         client.click(verify_btn)
             .waitForElementPresent(dialog_btn, 2000, "Constraint violation")
-            .click(dialog_btn).pause(1000);
+            .click(dialog_btn);
 
-        model_building_utils.click_off(client);
+        await model_building_utils.deselect_all(client);
 
 
         // SAVE INSTANCE MODEL
         let folder_name = "autotest";
         model_building_utils.save_model(client, folder_name, "autotest_instance.model");
 
-        client.pause(1000);
+        client.pause(300);
 
 
     },
-    
+
 
     after: function (client) {
         client.end();
