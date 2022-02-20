@@ -15,6 +15,7 @@ const _do = require("./___do");
 const _utils = require('./utils');
 const _mmmk = require("./mmmk");
 const _libcompile = require("./libcompile");
+const _libeventhandler = require("./libeventhandler")
 const _fs = _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']);
 
 
@@ -428,7 +429,7 @@ module.exports = {
 	'GET /validatem' :
 		function(resp)
 		{
-			let err = _mmmk.validateModel();
+			let err = _libeventhandler.validateModel(_mmmk);
 			if( err )
 				__postInternalErrorMsg(resp,err['$err']);
 			else
@@ -484,13 +485,15 @@ module.exports = {
 			let attrVals = {};
 
 			for (let fullvid in reqData) {
-				let res = _mmmk.runDesignerAccessorCode(
+				let res = _libeventhandler.runDesignerAccessorCode(
+					_mmmk,
 					reqData[fullvid],
 					'mapper evaluation (' + uri + ')',
 					id);
 				if (res == undefined)
 					continue;
-				else if (!_utils.isObject(res)) {
+
+				if (!_utils.isObject(res)) {
 					attrVals =
 						{
 							'$err':
