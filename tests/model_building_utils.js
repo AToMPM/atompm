@@ -22,6 +22,7 @@ async function create_class(client, x, y, i, element_type) {
         });
 
     //client.waitForElementPresent(class_div, 1000, "Created class: " + class_div);
+    client.pause(300);
 
     return class_div;
 
@@ -258,6 +259,8 @@ function navigate_to_folder(client, folder_name) {
         });
 
     }
+
+    client.pause(300);
 
 }
 
