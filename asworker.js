@@ -395,8 +395,8 @@ module.exports = {
 		{
 			let res;
 			let model = _utils.jsonp(_mmmk.read());
-			let metamodels = _mmmk.readMetamodels();
 			if (uri.match(/(.*)\..*Icons\.metamodel/)) {
+				let metamodels = _utils.jsonp(_mmmk.readMetamodels());
 				res = _libcompile.compileToIconDefinitionMetamodel(model, metamodels, reqData['csm'], reqData['asmm'])
 			} else {
 				res = _libcompile.compileToMetamodel(model);

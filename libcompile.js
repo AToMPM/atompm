@@ -291,7 +291,7 @@ module.exports = {
                 /* 5 */
                 return _utils.jsons(mm, null, "\t");
             } catch (err) {
-                return {'$err': 'invalid metamodel model, crashed on :: ' + err};
+                return {'$err': 'compileToIconDefinitionMetamodel - invalid metamodel model, crashed on :: ' + err};
             }
         },
 
@@ -479,7 +479,7 @@ module.exports = {
                 /* 5 */
                 return _utils.jsons(mm, null, "\t");
             } catch (err) {
-                return {'$err': 'invalid metamodel model, crashed on :: ' + err};
+                return {'$err': 'compileToMetamodel - invalid metamodel model, crashed on :: ' + err};
             }
         },
 }
