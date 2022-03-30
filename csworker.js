@@ -210,7 +210,6 @@ const _svg = require('./libsvg').SVG;
 const _utils = require('./utils');
 
 const logger = require('./logger.js')
-logger.set_level(logger.LOG_LEVELS.INFO);
 
 module.exports = {
     '__REGEN_ICON_RETRY_DELAY_MS': 200,

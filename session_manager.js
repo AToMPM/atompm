@@ -12,8 +12,6 @@ const _url = require("url");
 const _cp = require("child_process");
 const _path = require("path");
 
-logger.set_level(logger.LOG_LEVELS.INFO);
-
 /* an array of WebWorkers
 	... each has its own mmmk instance */
 let workers = [];
