@@ -11,6 +11,7 @@ const logger = require("./logger");
 const _url = require("url");
 const _cp = require("child_process");
 const _path = require("path");
+const _zmq = require("zeromq")
 
 /* an array of WebWorkers
 	... each has its own mmmk instance */
@@ -178,6 +179,18 @@ function handle_http_message(url, req, resp){
         let msg = {'workerType':url.pathname, 'workerId':wid};
         logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': url.pathname + wid, 'type':"-)"});
         worker.send(msg);
+
+        async function inform_mmmk_manager(msg) {
+            let __sock_mmmk = new _zmq.Request();
+            __sock_mmmk.connect("tcp://127.0.0.1:5555");
+            msg = JSON.stringify(msg);
+            console.log("Sending to MMMK: " + msg);
+            await __sock_mmmk.send(msg);
+            let res = await __sock_mmmk.receive();
+            return JSON.parse(res);
+        }
+
+        let res = inform_mmmk_manager(["-1", "create_worker", msg]);
 
         logger.http("http _ 'resp on worker creation: wid:'"+ wid, {'at':"session_mngr"});
 

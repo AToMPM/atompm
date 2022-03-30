@@ -8,7 +8,8 @@ const {
     __postInternalErrorMsg, __postMessage,
     __sequenceNumber,
     __successContinuable,
-	__uri_to_id
+	__uri_to_id,
+	__mmmkReq,
 } = require("./__worker");
 
 const _do = require("./___do");
@@ -208,16 +209,20 @@ module.exports = {
 					});		
 
 			_do.chain(actions)(
-					function(asmmData) 
-					{
+					async function (asmmData) {
 						let mm = reqData['mm'].match(/.+?(\/.*)\.metamodel/)[1];
-						let res = _mmmk.loadMetamodel(mm, asmmData);
+						// let res = _mmmk.loadMetamodel(mm, asmmData);
+						let msg = ["loadMetamodel", mm, asmmData];
+						let res = await __mmmkReq(msg);
+
 						__postMessage(
-							{'statusCode':200, 
-	  						 'changelog':res['changelog'],
-							 'sequence#':__sequenceNumber(),
-							 'hitchhiker':reqData['hitchhiker'],
-							 'respIndex':resp});
+							{
+								'statusCode': 200,
+								'changelog': res['changelog'],
+								'sequence#': __sequenceNumber(),
+								'hitchhiker': reqData['hitchhiker'],
+								'respIndex': resp
+							});
 					},
 					function (err) {
 
@@ -232,22 +237,27 @@ module.exports = {
 
 	/* unload a metamodel (deletes all entities from that metamodel) */
 	'DELETE *.metamodel' :
-		function(resp,uri)
-		{
-			let mm  = uri.match(/(.*)\.metamodel/)[1];
+		async function (resp, uri) {
+			let mm = uri.match(/(.*)\.metamodel/)[1];
 			let res = _mmmk.unloadMetamodel(mm);
+			//let msg = ["unloadMetamodel", mm];
+			//let res = await __mmmkReq(msg);
 			__postMessage(
-					{'statusCode':200, 
-					 'changelog':res['changelog'],
-					 'sequence#':__sequenceNumber(),
-					 'respIndex':resp});
+				{
+					'statusCode': 200,
+					'changelog': res['changelog'],
+					'sequence#': __sequenceNumber(),
+					'respIndex': resp
+				});
 		},
 
 
 	/* load a model */
 	'PUT /current.model' :
-		function (resp, uri, reqData/*m,name,insert,hitchhiker*/) {
-			let res = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
+		async function (resp, uri, reqData/*m,name,insert,hitchhiker*/) {
+			//let res = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
+			let msg = ["loadModel", reqData['name'], reqData['m'], reqData['insert']];
+			let res = await __mmmkReq(msg);
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
 			else

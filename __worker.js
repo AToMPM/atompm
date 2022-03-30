@@ -110,6 +110,7 @@ let _http 	= require('http'),
 	_fs		= _do.convert(require('fs'), ['readFile', 'writeFile', 'readdir']),
 	_utils	= require('./utils'),
 	logger	= require('./logger.js');
+const _zmq = require("zeromq");
 
 let	 _wlib,
 	 _mmmk,
@@ -209,7 +210,22 @@ function __wHttpReq(method,url,data,port)
 			 };
 }
 
+/******************************* MMMK COMMS *******************************/
 
+let __sock_mmmk;
+
+async function __mmmkReq(msg) {
+
+	// add the worker id to the message
+	let worker_id = __wtype+__wid;
+	msg.unshift(worker_id)
+
+	msg = JSON.stringify(msg);
+	console.log("Sending to MMMK: " + msg);
+	__sock_mmmk.send(msg);
+	let res = await __sock_mmmk.receive();
+	return JSON.parse(res);
+}
 
 /******************************* URI PROCESSING *******************************/
 /* optimize __id_to_uri() by remembering computed mappings */
@@ -499,6 +515,11 @@ process.on('message',
 				 throw "Error! Unknown worker type: " + __wtype;
 			}
 			_mmmk   = require('./mmmk');
+
+			//TODO: In future, communicate directly to PyMMMKs
+			let worker_address = 5555// + 1 + parseInt(__wid);
+			__sock_mmmk = new _zmq.Request();
+			__sock_mmmk.connect("tcp://127.0.0.1:" + worker_address);
 
             _mt  	  = require('./libmt');
 
@@ -870,6 +891,8 @@ module.exports = {
 	__httpReq,
 	__wHttpReq,
 
+	__mmmkReq,
+
 	__postInternalErrorMsg,
 	__postForbiddenErrorMsg,
 	__postBadReqErrorMsg,
@@ -887,6 +910,5 @@ module.exports = {
 	set__ids2uris,
 	get__nextSequenceNumber,
 	set__nextSequenceNumber,
-	get__wtype,
-
+	get__wtype
 };
