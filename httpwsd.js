@@ -14,14 +14,26 @@ const _cp = require('child_process'),
 	_utils = require('./utils');
 const session_manager = require("./session_manager");
 
-logger.set_level(logger.LOG_LEVELS.INFO);
-
 
 /** Wrapper function to log HTTP messages from the server **/
 function __respond(response, statusCode, reason, data, headers)
 {
 	logger.http("http _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
 	_utils.respond(response, statusCode, reason, data, headers);
+}
+
+/******************************* PARAMETERIZATION ******************************/
+
+const argv = require('minimist')(process.argv.slice(2));
+if (argv["log"]){
+	const level = argv["log"].toUpperCase();
+	if (logger.LOG_LEVELS[level] != undefined){
+		logger.set_level(logger.LOG_LEVELS[level]);
+	}else{
+		console.log("WARNING - Unknown logger level: " + level);
+		console.log("Valid values: ");
+		console.log(logger.return_level_names());
+	}
 }
 
 

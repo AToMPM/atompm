@@ -22,6 +22,14 @@ const LOG_LEVELS = {
     SILLY: 6
 }
 
+function return_level_names() {
+    let ret = [];
+    for (const enumMember in LOG_LEVELS) {
+        ret.push(enumMember);
+    }
+    return ret;
+}
+
 function set_level(new_level) {
     curr_log_level = new_level
 }
@@ -125,6 +133,7 @@ function silly(msg) {
 
 module.exports = {
     LOG_LEVELS,
+    return_level_names,
     set_level,
     log,
     error,
