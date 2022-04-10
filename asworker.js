@@ -10,6 +10,7 @@ const {
     __successContinuable,
 	__uri_to_id,
 	__mmmkReq,
+	compare_changelogs,
 } = require("./__worker");
 
 const _do = require("./___do");
@@ -105,12 +106,18 @@ module.exports = {
 										 'defaultDCL':prefs['default-mt-dcl']['value']},
   										8125);
 	  					},
-  						function()
-  						{
-							let mms = _mmmk.readMetamodels();
+  						async function () {
+							let mms1 = _mmmk.readMetamodels();
+							let mms = await __mmmkReq(["readMetamodels"])
+
+							compare_changelogs(mms1, mms)
 							if (mms['$err'])
 								return __errorContinuable(mms['$err']);
+
+							let m1 = await __mmmkReq(["read"])
 							let m = _mmmk.read();
+							compare_changelogs(m1, m)
+
 							if (m['$err'])
 								return __errorContinuable(m['$err']);
 
@@ -123,7 +130,7 @@ module.exports = {
 									'sequence#': __sequenceNumber(0)
 								},
 								8125);
-  						},
+						},
   						function()
   						{
   							return __httpReq(
@@ -211,14 +218,15 @@ module.exports = {
 			_do.chain(actions)(
 					async function (asmmData) {
 						let mm = reqData['mm'].match(/.+?(\/.*)\.metamodel/)[1];
-						// let res = _mmmk.loadMetamodel(mm, asmmData);
-						let msg = ["loadMetamodel", mm, asmmData];
-						let res = await __mmmkReq(msg);
+						let res1 = _mmmk.loadMetamodel(mm, asmmData);
+						let res2 = await __mmmkReq(["loadMetamodel", mm, asmmData]);
+
+						compare_changelogs(res1, res2)
 
 						__postMessage(
 							{
 								'statusCode': 200,
-								'changelog': res['changelog'],
+								'changelog': res2['changelog'],
 								'sequence#': __sequenceNumber(),
 								'hitchhiker': reqData['hitchhiker'],
 								'respIndex': resp
@@ -239,13 +247,13 @@ module.exports = {
 	'DELETE *.metamodel' :
 		async function (resp, uri) {
 			let mm = uri.match(/(.*)\.metamodel/)[1];
-			let res = _mmmk.unloadMetamodel(mm);
-			//let msg = ["unloadMetamodel", mm];
-			//let res = await __mmmkReq(msg);
+			let res1 = _mmmk.unloadMetamodel(mm);
+			let res2 = await __mmmkReq(["unloadMetamodel", mm]);
+			compare_changelogs(res1, res2)
 			__postMessage(
 				{
 					'statusCode': 200,
-					'changelog': res['changelog'],
+					'changelog': res1['changelog'],
 					'sequence#': __sequenceNumber(),
 					'respIndex': resp
 				});
@@ -255,9 +263,9 @@ module.exports = {
 	/* load a model */
 	'PUT /current.model' :
 		async function (resp, uri, reqData/*m,name,insert,hitchhiker*/) {
-			//let res = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
-			let msg = ["loadModel", reqData['name'], reqData['m'], reqData['insert']];
-			let res = await __mmmkReq(msg);
+			let res = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
+			let res2 = await __mmmkReq(["loadModel", reqData['name'], reqData['m'], reqData['insert']]);
+			compare_changelogs(res, res2)
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
 			else
@@ -286,48 +294,60 @@ module.exports = {
 				 would be possible to create nodes via copy-paste that would 
 				 otherwise be blocked by post-edit constraints */
 	'POST *.type' :
-		function(resp,uri,reqData/*[src,dest],hitchhiker,attrs*/)
-		{
-			let matches 	= uri.match(/(.*)\.type/);
-			let fulltype 	= matches[1];
+		async function (resp, uri, reqData/*[src,dest],hitchhiker,attrs*/) {
+			let matches = uri.match(/(.*)\.type/);
+			let fulltype = matches[1];
 			let res;
 			if (reqData == undefined || reqData['src'] == undefined) {
 				res = _mmmk.create(fulltype, reqData['attrs']);
+				let res2 = await __mmmkReq(["create", fulltype, reqData['attrs']])
+				compare_changelogs(res, res2)
 			} else {
 				res = _mmmk.connect(
+				 	__uri_to_id(reqData['src']),
+				 	__uri_to_id(reqData['dest']),
+				 	fulltype,
+				 	reqData['attrs']);
+				let res2 = await __mmmkReq(["connect",
 					__uri_to_id(reqData['src']),
 					__uri_to_id(reqData['dest']),
 					fulltype,
-					reqData['attrs']);
+					reqData['attrs']]);
+				compare_changelogs(res, res2)
 			}
 
-			if( '$err' in res )
-				__postInternalErrorMsg(resp,res['$err']);
+			if ('$err' in res)
+				__postInternalErrorMsg(resp, res['$err']);
 			else
 				__postMessage(
-					{'statusCode':200, 
-					 'changelog':res['changelog'],
-					 'data':res['id'],					 
-					 'sequence#':__sequenceNumber(),
-					 'hitchhiker':reqData['hitchhiker'],
-					 'respIndex':resp});
+					{
+						'statusCode': 200,
+						'changelog': res['changelog'],
+						'data': res['id'],
+						'sequence#': __sequenceNumber(),
+						'hitchhiker': reqData['hitchhiker'],
+						'respIndex': resp
+					});
 		},
 
 
 	/* return an instance */
 	'GET *.instance' :
-		function(resp,uri)
-		{
+		async function (resp, uri) {
 			let id = __uri_to_id(uri);
-			let res = _mmmk.read(id)
-			if( res['$err'] )
-				__postInternalErrorMsg(resp,res['$err']);
+			let res1 = _mmmk.read(id)
+			let res = await __mmmkReq(["read"])
+			compare_changelogs(res1, res)
+			if (res['$err'])
+				__postInternalErrorMsg(resp, res['$err']);
 			else
 				__postMessage(
-					{'statusCode':200, 
-					 'data':res, 
-					 'sequence#':__sequenceNumber(0),
-					 'respIndex':resp});
+					{
+						'statusCode': 200,
+						'data': res,
+						'sequence#': __sequenceNumber(0),
+						'respIndex': resp
+					});
 		},
 
 
@@ -337,9 +357,11 @@ module.exports = {
 				 bundled, we return a dummy changelog that ensures the said to-do-
 				 cschanges get handled by csworker.__applyASWChanges().CHATTR */
 	'PUT *.instance' :
-		function (resp, uri, reqData/*changes[,hitchhiker]*/) {
+		async function (resp, uri, reqData/*changes[,hitchhiker]*/) {
 			let id = __uri_to_id(uri);
-			let res = _mmmk.update(id, reqData['changes']);
+			let res1 = _mmmk.update(id, reqData['changes']);
+			let res = await __mmmkReq(["update", id, reqData['changes']]);
+			compare_changelogs(res1, res)
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
 			else {
@@ -371,14 +393,21 @@ module.exports = {
 				 NOTE for csworker.DELETE *.instance with the difference that in 
 				 this context, the client is the mtworker) */
 	'DELETE *.instance' :
-		function (resp, uri) {
+		async function (resp, uri) {
 			let id = __uri_to_id(uri);
-			let res = _mmmk.read(id)
+
+			let res1 = _mmmk.read(id)
+			let res = await __mmmkReq(["read", id])
+			compare_changelogs(res1, res)
+
 			if (res['$err']) {
 				__postMessage({'statusCode': 200, 'respIndex': resp});
 				return;
 			}
-			res = _mmmk['delete'](id);
+			res1 = _mmmk['delete'](id);
+			res = await __mmmkReq(["delete", id])
+			compare_changelogs(res1, res)
+
 			if (res['$err']) {
 				__postInternalErrorMsg(resp, res['$err']);
 				return;
@@ -401,12 +430,18 @@ module.exports = {
 			a) write specified mm to disk 
 		2. launch chain... return success or error code */ 
 	'PUT *.metamodel' :
-		function(resp,uri,reqData/*[csm]*/)
+		async function(resp,uri,reqData/*[csm]*/)
 		{
 			let res;
-			let model = _utils.jsonp(_mmmk.read());
+			let m1 = _utils.jsonp(_mmmk.read());
+			let m = await __mmmkReq(["read"]);
+
+			compare_changelogs(m1, m)
+
+			let model = _utils.jsonp(m);
 			if (uri.match(/(.*)\..*Icons\.metamodel/)) {
-				let metamodels = _utils.jsonp(_mmmk.readMetamodels());
+				let mm = await __mmmkReq(["readMetamodels"])
+				let metamodels = _utils.jsonp(mm);
 				res = _libcompile.compileToIconDefinitionMetamodel(model, metamodels, reqData['csm'], reqData['asmm'])
 			} else {
 				res = _libcompile.compileToMetamodel(model);
@@ -453,14 +488,19 @@ module.exports = {
 			OR
 		undo until the specified user-checkpoint */
 	'POST /undo' :
-		function(resp,uri,reqData/*[undoUntil],hitchhiker*/)
-		{
+		async function (resp, uri, reqData/*[undoUntil],hitchhiker*/) {
+			let res1 = _mmmk.undo(reqData['undoUntil']);
+			let res = await __mmmkReq(["undo", reqData['undoUntil']]);
+
+			compare_changelogs(res1, res);
 			__postMessage(
-				{'statusCode':200,
-				 'changelog':_mmmk.undo(reqData['undoUntil'])['changelog'],
-				 'sequence#':__sequenceNumber(),
-				 'hitchhiker':reqData['hitchhiker'],
-				 'respIndex':resp});
+				{
+					'statusCode': 200,
+					'changelog': res['changelog'],
+					'sequence#': __sequenceNumber(),
+					'hitchhiker': reqData['hitchhiker'],
+					'respIndex': resp
+				});
 		},
 	
 
@@ -468,14 +508,20 @@ module.exports = {
 			OR
 		redo until the specified user-checkpoint  */
 	'POST /redo' :
-		function(resp,uri,reqData/*[redoUntil],hitchhiker*/)
-		{
+		async function (resp, uri, reqData/*[redoUntil],hitchhiker*/) {
+			let res1 = _mmmk.redo(reqData['redoUntil']);
+			let res = await __mmmkReq(["redo", reqData['redoUntil']]);
+
+			compare_changelogs(res1, res);
+
 			__postMessage(
-				{'statusCode':200,
-				 'changelog':_mmmk.redo(reqData['redoUntil'])['changelog'],
-				 'sequence#':__sequenceNumber(),
-				 'hitchhiker':reqData['hitchhiker'],
-				 'respIndex':resp});
+				{
+					'statusCode': 200,
+					'changelog': res['changelog'],
+					'sequence#': __sequenceNumber(),
+					'hitchhiker': reqData['hitchhiker'],
+					'respIndex': resp
+				});
 		},
 
 
@@ -547,6 +593,7 @@ module.exports = {
 		function(resp,uri,reqData)
 		{
 			_mmmk.setUserCheckpoint(reqData['name']);
+			__mmmkReq(["setUserCheckpoint", reqData['name']]);
 			__postMessage(
 					{'statusCode':200,
 					 'changelog':[{'op':'MKBTCCHKPT','name':reqData['name']}],

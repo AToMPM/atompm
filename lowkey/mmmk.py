@@ -177,12 +177,17 @@ class PyMMMK:
             if int(ident) >= self.next_id:
                 self.next_id = int(ident) + 1
 
-        self.__log(
-            {
-                'op': 'RESETM',
-                'new_name': new_name,
-                'new_model': new_model,
-                'old_name': old_name,
-                'old_model': old_model,
-                'insert': insert
-            }, log)
+        #HACK: Remove spaces to match Javascript mmmk implementation exactly
+        old_model = old_model.replace(" ", "")
+
+        step = {
+                   'op': 'RESETM',
+                   'new_name': new_name,
+                   'new_model': new_model,
+                   'old_name': old_name,
+                   'old_model': old_model,
+               }
+        # only add insert if not null
+        if insert:
+            step['insert'] =  insert
+        self.__log(step, log)

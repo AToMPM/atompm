@@ -28,10 +28,10 @@ class PyMMMKManager:
         while True:
             #  Wait for next request from client
             message = bytes(self.socket.recv()).decode()
-            print("Received request: %s" % message)
+            #print("Received request: %s" % message)
 
             msg = json.loads(message)
-            print("Msg length: " + str(len(msg)) + ": " + str(msg))
+            print("Msg length: " + str(len(msg)) + ": " + str(msg[:2]))
 
             wid = msg[0]
             op = msg[1]
@@ -45,7 +45,7 @@ class PyMMMKManager:
             args = msg[2:]
             res = method_to_call(*args)
 
-            print("RES: " + str(res))
+            #print("RES: " + str(res))
 
             #  Send reply back to client
             self.socket.send(json.dumps(res).encode("utf-8"))

@@ -219,12 +219,31 @@ async function __mmmkReq(msg) {
 	// add the worker id to the message
 	let worker_id = __wtype+__wid;
 	msg.unshift(worker_id)
-
+	console.log("Sending to MMMK: [" + msg[0] + ", " + msg[1] + "...]");
 	msg = JSON.stringify(msg);
-	console.log("Sending to MMMK: " + msg);
 	__sock_mmmk.send(msg);
 	let res = await __sock_mmmk.receive();
 	return JSON.parse(res);
+}
+
+//compares the changelogs from the mmmk and pymmmk to see if there are any differences
+function compare_changelogs(res1, res2){
+	let chlg1 = res1["changelog"] || res1["$err"];
+	let chlg2 = res2["changelog"] || res1["$err"];
+
+	let failed = false;
+	if (chlg1.length != chlg2.length){
+		failed = true;
+		console.log(chlg1);
+		console.log(chlg2);
+	}
+	for (let i = 0; !failed && i < chlg1.length; i++){
+		if (JSON.stringify(chlg1[i]) != JSON.stringify(chlg2[i])){
+			failed = true;
+			console.log(chlg1[i]);
+			console.log(chlg2[i]);
+		}
+	}
 }
 
 /******************************* URI PROCESSING *******************************/
@@ -892,6 +911,7 @@ module.exports = {
 	__wHttpReq,
 
 	__mmmkReq,
+	compare_changelogs,
 
 	__postInternalErrorMsg,
 	__postForbiddenErrorMsg,
