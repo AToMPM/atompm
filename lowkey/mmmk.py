@@ -3,6 +3,7 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 import copy
 import json
+import os.path
 import re
 
 
@@ -38,6 +39,9 @@ class PyMMMK:
 
         self.undoredoJournal = []
 
+    def clone(self, clone):
+        raise NotImplementedError()
+
     # load a model into this.model
     #
     #     0. create step-checkpoint
@@ -67,6 +71,109 @@ class PyMMMK:
 
         self.__loadmm__(name, mm)
         return {'changelog': self.__changelog()}
+
+    def unloadMetamodel(self, name):
+        raise NotImplementedError()
+
+    def __crudOp(self, metamodel, events, eventTargets, op, args):
+        if not self.metamodels[metamodel]:
+            return {'$err': 'metamodel not loaded :: ' + metamodel}
+
+        if 'create' in events:
+            if args["fulltype"]:
+                self.next_type = args["fulltype"]
+            else:
+                self.next_type = args["connectorType"]
+
+        self.__checkpoint()
+
+        #TODO: Implement event handler
+        method_to_call = getattr(self, op)
+        err = method_to_call(args)
+        if err:
+            self.__restoreCheckpoint()
+            return err
+        self.__clearCheckpoint()
+
+    def __connectNN(self, args):
+        raise NotImplementedError()
+
+    def __connectCN(self, args):
+        raise NotImplementedError()
+
+    def connect(self, id1, id2, connectorType, attrs):
+        raise NotImplementedError()
+
+
+    def _create(self, args):
+        """
+        1. create [default] instance using metamodel [and possibly specified attrs] + init $type
+        2. add to current model nodes
+        3. if fulltype is a connectorType, create edges between node id1
+        and new instance and between new instance and node id2
+        :param args:
+        :return:
+        """
+        metamodel = self.__getMetamodel(args["fulltype"])
+        fulltype = self.__getType(args["fulltype"])
+        typeAttrs = self.metamodels[metamodel]['types'][fulltype]
+        new_node = {}
+
+        if not typeAttrs:
+            return {'$err': 'can not create instance of unknown type :: ' + args["fulltype"]}
+
+        for attr in typeAttrs:
+            val = attr["default"]
+            if args["attrs"] and attr['name'] in args["attrs"]:
+                val = args["attrs"][attr["name"]]
+            new_node[attr["name"]] = {
+                'type' : attr["type"],
+                'value' : copy.deepcopy(val)
+            }
+        new_node['$type'] = args["fulltype"]
+
+        self.__mknode__(self.next_id, new_node)
+
+        if "id1" in args:
+            self.__mkedge__(args["id1"], str(self.next_id))
+            self.__mkedge__(str(self.next_id), args["id2"])
+
+    def create(self, fullType, attrs):
+        """
+        0. create a step-checkpoint
+        1. wrap __create in crudOp
+        2. return err or new instance id
+        :param fullType:
+        :param attrs:
+        :return:
+        """
+        self.__setStepCheckpoint()
+
+        err = self.__crudOp(
+            self.__getMetamodel(fullType),
+            ['create'],
+            [self.next_id],
+            '_create',
+            {
+                'fulltype': fullType,
+                'attrs':'attrs'
+            }
+        )
+        if err:
+            return err
+        ret = {'id': self.next_id,
+               'changelog': self.__changelog()}
+        self.next_id += 1
+        return ret
+
+    def __delete(self, args):
+        raise NotImplementedError()
+
+    def __deleteConnector(self, args):
+        raise NotImplementedError()
+
+    def delete(self, id):
+        raise NotImplementedError()
 
     # returns the stringified full model,
     # a stringified node,
@@ -106,33 +213,28 @@ class PyMMMK:
         else:
             return attrVal
 
+    def readMetamodels(self, metamodel):
+        raise NotImplementedError()
 
-    def __setStepCheckpoint(self):
-        self.undoredoJournal = None
-        if len(self.journal) == 0 or self.journal[-1]['op'] != 'MKSTPCHKPT':
-            self.__log({'op': 'MKSTPCHKPT'})
+    # returns self.name
+    def readName(self):
+        return self.name
 
-    def __loadmm__(self, name, mm, log=None):
-        self.metamodels[name] = json.loads(mm)
-        if name not in self.model.metamodels:
-            self.model.metamodels.append(name)
-        self.__log(
-            {'op': 'LOADMM',
-             'name': name,
-             'mm': mm},
-            log)
+    def __update(self, args):
+        raise NotImplementedError()
 
-    def __log(self, step, log=None):
-        if not log:
-            if self.journalIndex != len(self.journal):
-                self.journal = self.journal[:self.journalIndex]
-            self.journal.append(step)
-            self.journalIndex += 1
-        elif log == 'UNDOREDO':
-           self.undoredoJournal.append(step)
+    def update(self, ident, data):
+        raise NotImplementedError()
 
-        elif log == 'DONTLOG':
-            pass
+    def __checkpoint(self):
+        self.__log({'op': 'MKCHKPT'})
+
+    def __clearCheckpoint(self):
+        for i in range(len(self.journal)-1, 0, -1):
+            if self.journal[i]["op"] == 'MKCHKPT':
+                self.journal.pop(i)
+                self.journalIndex -= 1
+                break
 
     def __changelog(self):
         if self.undoredoJournal:
@@ -146,6 +248,91 @@ class PyMMMK:
             if self.journal[ji]['op'] == 'MKSTPCHKPT':
                 break
         return self.journal[ji + 1: self.journalIndex]
+
+    def __log(self, step, log=None):
+        if not log:
+            if self.journalIndex != len(self.journal):
+                self.journal = self.journal[:self.journalIndex]
+            self.journal.append(step)
+            self.journalIndex += 1
+        elif log == 'UNDOREDO':
+            self.undoredoJournal.append(step)
+
+        elif log == 'DONTLOG':
+            pass
+
+    def __redo(self, step):
+        raise NotImplementedError()
+
+    def redo(self, uchkpt):
+        raise NotImplementedError()
+
+    def __restoreCheckpoint(self):
+        while len(self.journal) > 0:
+            step = self.journal.pop()
+            if step["op"] == 'MKCHKPT':
+                break
+            else:
+                self.__undo(step, 'DONTLOG')
+        self.journalIndex = len(self.journal)
+
+    def __setStepCheckpoint(self):
+        self.undoredoJournal = None
+        if len(self.journal) == 0 or self.journal[-1]['op'] != 'MKSTPCHKPT':
+            self.__log({'op': 'MKSTPCHKPT'})
+
+    def setUserCheckpoint(self, name):
+        raise NotImplementedError()
+
+    def __undo(self, step, log):
+        raise NotImplementedError()
+
+    def undo(self, uchkpt):
+        raise NotImplementedError()
+
+    def __chattr__(self, ident, attr, new_val, log):
+        raise NotImplementedError()
+
+    def __dumpmm__(self, name, log):
+        raise NotImplementedError()
+
+    def __loadmm__(self, name, mm, log=None):
+        self.metamodels[name] = json.loads(mm)
+        if name not in self.model.metamodels:
+            self.model.metamodels.append(name)
+        self.__log(
+            {'op': 'LOADMM',
+             'name': name,
+             'mm': mm},
+            log)
+
+    def __mkedge__(self, ident1, ident2, i=None, log=None):
+        edge = {'src': ident1, 'dest': ident2}
+        if not i:
+            i = self.model.edges.append(edge) - 1
+        else:
+            self.model.edges.insert(i, edge)
+
+        self.__log(
+            {
+                'op': 'MKEDGE',
+                'id1': ident1,
+                'id2': ident2,
+                'i': i
+            },
+            log
+        )
+
+    def __mknode__(self, ident, node, log = None):
+        self.model.nodes[ident] = node
+        self.__log(
+            {
+                'op': 'MKNODE',
+                'id': ident,
+                'node': json.dumps(node).replace(" ","")
+            },
+            log
+        )
 
     def __resetm__(self, new_name, new_model, insert, log=None):
         old_model = self.read()
@@ -191,3 +378,15 @@ class PyMMMK:
         if insert:
             step['insert'] =  insert
         self.__log(step, log)
+
+    def __rmedge__(self, i, log):
+        raise NotImplementedError()
+
+    def __rmnode__(self, ident, log):
+        raise NotImplementedError()
+
+    def __getMetamodel(self, fulltype):
+        return os.path.dirname(fulltype)
+
+    def __getType(self, fullType):
+        return os.path.basename(fullType)
