@@ -111,13 +111,13 @@ module.exports = {
 							let mms1 = _mmmk.readMetamodels();
 							let mms = await __mmmkReq(["readMetamodels"])
 
-							compare_changelogs(mms1, mms)
+							compare_objects(mms1, mms)
 							if (mms['$err'])
 								return __errorContinuable(mms['$err']);
 
 							let m1 = await __mmmkReq(["read"])
 							let m = _mmmk.read();
-							compare_changelogs(m1, m)
+							compare_objects(m1, m)
 
 							if (m['$err'])
 								return __errorContinuable(m['$err']);
@@ -399,13 +399,13 @@ module.exports = {
 
 			let res1 = _mmmk.read(id)
 			let res = await __mmmkReq(["read", id])
-			compare_changelogs(res1, res)
+			compare_objects(res1, res)
 
 			if (res['$err']) {
 				__postMessage({'statusCode': 200, 'respIndex': resp});
 				return;
 			}
-			res1 = _mmmk['delete'](id);
+			res1 = _mmmk.delete(id);
 			res = await __mmmkReq(["delete", id])
 			compare_changelogs(res1, res)
 
@@ -437,7 +437,7 @@ module.exports = {
 			let m1 = _utils.jsonp(_mmmk.read());
 			let m = await __mmmkReq(["read"]);
 
-			compare_changelogs(m1, m)
+			compare_objects(m1, m)
 
 			let model = _utils.jsonp(m);
 			if (uri.match(/(.*)\..*Icons\.metamodel/)) {

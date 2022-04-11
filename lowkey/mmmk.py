@@ -15,7 +15,7 @@ class Model:
 
         if from_dict:
             self.nodes = from_dict["nodes"]
-            self.edges = from_dict["nodes"]
+            self.edges = from_dict["edges"]
             self.metamodels = from_dict["metamodels"]
 
     def to_dict(self) -> dict:
@@ -166,14 +166,68 @@ class PyMMMK:
         self.next_id += 1
         return ret
 
-    def __delete(self, args):
-        raise NotImplementedError()
+    def _delete(self, args):
+        ident = args["id"]
+        metamodel = self.__getMetamodel(self.model.nodes[ident]['$type'])
+        n_type = self.__getType(self.model.nodes[ident]['$type'])
+        isConnector = n_type in self.metamodels[metamodel]['connectorTypes']
+        neighbors = []
 
-    def __deleteConnector(self, args):
-        raise NotImplementedError()
+        for edge in self.model.edges:
+            if edge['src'] == ident and edge['dest'] not in neighbors:
+                neighbors.append(edge['dest'])
+            elif edge['dest'] == ident and edge['src'] not in neighbors:
+                neighbors.append(edge['src'])
 
-    def delete(self, id):
-        raise NotImplementedError()
+        if isConnector:
+            res = self.__crudOp(
+                metamodel,
+                ['disconnect'],
+                neighbors,
+                '_deleteConnector',
+                {'id': ident}
+            )
+            if res: return res
+        else:
+            for neighbor in neighbors:
+                res = self.__crudOp(
+                    metamodel,
+                    ['delete'],
+                    [neighbor],
+                    '_delete',
+                    {'id': neighbor}
+                )
+                if res: return res
+            self.__rmnode__(ident)
+
+    def _deleteConnector(self, args):
+        # gather all the indices to remove
+        indices = []
+        for i, edge in enumerate(self.model.edges):
+            if edge['src'] == args["id"] or edge['dest'] == args["id"]:
+                indices.append(i)
+
+        # make a count to adjust future indices
+        num_removed = 0
+        for i in indices:
+            self.__rmedge__(i - num_removed)
+            num_removed += 1
+
+    def delete(self, ident):
+        self.__setStepCheckpoint()
+
+        if ident not in self.model.nodes:
+            return {'$err': 'invalid id :: ' + ident}
+
+        err = self.__crudOp(
+            self.__getMetamodel(self.model.nodes[ident]['$type']),
+            ['delete'],
+            [ident],
+            '_delete',
+            {'id': ident}
+        )
+        if err: return err
+        return {'changelog': self.__changelog()}
 
     # returns the stringified full model,
     # a stringified node,
@@ -322,7 +376,11 @@ class PyMMMK:
             self.__log({'op': 'MKSTPCHKPT'})
 
     def setUserCheckpoint(self, name):
-        raise NotImplementedError()
+        self.undoredoJournal = None
+        if len(self.journal) == 0 or \
+                self.journal[len(self.journal)-1]['op'] != 'MKUSRCHKPT' or \
+                self.journal[len(self.journal)-1]['name'] != name:
+            self.__log({'op': 'MKUSRCHKPT', 'name': name})
 
     def __undo(self, step, log):
         raise NotImplementedError()
@@ -445,11 +503,28 @@ class PyMMMK:
             step['insert'] =  insert
         self.__log(step, log)
 
-    def __rmedge__(self, i, log):
-        raise NotImplementedError()
+    def __rmedge__(self, i, log=None):
+        edge = self.model.edges.pop(i)
+        self.__log(
+            {
+                'op': 'RMEDGE',
+                'i': i,
+                'id1': edge['src'],
+                'id2': edge['dest']
+            }
+        )
 
-    def __rmnode__(self, ident, log):
-        raise NotImplementedError()
+    def __rmnode__(self, ident, log=None):
+        node = self.model.nodes[ident]
+        del self.model.nodes[ident]
+        self.__log(
+            {
+                'op': 'RMNODE',
+                'id': ident,
+                'node': json.dumps(node)
+            }
+        )
+
 
     def __getMetamodel(self, fulltype):
         return os.path.dirname(fulltype)
