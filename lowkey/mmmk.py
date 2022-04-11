@@ -8,7 +8,7 @@ import re
 
 
 class Model:
-    def __init__(self, from_dict = None):
+    def __init__(self, from_dict : dict = None):
         self.nodes = {}
         self.edges = []
         self.metamodels = []
@@ -18,7 +18,7 @@ class Model:
             self.edges = from_dict["nodes"]
             self.metamodels = from_dict["metamodels"]
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             "nodes": self.nodes,
             "edges": self.edges,
@@ -184,7 +184,8 @@ class PyMMMK:
         if not ident:
             return json.dumps(self.model.to_dict())
 
-        if not self.model.nodes[ident]:
+        if ident not in self.model.nodes:
+            print(self.model.nodes.keys())
             return {'$err': 'instance not found :: ' + ident}
 
         if not attr:
@@ -220,11 +221,50 @@ class PyMMMK:
     def readName(self):
         return self.name
 
-    def __update(self, args):
-        raise NotImplementedError()
+
+    def _update(self, args):
+        """
+        1. update instance as per data
+        2. return err on unknown attributes
+        3. TBA: type verification on new values
+        :param args:
+        """
+        for attr in args["data"]:
+            if not args["data"][attr]:
+                return {"$err": 'tried to set attribute ' + str(attr) + ' to "null"'}
+
+            res = self.read(args["id"], attr)
+            if '$err' in res:
+                return res
+
+            self.__chattr__(args["id"], attr, args["data"][attr])
 
     def update(self, ident, data):
-        raise NotImplementedError()
+        """
+        0. create a step-checkpoint
+        1. wrap _update in crudop
+        2. return err or nothing
+        :param ident:
+        :param data:
+        :return:
+        """
+        self.__setStepCheckpoint()
+
+        if not ident in self.model.nodes:
+            return {'$err': 'invalid id: ' + str(ident)}
+
+        err = self.__crudOp(
+            self.__getMetamodel(self.model.nodes[ident]['$type']),
+            ['edit'],
+            [ident],
+            '_update',
+            {
+                'id': ident,
+                'data': data
+            }
+        )
+        if err: return err
+        return {'changelog': self.__changelog()}
 
     def __checkpoint(self):
         self.__log({'op': 'MKCHKPT'})
@@ -290,8 +330,37 @@ class PyMMMK:
     def undo(self, uchkpt):
         raise NotImplementedError()
 
-    def __chattr__(self, ident, attr, new_val, log):
-        raise NotImplementedError()
+    def __chattr__(self, ident, attr, new_val, log=None):
+        get_attr = None
+        set_attr = None
+
+        if re.match(r".+/.+", attr):
+            curr = self.model.nodes[ident]
+            for i in attr.split('/'):
+                curr = curr[i]
+                def get_attr():
+                    return curr['value']
+                def set_attr(v):
+                    curr['value'] = v
+
+        else:
+            def get_attr():
+                return self.model.nodes[ident][attr]['value']
+            def set_attr(v):
+                self.model.nodes[ident][attr]['value'] = v
+
+        _old_val = get_attr()
+        _new_val = json.dumps(new_val)
+        if _old_val == _new_val:
+            return
+        set_attr(new_val)
+        self.__log({
+            'op': 'CHATTR',
+            'id': ident,
+            'attr': attr,
+            'new_val': new_val,
+            'old_val': _old_val,
+        }, log)
 
     def __dumpmm__(self, name, log):
         raise NotImplementedError()
@@ -324,12 +393,12 @@ class PyMMMK:
         )
 
     def __mknode__(self, ident, node, log = None):
-        self.model.nodes[ident] = node
+        self.model.nodes[str(ident)] = node
         self.__log(
             {
                 'op': 'MKNODE',
                 'id': ident,
-                'node': json.dumps(node).replace(" ","")
+                'node': json.dumps(node)
             },
             log
         )
@@ -363,9 +432,6 @@ class PyMMMK:
         for ident in self.model.nodes:
             if int(ident) >= self.next_id:
                 self.next_id = int(ident) + 1
-
-        #HACK: Remove spaces to match Javascript mmmk implementation exactly
-        old_model = old_model.replace(" ", "")
 
         step = {
                    'op': 'RESETM',

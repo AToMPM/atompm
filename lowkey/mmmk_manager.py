@@ -40,7 +40,7 @@ class PyMMMKManager:
             if wid in self.mmmks:
                 where_to_call = self.mmmks[wid]
 
-            print("OP: " + str(op))
+            #print("OP: " + str(op))
             method_to_call = getattr(where_to_call, op)
             args = msg[2:]
             res = method_to_call(*args)

@@ -11,6 +11,7 @@ const {
 	__uri_to_id,
 	__mmmkReq,
 	compare_changelogs,
+	compare_objects,
 } = require("./__worker");
 
 const _do = require("./___do");
@@ -336,8 +337,8 @@ module.exports = {
 		async function (resp, uri) {
 			let id = __uri_to_id(uri);
 			let res1 = _mmmk.read(id)
-			let res = await __mmmkReq(["read"])
-			compare_changelogs(res1, res)
+			let res = await __mmmkReq(["read", id])
+			compare_objects(res1, res)
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
 			else

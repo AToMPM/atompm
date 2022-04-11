@@ -226,6 +226,17 @@ async function __mmmkReq(msg) {
 	return JSON.parse(res);
 }
 
+//compares the objects from the mmmk and pymmk to see if there are any differences
+function compare_objects(res1, res2){
+	let r1 = JSON.stringify(res1).replace(/ /g, "");
+	let r2 = JSON.stringify(res2).replace(/ /g, "");
+	if (r1 != r2) {
+		console.log("ERROR: Objects do not match!");
+		console.log(r1);
+		console.log(r2);
+	}
+}
+
 //compares the changelogs from the mmmk and pymmmk to see if there are any differences
 function compare_changelogs(res1, res2){
 	let chlg1 = res1["changelog"] || res1["$err"];
@@ -238,10 +249,13 @@ function compare_changelogs(res1, res2){
 		console.log(chlg2);
 	}
 	for (let i = 0; !failed && i < chlg1.length; i++){
-		if (JSON.stringify(chlg1[i]) != JSON.stringify(chlg2[i])){
+		let entry1 = JSON.stringify(chlg1[i]).replace(/ /g, "")
+		let entry2 = JSON.stringify(chlg2[i]).replace(/ /g, "")
+		if (entry1 != entry2){
 			failed = true;
-			console.log(chlg1[i]);
-			console.log(chlg2[i]);
+			console.log("ERROR: Changelogs do not match!");
+			console.log(entry1);
+			console.log(entry2);
 		}
 	}
 }
@@ -912,6 +926,7 @@ module.exports = {
 
 	__mmmkReq,
 	compare_changelogs,
+	compare_objects,
 
 	__postInternalErrorMsg,
 	__postForbiddenErrorMsg,
