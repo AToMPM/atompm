@@ -19,7 +19,13 @@ module.exports = {
         default: {
             launch_url: 'http://localhost:8124/atompm',
             desiredCapabilities: {
-                browserName: 'chrome'
+                browserName: 'chrome',
+                'goog:chromeOptions': {
+                    'args':[
+                        '--window-size=2880,1800',
+                        '--disable-gpu','--remote-debugging-port=9222'
+                    ]
+                }
             }
         }
     },

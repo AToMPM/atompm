@@ -56,6 +56,7 @@ jobs:
         
     - name: run tests
       run: |
-        chromium --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+# if we are running xvfb there is no need to run headless; remaining parameters passed to nightwatch configuration
+#        chromium --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
         xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh
         
