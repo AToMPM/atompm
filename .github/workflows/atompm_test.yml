@@ -53,7 +53,7 @@ jobs:
       run: |
         pip3 install six wheel websocket-client python-socketio[client] python-socketio
         pip3 install --user python-igraph
-        
+    
     - name: run tests
       run: |
 # if we are running xvfb there is no need to run headless; remaining parameters passed to nightwatch configuration
