@@ -63,45 +63,45 @@ jobs:
 
     - name: run test 01_startup_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/01_startup_test.js
+        ./run_tests.sh headless ./tests/01_startup_test.js
 
     - name: run test 02_login_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/02_login_test.js
+        ./run_tests.sh headless  ./tests/02_login_test.js
 
     - name: run test 03_model_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/03_model_test.js
+        ./run_tests.sh headless  ./tests/03_model_test.js
 
     - name: run test 04_compile_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/04_compile_test.js
+        ./run_tests.sh headless  ./tests/04_compile_test.js
 
     - name: run test 05_toolbar_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/05_toolbar_test.js
+        ./run_tests.sh headless  ./tests/05_toolbar_test.js
 
     - name: run test 06_creating_dsl
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/06_creating_dsl.js
+        ./run_tests.sh headless  ./tests/06_creating_dsl.js
 
     - name: run test 07_transformation_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/07_transformation_test.js
+        ./run_tests.sh headless  ./tests/07_transformation_test.js
 
     - name: run test 08_pacman_transformation_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/08_pacman_transformation_test.js
+        ./run_tests.sh headless  ./tests/08_pacman_transformation_test.js
 
     - name: run test 09_missing_files
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/09_missing_files.js
+        ./run_tests.sh headless  ./tests/09_missing_files.js
 
     - name: run test 10_undo_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/10_undo_test.js
+        ./run_tests.sh headless  ./tests/10_undo_test.js
 
     - name: run test 99_ecore_toolbar_test
       run: |
-        xvfb-run --server-args="-screen 0 2880x1800x24" ./run_tests.sh ./tests/99_ecore_toolbar_test.js
+        ./run_tests.sh headless  ./tests/99_ecore_toolbar_test.js
 
