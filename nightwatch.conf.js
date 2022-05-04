@@ -22,8 +22,20 @@ module.exports = {
                 browserName: 'chrome',
                 'goog:chromeOptions': {
                     'args':[
-                        '--window-size=2880,1800',
-                        '--disable-gpu','--remote-debugging-port=9222'
+                        'disable-gpu','remote-debugging-port=9222'
+                    ]
+                }
+            }
+        },
+        run_headless: {
+            launch_url: 'http://localhost:8124/atompm',
+            desiredCapabilities: {
+                browserName: 'chrome',
+                'goog:chromeOptions': {
+                    'args':[
+                        'headless',
+                        'window-size=2880,1800',
+                        'disable-gpu','remote-debugging-port=9222'
                     ]
                 }
             }
