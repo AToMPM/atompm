@@ -43,7 +43,7 @@ module.exports = {
                         'headless',
                         // 'window-size=2880,1800',
                         'window-size=1920,1080',
-                        "no-sandbox",
+                        // "no-sandbox",
                         'disable-gpu','remote-debugging-port=9222'
                     ]
                 }
