@@ -85,7 +85,7 @@ jobs:
       run: |
         ./run_tests.sh headless  ./tests/06_creating_dsl.js
       uses: actions/upload-artifact@v3
-      if: failure()
+      # if: failure()
       with:
         path: screenshots/06_creating_dsl/
         if-no-files-found: ignore
@@ -93,29 +93,29 @@ jobs:
     - name: run test 07_transformation_test
       run: |
         ./run_tests.sh headless  ./tests/07_transformation_test.js
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        path: screenshots/07_transformation_test/
-        if-no-files-found: ignore
+      # uses: actions/upload-artifact@v3
+      # if: failure()
+      # with:
+      #   path: screenshots/07_transformation_test/
+      #   if-no-files-found: ignore
 
     - name: run test 08_pacman_transformation_test
       run: |
         ./run_tests.sh headless  ./tests/08_pacman_transformation_test.js
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        path: screenshots/08_pacman_transformation_test/
-        if-no-files-found: ignore
+      # uses: actions/upload-artifact@v3
+      # if: failure()
+      # with:
+      #   path: screenshots/08_pacman_transformation_test/
+      #   if-no-files-found: ignore
 
     - name: run test 09_missing_files
       run: |
         ./run_tests.sh headless  ./tests/09_missing_files.js
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        path: screenshots/09_missing_files/
-        if-no-files-found: ignore
+      # uses: actions/upload-artifact@v3
+      # if: failure()
+      # with:
+      #   path: screenshots/09_missing_files/
+      #   if-no-files-found: ignore
   
     - name: run test 10_undo_test
       run: |
