@@ -84,8 +84,9 @@ jobs:
     - name: run test 06_creating_dsl
       run: |
         ./run_tests.sh headless  ./tests/06_creating_dsl.js
-      uses: actions/upload-artifact@v3
-      # if: failure()
+
+    - uses: actions/upload-artifact@v3
+      if: failure()
       with:
         path: ./screenshots/06_creating_dsl/
         if-no-files-found: ignore
