@@ -88,29 +88,14 @@ jobs:
     - name: run test 07_transformation_test
       run: |
         ./run_tests.sh headless  ./tests/07_transformation_test.js
-      # uses: actions/upload-artifact@v3
-      # if: failure()
-      # with:
-      #   path: screenshots/07_transformation_test/
-      #   if-no-files-found: ignore
 
     - name: run test 08_pacman_transformation_test
       run: |
         ./run_tests.sh headless  ./tests/08_pacman_transformation_test.js
-      # uses: actions/upload-artifact@v3
-      # if: failure()
-      # with:
-      #   path: screenshots/08_pacman_transformation_test/
-      #   if-no-files-found: ignore
 
     - name: run test 09_missing_files
       run: |
         ./run_tests.sh headless  ./tests/09_missing_files.js
-      # uses: actions/upload-artifact@v3
-      # if: failure()
-      # with:
-      #   path: screenshots/09_missing_files/
-      #   if-no-files-found: ignore
   
     - name: run test 10_undo_test
       run: |
@@ -125,12 +110,3 @@ jobs:
       with:
         path: ./screenshots/
         if-no-files-found: ignore
-
-    # - name: Tar files
-    #   run: tar -cvf my_files.tar ./screenshots
-
-    # - name: Upload Artifact
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: my-artifact
-    #     path: my_files.tar
