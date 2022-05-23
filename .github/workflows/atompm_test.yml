@@ -61,70 +61,70 @@ jobs:
 
 #  if we are running with xvfb there is no need to run headless; remaining parameters passed to nightwatch configuration
 
-    # - name: run test 01_startup_test
-    #   run: |
-    #     ./run_tests.sh headless ./tests/01_startup_test.js
+    - name: run test 01_startup_test
+      run: |
+        ./run_tests.sh headless ./tests/01_startup_test.js
 
-    # - name: run test 02_login_test
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/02_login_test.js
+    - name: run test 02_login_test
+      run: |
+        ./run_tests.sh headless  ./tests/02_login_test.js
 
-    # - name: run test 03_model_test
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/03_model_test.js
+    - name: run test 03_model_test
+      run: |
+        ./run_tests.sh headless  ./tests/03_model_test.js
 
-    # - name: run test 04_compile_test
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/04_compile_test.js
+    - name: run test 04_compile_test
+      run: |
+        ./run_tests.sh headless  ./tests/04_compile_test.js
 
-    # - name: run test 05_toolbar_test
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/05_toolbar_test.js
+    - name: run test 05_toolbar_test
+      run: |
+        ./run_tests.sh headless  ./tests/05_toolbar_test.js
 
     - name: run test 06_creating_dsl
       run: |
         ./run_tests.sh headless  ./tests/06_creating_dsl.js
 
+    - name: run test 07_transformation_test
+      run: |
+        ./run_tests.sh headless  ./tests/07_transformation_test.js
+      # uses: actions/upload-artifact@v3
+      # if: failure()
+      # with:
+      #   path: screenshots/07_transformation_test/
+      #   if-no-files-found: ignore
+
+    - name: run test 08_pacman_transformation_test
+      run: |
+        ./run_tests.sh headless  ./tests/08_pacman_transformation_test.js
+      # uses: actions/upload-artifact@v3
+      # if: failure()
+      # with:
+      #   path: screenshots/08_pacman_transformation_test/
+      #   if-no-files-found: ignore
+
+    - name: run test 09_missing_files
+      run: |
+        ./run_tests.sh headless  ./tests/09_missing_files.js
+      # uses: actions/upload-artifact@v3
+      # if: failure()
+      # with:
+      #   path: screenshots/09_missing_files/
+      #   if-no-files-found: ignore
+  
+    - name: run test 10_undo_test
+      run: |
+        ./run_tests.sh headless  ./tests/10_undo_test.js
+
+    - name: run test 99_ecore_toolbar_test
+      run: |
+        ./run_tests.sh headless  ./tests/99_ecore_toolbar_test.js
+
     - uses: actions/upload-artifact@v3
       if: failure()
       with:
-        path: ./screenshots/06_creating_dsl/
+        path: ./screenshots/
         if-no-files-found: ignore
-
-    # - name: run test 07_transformation_test
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/07_transformation_test.js
-    #   # uses: actions/upload-artifact@v3
-    #   # if: failure()
-    #   # with:
-    #   #   path: screenshots/07_transformation_test/
-    #   #   if-no-files-found: ignore
-
-    # - name: run test 08_pacman_transformation_test
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/08_pacman_transformation_test.js
-    #   # uses: actions/upload-artifact@v3
-    #   # if: failure()
-    #   # with:
-    #   #   path: screenshots/08_pacman_transformation_test/
-    #   #   if-no-files-found: ignore
-
-    # - name: run test 09_missing_files
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/09_missing_files.js
-    #   # uses: actions/upload-artifact@v3
-    #   # if: failure()
-    #   # with:
-    #   #   path: screenshots/09_missing_files/
-    #   #   if-no-files-found: ignore
-  
-    # - name: run test 10_undo_test
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/10_undo_test.js
-
-    # - name: run test 99_ecore_toolbar_test
-    #   run: |
-    #     ./run_tests.sh headless  ./tests/99_ecore_toolbar_test.js
 
     # - name: Tar files
     #   run: tar -cvf my_files.tar ./screenshots
