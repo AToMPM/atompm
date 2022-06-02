@@ -427,7 +427,7 @@ function load_transformation(client, folder_name, model_name) {
     compile_model(client, "transform", folder_name, model_name);
 }
 
-function compile_model(client, compile_type, folder_name, model_name) {
+async function compile_model(client, compile_type, folder_name, model_name) {
 
     let button = "";
     let button_name = compile_type;
@@ -442,7 +442,7 @@ function compile_model(client, compile_type, folder_name, model_name) {
         button = "#\\2f Toolbars\\2f TransformationController\\2f TransformationController\\2e buttons\\2e model\\2f load";
     }
 
-    client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
+    await client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
         .click(button)
         .waitForElementPresent("#dialog_btn", 2000, button_name + " menu opens");
 
@@ -450,7 +450,7 @@ function compile_model(client, compile_type, folder_name, model_name) {
 
     let new_file_text = "#new_file";
     let model_div = "#" + fix_selector(model_name);
-    client.element('css selector', model_div, function (result) {
+    await client.element('css selector', model_div, function (result) {
 
             if (result.status == -1) {
                 //don't create new file with pattern compilation

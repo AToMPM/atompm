@@ -135,10 +135,10 @@ module.exports = {
         model_building_utils.load_toolbar(client, [filename]);
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/SimpleClassDiagram\\/SimpleClassDiagram\\.umlIcons\\.metamodel\\/ClassIcon";
-        client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
-        client.click(classIcon);
+        await client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
+        await client.click(classIcon);
 
-        client.waitForElementPresent(div_utils.canvas, 1000, "Checking for canvas...");
+        await client.waitForElementPresent(div_utils.canvas, 1000, "Checking for canvas...");
 
         let name_field = "#tr_name > td:nth-child(2) > textarea";
         let num_elements = 0;
@@ -188,7 +188,7 @@ module.exports = {
 
 
         //SET ASSOCS
-        client.pause(100);
+        await client.pause(100);
 
         // for debugging
         let skip_assocs = false;
@@ -246,7 +246,7 @@ module.exports = {
                     await model_building_utils.set_attribs(client, 0, attrs, to_ele, undefined, attrib_offset);
                 }
 
-                client.pause(300);
+                await client.pause(300);
 
                 let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
                 //tiny offset to not hit other arrows
@@ -273,8 +273,8 @@ module.exports = {
         let constraint_type = "GlobalConstraintIcon";
         let constraint_div = div_utils.get_element_div(constraint_type, num_elements);
         let constraintIcon = "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2e metamodel\\2f GlobalConstraintIcon";
-        client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
-        client.click(constraintIcon);
+        await client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
+        await client.click(constraintIcon);
 
         await model_building_utils.create_class(client, start_x + 3 * x_diff, start_y, num_elements, constraint_type);
 
@@ -298,9 +298,9 @@ module.exports = {
 
         //COMPILE TO ASMM
         let metamodel_name = "autotest.metamodel";
-        model_building_utils.compile_model(client, "AS", folder_name, metamodel_name);
+        await model_building_utils.compile_model(client, "AS", folder_name, metamodel_name);
 
-        client.pause(300);
+        await client.pause(300);
     },
 
 
@@ -309,11 +309,11 @@ module.exports = {
         model_building_utils.load_toolbar(client, [filename]);
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/IconIcon";
-        client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
-        client.click(classIcon);
+        await client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
+        await client.click(classIcon);
 
         let canvas = "#div_canvas";
-        client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
+        await client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
 
         let name_field = "#tr_typename > td:nth-child(2) > textarea";
         let num_elements = 0;
@@ -346,8 +346,8 @@ module.exports = {
         let textType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/TextIcon\\/";
         let textContent_field = "#tr_textContent > td:nth-child(2) > textarea";
 
-        client.waitForElementPresent(textIcon, 2000, "Check for text icon...");
-        client.click(textIcon);
+        await client.waitForElementPresent(textIcon, 2000, "Check for text icon...");
+        await client.click(textIcon);
 
         for (let i = 0; i < num_classes; i++) {
 
@@ -383,8 +383,8 @@ module.exports = {
         for (let i = 0; i < num_classes; i++) {
 
             let currSymbol = symbols[i % symbols.length];
-            client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...");
-            client.click(getIcon(currSymbol));
+            await client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...");
+            await client.click(getIcon(currSymbol));
 
             let symbolDiv = div_utils.build_div(getType(currSymbol), num_elements);
             let iconDiv = div_utils.build_div(icon_type, i);
@@ -399,7 +399,7 @@ module.exports = {
             //inner link counts as an element
             num_elements++;
 
-            client.pause(200);
+            await client.pause(200);
         }
 
         // BUILD LINKS
@@ -414,8 +414,8 @@ module.exports = {
             link_y_coords.push(start_y + i * y_diff);
         }
 
-        client.waitForElementPresent(linkIcon, 2000, "Check for link icon...");
-        client.click(linkIcon);
+        await client.waitForElementPresent(linkIcon, 2000, "Check for link icon...");
+        await client.click(linkIcon);
 
         let num_elements_before = num_elements;
         await model_building_utils.create_classes(client, link_x_coords, link_y_coords, num_elements, linkType);
@@ -437,7 +437,7 @@ module.exports = {
         let folder_name = "autotest";
         model_building_utils.save_model(client, folder_name, "autotestCS.model");
 
-        model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
+        await model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
 
     },
 
@@ -482,8 +482,8 @@ module.exports = {
             let class_name = class_names[i];
             let class_btn = class_icon + class_name;
 
-            client.waitForElementPresent(class_btn, 2000, "Check for class icon: " + class_btn);
-            client.click(class_btn);
+            await client.waitForElementPresent(class_btn, 2000, "Check for class icon: " + class_btn);
+            await client.click(class_btn);
 
             let class_div = class_type + class_name + "\\2f ";
             element_map[class_name] = await model_building_utils.create_class(client, coords[i][0], coords[i][1], num_elements, class_div);
@@ -557,7 +557,7 @@ module.exports = {
         model_building_utils.scroll_geometry_element(client, resizeH_btn_div, -120, 4);
         model_building_utils.scroll_geometry_element(client, resizeW_btn_div, -120, 4);
         model_building_utils.scroll_geometry_element(client, rotate_btn_div, 120, 8);
-        client.click(ok_btn_div).pause(500);
+        await client.click(ok_btn_div).pause(500);
 
         await model_building_utils.deselect_all(client);
 
@@ -588,19 +588,19 @@ module.exports = {
         let verify_btn = "#\\/Toolbars\\/MainMenu\\/MainMenu\\.buttons\\.model\\/validateM";
         let dialog_btn = "#dialog_btn";
 
-        client.waitForElementPresent(verify_btn, 2000, "Find verify button")
+        await client.waitForElementPresent(verify_btn, 2000, "Find verify button")
             .click(verify_btn)
             .waitForElementNotPresent(dialog_btn, 500, "No constraint violation");
 
         let new_x = start_x + 3 * x_diff;
         let class_btn = class_icon + "ClassCIcon";
         let CClass_type = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassCIcon\\/";
-        client.click(class_btn).pause(100);
+        await client.click(class_btn).pause(100);
 
         await model_building_utils.create_class(client, new_x, start_y, num_elements, CClass_type);
         await model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
 
-        client.click(verify_btn)
+        await client.click(verify_btn)
             .waitForElementPresent(dialog_btn, 2000, "Constraint violation")
             .click(dialog_btn);
 
@@ -611,7 +611,7 @@ module.exports = {
         let folder_name = "autotest";
         model_building_utils.save_model(client, folder_name, "autotest_instance.model");
 
-        client.pause(300);
+        await client.pause(300);
 
 
     },
