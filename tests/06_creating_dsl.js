@@ -135,10 +135,10 @@ module.exports = {
         model_building_utils.load_toolbar(client, [filename]);
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/SimpleClassDiagram\\/SimpleClassDiagram\\.umlIcons\\.metamodel\\/ClassIcon";
-        await client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
-        await client.click(classIcon);
+        client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
+        client.click(classIcon);
 
-        await client.waitForElementPresent(div_utils.canvas, 1000, "Checking for canvas...");
+        client.waitForElementPresent(div_utils.canvas, 1000, "Checking for canvas...");
 
         let name_field = "#tr_name > td:nth-child(2) > textarea";
         let num_elements = 0;
@@ -154,7 +154,7 @@ module.exports = {
 
         let num_classes = x_coords.length * y_coords.length;
 
-        num_elements = await model_building_utils.create_classes(client, x_coords, y_coords, num_elements);
+        num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements);
 
         let abstract_class = 4;
 
@@ -166,7 +166,7 @@ module.exports = {
                 let class_name = "Class" + String.fromCharCode(65 + i);
                 let attrs = {};
                 attrs[name_field] = class_name;
-                await model_building_utils.set_attribs(client, i, attrs);
+                model_building_utils.set_attribs(client, i, attrs);
             }
 
             // SET ATTRIBUTES
@@ -174,21 +174,21 @@ module.exports = {
             let attr_div = "#tr_attributes > td:nth-child(2) > textarea";
             let attrs = {}
             attrs[attr_div] = get_all_attrs();
-            await model_building_utils.set_attribs(client, 8, attrs);
+            model_building_utils.set_attribs(client, 8, attrs);
 
             attrs[attr_div] = get_all_attrs3();
-            await model_building_utils.set_attribs(client, 0, attrs);
+            model_building_utils.set_attribs(client, 0, attrs);
 
             let checkbox_div = "#tr_abstract > td:nth-child(2) > input[type=\"checkbox\"]";
             attrs = {};
             attrs[attr_div] = get_all_attrs2();
             attrs[checkbox_div] = "";
-            await model_building_utils.set_attribs(client, abstract_class, attrs);
+            model_building_utils.set_attribs(client, abstract_class, attrs);
         }
 
 
         //SET ASSOCS
-        await client.pause(100);
+        client.pause(100);
 
         // for debugging
         let skip_assocs = false;
@@ -209,7 +209,7 @@ module.exports = {
 
                 let inheri_relation = "#div_dialog_0 > select > option:nth-child(2)";
 
-                await model_building_utils.create_assoc(client, sub, sup, inheri_relation, offset, offset2);
+                model_building_utils.create_assoc(client, sub, sup, inheri_relation, offset, offset2);
 
                 num_elements++;
             }
@@ -237,23 +237,23 @@ module.exports = {
                 if (out_card) {
                     let attrs = {};
                     attrs[cardinality_field] = JSON.stringify(out_card);
-                    await model_building_utils.set_attribs(client, 0, attrs, from_ele, undefined, attrib_offset);
+                    model_building_utils.set_attribs(client, 0, attrs, from_ele, undefined, attrib_offset);
                 }
 
                 if (in_card) {
                     let attrs = {};
                     attrs[cardinality_field] = JSON.stringify(in_card);
-                    await model_building_utils.set_attribs(client, 0, attrs, to_ele, undefined, attrib_offset);
+                    model_building_utils.set_attribs(client, 0, attrs, to_ele, undefined, attrib_offset);
                 }
 
-                await client.pause(300);
+                client.pause(300);
 
                 let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
                 //tiny offset to not hit other arrows
                 let offset = [3 * assoc[0], 5 * assoc[1]];
                 let offset2 = [4 * assoc[1], 5 * assoc[1]];
 
-                await model_building_utils.create_assoc(client, from_ele, to_ele, assoc_relation, offset, offset2);
+                model_building_utils.create_assoc(client, from_ele, to_ele, assoc_relation, offset, offset2);
 
                 let attrs = {};
                 attrs[name_field] = name;
@@ -262,7 +262,7 @@ module.exports = {
                     attrs[contain_opt] = "";
                 }
 
-                await model_building_utils.set_attribs(client, 0, attrs, assoc_div, undefined, attrib_offset);
+                model_building_utils.set_attribs(client, 0, attrs, assoc_div, undefined, attrib_offset);
 
 
 
@@ -273,10 +273,10 @@ module.exports = {
         let constraint_type = "GlobalConstraintIcon";
         let constraint_div = div_utils.get_element_div(constraint_type, num_elements);
         let constraintIcon = "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2e metamodel\\2f GlobalConstraintIcon";
-        await client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
-        await client.click(constraintIcon);
+        client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
+        client.click(constraintIcon);
 
-        await model_building_utils.create_class(client, start_x + 3 * x_diff, start_y, num_elements, constraint_type);
+        model_building_utils.create_class(client, start_x + 3 * x_diff, start_y, num_elements, constraint_type);
 
         //let pre_create_opt = "#tr_event > td:nth-child(2) > select > option:nth-child(2)";
         let code_field = "#tr_code > td:nth-child(2) > textarea";
@@ -288,7 +288,7 @@ module.exports = {
         attrs[name_field] = "max-two-instances";
         attrs[validate_choice] = "";
         attrs[code_field] = constraint_code;
-        await model_building_utils.set_attribs(client, 0, attrs, constraint_div);
+        model_building_utils.set_attribs(client, 0, attrs, constraint_div);
 
         //SAVE MODEL
         let model_name = "autotest.model";
@@ -298,9 +298,9 @@ module.exports = {
 
         //COMPILE TO ASMM
         let metamodel_name = "autotest.metamodel";
-        await model_building_utils.compile_model(client, "AS", folder_name, metamodel_name);
+        model_building_utils.compile_model(client, "AS", folder_name, metamodel_name);
 
-        await client.pause(300);
+        client.pause(300);
     },
 
 
@@ -309,11 +309,11 @@ module.exports = {
         model_building_utils.load_toolbar(client, [filename]);
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/IconIcon";
-        await client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
-        await client.click(classIcon);
+        client.waitForElementPresent(classIcon, 2000, "Check for class icon...")
+        client.click(classIcon);
 
         let canvas = "#div_canvas";
-        await client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
+        client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
 
         let name_field = "#tr_typename > td:nth-child(2) > textarea";
         let num_elements = 0;
@@ -331,14 +331,14 @@ module.exports = {
 
         let num_classes = x_coords.length * y_coords.length;
 
-        num_elements = await model_building_utils.create_classes(client, x_coords, y_coords, num_elements, icon_type);
+        num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements, icon_type);
 
         //SET NAMES FOR CLASSES
         for (let i = 0; i < num_classes; i++) {
             let class_name = "Class" + String.fromCharCode(65 + i) + "Icon";
             let attrs = {};
             attrs[name_field] = class_name;
-            await model_building_utils.set_attribs(client, i, attrs, icon_type);
+            model_building_utils.set_attribs(client, i, attrs, icon_type);
         }
 
         // BUILD TEXT FOR ICONS
@@ -346,8 +346,8 @@ module.exports = {
         let textType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/TextIcon\\/";
         let textContent_field = "#tr_textContent > td:nth-child(2) > textarea";
 
-        await client.waitForElementPresent(textIcon, 2000, "Check for text icon...");
-        await client.click(textIcon);
+        client.waitForElementPresent(textIcon, 2000, "Check for text icon...");
+        client.click(textIcon);
 
         for (let i = 0; i < num_classes; i++) {
 
@@ -359,12 +359,12 @@ module.exports = {
             let attrs = {};
             attrs[textContent_field] = text;
 
-            await model_building_utils.create_class(client, 20, 200, num_elements, textType);
-            await model_building_utils.set_attribs(client, num_elements, attrs, textType);
+            model_building_utils.create_class(client, 20, 200, num_elements, textType);
+            model_building_utils.set_attribs(client, num_elements, attrs, textType);
 
             num_elements++;
 
-            await model_building_utils.move_element(client, textDiv, iconDiv, [0, 0], [0, 40]);
+            model_building_utils.move_element(client, textDiv, iconDiv, [0, 0], [0, 40]);
 
             //inner link counts as an element
             num_elements++;
@@ -383,23 +383,23 @@ module.exports = {
         for (let i = 0; i < num_classes; i++) {
 
             let currSymbol = symbols[i % symbols.length];
-            await client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...");
-            await client.click(getIcon(currSymbol));
+            client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...");
+            client.click(getIcon(currSymbol));
 
             let symbolDiv = div_utils.build_div(getType(currSymbol), num_elements);
             let iconDiv = div_utils.build_div(icon_type, i);
 
-            await model_building_utils.create_class(client, 20, 200, num_elements, getType(currSymbol));
-            await model_building_utils.deselect_all(client);
+            model_building_utils.create_class(client, 20, 200, num_elements, getType(currSymbol));
+            model_building_utils.deselect_all(client);
 
             num_elements++;
 
-            await model_building_utils.move_element(client, symbolDiv, iconDiv, [0, 0], [0, -40]);
+            model_building_utils.move_element(client, symbolDiv, iconDiv, [0, 0], [0, -40]);
 
             //inner link counts as an element
             num_elements++;
 
-            await client.pause(200);
+            client.pause(200);
         }
 
         // BUILD LINKS
@@ -414,30 +414,30 @@ module.exports = {
             link_y_coords.push(start_y + i * y_diff);
         }
 
-        await client.waitForElementPresent(linkIcon, 2000, "Check for link icon...");
-        await client.click(linkIcon);
+        client.waitForElementPresent(linkIcon, 2000, "Check for link icon...");
+        client.click(linkIcon);
 
         let num_elements_before = num_elements;
-        await model_building_utils.create_classes(client, link_x_coords, link_y_coords, num_elements, linkType);
+        model_building_utils.create_classes(client, link_x_coords, link_y_coords, num_elements, linkType);
 
         //SET NAMES FOR LINKS
         for (let i = 0; i < assocs.length; i++) {
             let link_name = assocs[i][2] + "Link";
             let attrs = {};
             attrs[link_typename_field] = link_name;
-            await model_building_utils.set_attribs(client, num_elements_before + i, attrs, linkType);
+            model_building_utils.set_attribs(client, num_elements_before + i, attrs, linkType);
         }
 
         //remove unneeded elements
-        await model_building_utils.delete_element(client, div_utils.build_div(icon_type, 4));
+        model_building_utils.delete_element(client, div_utils.build_div(icon_type, 4));
 
-        await model_building_utils.delete_element(client, div_utils.build_div(linkType, 50));
+        model_building_utils.delete_element(client, div_utils.build_div(linkType, 50));
 
 
         let folder_name = "autotest";
         model_building_utils.save_model(client, folder_name, "autotestCS.model");
 
-        await model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
+        model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
 
     },
 
@@ -482,17 +482,17 @@ module.exports = {
             let class_name = class_names[i];
             let class_btn = class_icon + class_name;
 
-            await client.waitForElementPresent(class_btn, 2000, "Check for class icon: " + class_btn);
-            await client.click(class_btn);
+            client.waitForElementPresent(class_btn, 2000, "Check for class icon: " + class_btn)
+                .click(class_btn);
 
             let class_div = class_type + class_name + "\\2f ";
-            element_map[class_name] = await model_building_utils.create_class(client, coords[i][0], coords[i][1], num_elements, class_div);
+            element_map[class_name] = model_building_utils.create_class(client, coords[i][0], coords[i][1], num_elements, class_div);
 
             num_elements++;
 
         }
 
-        await model_building_utils.deselect_all(client);
+        model_building_utils.deselect_all(client);
 
         // BUILD ASSOCIATIONS
         for (let assoc of assocs) {
@@ -523,14 +523,14 @@ module.exports = {
                 let offset = assoc[6];
                 let offset2 = assoc[7];
 
-                await model_building_utils.create_assoc(client, from_class_div, to_class_div, undefined, offset, offset2);
+                model_building_utils.create_assoc(client, from_class_div, to_class_div, undefined, offset, offset2);
             } else {
-                await model_building_utils.move_element(client, to_class_div, from_class_div, [0, 0], [0, 0])
+                model_building_utils.move_element(client, to_class_div, from_class_div, [0, 0], [0, 0])
             }
 
             num_elements++;
 
-            await model_building_utils.deselect_all(client);
+            model_building_utils.deselect_all(client);
 
         }
 
@@ -538,7 +538,7 @@ module.exports = {
 
         //SCALE AND ROTATE TESTS
         let scale_element_div = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassDIcon\\/3\\.instance";
-        await model_building_utils.hit_control_element(client, scale_element_div);
+        model_building_utils.hit_control_element(client, scale_element_div);
         //client.mouseButtonClick('left').pause(300);
         //client.setValue(scale_element_div, client.Keys.CONTROL);
         //TODO: Can't send CONTROL key
@@ -557,9 +557,9 @@ module.exports = {
         model_building_utils.scroll_geometry_element(client, resizeH_btn_div, -120, 4);
         model_building_utils.scroll_geometry_element(client, resizeW_btn_div, -120, 4);
         model_building_utils.scroll_geometry_element(client, rotate_btn_div, 120, 8);
-        await client.click(ok_btn_div).pause(500);
+        client.click(ok_btn_div).pause(500);
 
-        await model_building_utils.deselect_all(client);
+        model_building_utils.deselect_all(client);
 
         //SET ATTRIBUTES
 
@@ -580,7 +580,7 @@ module.exports = {
         }
         //TODO: Set other attribs
         let div_suffix = " > text";
-        await model_building_utils.set_attribs(client, 7, attribs, IClass, div_suffix, [5, 5]);
+        model_building_utils.set_attribs(client, 7, attribs, IClass, div_suffix, [5, 5]);
 
         //client.pause(500000)
 
@@ -588,30 +588,30 @@ module.exports = {
         let verify_btn = "#\\/Toolbars\\/MainMenu\\/MainMenu\\.buttons\\.model\\/validateM";
         let dialog_btn = "#dialog_btn";
 
-        await client.waitForElementPresent(verify_btn, 2000, "Find verify button")
+        client.waitForElementPresent(verify_btn, 2000, "Find verify button")
             .click(verify_btn)
             .waitForElementNotPresent(dialog_btn, 500, "No constraint violation");
 
         let new_x = start_x + 3 * x_diff;
         let class_btn = class_icon + "ClassCIcon";
         let CClass_type = "#\\/autotest\\/autotest\\.defaultIcons\\/ClassCIcon\\/";
-        await client.click(class_btn).pause(100);
+        client.click(class_btn).pause(100);
 
-        await model_building_utils.create_class(client, new_x, start_y, num_elements, CClass_type);
-        await model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
+        model_building_utils.create_class(client, new_x, start_y, num_elements, CClass_type);
+        model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
 
-        await client.click(verify_btn)
+        client.click(verify_btn)
             .waitForElementPresent(dialog_btn, 2000, "Constraint violation")
             .click(dialog_btn);
 
-        await model_building_utils.deselect_all(client);
+        model_building_utils.deselect_all(client);
 
 
         // SAVE INSTANCE MODEL
         let folder_name = "autotest";
         model_building_utils.save_model(client, folder_name, "autotest_instance.model");
 
-        await client.pause(300);
+        client.pause(300);
 
 
     },

@@ -1,7 +1,7 @@
 const div_utils = require('./div_utils');
 const {fix_selector} = require("./div_utils");
 
-async function create_class(client, x, y, i, element_type) {
+function create_class(client, x, y, i, element_type) {
 
     let class_div;
     if (element_type == undefined) {
@@ -12,10 +12,9 @@ async function create_class(client, x, y, i, element_type) {
         class_div = div_utils.get_element_div(element_type, i);
     }
 
-    //const canvas = await client.findElement(div_utils.canvas);
-    await client
-        .perform(function () {
-            const actions = this.actions({async: true});
+    //const canvas = client.findElement(div_utils.canvas);
+    client.perform(function () {
+            const actions = this.actions({async: false});
             return actions
                 .move({'x': x, 'y': y})
                 .contextClick();
@@ -28,10 +27,10 @@ async function create_class(client, x, y, i, element_type) {
 
 }
 
-async function create_classes(client, x_coords, y_coords, curr_num_elements, element_type) {
+function create_classes(client, x_coords, y_coords, curr_num_elements, element_type) {
     for (let x of x_coords) {
         for (let y of y_coords) {
-            await this.create_class(client, x, y, curr_num_elements, element_type);
+            this.create_class(client, x, y, curr_num_elements, element_type);
             curr_num_elements++;
         }
     }
@@ -39,19 +38,18 @@ async function create_classes(client, x_coords, y_coords, curr_num_elements, ele
     return curr_num_elements;
 }
 
-async function create_assoc(client, start_div, end_div, relation_div, offset, offset2) {
+function create_assoc(client, start_div, end_div, relation_div, offset, offset2) {
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
 
     if (offset2 == undefined){
         offset2 = offset;
     }
 
-    const start = await client.findElement(start_div);
-    const end = await client.findElement(end_div);
-    await client
-        .perform(function () {
-            const actions = this.actions({async: true});
+    const start = client.findElement(start_div);
+    const end = client.findElement(end_div);
+    client.perform(function () {
+            const actions = this.actions({async: false});
             return actions
                 .move({'origin':start, "x":offset[0], "y":offset[1]})
                 .press(2)
@@ -74,21 +72,20 @@ async function create_assoc(client, start_div, end_div, relation_div, offset, of
             .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
     }
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
     client.pause(300);
 
 }
 
-async function move_element(client, from_div, to_div, from_offset, to_offset) {
+function move_element(client, from_div, to_div, from_offset, to_offset) {
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
 
-    const start = await client.findElement(from_div);
-    const end = await client.findElement(to_div);
+    const start = client.findElement(from_div);
+    const end = client.findElement(to_div);
 
-    await client
-        .perform(function () {
-            const actions = this.actions({async: true});
+    client.perform(function () {
+            const actions = this.actions({async: false});
             return actions
                 .move({"origin": start})
                 .click(0)
@@ -102,10 +99,10 @@ async function move_element(client, from_div, to_div, from_offset, to_offset) {
             //dragAndDrop(start, end);
         });
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
 }
 
-async function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
+function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
 
     let element_div = element_type;
     if (element_type == undefined){
@@ -122,31 +119,29 @@ async function set_attribs(client, num, attrs, element_type, div_suffix, offset)
         offset = [0, 0];
     }
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
 
     client.waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div);
 
-    const ele = await client.findElement(element_div);
-    await client
-        .perform(function () {
-            const actions = this.actions({async: true});
+    const ele = client.findElement(element_div);
+    client.perform(function () {
+            const actions = this.actions({async: false});
             return actions
                 .move({'origin': ele, "x":offset[0], "y":offset[1]})
                 .click()
         });
-    await client
-        .perform(function () {
-            const actions = this.actions({async: true});
+    client.perform(function () {
+            const actions = this.actions({async: false});
             return actions
                 .sendKeys(client.Keys.INSERT);
         });
     client.waitForElementPresent("#dialog_btn", 1000, "Editing menu opens");
 
     for (const [key, value] of Object.entries(attrs)) {
-        const ele = await client.findElement(key);
+        const ele = client.findElement(key);
 
         if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean"))
-            client.click(ele);
+            client.actions().click(ele);
         else
             client.updateValue(key, value);
     }
@@ -155,7 +150,7 @@ async function set_attribs(client, num, attrs, element_type, div_suffix, offset)
         .click("#dialog_btn")
         .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
 
-    await deselect_all(client);
+    deselect_all(client);
 }
 
 function move_to_element_ratio(client, element, x_ratio, y_ratio) {
@@ -168,60 +163,60 @@ function move_to_element_ratio(client, element, x_ratio, y_ratio) {
     });
 }
 
-async function delete_element(client, element) {
-    await this.deselect_all(client);
+function delete_element(client, element) {
+    this.deselect_all(client);
 
-    const ele = await client.findElement(element);
-    await client
+    const ele = client.findElement(element);
+    client
         .perform(function () {
-            const actions = this.actions({async: true});
+            const actions = this.actions({async: false});
             return actions
                 .move({'origin': ele})
                 .click()
         });
     client.pause(200);
-    await client
+    client
         .perform(function () {
-            const actions = this.actions({async: true});
+            const actions = this.actions({async: false});
             return actions
                 .sendKeys(client.Keys.DELETE);
         });
 
     client.waitForElementNotPresent(element, 2000, "Deleted element");
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
 }
 
-async function hit_control_element(client, element) {
-    //await this.deselect_all(client);
+function hit_control_element(client, element) {
+    //this.deselect_all(client);
 
-    const ele = await client.findElement(element);
-    await client
+    const ele = client.findElement(element);
+    client
         .perform(function () {
-            const actions = this.actions({async: true});
+            const actions = this.actions({async: false});
             return actions
                 .move({'origin': ele})
                 .click()
         });
     client.pause(200);
-    await client
+    client
         .perform(function () {
-            const actions = this.actions({async: true});
+            const actions = this.actions({async: false});
             return actions
                 .sendKeys(client.Keys.CONTROL);
         });
 
     //client.waitForElementNotPresent(element, 2000, "Deleted element");
 
-    //await this.deselect_all(client);
+    //this.deselect_all(client);
 }
 
 
 
 async function deselect_all(client) {
-    await client
+    client
         .perform(function () {
-            const actions = this.actions({async: true});
+            const actions = this.actions({async: false});
             return actions
                 .sendKeys(client.Keys.ESCAPE);
         });
@@ -442,7 +437,7 @@ async function compile_model(client, compile_type, folder_name, model_name) {
         button = "#\\2f Toolbars\\2f TransformationController\\2f TransformationController\\2e buttons\\2e model\\2f load";
     }
 
-    await client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
+    client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
         .click(button)
         .waitForElementPresent("#dialog_btn", 2000, button_name + " menu opens");
 
@@ -450,7 +445,7 @@ async function compile_model(client, compile_type, folder_name, model_name) {
 
     let new_file_text = "#new_file";
     let model_div = "#" + fix_selector(model_name);
-    await client.element('css selector', model_div, function (result) {
+    client.element('css selector', model_div, function (result) {
 
             if (result.status == -1) {
                 //don't create new file with pattern compilation
