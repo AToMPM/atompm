@@ -27,6 +27,15 @@ module.exports = {
 
     'Collaboration test' : async function (client) {
 
+        // store the window handles to switch between
+        let tab_a = null;
+        let tab_b = null;
+        let tab_c = null
+
+        // the divs of the classes created
+        let first_class_div = null;
+        let second_class_div = null;
+
         //==========================================================
         client.verify.ok(true, 'Step 1: Client A joins Server');
 
@@ -40,6 +49,11 @@ module.exports = {
         }
 
         user_utils.login(client, username);
+
+        await client.windowHandles(function (result) {
+            tab_a = result.value[0];
+            client.verify.ok(true, 'Tab A\'s Handle:' + tab_a);
+        })
 
         client.pause(500);
 
@@ -65,7 +79,7 @@ module.exports = {
 
         let start_x = 50;
         let start_y = 200;
-        model_building_utils.create_class(client, start_x, start_y, 0);
+        first_class_div = await model_building_utils.create_class(client, start_x, start_y, 0);
 
         client.pause(500);
 
@@ -76,7 +90,7 @@ module.exports = {
         let attrs = {};
         let name_field = "#tr_name > td:nth-child(2) > textarea";
         attrs[name_field] = class_name;
-        model_building_utils.set_attribs(client, 0, attrs);
+        await model_building_utils.set_attribs(client, 0, attrs);
 
         //SAVE MODEL
         let model_name = "collab.model";
@@ -86,44 +100,25 @@ module.exports = {
         //==========================================================
         client.verify.ok(true, 'Step 3a: Client B joins through screen sharing');
 
-
         let screen_share_selector = "#a_screenshare";
 
-        client.getAttribute(screen_share_selector, "href", function (result) {
-            //client.verify.ok(true, "Screenshare link: " + result.value);
+        await client.getAttribute(screen_share_selector, "href", async function (result) {
 
             let screen_share_url = decodeHtml(result.value);
-            //client.verify.ok(true, "Screenshare url: " + result.value);
 
-            //const paragraph = 'http://localhost:8124/atompm?cswid=1&host=aaa';
             const regex = /http.*/g;
-            screen_share_url = screen_share_url.match(regex);
+            screen_share_url = screen_share_url.match(regex).toString();
+            client.verify.ok(true, "Navigating to: " + screen_share_url);
 
-            //client.verify.ok(true, "Screenshare url small: " + screen_share_url);
+            await client.openNewWindow('window').pause(500)
+            await client.url(screen_share_url)
 
-            client.openNewWindow('window', function (result) {
+            await client.windowHandles(function (result) {
+                tab_b = result.value[1];
+                client.verify.ok(true, 'Tab B\'s Handle:' + tab_b);
+            })
 
-                client.pause(2000);
-                client.windowHandles(function (result) {
-                    let b_window_handle = result.value[1];
-                    client.pause(5000);
-                    client.verify.ok(true, "Window handle: " + b_window_handle.toString());
-                    client.switchWindow(b_window_handle);
-                    client.pause(5000);
-                    client.url(screen_share_url, function (result) {
-                        client.verify.ok(true, "Navigated to: " + result.toString());
-                    });
-                    client.verify.ok(true, "Navigating to: " + screen_share_url);
-
-
-                    //this.pause();
-
-                });
-
-            });
-
-
-            client.pause(3000);
+            client.pause(500);
         });
 
 
@@ -131,23 +126,76 @@ module.exports = {
         client.verify.ok(true, 'Step 3b: Client C joins through model sharing');
 
         let model_share_selector = "#a_modelshare";
-        let model_share_url = "http://localhost:8124/atompm?cswid=0&aswid=1&host=aaa";
+
+        await client.getAttribute(model_share_selector, "href", async function (result) {
+
+            let model_share_url = decodeHtml(result.value);
+
+            const regex = /http.*/g;
+            model_share_url = model_share_url.match(regex).toString();
+            client.verify.ok(true, "Navigating to: " + model_share_url);
+
+            await client.openNewWindow('window').pause(500)
+            await client.url(model_share_url)
+
+            await client.windowHandles(function (result) {
+                tab_c = result.value[2];
+                client.verify.ok(true, 'Tab C\'s Handle:' + tab_c);
+            })
+
+            client.pause(500);
+        });
+
 
         //==========================================================
         client.verify.ok(true, 'Step 4a: Client A changes name of instance (with B and C listening)');
+        await client.switchToWindow(tab_a);
+        client.pause(500);
+        attrs = {};
+        attrs[name_field] = "MainTopic";
+        await model_building_utils.set_attribs(client, 0, attrs);
+        client.pause(300);
 
         //==========================================================
         client.verify.ok(true, 'Step 5: Client A creates second instance');
+        start_x = 300;
+        start_y = 200;
+        second_class_div = await model_building_utils.create_class(client, start_x, start_y, 1);
+        client.pause(300);
 
         //==========================================================
         client.verify.ok(true, 'Step 6: Client A creates link between elements');
 
-        //==========================================================
-        client.verify.ok(true, 'Step 7: Client A deletes the second instance');
+        let assoc_relation = "#div_dialog_0 > select > option:nth-child(1)";
+        //tiny offset to not hit other arrows
+        let offset = [3, 5];
+        let offset2 = [4, 5];
+
+        await model_building_utils.deselect_all(client);
+        await model_building_utils.create_assoc(client, first_class_div, second_class_div, assoc_relation, offset, offset2);
+        client.pause(300);
 
         //==========================================================
-        client.verify.ok(true, 'Step 8: Client A disconnects');
+        client.verify.ok(true, 'Step 7: Client A moves the second element');
+        await model_building_utils.move_element(client, second_class_div, second_class_div,[-60, -60], [60, 60]);
+        client.pause(300);
 
+        //==========================================================
+        client.verify.ok(true, 'Step 8: Client A deletes the second instance');
+        await model_building_utils.delete_element(client, first_class_div);
+        client.pause(300);
+
+        //==========================================================
+        client.verify.ok(true, 'Step 9: Client A switches concrete syntax');
+        // NOTE: This invalidates the divs of the created elements!
+        let toolbar_filename = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons.metamodel';
+        await model_building_utils.load_toolbar(client, [toolbar_filename]);
+        client.pause(300);
+
+        //==========================================================
+        client.verify.ok(true, 'Step 10: Client A disconnects');
+        await client.closeWindow();
+        client.pause(1000);
     },
 
     after : function (client) {

@@ -90,7 +90,7 @@ async function move_element(client, from_div, to_div, from_offset, to_offset) {
         .perform(function () {
             const actions = this.actions({async: true});
             return actions
-                .move({"origin": start})
+                .move({"origin": start, "x":from_offset[0], "y":from_offset[1]})
                 .click(0)
                 .pause(100)
                 .press(0)
@@ -400,10 +400,10 @@ function load_toolbar(client, fnames) {
             }, [name], null
         );
 
+        client.pause(300);
+
         let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
         toolbar_name = "#div_toolbar_" + toolbar_name;
-
-        //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
 
         client.element('css selector', '#dialog_btn', function (result) {
             if (result.status != -1) {
