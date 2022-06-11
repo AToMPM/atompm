@@ -404,35 +404,34 @@ function load_multiple_models(client, fnames) {
 
 function load_toolbar(client, fnames) {
 
-    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
+    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded")
+        .perform( function (){
+            for (let name of fnames) {
+                let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
+                toolbar_name = "#div_toolbar_" + toolbar_name;
 
-    for (let name of fnames) {
-        client.execute(
-            function (fname) {
-                _loadToolbar(fname);
-            }, [name], null
-        );
-
-        let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
-        toolbar_name = "#div_toolbar_" + toolbar_name;
-
-        //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
-
-        client.element('css selector', '#dialog_btn', function (result) {
-            if (result.status != -1) {
-                //Dialog has popped up, so check the text and click the button
-                client.assert.textContains("#div_dialog_0", "File not found");
-                client.click("#dialog_btn");
-
-                client.verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
-            } else {
-                //Toolbar loaded, so check for it
-                client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
+                client.execute(
+                        function (fname) {
+                            _loadToolbar(fname);
+                        }, [name], null
+                    )
+        
+                //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
+        
+                    .element('css selector', '#dialog_btn', function (result) {
+                        if (result.status != -1) {
+                            //Dialog has popped up, so check the text and click the button
+                            client.assert.textContains("#div_dialog_0", "File not found")
+                                .click("#dialog_btn")
+            
+                                .verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
+                        } else {
+                            //Toolbar loaded, so check for it
+                            client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
+                        }
+                    });
             }
-        });
-
-    }
-
+        })
 }
 
 
