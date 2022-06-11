@@ -46,16 +46,22 @@ function create_assoc(client, start_div, end_div, relation_div, offset, offset2)
         offset2 = offset;
     }
 
-    const start = client.findElement(start_div);
-    const end = client.findElement(end_div);
-    client.perform(function () {
-            const actions = this.actions({async: false});
-            return actions
-                .move({'origin':start, "x":offset[0], "y":offset[1]})
-                .press(2)
-                .move({'origin':end, "x":offset2[0], "y":offset2[1]})
-                .release(2)
-        });
+    let start, end;
+
+    client.findElement(start_div, response => {
+                start = response.value;
+            })
+        .findElement(end_div, response => {
+                end = response.value;
+            })
+        .perform(function () {
+                const actions = this.actions({async: false});
+                return actions
+                    .move({'origin':start, "x":offset[0], "y":offset[1]})
+                    .press(2)
+                    .move({'origin':end, "x":offset2[0], "y":offset2[1]})
+                    .release(2)
+            })
 
 
     // this.move_to_element_ratio(client, start_div, 50 + offset, 50 + offset);
@@ -63,15 +69,16 @@ function create_assoc(client, start_div, end_div, relation_div, offset, offset2)
     // this.move_to_element_ratio(client, end_div, 50 + offset, 50 + offset);
     // client.mouseButtonUp('right').pause(300);
 
-    if (relation_div != undefined && relation_div != "") {
-        client.waitForElementPresent(relation_div, 1000, "Relation option present: " + relation_div);
-        client.click(relation_div);
-        client.waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
-            .click("#dialog_btn")
-            .pause(300)
-            .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
-    }
-
+        .perform(function () {
+                if (relation_div != undefined && relation_div != "") {
+                    client.waitForElementPresent(relation_div, 1000, "Relation option present: " + relation_div)
+                        .click(relation_div)
+                        .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
+                        .click("#dialog_btn")
+                        .pause(300)
+                        .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
+                }        
+            });
     this.deselect_all(client);
     client.pause(300);
 
@@ -81,13 +88,18 @@ function move_element(client, from_div, to_div, from_offset, to_offset) {
 
     this.deselect_all(client);
 
-    const start = client.findElement(from_div);
-    const end = client.findElement(to_div);
+    let start, end;
+    client.findElement(from_div, response => {
+                start = response.value;
+            })
+        .findElement(to_div, response => {
+                end = response.value;
+            })
 
-    client.perform(function () {
+        .perform(function () {
             const actions = this.actions({async: false});
             return actions
-                .move({"origin": start})
+                .move({"origin": start, "x":from_offset[0], "y":from_offset[1]})
                 .click(0)
                 .pause(100)
                 .press(0)
@@ -120,33 +132,38 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
     }
 
     this.deselect_all(client);
+    let ele;
 
-    client.waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div);
-
-    const ele = client.findElement(element_div);
-    client.perform(function () {
-            const actions = this.actions({async: false});
-            return actions
-                .move({'origin': ele, "x":offset[0], "y":offset[1]})
-                .click()
-        });
-    client.perform(function () {
-            const actions = this.actions({async: false});
-            return actions
-                .sendKeys(client.Keys.INSERT);
-        });
-    client.waitForElementPresent("#dialog_btn", 1000, "Editing menu opens");
-
-    for (const [key, value] of Object.entries(attrs)) {
-        const ele = client.findElement(key);
-
-        if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean"))
-            client.actions().click(ele);
-        else
-            client.updateValue(key, value);
-    }
-
-    client
+    client.waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div)
+        .findElement(element_div, response => {
+                ele = response.value;
+            })
+        .perform(function () {
+                const actions = this.actions({async: false});
+                return actions
+                    .move({'origin': ele, "x":offset[0], "y":offset[1]})
+                    .click()
+            })
+        .perform(function () {
+                const actions = this.actions({async: false});
+                return actions
+                    .sendKeys(client.Keys.INSERT);
+            })
+        .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
+        .perform((function (attrs) {
+                let ele2;
+                for (const [key, value] of Object.entries(attrs)) {
+                    client.findElement(key, response => {
+                                ele2 = response.value;
+                            })
+                        .perform(function (){
+                                if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean"))
+                                    client.actions().click(ele2);
+                                else
+                                    client.updateValue(key, value);                        
+                            })
+                }
+            }).call(this,attrs))
         .click("#dialog_btn")
         .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
 
@@ -166,23 +183,23 @@ function move_to_element_ratio(client, element, x_ratio, y_ratio) {
 function delete_element(client, element) {
     this.deselect_all(client);
 
-    const ele = client.findElement(element);
-    client
+    let ele;
+    client.findElement(element, response => {
+                ele = response.value;
+            })
         .perform(function () {
-            const actions = this.actions({async: false});
-            return actions
-                .move({'origin': ele})
-                .click()
-        });
-    client.pause(200);
-    client
+                const actions = this.actions({async: false});
+                return actions
+                    .move({'origin': ele})
+                    .click()
+            })
+        .pause(200)
         .perform(function () {
-            const actions = this.actions({async: false});
-            return actions
-                .sendKeys(client.Keys.DELETE);
-        });
-
-    client.waitForElementNotPresent(element, 2000, "Deleted element");
+                const actions = this.actions({async: false});
+                return actions
+                    .sendKeys(client.Keys.DELETE);
+            })
+        .waitForElementNotPresent(element, 2000, "Deleted element");
 
     this.deselect_all(client);
 }
@@ -190,21 +207,22 @@ function delete_element(client, element) {
 function hit_control_element(client, element) {
     //this.deselect_all(client);
 
-    const ele = client.findElement(element);
-    client
+    let ele;
+    client.findElement(element, response => {
+                ele = response.value;
+            })
         .perform(function () {
-            const actions = this.actions({async: false});
-            return actions
-                .move({'origin': ele})
-                .click()
-        });
-    client.pause(200);
-    client
+                const actions = this.actions({async: false});
+                return actions
+                    .move({'origin': ele})
+                    .click()
+            })
+        .pause(200)
         .perform(function () {
-            const actions = this.actions({async: false});
-            return actions
-                .sendKeys(client.Keys.CONTROL);
-        });
+                const actions = this.actions({async: false});
+                return actions
+                    .sendKeys(client.Keys.CONTROL);
+            });
 
     //client.waitForElementNotPresent(element, 2000, "Deleted element");
 
