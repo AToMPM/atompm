@@ -331,7 +331,7 @@ module.exports = {
         let metamodel_name = "autotest.metamodel";
         model_building_utils.compile_model(client, "AS", folder_name, metamodel_name);
 
-        client.pause(300);
+        client.pause(3000);
     },
 
 
@@ -470,6 +470,7 @@ module.exports = {
 
         model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
 
+        client.pause(3000);
     },
 
     'Create model': function (client) {
