@@ -11,38 +11,16 @@ import logging
 import os
 import sys
 import threading
+import json
 
-from lowkey.collabtypes.Association import Association
-from lowkey.collabtypes.Clabject import Clabject
-from lowkey.collabtypes.Entity import Entity
+from model import Model
+
 from lowkey.network.Client import Client
-from lowkey.collabapi.Session import Session
-from lowkey.lww.LWWMap import LWWMap
 
 __author__ = "Benley James Oakes, Istvan David"
 __copyright__ = "Copyright 2022, GEODES"
 __credits__ = "Eugene Syriani"
 __license__ = "GPL-3.0"
-
-class Model(LWWMap):
-    def __init__(self, from_dict : dict = None):
-        super().__init__()
-        
-        self.nodes = {}
-        self.edges = []
-        self.metamodels = []
-
-        if from_dict:
-            self.nodes = from_dict["nodes"]
-            self.edges = from_dict["edges"]
-            self.metamodels = from_dict["metamodels"]
-
-    def to_dict(self) -> dict:
-        return {
-            "nodes": self.nodes,
-            "edges": self.edges,
-            "metamodels": self.metamodels,
-        }
 
 class PyMMMK(Client):
     __encoding = "utf-8"
@@ -146,6 +124,9 @@ class PyMMMK(Client):
         message = self.createMessage(f"hello from {self.__name}")
         self._publisher.send(message)
         
+        with open("model.json", "w") as outfile:
+            json.dump(self.model.to_dict(), outfile)
+
         return res
         
     '''
