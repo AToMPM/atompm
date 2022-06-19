@@ -12,7 +12,7 @@ import zmq
 from mmmk import PyMMMK
 
 
-__author__ = "Benley James Oakes, Istvan David"
+__author__ = "Bentley James Oakes, Istvan David"
 __copyright__ = "Copyright 2022, GEODES"
 __credits__ = "Eugene Syriani"
 __license__ = "GPL-3.0"
@@ -50,7 +50,7 @@ class PyMMMKManager:
             print("Msg length: " + str(len(msg)) + ": " + str(msg[:2]))
             if len(self.mmmks.values()) == 1:
                 #print(list(self.mmmks.values())[0])
-                print("Clabject ID of MMMK root model: {}".format((list(self.mmmks.values())[0]).model.getId()))
+                print("LWW object ID of MMMK root model: {}".format((list(self.mmmks.values())[0]).model.getId()))
 
             wid = msg[0]
             op = msg[1]
