@@ -63,50 +63,42 @@ function __initClient()
 			// request a client ID from the session manager
 			if (__clientID == undefined) {
 				HttpUtils.httpReq(
-					'GET',
+					'POST',
 					HttpUtils.url('/newCID', __NO_WID + __NO_USERNAME),
 					undefined,
 					function (statusCode, resp) {
 						if (!utils.isHttpSuccessCode(statusCode))
 							WindowManagement.openDialog(__FATAL_ERROR, 'could not get client ID: error ' + statusCode);
-						else
+						else{
 							// set the clientID
 							__clientID = resp;
+
+							// set up the session
+							// when the client ID is known
+							askForSession(socket, params);
+						}
 					});
 			}
+			else {
+				askForSession(socket, params);
+			}
 
-            if (window.location.search == '' ||
-                ('aswid' in params && 'cswid' in params))
-                HttpUtils.httpReq(
-                    'POST',
-                    '/csworker',
-                    undefined,
-                    function (statusCode, resp) {
-                        __wid = resp;
-                        socket.emit(
-                            'message',
-                            {'method': 'POST', 'url': '/changeListener?wid=' + __wid});
-                    });
-
-            else if ('cswid' in params)
-                socket.emit(
-                    'message',
-                    {'method': 'POST', 'url': '/changeListener?wid=' + params['cswid']});
-
-            else
-                WindowManagement.openDialog(__FATAL_ERROR, 'invalid URL parameters ' +
-                    utils.jsons(params));
-        });
+		});
 
 	socket.on('message', 
 		function(msg)	
 		{
 			console.debug(' >> '+utils.jsons(msg));
+
+			// this is the response to creating a session
 			if( msg['statusCode'] != undefined )
 			{
 				if( msg['statusCode'] == 201 )	
 				{
 					_loadToolbar(__MAINMENU_PATH);
+
+					//store the csworker id
+					__wid = msg['data']['wid'];
 					
 					if( window.location.search == '' )
 						HttpUtils.httpReq(
@@ -210,4 +202,11 @@ function __initClient()
 		};
 	
 
+}
+
+// TODO: Add joinSession
+function askForSession(socket, params) {
+	socket.emit(
+		'message',
+		{'method': 'POST', 'url': '/createSession?cid=' + __clientID});
 }

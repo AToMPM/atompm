@@ -21,6 +21,9 @@ let workers = [];
   ...	for workers to write on when they complete requests */
 let responses = [];
 
+/* a map of client IDs to their csworker wid */
+let clientIDs2csids = {};
+
 /* a map of worker ids to socket.io socket session ids
 	... each socket is registered to exactly one worker
  	... several sockets may be registered to the same worker */
@@ -79,6 +82,32 @@ function init_session_manager(httpserver){
                 {
                     let url = _url.parse(msg.url,true);
 
+                    logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':'client','to':"session_mngr"});
+
+                    /* the client asks to create a new session */
+                    /* the session manager then has a map from client ID to the worker ID */
+                    if (msg.method == 'POST' && url.pathname.match(/createSession/)) {
+                        let wid = __createNewWorker('/csworker');
+                        let cid = url['query']['cid'];
+
+                        if (cid == undefined) {
+                            __send(socket, 400, 'invalid client id :: ' + url['query']['cid']);
+                        } else {
+
+                            // map the worker to client socket
+                            workerIds2socketIds[wid].push(socket.id);
+
+                            // map the client ID to their worker
+                            clientIDs2csids[cid] = wid;
+
+                            logger.http("socket _ 'resp wid'+ <br/>" + ''+wid ,{'from':"session_mngr",'to': 'client', 'type':"-)"});
+
+                            /* respond worker id (used to identify associated worker) */
+                            __send(socket, 201, undefined, {'wid': wid});
+                        }
+                        return;
+                    }
+
                     /* check for worker id and it's validity */
                     if( url['query'] === undefined ||
                         url['query']['wid'] === undefined ){
@@ -86,7 +115,6 @@ function init_session_manager(httpserver){
                     }
 
                     let wid = url['query']['wid'];
-                    logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':'client','to':"session_mngr"});
 
                     if( workers[wid] === undefined ) {
                         __send(socket,400,'unknown worker id :: '+wid);
@@ -133,13 +161,58 @@ function init_session_manager(httpserver){
         });
 }
 
+function __createNewWorker(workerType){
+    /* setup and store new worker */
+    let worker = _cp.fork(_path.join(__dirname, '__worker.js'));
+
+    let wid = workers.push(worker)-1;
+
+    workerIds2socketIds[wid] = [];
+    workerIds2workerType[wid] = workerType;
+
+    worker.on('message',
+        function(msg)
+        {
+            /* push changes (if any) to registered sockets... even empty
+                changelogs are pushed to facilitate sequence number-based
+                ordering */
+            if( msg['changelog'] !== undefined )
+            {
+                send_to_all(wid, msg);
+            }
+
+            /* respond to a request */
+            if( msg['respIndex'] !== undefined )
+                _utils.respond(
+                    responses[msg['respIndex']],
+                    msg['statusCode'],
+                    msg['reason'],
+                    JSON.stringify(
+                        {'headers':
+                                (msg['headers'] ||
+                                    {'Content-Type': 'text/plain',
+                                        'Access-Control-Allow-Origin': '*'}),
+                            'data':msg['data'],
+                            'sequence#':msg['sequence#']}),
+                    {'Content-Type': 'application/json'});
+        });
+
+    let msg = {'workerType':workerType, 'workerId':wid};
+    logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': workerType + wid, 'type':"-)"});
+    worker.send(msg);
+
+    logger.http("http _ 'resp on worker creation: wid:'"+ wid, {'at':"session_mngr"});
+    return wid
+}
+
 function handle_http_message(url, req, resp){
 
     logger.http("fcn call _ 'message'",{'from': 'server', 'to':"session_mngr"});
 
     /* create new client ID and return it */
-    if (url.pathname == '/newCID'){
+    if (req.method == 'POST' && url.pathname == '/newCID'){
         let cid = _uuid.v4()
+        logger.http("http _ 'resp cid'+ <br/>" + ''+cid ,{'from':"session_mngr",'to': 'client', 'type':"-)"});
         _utils.respond(
             resp,
             201,
@@ -150,46 +223,7 @@ function handle_http_message(url, req, resp){
     else if( (url.pathname == '/csworker' || url.pathname == '/asworker')
         && req.method == 'POST' )
     {
-        /* setup and store new worker */
-        let worker = _cp.fork(_path.join(__dirname, '__worker.js'));
-
-        let wid = workers.push(worker)-1;
-
-        workerIds2socketIds[wid] = [];
-        workerIds2workerType[wid] = url.pathname;
-
-        worker.on('message',
-            function(msg)
-            {
-                /* push changes (if any) to registered sockets... even empty
-                    changelogs are pushed to facilitate sequence number-based
-                    ordering */
-                if( msg['changelog'] !== undefined )
-                {
-                    send_to_all(wid, msg);
-                }
-
-                /* respond to a request */
-                if( msg['respIndex'] !== undefined )
-                    _utils.respond(
-                        responses[msg['respIndex']],
-                        msg['statusCode'],
-                        msg['reason'],
-                        JSON.stringify(
-                            {'headers':
-                                    (msg['headers'] ||
-                                        {'Content-Type': 'text/plain',
-                                            'Access-Control-Allow-Origin': '*'}),
-                                'data':msg['data'],
-                                'sequence#':msg['sequence#']}),
-                        {'Content-Type': 'application/json'});
-            });
-
-        let msg = {'workerType':url.pathname, 'workerId':wid};
-        logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': url.pathname + wid, 'type':"-)"});
-        worker.send(msg);
-
-        logger.http("http _ 'resp on worker creation: wid:'"+ wid, {'at':"session_mngr"});
+        let wid = __createNewWorker(url.pathname);
 
         /* respond worker id (used to identify associated worker) */
         _utils.respond(
