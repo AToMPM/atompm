@@ -349,6 +349,11 @@ module.exports = {
         let name_field = "#tr_typename > td:nth-child(2) > textarea";
         let num_elements = 0;
 
+        // BUILD TEXT FOR ICONS
+        let textIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/TextIcon";
+        let textType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/TextIcon\\/";
+        let textContent_field = "#tr_textContent > td:nth-child(2) > textarea";
+
         //BUILD CLASSES
         let icon_type = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/IconIcon\\/";
 
@@ -361,8 +366,30 @@ module.exports = {
         let y_coords = [start_y, start_y + y_diff, start_y + 2 * y_diff];
 
         let num_classes = x_coords.length * y_coords.length;
+        
+        // BUILD SYMBOLS FOR ICONS
+        let symbols = ["PathIcon", "CircleIcon", "StarIcon", "PolygonIcon", "EllipseIcon", "EllipseIcon", "RectangleIcon", "ImageIcon"];
+        let getIcon = function (type) {
+            return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/" + type;
+        };
+        let getType = function (type) {
+            return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/" + type + "\\/";
+        };
 
-        num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements, icon_type);
+        // BUILD LINKS
+        let linkIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/LinkIcon";
+        let linkType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/LinkIcon\\/";
+        let link_typename_field = "#tr_typename > td:nth-child(2) > textarea";
+
+        let link_y_coords = [];
+        let link_x_coords = [start_x + 3 * x_diff, start_x + 4 * x_diff];
+
+        //nightwatch
+
+        //BUILD CLASSES
+
+        client.perform(function () {
+        num_elements = model_building_utils.create_classes(client, x_coords, y_coords, num_elements, icon_type)
 
         //SET NAMES FOR CLASSES
         for (let i = 0; i < num_classes; i++) {
@@ -371,14 +398,12 @@ module.exports = {
             attrs[name_field] = class_name;
             model_building_utils.set_attribs(client, i, attrs, icon_type);
         }
-
+            })
         // BUILD TEXT FOR ICONS
-        let textIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/TextIcon";
-        let textType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/TextIcon\\/";
-        let textContent_field = "#tr_textContent > td:nth-child(2) > textarea";
 
-        client.waitForElementPresent(textIcon, 2000, "Check for text icon...");
-        client.click(textIcon);
+            .waitForElementPresent(textIcon, 2000, "Check for text icon...")
+            .click(textIcon)
+            .perform(function () {
 
         for (let i = 0; i < num_classes; i++) {
 
@@ -403,19 +428,12 @@ module.exports = {
 
 
         // BUILD SYMBOLS FOR ICONS
-        let symbols = ["PathIcon", "CircleIcon", "StarIcon", "PolygonIcon", "EllipseIcon", "EllipseIcon", "RectangleIcon", "ImageIcon"];
-        let getIcon = function (type) {
-            return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/" + type;
-        };
-        let getType = function (type) {
-            return "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/" + type + "\\/";
-        };
 
         for (let i = 0; i < num_classes; i++) {
 
             let currSymbol = symbols[i % symbols.length];
-            client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...");
-            client.click(getIcon(currSymbol));
+            client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...")
+                .click(getIcon(currSymbol));
 
             let symbolDiv = div_utils.build_div(getType(currSymbol), num_elements);
             let iconDiv = div_utils.build_div(icon_type, i);
@@ -434,19 +452,15 @@ module.exports = {
         }
 
         // BUILD LINKS
-        let linkIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/LinkIcon";
-        let linkType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/LinkIcon\\/";
-        let link_typename_field = "#tr_typename > td:nth-child(2) > textarea";
-
-        let link_y_coords = [];
-        let link_x_coords = [start_x + 3 * x_diff, start_x + 4 * x_diff];
 
         for (let i = 0; i < assocs.length / 2; i++) {
             link_y_coords.push(start_y + i * y_diff);
         }
+            })
+            .waitForElementPresent(linkIcon, 2000, "Check for link icon...")
+            .click(linkIcon)
 
-        client.waitForElementPresent(linkIcon, 2000, "Check for link icon...");
-        client.click(linkIcon);
+            .perform(function () {
 
         let num_elements_before = num_elements;
         model_building_utils.create_classes(client, link_x_coords, link_y_coords, num_elements, linkType);
@@ -459,18 +473,19 @@ module.exports = {
             model_building_utils.set_attribs(client, num_elements_before + i, attrs, linkType);
         }
 
+
         //remove unneeded elements
         model_building_utils.delete_element(client, div_utils.build_div(icon_type, 4));
 
         model_building_utils.delete_element(client, div_utils.build_div(linkType, 50));
 
-
         let folder_name = "autotest";
+
         model_building_utils.save_model(client, folder_name, "autotestCS.model");
 
         model_building_utils.compile_model(client, "CS", folder_name, "autotest.defaultIcons.metamodel");
-
-        client.pause(3000);
+            })
+            .pause(3000);
     },
 
     'Create model': function (client) {
