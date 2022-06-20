@@ -69,6 +69,8 @@ function init_session_manager(httpserver){
                         workers[wid].kill();
                         workers[wid] = undefined;
                         delete workerIds2socketIds[wid];
+
+                        // TODO: Delete worker from clientIDs2csids
                     }
 
                     __send(socket,200);
@@ -76,7 +78,7 @@ function init_session_manager(httpserver){
             }
 
 
-            /* onmessage : on reception of data from client */
+            /* onmessage : on reception of data from client or csworker*/
             socket.on('message',
                 function(msg/*{method:_,url:_}*/)
                 {
@@ -87,23 +89,34 @@ function init_session_manager(httpserver){
                     /* the client asks to create a new session */
                     /* the session manager then has a map from client ID to the worker ID */
                     if (msg.method == 'POST' && url.pathname.match(/createSession/)) {
-                        let wid = __createNewWorker('/csworker');
+
                         let cid = url['query']['cid'];
 
                         if (cid == undefined) {
                             __send(socket, 400, 'invalid client id :: ' + url['query']['cid']);
                         } else {
 
+                            let cwid = __createNewWorker('/csworker');
+                            let awid = __createNewWorker('/asworker');
+
                             // map the worker to client socket
-                            workerIds2socketIds[wid].push(socket.id);
+                            __registerListener(cwid, socket.id);
+
+                            // message the cs worker to connect to the as worker
+                            workers[cwid].send(
+                                {
+                                    'method': 'PUT',
+                                    'uri': '/aswSubscription',
+                                    'reqData': {'aswid': awid}
+                                });
 
                             // map the client ID to their worker
-                            clientIDs2csids[cid] = wid;
+                            clientIDs2csids[cid] = cwid;
 
-                            logger.http("socket _ 'resp wid'+ <br/>" + ''+wid ,{'from':"session_mngr",'to': 'client', 'type':"-)"});
+                            logger.http("socket _ 'resp wid'" + ''+cwid + ' awid '+awid,{'from':"session_mngr",'to': 'client', 'type':"-)"});
 
-                            /* respond worker id (used to identify associated worker) */
-                            __send(socket, 201, undefined, {'wid': wid});
+                            /* respond worker id (used to identify associated workers) */
+                            __send(socket, 201, undefined, {'wid': cwid, 'awid': awid});
                         }
                         return;
                     }
@@ -122,14 +135,10 @@ function init_session_manager(httpserver){
                     /* register socket for requested worker */
                     else if( msg.method === 'POST' && url.pathname.match(/changeListener$/) )
                     {
-                        logger.http("Socket " + socket.id + " now listening to worker " + wid, {'at': 'session_mngr'});
-
-                        if( workerIds2socketIds[wid].indexOf(socket.id) > -1 ) {
-                            __send(socket,403,'already registered to worker');
-                        }else
-                        {
-                            workerIds2socketIds[wid].push(socket.id);
+                        if (__registerListener(wid, socket.id)){
                             __send(socket,201);
+                        }else{
+                            __send(socket,403,'already registered to worker');
                         }
                     }
 
@@ -159,6 +168,16 @@ function init_session_manager(httpserver){
                             }
                 });
         });
+}
+
+function __registerListener(wid, socketID){
+    logger.http("Socket " + socketID + " now listening to worker " + wid, {'at': 'session_mngr'});
+    if( workerIds2socketIds[wid].indexOf(socketID) > -1 ) {
+        return false;
+    }else{
+        workerIds2socketIds[wid].push(socketID);
+        return true;
+    }
 }
 
 function __createNewWorker(workerType){

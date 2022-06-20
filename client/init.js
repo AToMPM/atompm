@@ -90,86 +90,79 @@ function __initClient()
 		{
 			console.debug(' >> '+utils.jsons(msg));
 
-			// this is the response to creating a session
-			if( msg['statusCode'] != undefined )
+			// handle a changelog
+			if ( msg['statusCode'] == undefined ){
+				__handleChangelog(
+					msg['data']['changelog'],
+					msg['data']['sequence#'],
+					msg['data']['hitchhiker']);
+				return;
+			}
+			// otherwise, this is the response to creating a session
+			if( msg['statusCode'] != 201 )
 			{
-				if( msg['statusCode'] == 201 )	
+				WindowManagement.openDialog(__FATAL_ERROR, 'failed to connect to back-end');
+				return;
+			}
+
+			_loadToolbar(__MAINMENU_PATH);
+
+			//store the csworker id
+			__wid = msg['data']['wid'];
+			__aswid = msg['data']['awid'];
+
+			if( window.location.search == '' )
 				{
-					_loadToolbar(__MAINMENU_PATH);
+					_getUserPreferences(
+						function(prefs)
+						{
+							console.debug("Get User Preferences in Init.js (96)");
+							console.debug(prefs);
+							__prefs = prefs;
+							prefs['autoloaded-toolbars']['value'].
+							forEach(_loadToolbar);
+							if( prefs['autoloaded-model']['value'] != '' )
+								_loadModel(prefs['autoloaded-model']['value']);
 
-					//store the csworker id
-					__wid = msg['data']['wid'];
-					
-					if( window.location.search == '' )
-						HttpUtils.httpReq(
-							'PUT',
-							'/aswSubscription?wid='+__wid,
-							undefined,
-							function(statusCode,resp)
-							{
-								console.debug(statusCode);
-								console.debug(resp);
-								__aswid = utils.jsonp(resp)['data'];
-
-								_getUserPreferences(
-									function(prefs)
-									{
-										console.debug("Get User Preferences in Init.js (96)");
-										console.debug(prefs);
-										__prefs = prefs;
-										prefs['autoloaded-toolbars']['value'].
-											forEach(_loadToolbar);
-										if( prefs['autoloaded-model']['value'] != '' )
-											_loadModel(prefs['autoloaded-model']['value']);
-
-										Collaboration.enableCollaborationLinks();
-										__launchAutosave();
-									});
-						   });
-	
-					else if( 'aswid' in params && 'cswid' in params )
-					{
-						__user = params['host'];
-						HttpUtils.httpReq(
-								'PUT',
-								'/aswSubscription?wid='+__wid,
-								{'aswid':params['aswid'], 
-								 'cswid':params['cswid']},
-								 function(statusCode,resp)
-								 {
-									 resp = utils.jsonp(resp);
-									 __handleState(resp['data'],resp['sequence#']);
-									 Collaboration.enableCollaborationLinks();
- 									 __launchAutosave();
-								 });
-					}
-					
-					else
-					{															
-						__wid  = params['cswid'];
-						__user = params['host'];
-						HttpUtils.httpReq(
-								'GET',
-								'/current.state?wid='+params['cswid'],
-								undefined,
-								function(statusCode,resp)
-								{
-									resp = utils.jsonp(resp);
-									__handleState(resp['data'],resp['sequence#']);
-									Collaboration.enableCollaborationLinks();
-									__launchAutosave();
-								});
-					}
+							Collaboration.enableCollaborationLinks();
+							__launchAutosave();
+						});
 				}
-				else 
-					WindowManagement.openDialog(__FATAL_ERROR, 'failed to connect to back-end');
+
+
+			else if( 'aswid' in params && 'cswid' in params )
+			{
+				__user = params['host'];
+				HttpUtils.httpReq(
+						'PUT',
+						'/aswSubscription?wid='+__wid,
+						{'aswid':params['aswid'],
+						 'cswid':params['cswid']},
+						 function(statusCode,resp)
+						 {
+							 resp = utils.jsonp(resp);
+							 __handleState(resp['data'],resp['sequence#']);
+							 Collaboration.enableCollaborationLinks();
+							 __launchAutosave();
+						 });
 			}
 
 			else
-				__handleChangelog(
-						msg['data']['changelog'],
-						msg['data']['sequence#'],
-						msg['data']['hitchhiker']);
+			{
+				__wid  = params['cswid'];
+				__user = params['host'];
+				HttpUtils.httpReq(
+						'GET',
+						'/current.state?wid='+params['cswid'],
+						undefined,
+						function(statusCode,resp)
+						{
+							resp = utils.jsonp(resp);
+							__handleState(resp['data'],resp['sequence#']);
+							Collaboration.enableCollaborationLinks();
+							__launchAutosave();
+						});
+			}
 		});
 
 	socket.on('disconnect', 

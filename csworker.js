@@ -1092,34 +1092,20 @@ module.exports = {
             if (this.__aswid > -1)
                 return __postForbiddenErrorMsg(resp, 'already subscribed to an asworker');
 
-            if (reqData != undefined) {
-                if (reqData['aswid'] == undefined ||
-                    reqData['cswid'] == undefined)
-                    return __postInternalErrorMsg(resp, 'missing AS and/or CS wid');
+            if (reqData == undefined) {
+                return __postForbiddenErrorMsg(resp, 'asworker is not present!');
+            }
 
-                logger.info("/csworker" + __wid + " attaching to /asworker" + reqData['aswid'] + " and cloning /csworker" + reqData['cswid']);
-                let actions = [this.__aswSubscribe(reqData['aswid'], reqData['cswid'])];
+            if (reqData['aswid'] == undefined && reqData['cswid'] == undefined)
+                return __postInternalErrorMsg(resp, 'missing AS and/or CS wid');
 
-                _do.chain(actions)(
-                    function () {
-                        GET__current_state(resp);
-                    },
-                    function (err) {
-                        __postInternalErrorMsg(resp, err);
-                    }
-                );
-            } else {
-                logger.http("/csworker" + __wid + " creating /asworker", {'at': '/csworker' + __wid});
+            if (reqData['cswid'] == undefined) {
+                let aswid = reqData['aswid'];
+
+                logger.http("/csworker" + __wid + " subscribing to /asworker" + aswid, {'at': '/csworker' + __wid});
 
                 let self = this;
-                let actions = [
-                    __httpReq("POST", "/asworker"),
-                    function (aswid) {
-                        logger.http(
-                            "/csworker" + __wid + " subscribing to /asworker" + aswid, {'at': '/csworker' + __wid});
-                        return self.__aswSubscribe(aswid);
-                    },
-                ];
+                let actions = [this.__aswSubscribe(aswid)];
 
                 _do.chain(actions)(
                     function () {
@@ -1129,6 +1115,18 @@ module.exports = {
                                 'data': self.__aswid,
                                 'respIndex': resp
                             });
+                    },
+                    function (err) {
+                        __postInternalErrorMsg(resp, err);
+                    }
+                );
+            } else {
+                logger.info("/csworker" + __wid + " attaching to /asworker" + reqData['aswid'] + " and cloning /csworker" + reqData['cswid']);
+                let actions = [this.__aswSubscribe(reqData['aswid'], reqData['cswid'])];
+
+                _do.chain(actions)(
+                    function () {
+                        GET__current_state(resp);
                     },
                     function (err) {
                         __postInternalErrorMsg(resp, err);
