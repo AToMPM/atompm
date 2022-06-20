@@ -11,6 +11,7 @@ const logger = require("./logger");
 const _url = require("url");
 const _cp = require("child_process");
 const _path = require("path");
+const _uuid = require("uuid");
 
 /* an array of WebWorkers
 	... each has its own mmmk instance */
@@ -136,8 +137,17 @@ function handle_http_message(url, req, resp){
 
     logger.http("fcn call _ 'message'",{'from': 'server', 'to':"session_mngr"});
 
+    /* create new client ID and return it */
+    if (url.pathname == '/newCID'){
+        let cid = _uuid.v4()
+        _utils.respond(
+            resp,
+            201,
+            '',
+            ''+cid);
+    }
     /* spawn new worker */
-    if( (url.pathname == '/csworker' || url.pathname == '/asworker')
+    else if( (url.pathname == '/csworker' || url.pathname == '/asworker')
         && req.method == 'POST' )
     {
         /* setup and store new worker */

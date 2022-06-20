@@ -42,11 +42,11 @@
 function __initClient()
 {
 	/** PART 1 **/
-	var params = {};
+	let params = {};
 	window.location.search.substring(1).split('&').forEach(
 		function(arg)
 		{	
-			var _arg = arg.split('=');
+			let _arg = arg.split('=');
 			params[_arg[0]] = _arg[1];
 		});
 
@@ -59,6 +59,21 @@ function __initClient()
 
     socket.on('connect',
         function () {
+
+			// request a client ID from the session manager
+			if (__clientID == undefined) {
+				HttpUtils.httpReq(
+					'GET',
+					HttpUtils.url('/newCID', __NO_WID + __NO_USERNAME),
+					undefined,
+					function (statusCode, resp) {
+						if (!utils.isHttpSuccessCode(statusCode))
+							WindowManagement.openDialog(__FATAL_ERROR, 'could not get client ID: error ' + statusCode);
+						else
+							// set the clientID
+							__clientID = resp;
+					});
+			}
 
             if (window.location.search == '' ||
                 ('aswid' in params && 'cswid' in params))
