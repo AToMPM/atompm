@@ -232,7 +232,7 @@ function hit_control_element(client, element) {
 
 
 
-async function deselect_all(client) {
+function deselect_all(client) {
     client
         .perform(function () {
             const actions = this.actions({async: false});
