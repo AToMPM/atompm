@@ -157,9 +157,10 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
                                 ele2 = response.value;
                             })
                         .perform(function (){
-                                if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean"))
-                                    client.actions().click(ele2);
-                                else
+                                if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean")){
+                                    client.moveToElement(ele2,offset[0],offset[1])
+                                        .click(ele2);
+                                }else
                                     client.updateValue(key, value);                        
                             })
                 }
@@ -439,7 +440,7 @@ function load_transformation(client, folder_name, model_name) {
     compile_model(client, "transform", folder_name, model_name);
 }
 
-async function compile_model(client, compile_type, folder_name, model_name) {
+function compile_model(client, compile_type, folder_name, model_name) {
 
     let button = "";
     let button_name = compile_type;
