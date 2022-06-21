@@ -2,7 +2,6 @@
 
 function track_mouse(client) {
     client.execute(function() {
-        console.log("MOUSE MOUSE MOUSE");
         // https://gist.github.com/primaryobjects/70087610d9aef0f4bddbe2101dda7649
 
         // Create mouse following image.
