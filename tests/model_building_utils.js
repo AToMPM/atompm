@@ -404,7 +404,6 @@ function load_multiple_models(client, fnames) {
 }
 
 function load_toolbar(client, fnames) {
-
     client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded")
         .perform( function (){
             for (let name of fnames) {
@@ -416,15 +415,11 @@ function load_toolbar(client, fnames) {
                             _loadToolbar(fname);
                         }, [name], null
                     )
-        
-                //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
-        
                     .element('css selector', '#dialog_btn', function (result) {
                         if (result.status != -1) {
                             //Dialog has popped up, so check the text and click the button
                             client.assert.textContains("#div_dialog_0", "File not found")
                                 .click("#dialog_btn")
-            
                                 .verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
                         } else {
                             //Toolbar loaded, so check for it
