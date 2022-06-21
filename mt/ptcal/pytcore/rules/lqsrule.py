@@ -4,6 +4,8 @@ See COPYING.lesser and README.md in the root of this project for full details'''
 
 from ..util.infinity import INFINITY
 from .lrule import LRule
+from symbol import try_stmt
+
 
 class LQSRule(LRule):
     '''
