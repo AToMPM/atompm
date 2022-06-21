@@ -1,9 +1,12 @@
 let user_utils = require('./user_utils')
+let mouse_tracking = require('./mouse_tracking.js');
 
 module.exports = {
 
     beforeEach : function (client) {
         client.url('http://localhost:8124/atompm').pause(300);
+
+        mouse_tracking.track_mouse(client);
     },
 
     'Login user' : function (client) {
