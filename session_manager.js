@@ -237,6 +237,7 @@ function handle_http_message(url, req, resp){
             201,
             '',
             ''+cid);
+        return;
     }
     /* spawn new worker */
     else if( (url.pathname == '/csworker' || url.pathname == '/asworker')
@@ -250,30 +251,31 @@ function handle_http_message(url, req, resp){
             201,
             '',
             ''+wid);
+        return;
     }
 
+    let wid = undefined;
+    if (url['query'] != undefined && url['query']['wid'] != undefined){
+        wid = url['query']['wid'];
+    }
+    if (wid == undefined){
+        wid = clientIDs2csids[url['query']['cid']];
+    }
+    
     /* check for worker id and it's validity */
-    else if( url['query'] == undefined ||
-        url['query']['wid'] == undefined )
+    if (wid == undefined)
         _utils.respond(resp, 400, 'missing worker id');
 
-    else if( workers[url['query']['wid']] == undefined )
-        _utils.respond(resp, 400, 'invalid worker id :: '+url['query']['wid']);
-
     /* save resp object and forward request to worker (if request is PUT or
-          POST, recover request data first)
-
-        TBI:: only registered sockets should be allowed to speak to worker
-                ... one way of doing this is forcing request urls to contain
-                cid=socket.id## */
-    else if( req.method == 'PUT' || req.method == 'POST' )
+          POST, recover request data first) */
+    if( req.method == 'PUT' || req.method == 'POST' )
     {
         let reqData = '';
         req.addListener("data", function(chunk) {reqData += chunk;});
         req.addListener("end",
             function()
             {
-                workers[url['query']['wid']].send(
+                workers[wid].send(
                     {'method':req.method,
                         'uri':url.pathname,
                         'reqData':(reqData == '' ?
@@ -284,7 +286,7 @@ function handle_http_message(url, req, resp){
             });
     }
     else {
-        workers[url['query']['wid']].send(
+        workers[wid].send(
             {
                 'method': req.method,
                 'uri': url.pathname,
