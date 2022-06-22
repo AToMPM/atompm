@@ -43,7 +43,23 @@ fi
 
 
 echo "Starting tests..."
-./node_modules/nightwatch/bin/nightwatch
+if [ "$#" -ge 1 ]
+then
+    if [ "$1" == "headless" ]
+    then
+        if [ -z "$2" ]
+        then
+            ./node_modules/nightwatch/bin/nightwatch -e run_headless
+        else
+            ./node_modules/nightwatch/bin/nightwatch -e run_headless $2
+        fi
+    else
+        ./node_modules/nightwatch/bin/nightwatch $1
+    fi
+else
+    ./node_modules/nightwatch/bin/nightwatch
+fi
+
 
 echo "Stopping server and mt script..."
 kill "$serverpid"
