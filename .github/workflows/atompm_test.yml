@@ -96,7 +96,7 @@ jobs:
     - name: run test 09_missing_files
       run: |
         ./run_tests.sh headless  ./tests/09_missing_files.js
-
+  
     - name: run test 10_undo_test
       run: |
         ./run_tests.sh headless  ./tests/10_undo_test.js
@@ -105,3 +105,8 @@ jobs:
       run: |
         ./run_tests.sh headless  ./tests/99_ecore_toolbar_test.js
 
+    - uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        path: ./screenshots/
+        if-no-files-found: ignore
