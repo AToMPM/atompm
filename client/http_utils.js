@@ -81,7 +81,7 @@ HttpUtils = function(){
 		return (options & __FORCE_GET ? '/GET' : '')+
 				 (options & __NO_USERNAME ? '' : '/'+__user)+
 	 			 (uri.charAt(0) == '/' ? uri : '/'+uri)+
-	 			 (options & __NO_WID ? '' : '?wid='+wid);
+	 			 (options & __NO_WID ? '' : '?wid='+wid+'&cid='+__clientID);
 	};
 	
 	/**

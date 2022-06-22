@@ -42,11 +42,11 @@
 function __initClient()
 {
 	/** PART 1 **/
-	var params = {};
+	let params = {};
 	window.location.search.substring(1).split('&').forEach(
 		function(arg)
 		{	
-			var _arg = arg.split('=');
+			let _arg = arg.split('=');
 			params[_arg[0]] = _arg[1];
 		});
 
@@ -60,109 +60,110 @@ function __initClient()
     socket.on('connect',
         function () {
 
-            if (window.location.search == '' ||
-                ('aswid' in params && 'cswid' in params))
-                HttpUtils.httpReq(
-                    'POST',
-                    '/csworker',
-                    undefined,
-                    function (statusCode, resp) {
-                        __wid = resp;
-                        socket.emit(
-                            'message',
-                            {'method': 'POST', 'url': '/changeListener?wid=' + __wid});
-                    });
+			// request a client ID from the session manager
+			if (__clientID == undefined) {
+				HttpUtils.httpReq(
+					'POST',
+					HttpUtils.url('/newCID', __NO_WID + __NO_USERNAME),
+					undefined,
+					function (statusCode, resp) {
+						if (!utils.isHttpSuccessCode(statusCode))
+							WindowManagement.openDialog(__FATAL_ERROR, 'could not get client ID: error ' + statusCode);
+						else{
+							// set the clientID
+							__clientID = resp;
 
-            else if ('cswid' in params)
-                socket.emit(
-                    'message',
-                    {'method': 'POST', 'url': '/changeListener?wid=' + params['cswid']});
-
-            else
-                WindowManagement.openDialog(__FATAL_ERROR, 'invalid URL parameters ' +
-                    utils.jsons(params));
-        });
-
-	socket.on('message', 
-		function(msg)	
-		{
-			console.debug(' >> '+utils.jsons(msg));
-			if( msg['statusCode'] != undefined )
-			{
-				if( msg['statusCode'] == 201 )	
-				{
-					_loadToolbar(__MAINMENU_PATH);
-					
-					if( window.location.search == '' )
-						HttpUtils.httpReq(
-							'PUT',
-							'/aswSubscription?wid='+__wid,
-							undefined,
-							function(statusCode,resp)
-							{
-								console.debug(statusCode);
-								console.debug(resp);
-								__aswid = utils.jsonp(resp)['data'];
-
-								_getUserPreferences(
-									function(prefs)
-									{
-										console.debug("Get User Preferences in Init.js (96)");
-										console.debug(prefs);
-										__prefs = prefs;
-										prefs['autoloaded-toolbars']['value'].
-											forEach(_loadToolbar);
-										if( prefs['autoloaded-model']['value'] != '' )
-											_loadModel(prefs['autoloaded-model']['value']);
-
-										Collaboration.enableCollaborationLinks();
-										__launchAutosave();
-									});
-						   });
-	
-					else if( 'aswid' in params && 'cswid' in params )
-					{
-						__user = params['host'];
-						HttpUtils.httpReq(
-								'PUT',
-								'/aswSubscription?wid='+__wid,
-								{'aswid':params['aswid'], 
-								 'cswid':params['cswid']},
-								 function(statusCode,resp)
-								 {
-									 resp = utils.jsonp(resp);
-									 __handleState(resp['data'],resp['sequence#']);
-									 Collaboration.enableCollaborationLinks();
- 									 __launchAutosave();
-								 });
-					}
-					
-					else
-					{															
-						__wid  = params['cswid'];
-						__user = params['host'];
-						HttpUtils.httpReq(
-								'GET',
-								'/current.state?wid='+params['cswid'],
-								undefined,
-								function(statusCode,resp)
-								{
-									resp = utils.jsonp(resp);
-									__handleState(resp['data'],resp['sequence#']);
-									Collaboration.enableCollaborationLinks();
-									__launchAutosave();
-								});
-					}
-				}
-				else 
-					WindowManagement.openDialog(__FATAL_ERROR, 'failed to connect to back-end');
+							// set up the session
+							// when the client ID is known
+							askForSession(socket, params);
+						}
+					});
+			}
+			else {
+				askForSession(socket, params);
 			}
 
-			else
+		});
+
+	socket.on('message',
+		function (msg) {
+			console.debug(' >> ' + utils.jsons(msg));
+
+			// handle a changelog
+			if (msg['statusCode'] == undefined) {
 				__handleChangelog(
-						msg['data']['changelog'],
-						msg['data']['sequence#'],
-						msg['data']['hitchhiker']);
+					msg['data']['changelog'],
+					msg['data']['sequence#'],
+					msg['data']['hitchhiker']);
+				return;
+			}
+
+			// otherwise, this is the response to creating a session
+			if (msg['statusCode'] != 201) {
+				WindowManagement.openDialog(__FATAL_ERROR, 'failed to connect to back-end');
+				return;
+			}
+
+			_loadToolbar(__MAINMENU_PATH);
+
+			//store the csworker id
+			__wid = msg['data']['wid'];
+			__aswid = msg['data']['awid'];
+
+			if (window.location.search == '') {
+				_getUserPreferences(
+					function (prefs) {
+						__prefs = prefs;
+						prefs['autoloaded-toolbars']['value'].forEach(_loadToolbar);
+						if (prefs['autoloaded-model']['value'] != '')
+							_loadModel(prefs['autoloaded-model']['value']);
+
+						Collaboration.enableCollaborationLinks();
+						__launchAutosave();
+					});
+			}
+
+			// set up modelshare
+			else if ('aswid' in params && 'cswid' in params) {
+				__user = params['host'];
+				HttpUtils.httpReq(
+					'PUT',
+					'/aswSubscription?wid=' + __wid,
+					{
+						'aswid': params['aswid'],
+						'cswid': params['cswid']
+					},
+					function (statusCode, resp) {
+						resp = utils.jsonp(resp);
+						__handleState(resp['data'], resp['sequence#']);
+
+						_getUserPreferences(
+							function (prefs) {
+								__prefs = prefs;
+								Collaboration.enableCollaborationLinks();
+								__launchAutosave();
+							});
+					});
+			}
+
+			else {
+				__user = params['host'];
+				HttpUtils.httpReq(
+					'GET',
+					'/current.state?wid=' + __wid,
+					undefined,
+					function (statusCode, resp) {
+						resp = utils.jsonp(resp);
+						__handleState(resp['data'], resp['sequence#']);
+
+						_getUserPreferences(
+							function (prefs) {
+								__prefs = prefs;
+								Collaboration.enableCollaborationLinks();
+								__launchAutosave();
+							});
+					});
+			}
 		});
 
 	socket.on('disconnect', 
@@ -195,4 +196,18 @@ function __initClient()
 		};
 	
 
+}
+
+function askForSession(socket, params) {
+	if (params != undefined && params['cswid'] != undefined) {
+		let param_str = "?cid=" + __clientID;
+		param_str += (params['host'] == undefined) ? "" : "&host=" + params['host']
+		param_str += (params['aswid'] == undefined) ? "" : "&aswid=" + params['aswid']
+		param_str += (params['cswid'] == undefined) ? "" : "&cswid=" + params['cswid']
+		socket.emit('message', {'method': 'POST', 'url': '/joinSession' + param_str});
+	} else {
+		socket.emit(
+			'message',
+			{'method': 'POST', 'url': '/createSession?cid=' + __clientID});
+	}
 }
