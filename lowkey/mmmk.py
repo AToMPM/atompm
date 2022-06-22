@@ -1,33 +1,34 @@
-'''This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
-Copyright 2011 by the AToMPM team and licensed under the LGPL
-See COPYING.lesser and README.md in the root of this project for full details'''
+#  This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+#  Copyright 2011 by the AToMPM team and licensed under the LGPL
+#  See COPYING.lesser and README.md in the root of this project for full details
+
 import copy
 import json
 import os.path
 import re
+import argparse
+import logging
+import os
+import sys
+import threading
+import json
 
+from model import Model
 
-class Model:
-    def __init__(self, from_dict : dict = None):
-        self.nodes = {}
-        self.edges = []
-        self.metamodels = []
+from lowkey.network.Client import Client
 
-        if from_dict:
-            self.nodes = from_dict["nodes"]
-            self.edges = from_dict["edges"]
-            self.metamodels = from_dict["metamodels"]
+__author__ = "Benley James Oakes, Istvan David"
+__copyright__ = "Copyright 2022, GEODES"
+__credits__ = "Eugene Syriani"
+__license__ = "GPL-3.0"
 
-    def to_dict(self) -> dict:
-        return {
-            "nodes": self.nodes,
-            "edges": self.edges,
-            "metamodels": self.metamodels,
-        }
-
-class PyMMMK:
+class PyMMMK(Client):
+    __encoding = "utf-8"
 
     def __init__(self):
+        logging.debug('PyMMMK.__init()__')
+        super().__init__()
+        
         self.metamodels = {}
         self.model = Model()
         self.name = ''
@@ -39,7 +40,103 @@ class PyMMMK:
 
         self.undoredoJournal = []
 
+    ########## lowkey client functionality ########## 
+
+    def run(self):
+        connection_thread = threading.Thread(target=self.subscribe, args=())
+        connection_thread.daemon = True
+        logging.debug("Starting connection thread")
+        connection_thread.start()
+    
+    # Join a server and receive the updates
+    def join(self):
+        self._snapshot.send(b"request_snapshot")
+        while True:
+            try:
+                receviedMessage = self._snapshot.recv()
+                logging.debug("Received message from server {}".format(receviedMessage))
+                _, message = self.getMessage(receviedMessage)
+                self.processMessage(message)
+            except:
+                return  # Interrupted
+            if message == b"finished_snapshot":
+                logging.debug("Received snapshot")
+                break  # Done
+    
+    # The behavior that will be executed in the polling loop
+    def subscriberAction(self):
+        receviedMessage = self._subscriber.recv()
+        logging.debug("{} -- Received message via subscribe: {}".format(self.__name, receviedMessage))
+    
+    # Editor thread for interacting with the local user
+    def editorThread(self):
+        print("Reading user input")
+        while True:
+            userInput = str(input())
+            if not userInput:
+                continue
+            
+            tokens = self._parser.tokenize(userInput)
+            commandKeyWord = tokens[0].upper()
+            if self._parser.isLocalCommand(commandKeyWord):
+                commandObject = self._parser.processLocalMessage(commandKeyWord)
+                commandObject.execute(self._session)
+            elif self._parser.isGlobalCommand(commandKeyWord):
+                collabAPICommand = self._parser.translateIntoCollabAPICommand(userInput)
+                # process locally
+                self._session.processMessage(collabAPICommand)
+                # produce remote message and publish
+                body = collabAPICommand
+                message = self.createMessage(body)
+                self._publisher.send(message)
+            else:
+                print("Invalid command")
+                continue
+    
+    '''
+    Message production
+    '''
+    def messageToBeForwarded(self, command):
+        return command in ["READ", "OBJECTS"]
+    
+    def createMessage(self, body):
+        return bytes('[{}] {}'.format(self._id, body), self.__encoding)
+
+    
+    '''
+    Timeout action
+    '''
+    def timeoutAction(self):
+        pass    
+
+
+    ############################## MMMK functionality ##############################
+    '''
+    This is the single point of entry from lowkey's point of view.
+    '''
+    def dispatch(self, op, args):
+        logging.debug('PyMMMK.dispatch')
+        method_to_call = getattr(self, op)
+        logging.debug('PyMMMK -- calling self.{}'.format(op))
+        res = method_to_call(*args)
+        
+        logging.debug("Sending message to lowkey")
+        message = self.createMessage(f"hello from {self.__name}")
+        self._publisher.send(message)
+        
+        with open("model.json", "w") as outfile:
+            json.dump(self.model.to_dict(), outfile)
+
+        return res
+        
+    '''
+    This is a temporary method here for minimizing API break. This info should be passed in the constructor.
+    '''
+    def setName(self, workerName):
+        self.__name = workerName
+        
     def clone(self, clone):
+        logging.debug('PyMMMK.clone()')
         raise NotImplementedError()
 
     # load a model into this.model
@@ -51,6 +148,7 @@ class PyMMMK:
     #     2. otherwise, load 'model' into this.model and 'name' into this.name
     #         (via __resetm__)
     def loadModel(self, name, model, insert):
+        logging.debug('PyMMMK.loadModel()')
         self.__setStepCheckpoint()
 
         new_model = json.loads(model)
@@ -67,15 +165,18 @@ class PyMMMK:
     # 1. load metamodel into this.model.metamodels and this.metamodels
     # (via__loadmm__)
     def loadMetamodel(self, name, mm):
+        logging.debug('PyMMMK.loadMetamodel()')
         self.__setStepCheckpoint()
 
         self.__loadmm__(name, mm)
         return {'changelog': self.__changelog()}
 
     def unloadMetamodel(self, name):
+        logging.debug('PyMMMK.unloadMetamodel()')
         raise NotImplementedError()
 
     def __crudOp(self, metamodel, events, eventTargets, op, args):
+        logging.debug('PyMMMK.__crudOp()')
         if not self.metamodels[metamodel]:
             return {'$err': 'metamodel not loaded :: ' + metamodel}
 
@@ -96,16 +197,20 @@ class PyMMMK:
         self.__clearCheckpoint()
 
     def __connectNN(self, args):
+        logging.debug('PyMMMK.__connectNN()')
         raise NotImplementedError()
 
     def __connectCN(self, args):
+        logging.debug('PyMMMK.__connectCN()')
         raise NotImplementedError()
 
     def connect(self, id1, id2, connectorType, attrs):
+        logging.debug('PyMMMK.connect()')
         raise NotImplementedError()
 
 
     def _create(self, args):
+        logging.debug('PyMMMK._create()')
         """
         1. create [default] instance using metamodel [and possibly specified attrs] + init $type
         2. add to current model nodes
@@ -139,6 +244,7 @@ class PyMMMK:
             self.__mkedge__(str(self.next_id), args["id2"])
 
     def create(self, fullType, attrs):
+        logging.debug('PyMMMK.create()')
         """
         0. create a step-checkpoint
         1. wrap __create in crudOp
@@ -167,6 +273,7 @@ class PyMMMK:
         return ret
 
     def _delete(self, args):
+        logging.debug('PyMMMK._delete()')
         ident = args["id"]
         metamodel = self.__getMetamodel(self.model.nodes[ident]['$type'])
         n_type = self.__getType(self.model.nodes[ident]['$type'])
@@ -201,6 +308,7 @@ class PyMMMK:
             self.__rmnode__(ident)
 
     def _deleteConnector(self, args):
+        logging.debug('PyMMMK._deleteConnector()')
         # gather all the indices to remove
         indices = []
         for i, edge in enumerate(self.model.edges):
@@ -214,6 +322,7 @@ class PyMMMK:
             num_removed += 1
 
     def delete(self, ident):
+        logging.debug('PyMMMK.delete()')
         self.__setStepCheckpoint()
 
         if ident not in self.model.nodes:
@@ -233,7 +342,7 @@ class PyMMMK:
     # a stringified node,
     # or a copy of an attribute's value
     def read(self, ident=None, attr=None):
-
+        logging.debug('PyMMMK.read()')
         curr = None
         if not ident:
             return json.dumps(self.model.to_dict())
@@ -269,14 +378,17 @@ class PyMMMK:
             return attrVal
 
     def readMetamodels(self, metamodel):
+        logging.debug('PyMMMK.readMetamodels()')
         raise NotImplementedError()
 
     # returns self.name
     def readName(self):
+        logging.debug('PyMMMK.readName()')
         return self.name
 
 
     def _update(self, args):
+        logging.debug('PyMMMK._update()')
         """
         1. update instance as per data
         2. return err on unknown attributes
@@ -294,6 +406,7 @@ class PyMMMK:
             self.__chattr__(args["id"], attr, args["data"][attr])
 
     def update(self, ident, data):
+        logging.debug('PyMMMK.update()')
         """
         0. create a step-checkpoint
         1. wrap _update in crudop
@@ -321,9 +434,11 @@ class PyMMMK:
         return {'changelog': self.__changelog()}
 
     def __checkpoint(self):
+        logging.debug('PyMMMK.__checkpoint()')
         self.__log({'op': 'MKCHKPT'})
 
     def __clearCheckpoint(self):
+        logging.debug('PyMMMK.__clearCheckpoint()')
         for i in range(len(self.journal)-1, 0, -1):
             if self.journal[i]["op"] == 'MKCHKPT':
                 self.journal.pop(i)
@@ -331,6 +446,10 @@ class PyMMMK:
                 break
 
     def __changelog(self):
+        logging.debug('PyMMMK.__changelog()')
+        
+        print(self.model.nodes)
+        
         if self.undoredoJournal:
             ret = copy.deepcopy(self.undoredoJournal)
             self.undoredoJournal = []
@@ -344,6 +463,7 @@ class PyMMMK:
         return self.journal[ji + 1: self.journalIndex]
 
     def __log(self, step, log=None):
+        logging.debug('PyMMMK.__log()')
         if not log:
             if self.journalIndex != len(self.journal):
                 self.journal = self.journal[:self.journalIndex]
@@ -356,12 +476,15 @@ class PyMMMK:
             pass
 
     def __redo(self, step):
+        logging.debug('PyMMMK.__redo()')
         raise NotImplementedError()
 
     def redo(self, uchkpt):
+        logging.debug('PyMMMK.redo()')
         raise NotImplementedError()
 
     def __restoreCheckpoint(self):
+        logging.debug('PyMMMK.__restoreCheckpoint()')
         while len(self.journal) > 0:
             step = self.journal.pop()
             if step["op"] == 'MKCHKPT':
@@ -371,11 +494,13 @@ class PyMMMK:
         self.journalIndex = len(self.journal)
 
     def __setStepCheckpoint(self):
+        logging.debug('PyMMMK.__setStepCheckpoint()')
         self.undoredoJournal = None
         if len(self.journal) == 0 or self.journal[-1]['op'] != 'MKSTPCHKPT':
             self.__log({'op': 'MKSTPCHKPT'})
 
     def setUserCheckpoint(self, name):
+        logging.debug('PyMMMK.setUserCheckpoint()')
         self.undoredoJournal = None
         if len(self.journal) == 0 or \
                 self.journal[len(self.journal)-1]['op'] != 'MKUSRCHKPT' or \
@@ -383,12 +508,15 @@ class PyMMMK:
             self.__log({'op': 'MKUSRCHKPT', 'name': name})
 
     def __undo(self, step, log):
+        logging.debug('PyMMMK.__undo()')
         raise NotImplementedError()
 
     def undo(self, uchkpt):
+        logging.debug('PyMMMK.undo()')
         raise NotImplementedError()
 
     def __chattr__(self, ident, attr, new_val, log=None):
+        logging.debug('PyMMMK.__chattr__()')
         get_attr = None
         set_attr = None
 
@@ -421,9 +549,11 @@ class PyMMMK:
         }, log)
 
     def __dumpmm__(self, name, log):
+        logging.debug('PyMMMK.__dumpmm__()')
         raise NotImplementedError()
 
     def __loadmm__(self, name, mm, log=None):
+        logging.debug('PyMMMK.__loadmm__()')
         self.metamodels[name] = json.loads(mm)
         if name not in self.model.metamodels:
             self.model.metamodels.append(name)
@@ -434,6 +564,7 @@ class PyMMMK:
             log)
 
     def __mkedge__(self, ident1, ident2, i=None, log=None):
+        logging.debug('PyMMMK.__mkedge__()')
         edge = {'src': ident1, 'dest': ident2}
         if not i:
             i = self.model.edges.append(edge) - 1
@@ -451,6 +582,7 @@ class PyMMMK:
         )
 
     def __mknode__(self, ident, node, log = None):
+        logging.debug('PyMMMK.__mknode__()')
         self.model.nodes[str(ident)] = node
         self.__log(
             {
@@ -462,6 +594,7 @@ class PyMMMK:
         )
 
     def __resetm__(self, new_name, new_model, insert, log=None):
+        logging.debug('PyMMMK.__resetm__()')
         old_model = self.read()
         old_name = self.name
 
@@ -504,6 +637,7 @@ class PyMMMK:
         self.__log(step, log)
 
     def __rmedge__(self, i, log=None):
+        logging.debug('PyMMMK.__rmedge__()')
         edge = self.model.edges.pop(i)
         self.__log(
             {
@@ -515,6 +649,7 @@ class PyMMMK:
         )
 
     def __rmnode__(self, ident, log=None):
+        logging.debug('PyMMMK.__rmnode__()')
         node = self.model.nodes[ident]
         del self.model.nodes[ident]
         self.__log(
@@ -527,7 +662,9 @@ class PyMMMK:
 
 
     def __getMetamodel(self, fulltype):
+        logging.debug('PyMMMK.__getMetamodel()')
         return os.path.dirname(fulltype)
 
     def __getType(self, fullType):
+        logging.debug('PyMMMK.__getType()')
         return os.path.basename(fullType)
