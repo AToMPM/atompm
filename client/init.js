@@ -85,22 +85,21 @@ function __initClient()
 
 		});
 
-	socket.on('message', 
-		function(msg)	
-		{
-			console.debug(' >> '+utils.jsons(msg));
+	socket.on('message',
+		function (msg) {
+			console.debug(' >> ' + utils.jsons(msg));
 
 			// handle a changelog
-			if ( msg['statusCode'] == undefined ){
+			if (msg['statusCode'] == undefined) {
 				__handleChangelog(
 					msg['data']['changelog'],
 					msg['data']['sequence#'],
 					msg['data']['hitchhiker']);
 				return;
 			}
+
 			// otherwise, this is the response to creating a session
-			if( msg['statusCode'] != 201 )
-			{
+			if (msg['statusCode'] != 201) {
 				WindowManagement.openDialog(__FATAL_ERROR, 'failed to connect to back-end');
 				return;
 			}
@@ -111,57 +110,59 @@ function __initClient()
 			__wid = msg['data']['wid'];
 			__aswid = msg['data']['awid'];
 
-			if( window.location.search == '' )
-				{
-					_getUserPreferences(
-						function(prefs)
-						{
-							console.debug("Get User Preferences in Init.js (96)");
-							console.debug(prefs);
-							__prefs = prefs;
-							prefs['autoloaded-toolbars']['value'].
-							forEach(_loadToolbar);
-							if( prefs['autoloaded-model']['value'] != '' )
-								_loadModel(prefs['autoloaded-model']['value']);
+			if (window.location.search == '') {
+				_getUserPreferences(
+					function (prefs) {
+						__prefs = prefs;
+						prefs['autoloaded-toolbars']['value'].forEach(_loadToolbar);
+						if (prefs['autoloaded-model']['value'] != '')
+							_loadModel(prefs['autoloaded-model']['value']);
 
-							Collaboration.enableCollaborationLinks();
-							__launchAutosave();
-						});
-				}
-
-
-			else if( 'aswid' in params && 'cswid' in params )
-			{
-				__user = params['host'];
-				HttpUtils.httpReq(
-						'PUT',
-						'/aswSubscription?wid='+__wid,
-						{'aswid':params['aswid'],
-						 'cswid':params['cswid']},
-						 function(statusCode,resp)
-						 {
-							 resp = utils.jsonp(resp);
-							 __handleState(resp['data'],resp['sequence#']);
-							 Collaboration.enableCollaborationLinks();
-							 __launchAutosave();
-						 });
+						Collaboration.enableCollaborationLinks();
+						__launchAutosave();
+					});
 			}
 
-			else
-			{
-				__wid  = params['cswid'];
+			// set up modelshare
+			else if ('aswid' in params && 'cswid' in params) {
 				__user = params['host'];
 				HttpUtils.httpReq(
-						'GET',
-						'/current.state?wid='+params['cswid'],
-						undefined,
-						function(statusCode,resp)
-						{
-							resp = utils.jsonp(resp);
-							__handleState(resp['data'],resp['sequence#']);
-							Collaboration.enableCollaborationLinks();
-							__launchAutosave();
-						});
+					'PUT',
+					'/aswSubscription?wid=' + __wid,
+					{
+						'aswid': params['aswid'],
+						'cswid': params['cswid']
+					},
+					function (statusCode, resp) {
+						resp = utils.jsonp(resp);
+						__handleState(resp['data'], resp['sequence#']);
+
+						_getUserPreferences(
+							function (prefs) {
+								__prefs = prefs;
+								Collaboration.enableCollaborationLinks();
+								__launchAutosave();
+							});
+					});
+			}
+
+			else {
+				__user = params['host'];
+				HttpUtils.httpReq(
+					'GET',
+					'/current.state?wid=' + __wid,
+					undefined,
+					function (statusCode, resp) {
+						resp = utils.jsonp(resp);
+						__handleState(resp['data'], resp['sequence#']);
+
+						_getUserPreferences(
+							function (prefs) {
+								__prefs = prefs;
+								Collaboration.enableCollaborationLinks();
+								__launchAutosave();
+							});
+					});
 			}
 		});
 
@@ -197,9 +198,16 @@ function __initClient()
 
 }
 
-// TODO: Add joinSession
 function askForSession(socket, params) {
-	socket.emit(
-		'message',
-		{'method': 'POST', 'url': '/createSession?cid=' + __clientID});
+	if (params != undefined && params['cswid'] != undefined) {
+		let param_str = "?cid=" + __clientID;
+		param_str += (params['host'] == undefined) ? "" : "&host=" + params['host']
+		param_str += (params['aswid'] == undefined) ? "" : "&aswid=" + params['aswid']
+		param_str += (params['cswid'] == undefined) ? "" : "&cswid=" + params['cswid']
+		socket.emit('message', {'method': 'POST', 'url': '/joinSession' + param_str});
+	} else {
+		socket.emit(
+			'message',
+			{'method': 'POST', 'url': '/createSession?cid=' + __clientID});
+	}
 }

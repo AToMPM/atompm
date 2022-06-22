@@ -86,38 +86,85 @@ function init_session_manager(httpserver){
 
                     logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':'client','to':"session_mngr"});
 
-                    /* the client asks to create a new session */
+                    /* the client asks to create a new session or join a session */
                     /* the session manager then has a map from client ID to the worker ID */
-                    if (msg.method == 'POST' && url.pathname.match(/createSession/)) {
+                    if (msg.method == 'POST' && (url.pathname.match(/createSession/)) || url.pathname.match(/joinSession/)) {
 
                         let cid = url['query']['cid'];
 
                         if (cid == undefined) {
                             __send(socket, 400, 'invalid client id :: ' + url['query']['cid']);
-                        } else {
+                            return;
+                        }
 
-                            let cwid = __createNewWorker('/csworker');
-                            let awid = __createNewWorker('/asworker');
+                        // determine whether to create or join a session
+                        // and whether to do screenshare or modelshare
+                        let existingcwid = url['query']['cswid'];
+                        let existingawid = url['query']['aswid'];
 
-                            // map the worker to client socket
+                        let isScreenshare = existingcwid != undefined && existingawid == undefined;
+                        let isModelshare = existingcwid != undefined && existingawid != undefined;
+
+                        let cwid = undefined;
+                        let awid = undefined;
+
+                        // normal case, not sharing
+                        if (!isScreenshare && !isModelshare){
+                            // create a new csworker and asworker
+                            cwid = __createNewWorker('/csworker');
+                            awid = __createNewWorker('/asworker');
+
+                            // set up client-csworker comms
                             __registerListener(cwid, socket.id);
+                            clientIDs2csids[cid] = [cwid];
 
-                            // message the cs worker to connect to the as worker
+                            // set up the csworker listening to the asworker
+                            let params = {'aswid': awid};
                             workers[cwid].send(
                                 {
                                     'method': 'PUT',
                                     'uri': '/aswSubscription',
-                                    'reqData': {'aswid': awid}
+                                    'reqData': params
                                 });
+                        }else if (isScreenshare){
+                            // no workers created
 
-                            // map the client ID to their worker
-                            clientIDs2csids[cid] = cwid;
+                            // set up client-csworker comms
+                            __registerListener(existingcwid, socket.id);
+                            clientIDs2csids[cid] = [existingcwid];
 
-                            logger.http("socket _ 'resp wid'" + ''+cwid + ' awid '+awid,{'from':"session_mngr",'to': 'client', 'type':"-)"});
+                            cwid = existingcwid;
 
-                            /* respond worker id (used to identify associated workers) */
-                            __send(socket, 201, undefined, {'wid': cwid, 'awid': awid});
+                        } else if (isModelshare){
+                            // create a new csworker
+                            cwid = __createNewWorker('/csworker');
+
+                            // set up client-csworker comms
+                            __registerListener(cwid, socket.id);
+                            clientIDs2csids[cid] = [cwid];
+
+                            /* TODO: Has to be done by the client in init.js
+                               to avoid a race condition with the client
+                               asking for csworker state too early
+                            */
+                            // set up the csworker listening to the asworker
+                            // clones the existing csworker
+                            // let params = {'aswid': existingawid, 'cswid': existingcwid};
+                            // workers[cwid].send(
+                            //     {
+                            //         'method': 'PUT',
+                            //         'uri': '/aswSubscription',
+                            //         'reqData': params
+                            //     });
+
+                            awid = existingawid;
                         }
+
+                        logger.http("socket _ 'resp wid'" + ''+cwid + ' awid '+awid,{'from':"session_mngr",'to': 'client', 'type':"-)"});
+
+                        /* respond worker id (used to identify associated workers) */
+                        __send(socket, 201, undefined, {'wid': cwid, 'awid': awid});
+
                         return;
                     }
 
@@ -172,6 +219,10 @@ function init_session_manager(httpserver){
 
 function __registerListener(wid, socketID){
     logger.http("Socket " + socketID + " now listening to worker " + wid, {'at': 'session_mngr'});
+    if (workerIds2socketIds[wid] == undefined){
+        workerIds2socketIds[wid] = [];
+    }
+
     if( workerIds2socketIds[wid].indexOf(socketID) > -1 ) {
         return false;
     }else{
@@ -254,45 +305,57 @@ function handle_http_message(url, req, resp){
         return;
     }
 
-    let wid = undefined;
-    if (url['query'] != undefined && url['query']['wid'] != undefined){
-        wid = url['query']['wid'];
+    let wids = undefined;
+
+    // first, try to get the wid(s) from the client id
+    // this is developed so that clients can talk to multiple cs workers if needed
+    if (url['query'] != undefined && url['query']['cid'] != undefined){
+        wids = clientIDs2csids[url['query']['cid']];
     }
-    if (wid == undefined){
-        wid = clientIDs2csids[url['query']['cid']];
+
+    // if the mapping wasn't possible, check if the message contains the wid
+    // this is normal in the case for a HTTP message from a CSWorker
+    if (wids == undefined && url['query'] != undefined && url['query']['wid'] != undefined){
+        wids = [parseInt(url['query']['wid'])];
     }
-    
+
     /* check for worker id and it's validity */
-    if (wid == undefined)
+    if (wids == undefined)
         _utils.respond(resp, 400, 'missing worker id');
 
-    /* save resp object and forward request to worker (if request is PUT or
+    /* save resp object and forward request to worker(s) (if request is PUT or
           POST, recover request data first) */
-    if( req.method == 'PUT' || req.method == 'POST' )
-    {
+    // again, in the future, requests might need to be directed to multiple workers
+    if (req.method == 'PUT' || req.method == 'POST') {
         let reqData = '';
-        req.addListener("data", function(chunk) {reqData += chunk;});
+        req.addListener("data", function (chunk) {
+            reqData += chunk;
+        });
         req.addListener("end",
-            function()
-            {
-                workers[wid].send(
-                    {'method':req.method,
-                        'uri':url.pathname,
-                        'reqData':(reqData == '' ?
-                            undefined :
-                            eval('('+reqData+')')),
-                        'uriData':url['query'],
-                        'respIndex':responses.push(resp)-1});
+            function () {
+                for (let wid of wids) {
+                    workers[wid].send(
+                        {
+                            'method': req.method,
+                            'uri': url.pathname,
+                            'reqData': (reqData == '' ?
+                                undefined :
+                                eval('(' + reqData + ')')),
+                            'uriData': url['query'],
+                            'respIndex': responses.push(resp) - 1
+                        });
+                }
             });
-    }
-    else {
-        workers[wid].send(
-            {
-                'method': req.method,
-                'uri': url.pathname,
-                'uriData': url['query'],
-                'respIndex': responses.push(resp) - 1
-            });
+    } else {
+        for (let wid of wids) {
+            workers[wid].send(
+                {
+                    'method': req.method,
+                    'uri': url.pathname,
+                    'uriData': url['query'],
+                    'respIndex': responses.push(resp) - 1
+                });
+        }
     }
 }
 
@@ -325,5 +388,4 @@ module.exports = {
     socket_server,
     init_session_manager,
     handle_http_message,
-    send_to_all,
 }
