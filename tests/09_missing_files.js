@@ -20,20 +20,19 @@ let deleteFolderRecursive = function (path) {
 module.exports = {
 
 
-    'Signup userremove user': function (client) {
+    'Signup userremove user': async function (client) {
 
         client.url('http://localhost:8124/atompm').pause(300);
 
         let username = 'userremove';
         let user_pass = 'test';
 
-        let user_exists = user_utils.user_exists(client, username, user_pass);
+        let user_exists = await user_utils.user_exists(client, username, user_pass);
         if (!user_exists) {
-            user_utils.create_user(client, username, user_pass);
+            await user_utils.create_user(client, username, user_pass);
         }
-        client.pause(1000);
-
-        user_utils.login(client, username);
+        //client.pause(1000);
+        //await user_utils.login(client, username, user_pass);
 
         //needed to ensure everything is loaded
         client.pause(1000);

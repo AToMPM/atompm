@@ -12,8 +12,8 @@ module.exports = {
         client.url('http://localhost:8124/atompm').pause(1000);
     },
 
-    'Login' : function (client) {
-        user_utils.login(client);
+    'Login' : async function (client) {
+        await user_utils.login(client);
     },
 
 

@@ -9,18 +9,20 @@ module.exports = {
         mouse_tracking.track_mouse(client);
     },
 
-    'Login user' : function (client) {
+    'Login user' : async function (client) {
 
         let username = 'testuser';
         let user_pass = 'test';
 
-        let user_exists = user_utils.user_exists(client, username, user_pass);
+        let user_exists = await user_utils.user_exists(client, username, user_pass);
+        client.verify.ok(true, 'User exists:' + user_exists);
 
         if (!user_exists) {
-            user_utils.create_user(client, username, user_pass);
+            client.verify.ok(true, 'Creating user: ' + username + " pass: " + user_pass);
+            await user_utils.create_user(client, username, user_pass);
         }
 
-        user_utils.login(client, username);
+        //await user_utils.login(client, username);
     },
 
     after : function (client) {

@@ -71,7 +71,7 @@ function create_assoc(client, start_div, end_div, relation_div, offset, offset2)
 
         .perform(function () {
                 if (relation_div != undefined && relation_div != "") {
-                    client.waitForElementPresent(relation_div, 1000, "Relation option present: " + relation_div)
+                    client.waitForElementPresent(relation_div, 2000, "Relation option present: " + relation_div)
                         .click(relation_div)
                         .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
                         .click("#dialog_btn")
@@ -134,7 +134,7 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
     this.deselect_all(client);
     let ele;
 
-    client.waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div)
+    client.waitForElementPresent(element_div, 2000, "Find element for attrib set: " + element_div)
         .findElement(element_div, response => {
                 ele = response.value;
             })
@@ -143,13 +143,10 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
                 return actions
                     .move({'origin': ele, "x":offset[0], "y":offset[1]})
                     .click()
-            })
-        .perform(function () {
-                const actions = this.actions({async: false});
-                return actions
+                    .pause(300)
                     .sendKeys(client.Keys.INSERT);
             })
-        .waitForElementPresent("#dialog_btn", 1000, "Editing menu opens")
+        .waitForElementPresent("#dialog_btn", 2000, "Editing menu opens")
         .perform((function (attrs) {
                 let ele2;
                 for (const [key, value] of Object.entries(attrs)) {
@@ -233,13 +230,16 @@ function hit_control_element(client, element) {
 
 
 function deselect_all(client) {
+    // Perform twice to make sure
     client
         .perform(function () {
             const actions = this.actions({async: false});
             return actions
-                .sendKeys(client.Keys.ESCAPE);
+                .sendKeys(client.Keys.ESCAPE)
+                .pause(200)
+                .sendKeys(client.Keys.ESCAPE)
         });
-    client.pause(200);
+    client.pause(300);
 }
 
 function navigate_to_folder(client, folder_name) {

@@ -6,15 +6,13 @@ let mouse_tracking = require('./mouse_tracking.js');
 
 module.exports = {
 
-    beforeEach: function (client, done) {
-        client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
-
+    beforeEach : async function (client) {
+        await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
         mouse_tracking.track_mouse(client);
     },
 
-    'Login': function (client) {
-
-        user_utils.login(client);
+    'Login' : async function (client) {
+        await user_utils.login(client);
     },
 
     'Execute Transformation': function (client) {
