@@ -44,9 +44,11 @@ module.exports = {
         let username = 'aaa';
         let user_pass = 'aaa';
 
-        let user_exists = user_utils.user_exists(client, username, user_pass);
+        let user_exists = await user_utils.user_exists(client, username, user_pass);
+        client.verify.ok(true, 'User exists:' + user_exists);
 
         if (!user_exists) {
+            client.verify.ok(true, 'Creating user: ' + username + " pass: " + user_pass);
             await user_utils.create_user(client, username, user_pass);
         }
 
