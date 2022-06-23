@@ -20,7 +20,7 @@ module.exports = {
             await user_utils.create_user(client, username, user_pass);
         }
 
-        await user_utils.login(client, username);
+        //await user_utils.login(client, username);
     },
 
     after : function (client) {
