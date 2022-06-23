@@ -1,16 +1,16 @@
 let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
+const mouse_tracking = require("./mouse_tracking");
 
 module.exports = {
 
-    beforeEach : function (client) {
-        client.url('http://localhost:8124/atompm').pause(300);
+    beforeEach : async function (client) {
+        await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
+        mouse_tracking.track_mouse(client);
     },
 
     'Login' : async function (client) {
-        user_utils.login(client);
-        let canvas = "#div_canvas";
-        await client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
+        await user_utils.login(client);
     },
 
     'Check undo of deletion' : async function (client) {

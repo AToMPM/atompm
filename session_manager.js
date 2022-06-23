@@ -323,6 +323,11 @@ function handle_http_message(url, req, resp){
     if (wids == undefined)
         _utils.respond(resp, 400, 'missing worker id');
 
+    for (let wid of wids) {
+        if (workers[wid] == undefined)
+            _utils.respond(resp, 400, 'wid ' + wid + ' not found in workers: ' + workers);
+    }
+
     /* save resp object and forward request to worker(s) (if request is PUT or
           POST, recover request data first) */
     // again, in the future, requests might need to be directed to multiple workers

@@ -4,9 +4,9 @@
  * See COPYING.lesser and README.md in the root of this project for full details
  */
 
-function user_exists(client, username, password){
-    client.execute(
-        function(username, password) {
+async function user_exists(client, username, password) {
+    await client.execute(
+        function (username, password) {
             UserManagement.validateCredentials(username, password);
         }, [username, password], null
     );
@@ -15,30 +15,32 @@ function user_exists(client, username, password){
     client.getText('div[id=div_login_error]', function (result) {
         user_exists = !result.value.includes('login failed');
     });
+    client.pause(1000);
     return user_exists;
 }
 
-function create_user(client, username, password){
-    client.execute(
-        function(username, password) {
+async function create_user(client, username, password) {
+    await client.execute(
+        function (username, password) {
             UserManagement.signup(username, password);
         }, [username, password], null
     );
 }
 
-function login(client, username) {
+async function login(client, username, pass) {
 
     //set default value
-    username = username? username : 'testuser';
+    username = username ? username : 'testuser';
+    pass = pass ? pass : 'test';
 
-    client.execute(
-        function (username) {
-            UserManagement.login(username);
-        }, [username], null
-    );
+    client.updateValue("#input_username", username);
+    client.updateValue("#input_password", pass);
+    client.click("#login_button");
+
+    client.pause(500);
 
     client.getTitle(function (title) {
-        this.assert.ok(title.includes("AToMPM - [Unnamed]"), "AToMPM is opened");
+        this.assert.ok(title.includes("AToMPM - [Unnamed]"), "AToMPM is opened - '" + title + "'");
     });
 }
 

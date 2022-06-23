@@ -101,7 +101,7 @@ jobs:
       run: |
         ./run_tests.sh headless  ./tests/10_undo_test.js
         
-    - name: run test 11_undo_test
+    - name: run test 11_collab_test
       run: |
         ./run_tests.sh headless  ./tests/11_collab_test.js
 
