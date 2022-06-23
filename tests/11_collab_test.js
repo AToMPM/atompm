@@ -48,10 +48,10 @@ module.exports = {
         let user_exists = user_utils.user_exists(client, username, user_pass);
 
         if (!user_exists) {
-            user_utils.create_user(client, username, user_pass);
+            await user_utils.create_user(client, username, user_pass);
         }
 
-        user_utils.login(client, username);
+        await user_utils.login(client, username);
 
         await client.windowHandles(function (result) {
             tab_a = result.value[0];
@@ -104,7 +104,7 @@ module.exports = {
 
         let screen_share_selector = "#a_screenshare";
 
-        client.getAttribute(screen_share_selector, "href", function (result) {
+        await client.getAttribute(screen_share_selector, "href", async function (result) {
 
             let screen_share_url = decodeHtml(result.value);
 
@@ -112,12 +112,12 @@ module.exports = {
             screen_share_url = screen_share_url.match(regex).toString();
             client.verify.ok(true, "Navigating to: " + screen_share_url);
 
-            client.openNewWindow('window').pause(500)
+            await client.openNewWindow('window').pause(500)
                 .url(screen_share_url);
 
-            client.windowHandles(function (result) {
-                    tab_b = result.value[1];
-                });
+            await client.windowHandles(function (result) {
+                tab_b = result.value[1];
+            });
             client.verify.ok(true, 'Tab B\'s Handle: \'' + tab_b + "'");
             client.pause(500);
         });
@@ -128,7 +128,7 @@ module.exports = {
 
         let model_share_selector = "#a_modelshare";
 
-        client.getAttribute(model_share_selector, "href", async function (result) {
+        await client.getAttribute(model_share_selector, "href", async function (result) {
 
             let model_share_url = decodeHtml(result.value);
 
@@ -136,7 +136,7 @@ module.exports = {
             model_share_url = model_share_url.match(regex).toString();
             client.verify.ok(true, "Navigating to: " + model_share_url);
 
-            client.openNewWindow('window').pause(500)
+            await client.openNewWindow('window').pause(500)
                 .url(model_share_url);
 
             await client.windowHandles(function (result) {
@@ -150,7 +150,7 @@ module.exports = {
 
         //==========================================================
         client.verify.ok(true, 'Step 4a: Client A changes name of instance (with B and C listening)');
-        client.switchToWindow(tab_a.toString())
+        await client.switchToWindow(tab_a.toString())
         client.pause(500);
         attrs = {};
         attrs[name_field] = "MainTopic";

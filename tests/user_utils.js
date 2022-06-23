@@ -4,9 +4,9 @@
  * See COPYING.lesser and README.md in the root of this project for full details
  */
 
-function user_exists(client, username, password){
-    client.execute(
-        function(username, password) {
+async function user_exists(client, username, password) {
+    await client.execute(
+        function (username, password) {
             UserManagement.validateCredentials(username, password);
         }, [username, password], null
     );
@@ -18,27 +18,27 @@ function user_exists(client, username, password){
     return user_exists;
 }
 
-function create_user(client, username, password){
-    client.execute(
-        function(username, password) {
+async function create_user(client, username, password) {
+    await client.execute(
+        function (username, password) {
             UserManagement.signup(username, password);
         }, [username, password], null
     );
 }
 
-function login(client, username) {
+async function login(client, username) {
 
     //set default value
-    username = username? username : 'testuser';
+    username = username ? username : 'testuser';
 
-    client.execute(
+    await client.execute(
         function (username) {
             UserManagement.login(username);
         }, [username], null
     );
 
     client.getTitle(function (title) {
-        this.assert.ok(title.includes("AToMPM - [Unnamed]"), "AToMPM is opened");
+        this.assert.ok(title.includes("AToMPM - [Unnamed]"), "AToMPM is opened - '" + title + "'");
     });
 }
 
