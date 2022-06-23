@@ -6,6 +6,7 @@
 
 let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
+let mouse_tracking = require('./mouse_tracking.js');
 const div_utils = require("./div_utils");
 
 function decodeHtml(html) {
@@ -23,6 +24,8 @@ module.exports = {
 
     beforeEach: function (client, done) {
         client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
+
+        mouse_tracking.track_mouse(client);
     },
 
     'Collaboration test' : async function (client) {
@@ -52,10 +55,9 @@ module.exports = {
 
         await client.windowHandles(function (result) {
             tab_a = result.value[0];
-            client.verify.ok(true, 'Tab A\'s Handle:' + tab_a);
         })
-
         client.pause(500);
+        client.verify.ok(true, 'Tab A\'s Handle: \'' + tab_a + "'");
 
         //==========================================================
 
@@ -79,7 +81,7 @@ module.exports = {
 
         let start_x = 50;
         let start_y = 200;
-        first_class_div = await model_building_utils.create_class(client, start_x, start_y, 0);
+        first_class_div = model_building_utils.create_class(client, start_x, start_y, 0);
 
         client.pause(500);
 
@@ -90,7 +92,7 @@ module.exports = {
         let attrs = {};
         let name_field = "#tr_name > td:nth-child(2) > textarea";
         attrs[name_field] = class_name;
-        await model_building_utils.set_attribs(client, 0, attrs);
+        model_building_utils.set_attribs(client, 0, attrs);
 
         //SAVE MODEL
         let model_name = "collab.model";
@@ -102,7 +104,7 @@ module.exports = {
 
         let screen_share_selector = "#a_screenshare";
 
-        await client.getAttribute(screen_share_selector, "href", async function (result) {
+        client.getAttribute(screen_share_selector, "href", function (result) {
 
             let screen_share_url = decodeHtml(result.value);
 
@@ -110,14 +112,13 @@ module.exports = {
             screen_share_url = screen_share_url.match(regex).toString();
             client.verify.ok(true, "Navigating to: " + screen_share_url);
 
-            await client.openNewWindow('window').pause(500)
-            await client.url(screen_share_url)
+            client.openNewWindow('window').pause(500)
+                .url(screen_share_url);
 
-            await client.windowHandles(function (result) {
-                tab_b = result.value[1];
-                client.verify.ok(true, 'Tab B\'s Handle:' + tab_b);
-            })
-
+            client.windowHandles(function (result) {
+                    tab_b = result.value[1];
+                });
+            client.verify.ok(true, 'Tab B\'s Handle: \'' + tab_b + "'");
             client.pause(500);
         });
 
@@ -127,7 +128,7 @@ module.exports = {
 
         let model_share_selector = "#a_modelshare";
 
-        await client.getAttribute(model_share_selector, "href", async function (result) {
+        client.getAttribute(model_share_selector, "href", async function (result) {
 
             let model_share_url = decodeHtml(result.value);
 
@@ -135,32 +136,32 @@ module.exports = {
             model_share_url = model_share_url.match(regex).toString();
             client.verify.ok(true, "Navigating to: " + model_share_url);
 
-            await client.openNewWindow('window').pause(500)
-            await client.url(model_share_url)
+            client.openNewWindow('window').pause(500)
+                .url(model_share_url);
 
             await client.windowHandles(function (result) {
-                tab_c = result.value[2];
-                client.verify.ok(true, 'Tab C\'s Handle:' + tab_c);
-            })
+                    tab_c = result.value[2];
+                })
 
+            client.verify.ok(true, 'Tab C\'s Handle: \'' + tab_c + "'");
             client.pause(500);
         });
 
 
         //==========================================================
         client.verify.ok(true, 'Step 4a: Client A changes name of instance (with B and C listening)');
-        await client.switchToWindow(tab_a);
+        client.switchToWindow(tab_a.toString())
         client.pause(500);
         attrs = {};
         attrs[name_field] = "MainTopic";
-        await model_building_utils.set_attribs(client, 0, attrs);
+        model_building_utils.set_attribs(client, 0, attrs);
         client.pause(300);
 
         //==========================================================
         client.verify.ok(true, 'Step 5: Client A creates second instance');
         start_x = 300;
         start_y = 200;
-        second_class_div = await model_building_utils.create_class(client, start_x, start_y, 1);
+        second_class_div = model_building_utils.create_class(client, start_x, start_y, 1);
         client.pause(300);
 
         //==========================================================
@@ -171,30 +172,30 @@ module.exports = {
         let offset = [3, 5];
         let offset2 = [4, 5];
 
-        await model_building_utils.deselect_all(client);
-        await model_building_utils.create_assoc(client, first_class_div, second_class_div, assoc_relation, offset, offset2);
+        model_building_utils.deselect_all(client);
+        model_building_utils.create_assoc(client, first_class_div, second_class_div, assoc_relation, offset, offset2);
         client.pause(300);
 
         //==========================================================
         client.verify.ok(true, 'Step 7: Client A moves the second element');
-        await model_building_utils.move_element(client, second_class_div, second_class_div,[-60, -60], [60, 60]);
+        model_building_utils.move_element(client, second_class_div, second_class_div, [-60, -60], [60, 60]);
         client.pause(300);
 
         //==========================================================
         client.verify.ok(true, 'Step 8: Client A deletes the second instance');
-        await model_building_utils.delete_element(client, first_class_div);
+        model_building_utils.delete_element(client, first_class_div);
         client.pause(300);
 
         //==========================================================
         client.verify.ok(true, 'Step 9: Client A switches concrete syntax');
         // NOTE: This invalidates the divs of the created elements!
         let toolbar_filename = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.defaultIcons.metamodel';
-        await model_building_utils.load_toolbar(client, [toolbar_filename]);
+        model_building_utils.load_toolbar(client, [toolbar_filename]);
         client.pause(300);
 
         //==========================================================
         client.verify.ok(true, 'Step 10: Client A disconnects');
-        await client.closeWindow();
+        client.closeWindow();
         client.pause(1000);
     },
 
