@@ -9,7 +9,7 @@ module.exports = {
         mouse_tracking.track_mouse(client);
     },
 
-    'Login user' : function (client) {
+    'Login user' : async function (client) {
 
         let username = 'testuser';
         let user_pass = 'test';
@@ -17,10 +17,10 @@ module.exports = {
         let user_exists = user_utils.user_exists(client, username, user_pass);
 
         if (!user_exists) {
-            user_utils.create_user(client, username, user_pass);
+            await user_utils.create_user(client, username, user_pass);
         }
 
-        user_utils.login(client, username);
+        await user_utils.login(client, username);
     },
 
     after : function (client) {

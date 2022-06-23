@@ -37,6 +37,8 @@ async function login(client, username) {
         }, [username], null
     );
 
+    client.pause(500);
+    
     client.getTitle(function (title) {
         this.assert.ok(title.includes("AToMPM - [Unnamed]"), "AToMPM is opened - '" + title + "'");
     });
