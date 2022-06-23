@@ -22,9 +22,8 @@ function decodeHtml(html) {
 
 module.exports = {
 
-    beforeEach: function (client, done) {
-        client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
-
+    beforeEach : async function (client) {
+        await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
         mouse_tracking.track_mouse(client);
     },
 

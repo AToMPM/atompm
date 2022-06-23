@@ -11,15 +11,10 @@ let rule_toolbars = [
 
 module.exports = {
 
-    beforeEach: function (client, done) {
-        client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
-
+    beforeEach : async function (client) {
+        await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
+        await user_utils.login(client);
         mouse_tracking.track_mouse(client);
-    },
-
-    'Login': function (client) {
-
-        user_utils.login(client);
     },
 
     'Compile Pattern MM': function (client) {

@@ -6,14 +6,10 @@ let folder_name = "Formalisms/__LanguageSyntax__/SimpleClassDiagram";
 
 module.exports = {
 
-    beforeEach : function (client) {
-        client.url('http://localhost:8124/atompm').pause(300);
-
+    beforeEach : async function (client) {
+        await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
+        await user_utils.login(client);
         mouse_tracking.track_mouse(client);
-    },
-
-    'Login' : function (client) {
-        user_utils.login(client);
     },
 
     'Compile AS' : function (client) {
