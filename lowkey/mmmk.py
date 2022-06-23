@@ -228,16 +228,20 @@ class PyMMMK(Client):
         logging.debug('PyMMMK.unloadMetamodel()')
         self.__setStepCheckpoint()
 
-        old_edges = self.model.edges
-        for i, edge in enumerate(old_edges):
+        edges_to_remove = []
+        for i, edge in enumerate(self.model.edges):
             if (self.__getMetamodel(self.model.nodes[edge['src']]['$type']) == name or
             self.__getMetamodel(self.model.nodes[edge['dest']]['$type']) == name):
-                self.__rmedge__(i)
-                i -= 1
+                edges_to_remove.append(i)
+        for i in edges_to_remove:
+            self.__rmedge__(i)
 
+        nodes_to_remove = []
         for ident in self.model.nodes:
-            if self.__getMetamodel(self.model.nodes[ident]['$type']) == name:
-                self.__rmnode__(ident)
+            if self.__getMetamodel(self.model.nodes['$type']) == name:
+                nodes_to_remove.append(ident)
+        for ident in nodes_to_remove:
+            self.__rmnode__(ident)
 
         self.__dumpmm__(name)
         return {'changelog': self.__changelog()}
@@ -269,7 +273,7 @@ class PyMMMK(Client):
             return {'$err': 'metamodel not loaded :: ' + metamodel}
 
         if 'create' in events:
-            if args["fulltype"]:
+            if "fulltype" in args:
                 self.next_type = args["fulltype"]
             else:
                 self.next_type = args["connectorType"]
@@ -297,27 +301,27 @@ class PyMMMK(Client):
         err = method_to_call(args)
         if err:
             self.__restoreCheckpoint()
+            # print("Error: " + str(err))
             return err
         self.__clearCheckpoint()
 
     # /* connect specified nodes with instance of connectorType */
 
-
-    def __connectNN(self, args): #/*id1,id2,connectorType,attrs*/
+    def _connectNN(self, args): #/*id1,id2,connectorType,attrs*/
         """
-        # __connectNN: (connect 2 nodes)
+        # _connectNN: (connect 2 nodes)
         # 1. run pre-connect on end nodes
-        # 2. run __create to create instance and connect it to end nodes
+        # 2. run _create to create instance and connect it to end nodes
         # 3. run post-connect on end nodes
         :param args:
         :return:
         """
-        logging.debug('PyMMMK.__connectNN()')
+        logging.debug('PyMMMK._connectNN()')
         return self.__crudOp(
                 self.__getMetamodel(args["connectorType"]),
                 ['connect'],
                 [args["id1"], args["id2"]],
-                '__create',
+                '_create',
                 {
                     'fulltype': args["connectorType"],
                     'id1': args["id1"],
@@ -350,7 +354,7 @@ class PyMMMK(Client):
         # 2. if both nodes are non-connectors
         #     a) run pre-create on connectorType
         #     b) create connectorType instance and connect it to end nodes (via
-        #           __connectNN)
+        #           _connectNN)
         #     c) run post-create on connectorType
         # 3. return err or (new or existing) connector's id */
         :param id1:
@@ -380,12 +384,18 @@ class PyMMMK(Client):
         num_toid2 = 0
 
         for t in [t1, '$*', '__p$*']:
+            if t not in self.metamodels[metamodel]['cardinalities']:
+                continue
+
             for card in self.metamodels[metamodel]['cardinalities'][t]:
                 if card['type'] == _into and card['dir'] == 'out':
                     card_into = card
                     break
 
-        for x in [t2, '$*', '__p$*']:
+        for t in [t2, '$*', '__p$*']:
+            if t not in self.metamodels[metamodel]['cardinalities']:
+                continue
+
             for card in self.metamodels[metamodel]['cardinalities'][t]:
                 if card['type'] == _from and card['dir'] == 'in':
                     card_from = card
@@ -438,7 +448,7 @@ class PyMMMK(Client):
                 metamodel,
                 ['create'],
                 [self.next_id],
-                '__connectNN',
+                '_connectNN',
                 {
                     'id1': id1,
                     'id2': id2,
@@ -467,12 +477,13 @@ class PyMMMK(Client):
         """
         metamodel = self.__getMetamodel(args["fulltype"])
         fulltype = self.__getType(args["fulltype"])
-        typeAttrs = self.metamodels[metamodel]['types'][fulltype]
-        new_node = {}
 
-        if not typeAttrs:
+        if not fulltype in self.metamodels[metamodel]['types']:
             return {'$err': 'can not create instance of unknown type :: ' + args["fulltype"]}
 
+        typeAttrs = self.metamodels[metamodel]['types'][fulltype]
+
+        new_node = {}
         for attr in typeAttrs:
             val = attr["default"]
             if args["attrs"] and attr['name'] in args["attrs"]:
@@ -493,7 +504,7 @@ class PyMMMK(Client):
         logging.debug('PyMMMK.create()')
         """
         0. create a step-checkpoint
-        1. wrap __create in crudOp
+        1. wrap _create in crudOp
         2. return err or new instance id
         :param fullType:
         :param attrs:
@@ -1092,7 +1103,8 @@ class PyMMMK(Client):
         logging.debug('PyMMMK.__mkedge__()')
         edge = {'src': ident1, 'dest': ident2}
         if not i:
-            i = self.model.edges.append(edge) - 1
+            self.model.edges.append(edge)
+            i = len(self.model.edges) - 1
         else:
             self.model.edges.insert(i, edge)
 

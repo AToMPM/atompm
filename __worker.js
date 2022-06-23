@@ -243,7 +243,7 @@ function compare_changelogs(res1, res2){
 	let chlg2 = res2["changelog"] || res1["$err"];
 
 	let failed = false;
-	if (chlg1.length != chlg2.length){
+	if (chlg1 == undefined || chlg2 == undefined || chlg1.length != chlg2.length){
 		failed = true;
 		console.log(chlg1);
 		console.log(chlg2);
