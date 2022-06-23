@@ -15,6 +15,7 @@ async function user_exists(client, username, password) {
     client.getText('div[id=div_login_error]', function (result) {
         user_exists = !result.value.includes('login failed');
     });
+    client.pause(1000);
     return user_exists;
 }
 

@@ -236,10 +236,10 @@ function deselect_all(client) {
             const actions = this.actions({async: false});
             return actions
                 .sendKeys(client.Keys.ESCAPE)
-                .pause(300)
+                .pause(200)
                 .sendKeys(client.Keys.ESCAPE)
-                .pause(300);
         });
+    client.pause(300);
 }
 
 function navigate_to_folder(client, folder_name) {
