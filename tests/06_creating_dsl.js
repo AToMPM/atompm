@@ -122,7 +122,7 @@ let assocs = [
 module.exports = {
 
     beforeEach : async function (client) {
-        await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow(done);
+        await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
         await user_utils.login(client);
         mouse_tracking.track_mouse(client);
     },
