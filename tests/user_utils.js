@@ -26,19 +26,18 @@ async function create_user(client, username, password) {
     );
 }
 
-async function login(client, username) {
+async function login(client, username, pass) {
 
     //set default value
     username = username ? username : 'testuser';
+    pass = pass ? pass : 'test';
 
-    await client.execute(
-        function (username) {
-            UserManagement.login(username);
-        }, [username], null
-    );
+    client.updateValue("#input_username", username);
+    client.updateValue("#input_password", pass);
+    client.click("#login_button");
 
     client.pause(500);
-    
+
     client.getTitle(function (title) {
         this.assert.ok(title.includes("AToMPM - [Unnamed]"), "AToMPM is opened - '" + title + "'");
     });

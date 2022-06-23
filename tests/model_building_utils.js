@@ -236,9 +236,9 @@ function deselect_all(client) {
             const actions = this.actions({async: false});
             return actions
                 .sendKeys(client.Keys.ESCAPE)
-                .pause(200)
+                .pause(300)
                 .sendKeys(client.Keys.ESCAPE)
-                .pause(200);
+                .pause(300);
         });
 }
 

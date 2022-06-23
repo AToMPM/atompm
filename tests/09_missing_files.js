@@ -33,7 +33,7 @@ module.exports = {
         }
         client.pause(1000);
 
-        await user_utils.login(client, username);
+        await user_utils.login(client, username, user_pass);
 
         //needed to ensure everything is loaded
         client.pause(1000);

@@ -50,8 +50,6 @@ module.exports = {
             await user_utils.create_user(client, username, user_pass);
         }
 
-        await user_utils.login(client, username);
-
         await client.windowHandles(function (result) {
             tab_a = result.value[0];
         })
@@ -118,15 +116,19 @@ module.exports = {
                 tab_b = result.value[1];
             });
             client.verify.ok(true, 'Tab B\'s Handle: \'' + tab_b + "'");
-            client.pause(500);
         });
 
+        // wait to ensure that B is created
+        client.pause(1000);
 
         //==========================================================
         client.verify.ok(true, 'Step 3b: Client C joins through model sharing');
 
-        let model_share_selector = "#a_modelshare";
+        await client.switchToWindow(tab_a.toString())
 
+        client.pause(500);
+
+        let model_share_selector = "#a_modelshare";
         await client.getAttribute(model_share_selector, "href", async function (result) {
 
             let model_share_url = decodeHtml(result.value);
@@ -143,14 +145,17 @@ module.exports = {
                 })
 
             client.verify.ok(true, 'Tab C\'s Handle: \'' + tab_c + "'");
-            client.pause(500);
         });
 
+        // wait to ensure that B and C are created
+        client.pause(1000);
 
         //==========================================================
         client.verify.ok(true, 'Step 4a: Client A changes name of instance (with B and C listening)');
+
         await client.switchToWindow(tab_a.toString())
         client.pause(500);
+
         attrs = {};
         attrs[name_field] = "MainTopic";
         model_building_utils.set_attribs(client, 0, attrs);
@@ -194,7 +199,7 @@ module.exports = {
 
         //==========================================================
         client.verify.ok(true, 'Step 10: Client A disconnects');
-        client.closeWindow();
+        await client.closeWindow();
         client.pause(1000);
     },
 
