@@ -14,6 +14,7 @@ import threading
 import json
 
 from model import Model
+from libeventhandler import __runEventHandlers as runEventHandlers
 
 from lowkey.network.Client import Client
 
@@ -280,29 +281,34 @@ class PyMMMK(Client):
 
         self.__checkpoint()
 
-        # TODO: Implement event handler
-        # let pre_events = events.slice(0).map(function (ev) {
-        #     return 'pre-' + ev;
-        # });
-        # let post_events = events.slice(0).map(function (ev) {
-        #     return 'post-' + ev;
-        # });
-        # let err;
-        # if ((err = _libeventhandler.__runEventHandlers(this, this.metamodels[metamodel]['constraints'], pre_events, eventTargets, 'constraint')) ||
-        #     (err = _libeventhandler.__runEventHandlers(this, this.metamodels[metamodel]['actions'], pre_events, eventTargets, 'action')) ||
-        #     (err = this[op](args)) ||
-        #     (err = _libeventhandler.__runEventHandlers(this, this.metamodels[metamodel]['actions'], post_events, eventTargets, 'action')) ||
-        #     (err = _libeventhandler.__runEventHandlers(this, this.metamodels[metamodel]['constraints'], post_events, eventTargets, 'constraint'))) {
-        #     this.__restoreCheckpoint();
-        #     return err;
-        # }
+        pre_events = ['pre-' + ev for ev in events]
+        post_events = ['post-' + ev for ev in events]
 
-        method_to_call = getattr(self, op)
-        err = method_to_call(args)
-        if err:
+        class ErrorRaised(Exception):
+            def __init__(self, _err):
+                self.err = _err
+
+        try:
+            err = runEventHandlers(self, self.metamodels[metamodel]['constraints'], pre_events, eventTargets, 'constraint')
+            if err: raise ErrorRaised(err)
+
+            err = runEventHandlers(self, self.metamodels[metamodel]['actions'], pre_events, eventTargets, 'action')
+            if err: raise ErrorRaised(err)
+
+            method_to_call = getattr(self, op)
+            err = method_to_call(args)
+            if err: raise ErrorRaised(err)
+
+            err = runEventHandlers(self, self.metamodels[metamodel]['actions'], post_events, eventTargets, 'action')
+            if err: raise ErrorRaised(err)
+
+            err = runEventHandlers(self, self.metamodels[metamodel]['constraints'], post_events, eventTargets, 'constraint')
+            if err: raise ErrorRaised(err)
+
+        except ErrorRaised as e:
             self.__restoreCheckpoint()
-            # print("Error: " + str(err))
-            return err
+            print("Error in crudOp: " + str(e.err))
+            return e.err
         self.__clearCheckpoint()
 
     # /* connect specified nodes with instance of connectorType */
@@ -411,12 +417,12 @@ class PyMMMK(Client):
         for edge in self.model.edges:
             if edge['src'] == id1 and self.__getType(self.model.nodes[edge['dest']]['$type']) == _into:
                 num_id1to += 1
-                if num_id1to >= card_into['max']:
+                if card_into['max'] != "Infinity" and num_id1to >= int(card_into['max']):
                     return {'$err': 'maximum outbound multiplicity reached for ' + t1 + ' (' + id1 + ') and type ' + _into}
 
             if edge['dest'] == id2 and self.__getType(self.model.nodes[edge['src']]['$type']) == _from:
                 num_toid2 += 1
-                if num_toid2 >= card_from['max']:
+                if card_from['max'] != "Infinity" and num_toid2 >= int(card_from['max']):
                     return {'$err': 'maximum inbound multiplicity reached for ' + t2 + ' (' + id2 + ') and type ' + _from}
 
         if t1 == tc or t2 == tc:
@@ -701,7 +707,7 @@ class PyMMMK(Client):
                 return {"$err": 'tried to set attribute ' + str(attr) + ' to "null"'}
 
             res = self.read(args["id"], attr)
-            if '$err' in res:
+            if type(res) is not bool and '$err' in res:
                 return res
 
             self.__chattr__(args["id"], attr, args["data"][attr])

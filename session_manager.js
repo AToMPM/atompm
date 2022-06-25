@@ -268,8 +268,22 @@ function __createNewWorker(workerType){
                     {'Content-Type': 'application/json'});
         });
 
+
+
     let msg = {'workerType':workerType, 'workerId':wid};
     logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': workerType + wid, 'type':"-)"});
+
+    async function inform_mmmk_manager(msg) {
+        let __sock_mmmk = new _zmq.Request();
+        __sock_mmmk.connect("tcp://127.0.0.1:5555");
+        msg = JSON.stringify(msg);
+        console.log("Sending to MMMK: " + msg);
+        await __sock_mmmk.send(msg);
+        return await __sock_mmmk.receive();
+    }
+
+    let res = inform_mmmk_manager(["-1", "create_worker", msg]);
+
     worker.send(msg);
 
     logger.http("http _ 'resp on worker creation: wid:'"+ wid, {'at':"session_mngr"});

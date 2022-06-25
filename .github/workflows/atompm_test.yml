@@ -7,12 +7,16 @@ on:
       - '**.md'
       - '**/make_docker.yml'
       - '**/package_portable.yml'
+    branches-ignore:
+      - 'add_pymmmk'
   pull_request:
     paths-ignore:
       - 'doc/**'
       - '**.md'
       - '**/make_docker.yml'
       - '**/package_portable.yml'
+    branches-ignore:
+      - 'add_pymmmk'
 
 jobs:
   test:

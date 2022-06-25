@@ -223,6 +223,8 @@ async function __mmmkReq(msg) {
 	msg = JSON.stringify(msg);
 	__sock_mmmk.send(msg);
 	let res = await __sock_mmmk.receive();
+	// console.log("Receiving:");
+	// console.log(JSON.parse(res));
 	return JSON.parse(res);
 }
 
@@ -237,10 +239,14 @@ function compare_objects(res1, res2){
 	}
 }
 
+function handleDiffs(entry){
+	return JSON.stringify(entry).replace(/ /g, "")
+}
+
 //compares the changelogs from the mmmk and pymmmk to see if there are any differences
 function compare_changelogs(res1, res2){
 	let chlg1 = res1["changelog"] || res1["$err"];
-	let chlg2 = res2["changelog"] || res1["$err"];
+	let chlg2 = res2["changelog"] || res2["$err"];
 
 	let failed = false;
 	if (chlg1 == undefined || chlg2 == undefined || chlg1.length != chlg2.length){
@@ -248,9 +254,10 @@ function compare_changelogs(res1, res2){
 		console.log(chlg1);
 		console.log(chlg2);
 	}
+
 	for (let i = 0; !failed && i < chlg1.length; i++){
-		let entry1 = JSON.stringify(chlg1[i]).replace(/ /g, "")
-		let entry2 = JSON.stringify(chlg2[i]).replace(/ /g, "")
+		let entry1 = handleDiffs(chlg1[i])
+		let entry2 = handleDiffs(chlg2[i])
 		if (entry1 != entry2){
 			failed = true;
 			console.log("ERROR: Changelogs do not match!");
