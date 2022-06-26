@@ -78,6 +78,7 @@ class PyMMMKManager:
         worker_type, wid = msg.values()
         worker_name = worker_type + str(wid)
         pymmmk.setName(worker_name)
+        pymmmk.setType(worker_type)
 
         print("Created pymmmk for worker: " + worker_name)
         self.mmmks[worker_name] = pymmmk
@@ -85,6 +86,7 @@ class PyMMMKManager:
         logging.debug('pymmmk joining to lowkey')
         pymmmk.join()
         logging.debug('pymmmk joined to lowkey')
+        pymmmk.run()
 
         return "ACK"
     

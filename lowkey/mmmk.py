@@ -13,7 +13,7 @@ import sys
 import threading
 import json
 
-from model import Model
+from MMMKModel import Model
 
 from lowkey.network.Client import Client
 
@@ -45,7 +45,7 @@ class PyMMMK(Client):
     def run(self):
         connection_thread = threading.Thread(target=self.subscribe, args=())
         connection_thread.daemon = True
-        logging.debug("Starting connection thread")
+        logging.debug("{}: Starting connection thread".format(self.__name))
         connection_thread.start()
     
     # Join a server and receive the updates
@@ -54,54 +54,87 @@ class PyMMMK(Client):
         while True:
             try:
                 receviedMessage = self._snapshot.recv()
-                logging.debug("Received message from server {}".format(receviedMessage))
+                logging.debug("{}: Received message from server.".format(self.__name))
                 _, message = self.getMessage(receviedMessage)
                 self.processMessage(message)
             except:
                 return  # Interrupted
             if message == b"finished_snapshot":
-                logging.debug("Received snapshot")
+                logging.debug("{}: Received snapshot".format(self.__name))
                 break  # Done
     
     # The behavior that will be executed in the polling loop
     def subscriberAction(self):
+        logging.debug("{}: Printing received message.".format(self.__name))
         receviedMessage = self._subscriber.recv()
-        logging.debug("{} -- Received message via subscribe: {}".format(self.__name, receviedMessage))
-    
-    # Editor thread for interacting with the local user
-    def editorThread(self):
-        print("Reading user input")
-        while True:
-            userInput = str(input())
-            if not userInput:
-                continue
-            
-            tokens = self._parser.tokenize(userInput)
-            commandKeyWord = tokens[0].upper()
-            if self._parser.isLocalCommand(commandKeyWord):
-                commandObject = self._parser.processLocalMessage(commandKeyWord)
-                commandObject.execute(self._session)
-            elif self._parser.isGlobalCommand(commandKeyWord):
-                collabAPICommand = self._parser.translateIntoCollabAPICommand(userInput)
-                # process locally
-                self._session.processMessage(collabAPICommand)
-                # produce remote message and publish
-                body = collabAPICommand
-                message = self.createMessage(body)
-                self._publisher.send(message)
-            else:
-                print("Invalid command")
-                continue
-    
+        senderId, senderType, senderName, op, args = self.getMessage(receviedMessage)
+        
+        if self.throwawayMessage(senderId, senderType, senderName):
+            logging.debug("{}: Throwing message {} ### {}".format(self.__name, op, args))
+        else:
+            logging.debug("{}: Processing message {} ### {}".format(self.__name, op, args))
+            self.processMessage(op, args)
+        
+        logging.debug("{}: Received message via subscribe: {}".format(self.__name, receviedMessage))
+
     '''
     Message production
     '''
     def messageToBeForwarded(self, command):
-        return command in ["READ", "OBJECTS"]
+        return command in ["create"]
     
     def createMessage(self, body):
         return bytes('[{}] {}'.format(self._id, body), self.__encoding)
+        
+    '''
+    Message processing
+    '''
 
+    def getMessage(self, rawMessage):
+        #return rawMessage.decode(self.__encoding).split('###', 2)
+        senderId, message = rawMessage.decode(self.__encoding).split(' ', 1)
+        senderId = senderId.replace('[', '').replace(']', '')
+        senderType, senderName, op, args = message.split('###')
+        senderType = senderType.split(':', 1)[1].strip()
+        senderName = senderName.split(':', 1)[1].strip()
+        op = op.split(':', 1)[1].strip()
+        args = args.split(':', 1)[1].strip()
+        return senderId, senderType, senderName, op, args
+        
+    def throwawayMessage(self, senderId, senderType, senderName):
+        logging.debug("{}: Checking if message is throwaway. SenderID: {}. My ID: {}. SenderType: {}. My type:{}. SenderName: {}. My name:{}.".format(self.__name, senderId, self._id, senderType, self.__type, senderName, self.__name))
+        sameType = senderType == self.__type
+        logging.debug("{}: Comparing {} to {}. Same? {}.".format(self.__name, senderType, self.__type, sameType))
+        sameName = senderName == self.__name
+        logging.debug("{}: Comparing {} to {}. Same? {}.".format(self.__name, senderName, self.__name, sameName))
+        logging.debug("{}: Same type? {}. Same name? {}.".format(self.__name, sameType, sameName))
+        throwaway = (not sameType) or sameName
+        logging.debug("{}: Throwaway? {}.".format(self.__name, throwaway))
+        return throwaway
+
+    def processMessage(self, op, args):
+        logging.debug("{}: ProcessingMessage...........................".format(self.__name))
+        args = self.unpackArgs(args)
+        logging.debug("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
+        
+        # TODO this runs into an infinite loop
+        #self.dispatch(op, args)
+        
+    def unpackArgs(self, args):
+        args = args.replace('[', '').replace(']', '')
+        args = args.split(',')
+        
+        arglist = []
+        for a in args:
+            logging.debug("{}: Cleaning up arg: {}.".format(self.__name, a))
+            a = a.replace("'", '')
+            a = a.strip()
+            logging.debug("{}: Cleaned up arg: {}.".format(self.__name, a))
+            arglist.append(a)
+        
+        logging.debug("{}: Unpacked args: {}. type: {}.".format(self.__name, arglist, type(arglist)))
+        
+        return arglist
     
     '''
     Timeout action
@@ -116,13 +149,17 @@ class PyMMMK(Client):
     '''
     def dispatch(self, op, args):
         logging.debug('PyMMMK.dispatch')
+        logging.debug("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
         method_to_call = getattr(self, op)
         logging.debug('PyMMMK -- calling self.{}'.format(op))
         res = method_to_call(*args)
         
-        logging.debug("Sending message to lowkey")
-        message = self.createMessage(f"hello from {self.__name}")
-        self._publisher.send(message)
+        logging.debug(args)
+        
+        if self.messageToBeForwarded(op):
+            logging.debug("Sending message to lowkey")
+            message = self.createMessage(f"senderType:{self.__type} ### senderName:{self.__name} ### op:{op} ### args:{args}")
+            self._publisher.send(message)
         
         with open("model.json", "w") as outfile:
             json.dump(self.model.to_dict(), outfile)
@@ -134,6 +171,9 @@ class PyMMMK(Client):
     '''
     def setName(self, workerName):
         self.__name = workerName
+        
+    def setType(self, workerType):
+        self.__type = workerType
         
     def clone(self, clone):
         logging.debug('PyMMMK.clone()')
