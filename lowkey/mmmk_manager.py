@@ -71,8 +71,11 @@ class PyMMMKManager:
             #print("RES: " + str(res))
 
             #  Send reply back to client
-            self.socket.send(json.dumps(res).encode("utf-8"))
+            self.sendChangelog(res)
 
+    def sendChangelog(self, result):
+        self.socket.send(json.dumps(result).encode("utf-8"))
+            
     def create_worker(self, msg):
         pymmmk = PyMMMK()
         worker_type, wid = msg.values()
