@@ -59,8 +59,8 @@ module.exports = {
 			if (mms['$err'])
 				return __errorContinuable(mms['$err']);
 
-			let m1 = await __mmmkReq(["read"])
-			let m = _mmmk.read();
+			let m = await __mmmkReq(["read"])
+			let m1 = _mmmk.read();
 			compare_objects(m1, m)
 
 			if (m['$err'])
@@ -253,7 +253,7 @@ module.exports = {
 			__postMessage(
 				{
 					'statusCode': 200,
-					'changelog': res1['changelog'],
+					'changelog': res2['changelog'],
 					'sequence#': __sequenceNumber(),
 					'respIndex': resp
 				});
@@ -263,8 +263,8 @@ module.exports = {
 	/* load a model */
 	'PUT /current.model' :
 		async function (resp, uri, reqData/*m,name,insert,hitchhiker*/) {
-			let res = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
-			let res2 = await __mmmkReq(["loadModel", reqData['name'], reqData['m'], reqData['insert']]);
+			let res2 = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
+			let res = await __mmmkReq(["loadModel", reqData['name'], reqData['m'], reqData['insert']]);
 			compare_changelogs(res, res2)
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
@@ -298,23 +298,24 @@ module.exports = {
 			let matches = uri.match(/(.*)\.type/);
 			let fulltype = matches[1];
 			let res;
+			let res2;
 			if (reqData == undefined || reqData['src'] == undefined) {
-				res = _mmmk.create(fulltype, reqData['attrs']);
-				let res2 = await __mmmkReq(["create", fulltype, reqData['attrs']])
-				compare_changelogs(res, res2)
+				res2 = _mmmk.create(fulltype, reqData['attrs']);
+				res = await __mmmkReq(["create", fulltype, reqData['attrs']])
+
 			} else {
-				res = _mmmk.connect(
+				res2 = _mmmk.connect(
 				 	__uri_to_id(reqData['src']),
 				 	__uri_to_id(reqData['dest']),
 				 	fulltype,
 				 	reqData['attrs']);
-				let res2 = await __mmmkReq(["connect",
+				res = await __mmmkReq(["connect",
 					__uri_to_id(reqData['src']),
 					__uri_to_id(reqData['dest']),
 					fulltype,
 					reqData['attrs']]);
-				compare_changelogs(res, res2)
 			}
+			compare_changelogs(res2, res)
 
 			if ('$err' in res)
 				__postInternalErrorMsg(resp, res['$err']);

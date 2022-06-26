@@ -136,6 +136,12 @@ class PyMMMK(Client):
     def setName(self, workerName):
         self.__name = workerName
 
+    '''
+    This is needed for the CSWorker
+    '''
+    def getNextID(self):
+        return self.next_id
+
     #/********************************* ENV SETUP *******************************/
 
     def clone(self, clone):
@@ -992,17 +998,17 @@ class PyMMMK(Client):
                 return step['op'] == 'MKUSRCHKPT' and step['name'] == uchkpt
 
         def stopMarkerFound(i):
-            for j in range(i-1, 0, -1):
+            for j in range(i-1, -1, -1):
                 if stopMarkerReached(self.journal[i]):
                     return True
             return False
 
         if not uchkpt or stopMarkerFound(self.journalIndex):
-            for i in range(self.journalIndex, 0, -1):
-                if stopMarkerReached(self.journal[self.journalIndex]):
+            for step in reversed(self.journal):
+                if stopMarkerReached(step):
                     break
                 else:
-                    self.__undo(self.journal[self.journalIndex], 'UNDOREDO')
+                    self.__undo(step, 'UNDOREDO')
 
         return {'changelog': self.__changelog()}
 
@@ -1194,8 +1200,8 @@ class PyMMMK(Client):
 
     def __rmnode__(self, ident, log=None):
         logging.debug('PyMMMK.__rmnode__()')
-        node = self.model.nodes[ident]
-        del self.model.nodes[ident]
+        node = self.model.nodes[str(ident)]
+        del self.model.nodes[str(ident)]
         self.__log(
             {
                 'op': 'RMNODE',
