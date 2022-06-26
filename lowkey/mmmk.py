@@ -307,7 +307,7 @@ class PyMMMK(Client):
 
         except ErrorRaised as e:
             self.__restoreCheckpoint()
-            print("Error in crudOp: " + str(e.err))
+            logging.debug("Error in crudOp: " + str(e.err))
             return e.err
         self.__clearCheckpoint()
 
@@ -472,7 +472,6 @@ class PyMMMK(Client):
                 }
 
     def _create(self, args):
-        logging.debug('PyMMMK._create()')
         """
         1. create [default] instance using metamodel [and possibly specified attrs] + init $type
         2. add to current model nodes
@@ -481,6 +480,8 @@ class PyMMMK(Client):
         :param args:
         :return:
         """
+        logging.debug('PyMMMK._create()')
+
         metamodel = self.__getMetamodel(args["fulltype"])
         fulltype = self.__getType(args["fulltype"])
 
@@ -525,7 +526,7 @@ class PyMMMK(Client):
             '_create',
             {
                 'fulltype': fullType,
-                'attrs':'attrs'
+                'attrs':attrs
             }
         )
         if err:
@@ -991,7 +992,7 @@ class PyMMMK(Client):
                 return step['op'] == 'MKUSRCHKPT' and step['name'] == uchkpt
 
         def stopMarkerFound(i):
-            for j in range(i, 0, -1):
+            for j in range(i-1, 0, -1):
                 if stopMarkerReached(self.journal[i]):
                     return True
             return False

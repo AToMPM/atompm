@@ -39,8 +39,7 @@ module.exports = {
 	2. launch chain... return success code or error */
 	'__mtwid':undefined,
 	'mtwRequest' :
-		function(resp,method,uri,reqData)
-		{
+		async function (resp, method, uri, reqData) {
 			let self = this;
 			let actions =
 				[__successContinuable(),
@@ -52,6 +51,20 @@ module.exports = {
 							reqData,
 							8125);
 					}];
+
+			let mms1 = _mmmk.readMetamodels();
+			let mms = await __mmmkReq(["readMetamodels"])
+
+			compare_objects(mms1, mms)
+			if (mms['$err'])
+				return __errorContinuable(mms['$err']);
+
+			let m1 = await __mmmkReq(["read"])
+			let m = _mmmk.read();
+			compare_objects(m1, m)
+
+			if (m['$err'])
+				return __errorContinuable(m['$err']);
 
 			if( this.__mtwid == undefined )
 			{
@@ -107,21 +120,7 @@ module.exports = {
 										 'defaultDCL':prefs['default-mt-dcl']['value']},
   										8125);
 	  					},
-  						async function () {
-							let mms1 = _mmmk.readMetamodels();
-							let mms = await __mmmkReq(["readMetamodels"])
-
-							compare_objects(mms1, mms)
-							if (mms['$err'])
-								return __errorContinuable(mms['$err']);
-
-							let m1 = await __mmmkReq(["read"])
-							let m = _mmmk.read();
-							compare_objects(m1, m)
-
-							if (m['$err'])
-								return __errorContinuable(m['$err']);
-
+  						function () {
 							return __httpReq(
 								'PUT',
 								'/current.model?wid=' + self.__mtwid,
@@ -437,9 +436,10 @@ module.exports = {
 			let m1 = _utils.jsonp(_mmmk.read());
 			let m = await __mmmkReq(["read"]);
 
-			compare_objects(m1, m)
-
 			let model = _utils.jsonp(m);
+
+			compare_objects(m1, model)
+
 			if (uri.match(/(.*)\..*Icons\.metamodel/)) {
 				let mm = await __mmmkReq(["readMetamodels"])
 				let metamodels = _utils.jsonp(mm);

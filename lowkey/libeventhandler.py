@@ -23,7 +23,7 @@ def runDesignerAccessorCode(_mmmk, code, desc, ident):
     :param ident: 
     :return: 
     """
-
+    logging.debug('libeventhandler.runDesignerAccessorCode()')
     return __runDesignerCode(_mmmk, code, desc, 'accessor', ident)
 
 
@@ -40,6 +40,7 @@ def runDesignerActionCode(_mmmk, code, desc, event_type, ident):
     :param ident:
     :return:
     """
+    logging.debug('libeventhandler.runDesignerActionCode()')
 
     _mmmk.__setStepCheckpoint()
 
@@ -233,11 +234,15 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
         :return: 
         """
         try:
+            logging.debug('libeventhandler.eval()')
+            logging.debug(_code)
             return eval(_code)
         except Exception as err:
             if 'IgnoredConstraint' in str(err):
                 return True
             return {'$err': str(err)}
+
+    logging.debug('libeventhandler.__runDesignerCode()')
 
     res = safe_eval(code)
 
@@ -269,6 +274,7 @@ def __runEventHandlers(_mmmk, allHandlers, events, ids, handlerType):
     :param handlerType:
     :return:
     """
+    logging.debug('libeventhandler.__runEventHandlers()')
     types2ids = {}
     for ident in ids:
         if ident == _mmmk.next_id:
@@ -340,6 +346,7 @@ def validateModel(_mmmk, model=None):
     :param model:
     :return:
     """
+    logging.debug('libeventhandler.validateModel()')
     inCounts = {}
     outCounts = {}
     outContainments = {}
