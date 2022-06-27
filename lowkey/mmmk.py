@@ -685,11 +685,13 @@ class PyMMMK(Client):
         :param metamodel:
         :return:
         """
-        logging.debug('PyMMMK.readMetamodels()')
+        logging.debug('PyMMMK.readMetamodels(' + str(metamodel) + ')')
         if metamodel is None:
             return json.dumps(self.metamodels)
-        elif metamodel not in self.metamodels[metamodel]:
+        elif metamodel not in self.metamodels:
             return {'$err': 'metamodel not found :: ' + metamodel}
+        else:
+            return json.dumps(self.metamodels[metamodel])
 
 
     def readName(self):
@@ -941,7 +943,7 @@ class PyMMMK(Client):
         if len(self.journal) == 0 or self.journal[-1]['op'] != 'MKSTPCHKPT':
             self.__log({'op': 'MKSTPCHKPT'})
 
-    def setUserCheckpoint(self, name):
+    def setUserCheckpoint(self, name = None):
         # /*	create a user-checkpoint : add an entry in the log used as a delimiter to
         # enable undoing/redoing until a specified marker
         #
@@ -1102,7 +1104,7 @@ class PyMMMK(Client):
             log)
 
     def __loadmm__(self, name, mm, log=None):
-        logging.debug('PyMMMK.__loadmm__()')
+        logging.debug('PyMMMK.__loadmm__(' + name + ')')
         self.metamodels[name] = json.loads(mm)
         if name not in self.model.metamodels:
             self.model.metamodels.append(name)

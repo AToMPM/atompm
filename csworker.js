@@ -451,7 +451,8 @@ module.exports = {
                                     let data = hitchhiker['csmm'];
 
                                     let chglg2 = _mmmk.loadMetamodel(csmm, data)['changelog'];
-                                    let chglg = await __mmmkReq(["loadMetamodel", csmm, data])['changelog'];
+                                    let d = await __mmmkReq(["loadMetamodel", csmm, data]);
+                                    let chglg = d['changelog'];
                                     compare_changelogs(chglg, chglg2)
 
                                     cschangelogs.push(chglg,
@@ -549,6 +550,7 @@ module.exports = {
 
                                             let csmm = _fs.readFile('./users/' + mm, 'utf8');
                                             _mmmk.loadMetamodel(mm, csmm);
+                                            await __mmmkReq(["loadMetamodel", mm, csmm]);
                                         }
                                     }
 
@@ -556,10 +558,10 @@ module.exports = {
                                         step['new_name'],
                                         csm,
                                         step['insert']);
-                                    let res = await __mmmkReq(["loadModel"],
+                                    let res = await __mmmkReq(["loadModel",
                                         step['new_name'],
                                         csm,
-                                        step['insert']);
+                                        step['insert']]);
                                     compare_changelogs(res2, res)
 
                                     if (res["$err"] == undefined) {
@@ -2305,9 +2307,9 @@ module.exports = {
     /* add a checkpointing marker in mmmk and log the said marker as a
         non-undo/redo operation (remove any undone operations from log first) */
     '__checkpointUserOperation':
-        async function (sn) {
+        function (sn) {
             _mmmk.setUserCheckpoint(sn);
-            await __mmmkReq(["setUserCheckpoint"]);
+            __mmmkReq(["setUserCheckpoint"]);
 
             if (this.__handledSeqNums['i'] != undefined) {
                 this.__handledSeqNums['#s'].splice(this.__handledSeqNums['i'] + 1);
