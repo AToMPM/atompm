@@ -284,14 +284,7 @@ function compare_changelogs(res1, res2){
 			failed = true;
 			console.log(entry1);
 			console.log(entry2);
-			function _get_stack_loc() {
-				const e = new Error();
-				const stack = e.stack.split("\n");
-				let loc = stack[4].split("/")
-				loc = loc[loc.length - 1].split(":")
-				return loc[0] + "(" + loc[1].padStart(4, ' ') + ")"
-			}
-			throw "ERROR: Changelogs do not match!\n" + _get_stack_loc();
+			console.log("ERROR: Changelogs do not match!");
 		}
 	}
 }

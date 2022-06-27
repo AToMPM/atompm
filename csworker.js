@@ -357,7 +357,7 @@ module.exports = {
 
                                     let res2 = _mmmk.create(fullcstype, attrs);
                                     let res = await __mmmkReq(["create", fullcstype, attrs]);
-                                    compare_changelogs(res, res2)
+                                    compare_changelogs(res2, res)
 
                                     let csid = res['id'];
 
@@ -379,7 +379,9 @@ module.exports = {
                                         s[__id_to_uri(csid) + '--' + dest] = segments[1];
 
                                         let chglg2 = _mmmk.update(csid, {'$segments': s})['changelog'];
-                                        let chglg = await __mmmkReq(["update", csid, {'$segments': s}])['changelog'];
+                                        let res = await __mmmkReq(["update", csid, {'$segments': s}]);
+                                        let chglg = res['changelog'];
+
                                         compare_changelogs(chglg, chglg2)
                                         cschangelogs.push(chglg, self.__positionLinkDecorators(csid));
                                     }
@@ -1509,89 +1511,84 @@ module.exports = {
                     resp, 'no concrete syntax definition found for ' + cstype);
             }
 
-            let parser =
-                    types[cstype].filter(
-                        function (attr) {
-                            return attr['name'] == 'parser';
-                        })[0]['default'],
-                self = this,
-                actions =
-                    [__successContinuable(),
-                        function () {
-                            if (reqData == undefined)
-                                return __errorContinuable('missing creation parameters');
+            let parser = types[cstype].filter(
+                function (attr) {
+                    return attr['name'] == 'parser';
+                })[0]['default'];
+            let self = this;
+            let posting_params = async function () {
 
-                            let hitchhiker = {},
-                                reqParams = {},
-                                segments = reqData['segments'],
-                                src = reqData['src'],
-                                dest = reqData['dest'],
-                                pos = reqData['pos'];
+                if (reqData == undefined)
+                    return __errorContinuable('missing creation parameters');
 
-                            if (src != undefined &&
-                                dest != undefined) {
+                let hitchhiker = {},
+                    reqParams = {},
+                    segments = reqData['segments'],
+                    src = reqData['src'],
+                    dest = reqData['dest'],
+                    pos = reqData['pos'];
 
-                                let src_asuri = self.__csuri_to_asuri(src);
-                                if (src_asuri['$err'])
-                                    return __errorContinuable(src_asuri['$err']);
+                if (src != undefined && dest != undefined) {
 
-                                let dest_asuri = self.__csuri_to_asuri(dest);
-                                if (dest_asuri['$err'])
-                                    return __errorContinuable(dest_asuri['$err']);
+                    let src_asuri = await self.__csuri_to_asuri(src);
+                    if (src_asuri['$err'])
+                        return __errorContinuable(src_asuri['$err']);
 
-                                if (segments == undefined) {
-                                    segments = self.__defaultSegments(src, dest);
-                                }
+                    let dest_asuri = await self.__csuri_to_asuri(dest);
+                    if (dest_asuri['$err'])
+                        return __errorContinuable(dest_asuri['$err']);
 
-                                if (pos == undefined) {
-                                    pos = self.__nodesCenter([src_asuri, dest_asuri]);
-                                }
+                    if (segments == undefined) {
+                        segments = await self.__defaultSegments(src, dest);
+                    }
 
-                                hitchhiker = {
-                                    'segments': segments,
-                                    'src': src,
-                                    'dest': dest
-                                };
-                                reqParams = {
-                                    'src': src_asuri,
-                                    'dest': dest_asuri
-                                };
+                    if (pos == undefined) {
+                        pos = await self.__nodesCenter([src_asuri, dest_asuri]);
+                    }
 
-
-                            }
-
-                            if (pos == undefined)
-                                return __errorContinuable('missing position');
-
-                            hitchhiker['pos'] = pos;
-                            reqParams['attrs'] =
-                                self.__runParser(
-                                    parser,
-                                    {
-                                        'position': pos,
-                                        'orientation': 0,
-                                        'scale': [1, 1]
-                                    },
-                                    {});
-
-                            return __successContinuable(
-                                _utils.mergeDicts(
-                                    [{'hitchhiker': hitchhiker}, reqParams]));
-                        },
-                        function (asreqData) {
-                            return __wHttpReq(
-                                'POST',
-                                asuri + '?wid=' + self.__aswid,
-                                asreqData);
-                        }];
-
-            _do.chain(actions)(
-                function (res) {
-                    __postMessage({'statusCode': 202, 'respIndex': resp, 'reason': res});
-                },
-                function (err) {
-                    __postInternalErrorMsg(resp, err);
+                    hitchhiker = {
+                        'segments': segments,
+                        'src': src,
+                        'dest': dest
+                    };
+                    reqParams = {
+                        'src': src_asuri,
+                        'dest': dest_asuri
+                    };
                 }
+
+                if (pos == undefined)
+                    return __errorContinuable('missing position');
+
+                hitchhiker['pos'] = pos;
+                reqParams['attrs'] =
+                    self.__runParser(
+                        parser,
+                        {
+                            'position': pos,
+                            'orientation': 0,
+                            'scale': [1, 1]
+                        },
+                        {});
+
+                return _utils.mergeDicts(
+                        [{'hitchhiker': hitchhiker}, reqParams]);
+            };
+
+            let posting_command = function (asreqData) {
+                return __wHttpReq(
+                    'POST',
+                    asuri + '?wid=' + self.__aswid,
+                    asreqData);
+
+            };
+
+            let make_response = function(res){
+                __postMessage({'statusCode': 202, 'respIndex': resp, 'reason': res})
+            }
+
+            posting_params().then(
+                res => posting_command(res)(make_response)
             );
 
         },
@@ -1785,7 +1782,9 @@ module.exports = {
                 this.__checkpointUserOperation(sn);
 
                 let updates2 = _mmmk.update(id, reqData['changes'])['changelog']
-                let updates = await __mmmkReq(["read", id, reqData['changes']])['changelog'];
+                let res = await __mmmkReq(["update", id, reqData['changes']]);
+
+                let updates = res['changelog']
                 compare_changelogs(updates2, updates);
 
                 let chnglg = updates.concat('$segments' in reqData['changes'] ?
@@ -2384,21 +2383,24 @@ module.exports = {
 
     /* compute the x,y center of the icons given by the specified AS uris */
     '__nodesCenter':
-        function (asuris) {
+        async function (asuris) {
             let sumx = 0;
             let sumy = 0;
             let self = this;
-            asuris.forEach(
-                async function (asuri) {
-                    let asid = __uri_to_id(asuri);
-                    let csid = self.__asid_to_csid(asid);
-                    let pos2 = _mmmk.read(csid, 'position');
-                    let pos = await __mmmkReq(["read", csid, 'position']);
 
-                    compare_changelogs(pos2, pos);
-                    sumx += parseFloat(pos[0]);
-                    sumy += parseFloat(pos[1]);
-                });
+            await Promise.all(
+                asuris.map(
+                    async function (asuri) {
+                        let asid = __uri_to_id(asuri);
+                        let csid = await self.__asid_to_csid(asid);
+                        let pos2 = _mmmk.read(csid, 'position');
+                        let pos = await __mmmkReq(["read", csid, 'position']);
+
+                        compare_changelogs(pos2, pos);
+                        sumx += parseFloat(pos[0]);
+                        sumy += parseFloat(pos[1]);
+                    })
+            );
             return [sumx / asuris.length, sumy / asuris.length];
         },
 

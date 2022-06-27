@@ -658,7 +658,7 @@ class PyMMMK(Client):
         if not attr:
             return json.dumps(self.model.nodes[ident])
 
-        if re.match(r".+/.+", attr):
+        if re.match(r".+/.+", str(attr)):
             curr = self.model.nodes[ident]
             path = attr.split('/')
             for p in path:
