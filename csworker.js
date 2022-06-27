@@ -384,7 +384,7 @@ module.exports = {
                                         cschangelogs.push(chglg, self.__positionLinkDecorators(csid));
                                     }
 
-                                    return self.__regenIcon(csid);
+                                   return self.__regenIcon(csid);
                                 },
                                 function (riChangelog) {
                                     cschangelogs.push(riChangelog);
@@ -424,7 +424,7 @@ module.exports = {
 
                                         let chglg2 = _mmmk.update(csid, cschanges)['changelog'];
                                         let chglg = await __mmmkReq(["update", csid, cschanges])['changelog'];
-                                        compare_changelogs(chglg, chglg2)
+                                        compare_changelogs(chglg2, chglg)
 
                                         cschangelogs.push(chglg,
                                             ('$segments' in cschanges ?
@@ -909,7 +909,7 @@ module.exports = {
                 }
 
                 let csuri = __id_to_uri(id);
-                let asuri = self.__csuri_to_asuri(csuri);
+                let asuri = await self.__csuri_to_asuri(csuri);
 
                 let icon2 = _utils.jsonp(_mmmk.read(id));
                 let icon = _utils.jsonp(await __mmmkReq(["read", id]));

@@ -253,8 +253,8 @@ function handleDiffs(entry){
 
 //compares the changelogs from the mmmk and pymmmk to see if there are any differences
 function compare_changelogs(res1, res2){
-	let chlg1 = res1["changelog"] || res1["$err"];
-	let chlg2 = res2["changelog"] || res2["$err"];
+	let chlg1 = res1["changelog"] || res1["$err"] || res1;
+	let chlg2 = res2["changelog"] || res2["$err"] || res2;
 
 	// assume nothing is wrong in this case
 	if (chlg1 == undefined && chlg2 == undefined){
@@ -267,6 +267,14 @@ function compare_changelogs(res1, res2){
 		console.log("ERROR: Changelogs are different lengths!");
 		console.log(chlg1);
 		console.log(chlg2);
+		return;
+	}
+
+	if (Object.keys(chlg1).toString() != Object.keys(chlg2).toString()){
+		console.log("ERROR: Changelogs have different keys!");
+		console.log(chlg1);
+		console.log(chlg2);
+		return;
 	}
 
 	for (let i = 0; !failed && i < chlg1.length; i++){
@@ -274,9 +282,16 @@ function compare_changelogs(res1, res2){
 		let entry2 = handleDiffs(chlg2[i])
 		if (entry1 != entry2){
 			failed = true;
-			console.log("ERROR: Changelogs do not match!");
 			console.log(entry1);
 			console.log(entry2);
+			function _get_stack_loc() {
+				const e = new Error();
+				const stack = e.stack.split("\n");
+				let loc = stack[4].split("/")
+				loc = loc[loc.length - 1].split(":")
+				return loc[0] + "(" + loc[1].padStart(4, ' ') + ")"
+			}
+			throw "ERROR: Changelogs do not match!\n" + _get_stack_loc();
 		}
 	}
 }

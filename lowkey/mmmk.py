@@ -644,10 +644,12 @@ class PyMMMK(Client):
         :param attr:
         :return:
         """
-        logging.debug('PyMMMK.read()')
+        logging.debug('PyMMMK.read(' + str(ident) + ', ' + str(attr) + ')')
         curr = None
-        if not ident:
+        if ident is None:
             return json.dumps(self.model.to_dict())
+
+        ident = str(ident)
 
         if ident not in self.model.nodes:
             print(self.model.nodes.keys())
@@ -712,7 +714,7 @@ class PyMMMK(Client):
         :param args:
         """
         for attr in args["data"]:
-            if not args["data"][attr]:
+            if args["data"][attr] is None:
                 return {"$err": 'tried to set attribute ' + str(attr) + ' to "null"'}
 
             res = self.read(args["id"], attr)
@@ -722,7 +724,7 @@ class PyMMMK(Client):
             self.__chattr__(args["id"], attr, args["data"][attr])
 
     def update(self, ident, data):
-        logging.debug('PyMMMK.update()')
+        logging.debug('PyMMMK.update(' + str(ident) + ')')
         """
         0. create a step-checkpoint
         1. wrap _update in crudop
@@ -732,6 +734,8 @@ class PyMMMK(Client):
         :return:
         """
         self.__setStepCheckpoint()
+
+        ident = str(ident)
 
         if not ident in self.model.nodes:
             return {'$err': 'invalid id: ' + str(ident)}
@@ -1055,9 +1059,11 @@ class PyMMMK(Client):
 #                 references that could be altered elsewhere thereby altering the
 #                 journal's contents) */
     def __chattr__(self, ident, attr, new_val, log=None):
-        logging.debug('PyMMMK.__chattr__()')
+        logging.debug('PyMMMK.__chattr__(' + str(ident) +', ' + str(attr) + ', ' + str(new_val) + ')')
         get_attr = None
         set_attr = None
+
+        ident = str(ident)
 
         if re.match(r".+/.+", attr):
             curr = self.model.nodes[ident]
@@ -1081,7 +1087,7 @@ class PyMMMK(Client):
         set_attr(new_val)
         self.__log({
             'op': 'CHATTR',
-            'id': ident,
+            'id': int(ident),
             'attr': attr,
             'new_val': new_val,
             'old_val': _old_val,
