@@ -21,8 +21,9 @@ let workers = [];
   ...	for workers to write on when they complete requests */
 let responses = [];
 
-/* a map of client IDs to their csworker wid */
+/* a map of client IDs to their worker wids */
 let clientIDs2csids = {};
+let clientIDs2asids = {};
 
 /* a map of worker ids to socket.io socket session ids
 	... each socket is registered to exactly one worker
@@ -117,6 +118,7 @@ function init_session_manager(httpserver){
                             // set up client-csworker comms
                             __registerListener(cwid, socket.id);
                             clientIDs2csids[cid] = [cwid];
+                            clientIDs2asids[cid] = awid;
 
                             // set up the csworker listening to the asworker
                             let params = {'aswid': awid};
@@ -132,6 +134,7 @@ function init_session_manager(httpserver){
                             // set up client-csworker comms
                             __registerListener(existingcwid, socket.id);
                             clientIDs2csids[cid] = [existingcwid];
+                            clientIDs2asids[cid] = existingawid;
 
                             cwid = existingcwid;
 
@@ -142,6 +145,7 @@ function init_session_manager(httpserver){
                             // set up client-csworker comms
                             __registerListener(cwid, socket.id);
                             clientIDs2csids[cid] = [cwid];
+                            clientIDs2asids[cid] = existingawid;
 
                             /* TODO: Has to be done by the client in init.js
                                to avoid a race condition with the client
@@ -290,6 +294,40 @@ function handle_http_message(url, req, resp){
             ''+cid);
         return;
     }
+    // build and return urls for screenshare and modelshare
+    else if (url.pathname.includes('/collab')) {
+        
+        if (url['query'] == undefined || url['query']['cid'] == undefined){
+            _utils.respond(resp, 400, 'missing client ID for collab');
+            return;
+        }
+        if (url['query'] == undefined || url['query']['user'] == undefined){
+            _utils.respond(resp, 400, 'missing host for collab');
+            return;
+        }
+        if (url['query'] == undefined || url['query']['address'] == undefined){
+            _utils.respond(resp, 400, 'missing address for collab');
+            return;
+        }
+        let cid = url['query']['cid'];
+        let host = url['query']['user'];
+        let address = url['query']['address'];
+
+        let cswid = clientIDs2csids[cid][0];
+        let aswid = clientIDs2asids[cid];
+
+        let screenShareURL = address + "?host=" + host + "&cswid=" + cswid;
+        let modelShareURL = screenShareURL + "&aswid=" + aswid;
+
+        let params = {'screenShare': screenShareURL, "modelShare": modelShareURL};
+        _utils.respond(
+            resp,
+            201,
+            '',
+            params);
+
+        return;
+    }
     /* spawn new worker */
     else if( (url.pathname == '/csworker' || url.pathname == '/asworker')
         && req.method == 'POST' )
@@ -320,8 +358,10 @@ function handle_http_message(url, req, resp){
     }
 
     /* check for worker id and it's validity */
-    if (wids == undefined)
+    if (wids == undefined) {
         _utils.respond(resp, 400, 'missing worker id');
+        return;
+    }
 
     for (let wid of wids) {
         if (workers[wid] == undefined)
