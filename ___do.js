@@ -39,14 +39,30 @@ exports.chain = function chain(actions) {
     actions = Array.prototype.slice.call(arguments);
   }
   return function(callback, errback) {
-    var pos = 0;
-    var length = actions.length;
-    function loop(result) {
+    let pos = 0;
+    let length = actions.length;
+    async function loop(result) {
       pos++;
       if (pos >= length) {
         callback(result);
       } else {
-        actions[pos](result)(loop, errback);
+        //TODO: Fix this
+        if (actions[pos].constructor.name == 'AsyncFunction') {
+          try {
+            let res = await actions[pos](result);
+            if (typeof res == 'function' && res.constructor.name == 'AsyncFunction'){
+              res(loop);
+            }else{
+              await loop(res);
+            }
+          } catch (e) {
+            console.log("Error: " + e);
+            errback();
+          }
+        } else {
+          actions[pos](result)(loop, errback);
+        }
+
       }
     }
     actions[pos](loop, errback);
