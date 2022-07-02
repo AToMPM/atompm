@@ -82,6 +82,7 @@ class PyMMMKManager:
         worker_name = worker_type + str(wid)
         pymmmk.setName(worker_name)
         pymmmk.setType(worker_type)
+        pymmmk.setManager(self)
 
         print("Created pymmmk for worker: " + worker_name)
         self.mmmks[worker_name] = pymmmk

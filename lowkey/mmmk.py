@@ -12,12 +12,13 @@ import os
 import sys
 import threading
 import json
+import requests as req
 
 from MMMKModel import Model
 
 from lowkey.network.Client import Client
 
-__author__ = "Benley James Oakes, Istvan David"
+__author__ = "Istvan David, Benley James Oakes"
 __copyright__ = "Copyright 2022, GEODES"
 __credits__ = "Eugene Syriani"
 __license__ = "GPL-3.0"
@@ -116,7 +117,6 @@ class PyMMMK(Client):
         args = self.unpackArgs(args)
         logging.debug("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
         
-        # TODO this runs into an infinite loop
         self.dispatch(op, args, remote = True)
         
     def unpackArgs(self, args):
@@ -167,8 +167,10 @@ class PyMMMK(Client):
             json.dump(self.model.to_dict(), outfile)
         
         if remote:
-            #TODO: call back to the mmmk manager
-            pass
+            x = req.post('http://localhost:8124/atompm/csworker')
+            logging.debug(x.text)
+        
+        logging.debug('Classes in the model: {}.'.format(len(self.model.nodes)))
         
         return res
         
@@ -180,6 +182,9 @@ class PyMMMK(Client):
         
     def setType(self, workerType):
         self.__type = workerType
+        
+    def setManager(self, manager):
+        self.__manager = manager
         
     def clone(self, clone):
         logging.debug('PyMMMK.clone()')

@@ -4,7 +4,7 @@
 
 from lowkey.lww.LWWMap import LWWMap
 
-__author__ = "Istvan David, Bentley James Oakes"
+__author__ = "Istvan David"
 __copyright__ = "Copyright 2022, GEODES"
 __credits__ = "Eugene Syriani"
 __license__ = "GPL-3.0"
