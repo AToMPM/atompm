@@ -44,16 +44,17 @@
 
 /******************************** GLOBAL VARS *********************************/
 var __user = undefined,
-	 __wid,
-	 __aswid,
-	 __prefs,
-	 __typeToCreate,
-	 __loadedToolbars = {},
-	 __icons = {},
-	 __edges = {},
-	 __canvas,
-	 __saveas;
-	 __option = '',
+	__clientID,
+	__wid,
+	__aswid,
+	__prefs,
+	__typeToCreate,
+	__loadedToolbars = {},
+	__icons = {},
+	__edges = {},
+	__canvas,
+	__saveas,
+	__option = '',
 	 __trafo = '',
 	 __msg = '',
 	 __name = '';

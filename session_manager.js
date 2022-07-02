@@ -12,6 +12,7 @@ const _url = require("url");
 const _cp = require("child_process");
 const _path = require("path");
 const _zmq = require("zeromq")
+const _uuid = require("uuid");
 
 /* an array of WebWorkers
 	... each has its own mmmk instance */
@@ -20,6 +21,9 @@ let workers = [];
 /* an array of response objects
   ...	for workers to write on when they complete requests */
 let responses = [];
+
+/* a map of client IDs to their csworker wid */
+let clientIDs2csids = {};
 
 /* a map of worker ids to socket.io socket session ids
 	... each socket is registered to exactly one worker
@@ -66,6 +70,8 @@ function init_session_manager(httpserver){
                         workers[wid].kill();
                         workers[wid] = undefined;
                         delete workerIds2socketIds[wid];
+
+                        // TODO: Delete worker from clientIDs2csids
                     }
 
                     __send(socket,200);
@@ -73,11 +79,95 @@ function init_session_manager(httpserver){
             }
 
 
-            /* onmessage : on reception of data from client */
+            /* onmessage : on reception of data from client or csworker*/
             socket.on('message',
                 function(msg/*{method:_,url:_}*/)
                 {
                     let url = _url.parse(msg.url,true);
+
+                    logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':'client','to':"session_mngr"});
+
+                    /* the client asks to create a new session or join a session */
+                    /* the session manager then has a map from client ID to the worker ID */
+                    if (msg.method == 'POST' && (url.pathname.match(/createSession/)) || url.pathname.match(/joinSession/)) {
+
+                        let cid = url['query']['cid'];
+
+                        if (cid == undefined) {
+                            __send(socket, 400, 'invalid client id :: ' + url['query']['cid']);
+                            return;
+                        }
+
+                        // determine whether to create or join a session
+                        // and whether to do screenshare or modelshare
+                        let existingcwid = url['query']['cswid'];
+                        let existingawid = url['query']['aswid'];
+
+                        let isScreenshare = existingcwid != undefined && existingawid == undefined;
+                        let isModelshare = existingcwid != undefined && existingawid != undefined;
+
+                        let cwid = undefined;
+                        let awid = undefined;
+
+                        // normal case, not sharing
+                        if (!isScreenshare && !isModelshare){
+                            // create a new csworker and asworker
+                            cwid = __createNewWorker('/csworker');
+                            awid = __createNewWorker('/asworker');
+
+                            // set up client-csworker comms
+                            __registerListener(cwid, socket.id);
+                            clientIDs2csids[cid] = [cwid];
+
+                            // set up the csworker listening to the asworker
+                            let params = {'aswid': awid};
+                            workers[cwid].send(
+                                {
+                                    'method': 'PUT',
+                                    'uri': '/aswSubscription',
+                                    'reqData': params
+                                });
+                        }else if (isScreenshare){
+                            // no workers created
+
+                            // set up client-csworker comms
+                            __registerListener(existingcwid, socket.id);
+                            clientIDs2csids[cid] = [existingcwid];
+
+                            cwid = existingcwid;
+
+                        } else if (isModelshare){
+                            // create a new csworker
+                            cwid = __createNewWorker('/csworker');
+
+                            // set up client-csworker comms
+                            __registerListener(cwid, socket.id);
+                            clientIDs2csids[cid] = [cwid];
+
+                            /* TODO: Has to be done by the client in init.js
+                               to avoid a race condition with the client
+                               asking for csworker state too early
+                            */
+                            // set up the csworker listening to the asworker
+                            // clones the existing csworker
+                            // let params = {'aswid': existingawid, 'cswid': existingcwid};
+                            // workers[cwid].send(
+                            //     {
+                            //         'method': 'PUT',
+                            //         'uri': '/aswSubscription',
+                            //         'reqData': params
+                            //     });
+
+                            awid = existingawid;
+                        }
+
+                        logger.http("socket _ 'resp wid'" + ''+cwid + ' awid '+awid,{'from':"session_mngr",'to': 'client', 'type':"-)"});
+
+                        /* respond worker id (used to identify associated workers) */
+                        __send(socket, 201, undefined, {'wid': cwid, 'awid': awid});
+
+                        return;
+                    }
 
                     /* check for worker id and it's validity */
                     if( url['query'] === undefined ||
@@ -86,7 +176,6 @@ function init_session_manager(httpserver){
                     }
 
                     let wid = url['query']['wid'];
-                    logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':'client','to':"session_mngr"});
 
                     if( workers[wid] === undefined ) {
                         __send(socket,400,'unknown worker id :: '+wid);
@@ -94,14 +183,10 @@ function init_session_manager(httpserver){
                     /* register socket for requested worker */
                     else if( msg.method === 'POST' && url.pathname.match(/changeListener$/) )
                     {
-                        logger.http("Socket " + socket.id + " now listening to worker " + wid, {'at': 'session_mngr'});
-
-                        if( workerIds2socketIds[wid].indexOf(socket.id) > -1 ) {
-                            __send(socket,403,'already registered to worker');
-                        }else
-                        {
-                            workerIds2socketIds[wid].push(socket.id);
+                        if (__registerListener(wid, socket.id)){
                             __send(socket,201);
+                        }else{
+                            __send(socket,403,'already registered to worker');
                         }
                     }
 
@@ -133,66 +218,99 @@ function init_session_manager(httpserver){
         });
 }
 
+function __registerListener(wid, socketID){
+    logger.http("Socket " + socketID + " now listening to worker " + wid, {'at': 'session_mngr'});
+    if (workerIds2socketIds[wid] == undefined){
+        workerIds2socketIds[wid] = [];
+    }
+
+    if( workerIds2socketIds[wid].indexOf(socketID) > -1 ) {
+        return false;
+    }else{
+        workerIds2socketIds[wid].push(socketID);
+        return true;
+    }
+}
+
+function __createNewWorker(workerType){
+    /* setup and store new worker */
+    let worker = _cp.fork(_path.join(__dirname, '__worker.js'));
+
+    let wid = workers.push(worker)-1;
+
+    workerIds2socketIds[wid] = [];
+    workerIds2workerType[wid] = workerType;
+
+    worker.on('message',
+        function(msg)
+        {
+            /* push changes (if any) to registered sockets... even empty
+                changelogs are pushed to facilitate sequence number-based
+                ordering */
+            if( msg['changelog'] !== undefined )
+            {
+                send_to_all(wid, msg);
+            }
+
+            /* respond to a request */
+            if( msg['respIndex'] !== undefined )
+                _utils.respond(
+                    responses[msg['respIndex']],
+                    msg['statusCode'],
+                    msg['reason'],
+                    JSON.stringify(
+                        {'headers':
+                                (msg['headers'] ||
+                                    {'Content-Type': 'text/plain',
+                                        'Access-Control-Allow-Origin': '*'}),
+                            'data':msg['data'],
+                            'sequence#':msg['sequence#']}),
+                    {'Content-Type': 'application/json'});
+        });
+
+
+
+    let msg = {'workerType':workerType, 'workerId':wid};
+    logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': workerType + wid, 'type':"-)"});
+
+    async function inform_mmmk_manager(msg) {
+        let __sock_mmmk = new _zmq.Request();
+        __sock_mmmk.connect("tcp://127.0.0.1:5555");
+        msg = JSON.stringify(msg);
+        console.log("Sending to MMMK: " + msg);
+        await __sock_mmmk.send(msg);
+        return await __sock_mmmk.receive();
+    }
+
+    let res = inform_mmmk_manager(["-1", "create_worker", msg]);
+
+    worker.send(msg);
+
+    logger.http("http _ 'resp on worker creation: wid:'"+ wid, {'at':"session_mngr"});
+    return wid
+}
+
 function handle_http_message(url, req, resp){
 
     logger.http("fcn call _ 'message'",{'from': 'server', 'to':"session_mngr"});
 
+    /* create new client ID and return it */
+    if (req.method == 'POST' && url.pathname == '/newCID'){
+        let cid = _uuid.v4()
+        logger.http("http _ 'resp cid'+ <br/>" + ''+cid ,{'from':"session_mngr",'to': 'client', 'type':"-)"});
+        _utils.respond(
+            resp,
+            201,
+            '',
+            ''+cid);
+        return;
+    }
     /* spawn new worker */
-    if( (url.pathname == '/csworker' || url.pathname == '/asworker')
+    else if( (url.pathname == '/csworker' || url.pathname == '/asworker')
         && req.method == 'POST' )
     {
-        /* setup and store new worker */
-        let worker = _cp.fork(_path.join(__dirname, '__worker.js'));
 
-        let wid = workers.push(worker)-1;
-
-        workerIds2socketIds[wid] = [];
-        workerIds2workerType[wid] = url.pathname;
-
-        worker.on('message',
-            function(msg)
-            {
-                /* push changes (if any) to registered sockets... even empty
-                    changelogs are pushed to facilitate sequence number-based
-                    ordering */
-                if( msg['changelog'] !== undefined )
-                {
-                    send_to_all(wid, msg);
-                }
-
-                /* respond to a request */
-                if( msg['respIndex'] !== undefined )
-                    _utils.respond(
-                        responses[msg['respIndex']],
-                        msg['statusCode'],
-                        msg['reason'],
-                        JSON.stringify(
-                            {'headers':
-                                    (msg['headers'] ||
-                                        {'Content-Type': 'text/plain',
-                                            'Access-Control-Allow-Origin': '*'}),
-                                'data':msg['data'],
-                                'sequence#':msg['sequence#']}),
-                        {'Content-Type': 'application/json'});
-            });
-
-        let msg = {'workerType':url.pathname, 'workerId':wid};
-        logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': url.pathname + wid, 'type':"-)"});
-        worker.send(msg);
-
-        async function inform_mmmk_manager(msg) {
-            let __sock_mmmk = new _zmq.Request();
-            __sock_mmmk.connect("tcp://127.0.0.1:5555");
-            msg = JSON.stringify(msg);
-            console.log("Sending to MMMK: " + msg);
-            await __sock_mmmk.send(msg);
-            let res = await __sock_mmmk.receive();
-            return JSON.parse(res);
-        }
-
-        let res = inform_mmmk_manager(["-1", "create_worker", msg]);
-
-        logger.http("http _ 'resp on worker creation: wid:'"+ wid, {'at':"session_mngr"});
+        let wid = __createNewWorker(url.pathname);
 
         /* respond worker id (used to identify associated worker) */
         _utils.respond(
@@ -200,47 +318,65 @@ function handle_http_message(url, req, resp){
             201,
             '',
             ''+wid);
+        return;
+    }
+
+    let wids = undefined;
+
+    // first, try to get the wid(s) from the client id
+    // this is developed so that clients can talk to multiple cs workers if needed
+    if (url['query'] != undefined && url['query']['cid'] != undefined){
+        wids = clientIDs2csids[url['query']['cid']];
+    }
+
+    // if the mapping wasn't possible, check if the message contains the wid
+    // this is normal in the case for a HTTP message from a CSWorker
+    if (wids == undefined && url['query'] != undefined && url['query']['wid'] != undefined){
+        wids = [parseInt(url['query']['wid'])];
     }
 
     /* check for worker id and it's validity */
-    else if( url['query'] == undefined ||
-        url['query']['wid'] == undefined )
+    if (wids == undefined)
         _utils.respond(resp, 400, 'missing worker id');
 
-    else if( workers[url['query']['wid']] == undefined )
-        _utils.respond(resp, 400, 'invalid worker id :: '+url['query']['wid']);
-
-    /* save resp object and forward request to worker (if request is PUT or
-          POST, recover request data first)
-
-        TBI:: only registered sockets should be allowed to speak to worker
-                ... one way of doing this is forcing request urls to contain
-                cid=socket.id## */
-    else if( req.method == 'PUT' || req.method == 'POST' )
-    {
-        let reqData = '';
-        req.addListener("data", function(chunk) {reqData += chunk;});
-        req.addListener("end",
-            function()
-            {
-                workers[url['query']['wid']].send(
-                    {'method':req.method,
-                        'uri':url.pathname,
-                        'reqData':(reqData == '' ?
-                            undefined :
-                            eval('('+reqData+')')),
-                        'uriData':url['query'],
-                        'respIndex':responses.push(resp)-1});
-            });
+    for (let wid of wids) {
+        if (workers[wid] == undefined)
+            _utils.respond(resp, 400, 'wid ' + wid + ' not found in workers: ' + workers);
     }
-    else {
-        workers[url['query']['wid']].send(
-            {
-                'method': req.method,
-                'uri': url.pathname,
-                'uriData': url['query'],
-                'respIndex': responses.push(resp) - 1
+
+    /* save resp object and forward request to worker(s) (if request is PUT or
+          POST, recover request data first) */
+    // again, in the future, requests might need to be directed to multiple workers
+    if (req.method == 'PUT' || req.method == 'POST') {
+        let reqData = '';
+        req.addListener("data", function (chunk) {
+            reqData += chunk;
+        });
+        req.addListener("end",
+            function () {
+                for (let wid of wids) {
+                    workers[wid].send(
+                        {
+                            'method': req.method,
+                            'uri': url.pathname,
+                            'reqData': (reqData == '' ?
+                                undefined :
+                                eval('(' + reqData + ')')),
+                            'uriData': url['query'],
+                            'respIndex': responses.push(resp) - 1
+                        });
+                }
             });
+    } else {
+        for (let wid of wids) {
+            workers[wid].send(
+                {
+                    'method': req.method,
+                    'uri': url.pathname,
+                    'uriData': url['query'],
+                    'respIndex': responses.push(resp) - 1
+                });
+        }
     }
 }
 
@@ -273,5 +409,4 @@ module.exports = {
     socket_server,
     init_session_manager,
     handle_http_message,
-    send_to_all,
 }

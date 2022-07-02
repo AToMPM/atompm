@@ -212,17 +212,27 @@ function __wHttpReq(method,url,data,port)
 
 /******************************* MMMK COMMS *******************************/
 
-let __sock_mmmk;
-
 async function __mmmkReq(msg) {
 
 	// add the worker id to the message
-	let worker_id = __wtype+__wid;
+	let worker_id = __wtype + __wid;
 	msg.unshift(worker_id)
-	console.log("Sending to MMMK: [" + msg[0] + ", " + msg[1] + "...]");
+
+	console.log("Worker '" + __wid + "' sending to MMMK: [" + msg[0] + ", " + msg[1] + "...]");
 	msg = JSON.stringify(msg);
-	__sock_mmmk.send(msg);
-	let res = await __sock_mmmk.receive();
+
+	// for every request, create a new socket
+	// TODO: Make this better
+	let worker_address = 5555// + 1 + parseInt(__wid);
+	let sock = new _zmq.Request();
+	sock.connect("tcp://127.0.0.1:" + worker_address);
+
+	await sock.send(msg);
+
+	let res = await sock.receive();
+
+	// console.log("Receiving:");
+	// console.log(JSON.parse(res));
 	return JSON.parse(res);
 }
 
@@ -237,25 +247,44 @@ function compare_objects(res1, res2){
 	}
 }
 
+function handleDiffs(entry){
+	return JSON.stringify(entry).replace(/ /g, "")
+}
+
 //compares the changelogs from the mmmk and pymmmk to see if there are any differences
 function compare_changelogs(res1, res2){
-	let chlg1 = res1["changelog"] || res1["$err"];
-	let chlg2 = res2["changelog"] || res1["$err"];
+	let chlg1 = res1["changelog"] || res1["$err"] || res1;
+	let chlg2 = res2["changelog"] || res2["$err"] || res2;
+
+	// assume nothing is wrong in this case
+	if (chlg1 == undefined && chlg2 == undefined){
+		return;
+	}
 
 	let failed = false;
-	if (chlg1.length != chlg2.length){
+	if (chlg1 == undefined || chlg2 == undefined || chlg1.length != chlg2.length){
 		failed = true;
+		console.log("ERROR: Changelogs are different lengths!");
 		console.log(chlg1);
 		console.log(chlg2);
+		return;
 	}
+
+	if (Object.keys(chlg1).toString() != Object.keys(chlg2).toString()){
+		console.log("ERROR: Changelogs have different keys!");
+		console.log(chlg1);
+		console.log(chlg2);
+		return;
+	}
+
 	for (let i = 0; !failed && i < chlg1.length; i++){
-		let entry1 = JSON.stringify(chlg1[i]).replace(/ /g, "")
-		let entry2 = JSON.stringify(chlg2[i]).replace(/ /g, "")
+		let entry1 = handleDiffs(chlg1[i])
+		let entry2 = handleDiffs(chlg2[i])
 		if (entry1 != entry2){
 			failed = true;
-			console.log("ERROR: Changelogs do not match!");
 			console.log(entry1);
 			console.log(entry2);
+			console.log("ERROR: Changelogs do not match!");
 		}
 	}
 }
@@ -548,11 +577,6 @@ process.on('message',
 				 throw "Error! Unknown worker type: " + __wtype;
 			}
 			_mmmk   = require('./mmmk');
-
-			//TODO: In future, communicate directly to PyMMMKs
-			let worker_address = 5555// + 1 + parseInt(__wid);
-			__sock_mmmk = new _zmq.Request();
-			__sock_mmmk.connect("tcp://127.0.0.1:" + worker_address);
 
             _mt  	  = require('./libmt');
 

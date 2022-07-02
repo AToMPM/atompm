@@ -1,7 +1,7 @@
 const div_utils = require('./div_utils');
 const {fix_selector} = require("./div_utils");
 
-async function create_class(client, x, y, i, element_type) {
+function create_class(client, x, y, i, element_type) {
 
     let class_div;
     if (element_type == undefined) {
@@ -12,10 +12,9 @@ async function create_class(client, x, y, i, element_type) {
         class_div = div_utils.get_element_div(element_type, i);
     }
 
-    //const canvas = await client.findElement(div_utils.canvas);
-    await client
-        .perform(function () {
-            const actions = this.actions({async: true});
+    //const canvas = client.findElement(div_utils.canvas);
+    client.perform(function () {
+            const actions = this.actions({async: false});
             return actions
                 .move({'x': x, 'y': y})
                 .contextClick();
@@ -28,10 +27,10 @@ async function create_class(client, x, y, i, element_type) {
 
 }
 
-async function create_classes(client, x_coords, y_coords, curr_num_elements, element_type) {
+function create_classes(client, x_coords, y_coords, curr_num_elements, element_type) {
     for (let x of x_coords) {
         for (let y of y_coords) {
-            await this.create_class(client, x, y, curr_num_elements, element_type);
+            this.create_class(client, x, y, curr_num_elements, element_type);
             curr_num_elements++;
         }
     }
@@ -39,25 +38,30 @@ async function create_classes(client, x_coords, y_coords, curr_num_elements, ele
     return curr_num_elements;
 }
 
-async function create_assoc(client, start_div, end_div, relation_div, offset, offset2) {
+function create_assoc(client, start_div, end_div, relation_div, offset, offset2) {
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
 
     if (offset2 == undefined){
         offset2 = offset;
     }
 
-    const start = await client.findElement(start_div);
-    const end = await client.findElement(end_div);
-    await client
+    let start, end;
+
+    client.findElement(start_div, response => {
+                start = response.value;
+            })
+        .findElement(end_div, response => {
+                end = response.value;
+            })
         .perform(function () {
-            const actions = this.actions({async: true});
-            return actions
-                .move({'origin':start, "x":offset[0], "y":offset[1]})
-                .press(2)
-                .move({'origin':end, "x":offset2[0], "y":offset2[1]})
-                .release(2)
-        });
+                const actions = this.actions({async: false});
+                return actions
+                    .move({'origin':start, "x":offset[0], "y":offset[1]})
+                    .press(2)
+                    .move({'origin':end, "x":offset2[0], "y":offset2[1]})
+                    .release(2)
+            })
 
 
     // this.move_to_element_ratio(client, start_div, 50 + offset, 50 + offset);
@@ -65,32 +69,37 @@ async function create_assoc(client, start_div, end_div, relation_div, offset, of
     // this.move_to_element_ratio(client, end_div, 50 + offset, 50 + offset);
     // client.mouseButtonUp('right').pause(300);
 
-    if (relation_div != undefined && relation_div != "") {
-        client.waitForElementPresent(relation_div, 1000, "Relation option present: " + relation_div);
-        client.click(relation_div);
-        client.waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
-            .click("#dialog_btn")
-            .pause(300)
-            .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
-    }
-
-    await this.deselect_all(client);
+        .perform(function () {
+                if (relation_div != undefined && relation_div != "") {
+                    client.waitForElementPresent(relation_div, 2000, "Relation option present: " + relation_div)
+                        .click(relation_div)
+                        .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
+                        .click("#dialog_btn")
+                        .pause(300)
+                        .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
+                }        
+            });
+    this.deselect_all(client);
     client.pause(300);
 
 }
 
-async function move_element(client, from_div, to_div, from_offset, to_offset) {
+function move_element(client, from_div, to_div, from_offset, to_offset) {
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
 
-    const start = await client.findElement(from_div);
-    const end = await client.findElement(to_div);
+    let start, end;
+    client.findElement(from_div, response => {
+                start = response.value;
+            })
+        .findElement(to_div, response => {
+                end = response.value;
+            })
 
-    await client
         .perform(function () {
-            const actions = this.actions({async: true});
+            const actions = this.actions({async: false});
             return actions
-                .move({"origin": start})
+                .move({"origin": start, "x":from_offset[0], "y":from_offset[1]})
                 .click(0)
                 .pause(100)
                 .press(0)
@@ -102,10 +111,10 @@ async function move_element(client, from_div, to_div, from_offset, to_offset) {
             //dragAndDrop(start, end);
         });
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
 }
 
-async function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
+function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
 
     let element_div = element_type;
     if (element_type == undefined){
@@ -122,40 +131,41 @@ async function set_attribs(client, num, attrs, element_type, div_suffix, offset)
         offset = [0, 0];
     }
 
-    await this.deselect_all(client);
+    this.deselect_all(client);
+    let ele;
 
-    client.waitForElementPresent(element_div, 1000, "Find element for attrib set: " + element_div);
-
-    const ele = await client.findElement(element_div);
-    await client
+    client.waitForElementPresent(element_div, 2000, "Find element for attrib set: " + element_div)
+        .findElement(element_div, response => {
+                ele = response.value;
+            })
         .perform(function () {
-            const actions = this.actions({async: true});
-            return actions
-                .move({'origin': ele, "x":offset[0], "y":offset[1]})
-                .click()
-        });
-    await client
-        .perform(function () {
-            const actions = this.actions({async: true});
-            return actions
-                .sendKeys(client.Keys.INSERT);
-        });
-    client.waitForElementPresent("#dialog_btn", 1000, "Editing menu opens");
-
-    for (const [key, value] of Object.entries(attrs)) {
-        const ele = await client.findElement(key);
-
-        if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean"))
-            client.click(ele);
-        else
-            client.updateValue(key, value);
-    }
-
-    client
+                const actions = this.actions({async: false});
+                return actions
+                    .move({'origin': ele, "x":offset[0], "y":offset[1]})
+                    .click()
+                    .pause(300)
+                    .sendKeys(client.Keys.INSERT);
+            })
+        .waitForElementPresent("#dialog_btn", 2000, "Editing menu opens")
+        .perform((function (attrs) {
+                let ele2;
+                for (const [key, value] of Object.entries(attrs)) {
+                    client.findElement(key, response => {
+                                ele2 = response.value;
+                            })
+                        .perform(function (){
+                                if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean")){
+                                    client.moveToElement(ele2,offset[0],offset[1])
+                                        .click(ele2);
+                                }else
+                                    client.updateValue(key, value);                        
+                            })
+                }
+            }).call(this,attrs))
         .click("#dialog_btn")
         .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
 
-    await deselect_all(client);
+    deselect_all(client);
 }
 
 function move_to_element_ratio(client, element, x_ratio, y_ratio) {
@@ -168,64 +178,68 @@ function move_to_element_ratio(client, element, x_ratio, y_ratio) {
     });
 }
 
-async function delete_element(client, element) {
-    await this.deselect_all(client);
+function delete_element(client, element) {
+    this.deselect_all(client);
 
-    const ele = await client.findElement(element);
-    await client
+    let ele;
+    client.findElement(element, response => {
+                ele = response.value;
+            })
         .perform(function () {
-            const actions = this.actions({async: true});
-            return actions
-                .move({'origin': ele})
-                .click()
-        });
-    client.pause(200);
-    await client
+                const actions = this.actions({async: false});
+                return actions
+                    .move({'origin': ele})
+                    .click()
+            })
+        .pause(200)
         .perform(function () {
-            const actions = this.actions({async: true});
-            return actions
-                .sendKeys(client.Keys.DELETE);
-        });
+                const actions = this.actions({async: false});
+                return actions
+                    .sendKeys(client.Keys.DELETE);
+            })
+        .waitForElementNotPresent(element, 2000, "Deleted element");
 
-    client.waitForElementNotPresent(element, 2000, "Deleted element");
-
-    await this.deselect_all(client);
+    this.deselect_all(client);
 }
 
-async function hit_control_element(client, element) {
-    //await this.deselect_all(client);
+function hit_control_element(client, element) {
+    //this.deselect_all(client);
 
-    const ele = await client.findElement(element);
-    await client
+    let ele;
+    client.findElement(element, response => {
+                ele = response.value;
+            })
         .perform(function () {
-            const actions = this.actions({async: true});
-            return actions
-                .move({'origin': ele})
-                .click()
-        });
-    client.pause(200);
-    await client
+                const actions = this.actions({async: false});
+                return actions
+                    .move({'origin': ele})
+                    .click()
+            })
+        .pause(200)
         .perform(function () {
-            const actions = this.actions({async: true});
-            return actions
-                .sendKeys(client.Keys.CONTROL);
-        });
+                const actions = this.actions({async: false});
+                return actions
+                    .sendKeys(client.Keys.CONTROL);
+            });
 
     //client.waitForElementNotPresent(element, 2000, "Deleted element");
 
-    //await this.deselect_all(client);
+    //this.deselect_all(client);
 }
 
 
 
-async function deselect_all(client) {
-    await client
+function deselect_all(client) {
+    // Perform twice to make sure
+    client
         .perform(function () {
-            const actions = this.actions({async: true});
+            const actions = this.actions({async: false});
             return actions
-                .sendKeys(client.Keys.ESCAPE);
+                .sendKeys(client.Keys.ESCAPE)
+                .pause(200)
+                .sendKeys(client.Keys.ESCAPE)
         });
-    client.pause(200);
+    client.pause(300);
 }
 
 function navigate_to_folder(client, folder_name) {
@@ -391,35 +405,34 @@ function load_multiple_models(client, fnames) {
 
 function load_toolbar(client, fnames) {
 
-    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
+    client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded")
+        .perform( function (){
+            for (let name of fnames) {
+                let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
+                toolbar_name = "#div_toolbar_" + toolbar_name;
 
-    for (let name of fnames) {
-        client.execute(
-            function (fname) {
-                _loadToolbar(fname);
-            }, [name], null
-        );
-
-        let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
-        toolbar_name = "#div_toolbar_" + toolbar_name;
-
-        //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
-
-        client.element('css selector', '#dialog_btn', function (result) {
-            if (result.status != -1) {
-                //Dialog has popped up, so check the text and click the button
-                client.assert.textContains("#div_dialog_0", "File not found");
-                client.click("#dialog_btn");
-
-                client.verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
-            } else {
-                //Toolbar loaded, so check for it
-                client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
+                client.execute(
+                        function (fname) {
+                            _loadToolbar(fname);
+                        }, [name], null
+                    )
+        
+                //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
+        
+                    .element('css selector', '#dialog_btn', function (result) {
+                        if (result.status != -1) {
+                            //Dialog has popped up, so check the text and click the button
+                            client.assert.textContains("#div_dialog_0", "File not found")
+                                .click("#dialog_btn")
+            
+                                .verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
+                        } else {
+                            //Toolbar loaded, so check for it
+                            client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
+                        }
+                    });
             }
-        });
-
-    }
-
+        })
 }
 
 

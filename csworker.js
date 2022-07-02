@@ -190,11 +190,12 @@ const {
     __httpReq,
     __id_to_uri,
     __wHttpReq,
+    __mmmkReq,
     __postInternalErrorMsg, __postMessage,
     __postBadReqErrorMsg, __postForbiddenErrorMsg,
     __sequenceNumber,
     __successContinuable,
-    __uri_to_id
+    __uri_to_id, compare_changelogs
 } = require("./__worker");
 
 const _path = require('path');
@@ -244,7 +245,7 @@ module.exports = {
     '__pendingChangelogs': [],
     '__hitchhikerJournal': {},
     '__applyASWChanges':
-        function (changelog, aswSequenceNumber, hitchhiker) {
+        async function (changelog, aswSequenceNumber, hitchhiker) {
             let log_chs = _utils.collapse_changelog(changelog);
             logger.debug('worker#' + __wid + ' << (' + aswSequenceNumber + ') ' + _utils.jsons(log_chs));
 
@@ -276,10 +277,14 @@ module.exports = {
 
             /* special handling of undo/redo changelogs (see NOTES above) */
             if (hitchhiker && 'undo' in hitchhiker) {
-                let chglg = _mmmk.undo(hitchhiker['undo'])['changelog']
+                let chglg2 = _mmmk.undo(hitchhiker['undo'])['changelog'];
+                let chglg = await __mmmkReq(["undo", hitchhiker['undo']])['changelog'];
+                compare_changelogs(chglg, chglg2);
                 cschangelogs.push(chglg);
             } else if (hitchhiker && 'redo' in hitchhiker) {
-                let chglg = _mmmk.redo(hitchhiker['redo'])['changelog']
+                let chglg2 = _mmmk.undo(hitchhiker['redo'])['changelog'];
+                let chglg = await __mmmkReq(["redo", hitchhiker['redo']])['changelog'];
+                compare_changelogs(chglg, chglg2);
                 cschangelogs.push(chglg);
             }
 
@@ -324,7 +329,7 @@ module.exports = {
                             optimize future operations) */
                         else if (step['op'] == 'MKNODE') {
                             actions.push(
-                                function () {
+                                async function () {
                                     manageHitchhiker(step['id']);
 
                                     let asid = step['id'];
@@ -350,8 +355,11 @@ module.exports = {
                                     else
                                         attrs['position'] = [200, 200];
 
-                                    let res = _mmmk.create(fullcstype, attrs),
-                                        csid = res['id'];
+                                    let res2 = _mmmk.create(fullcstype, attrs);
+                                    let res = await __mmmkReq(["create", fullcstype, attrs]);
+                                    compare_changelogs(res2, res)
+
+                                    let csid = res['id'];
 
                                     self.__asid2csid[asid] = csid;
                                     cschangelogs.push(res['changelog']);
@@ -370,11 +378,15 @@ module.exports = {
                                         s[src + '--' + __id_to_uri(csid)] = segments[0];
                                         s[__id_to_uri(csid) + '--' + dest] = segments[1];
 
-                                        let chglg = _mmmk.update(csid, {'$segments': s})['changelog'];
+                                        let chglg2 = _mmmk.update(csid, {'$segments': s})['changelog'];
+                                        let res = await __mmmkReq(["update", csid, {'$segments': s}]);
+                                        let chglg = res['changelog'];
+
+                                        compare_changelogs(chglg, chglg2)
                                         cschangelogs.push(chglg, self.__positionLinkDecorators(csid));
                                     }
 
-                                    return self.__regenIcon(csid);
+                                   return self.__regenIcon(csid);
                                 },
                                 function (riChangelog) {
                                     cschangelogs.push(riChangelog);
@@ -385,11 +397,14 @@ module.exports = {
                               to remain consistent */
                         else if (step['op'] == 'RMNODE')
                             actions.push(
-                                function () {
+                                async function () {
                                     let asid = step['id'];
                                     let csid = self.__asid_to_csid(asid);
 
-                                    let chglg = _mmmk.delete(csid)['changelog']
+                                    let chglg2 = _mmmk.delete(csid)['changelog']
+                                    let chglg = await __mmmkReq(["delete", csid])['changelog'];
+                                    compare_changelogs(chglg, chglg2)
+
                                     cschangelogs.push(chglg);
                                     delete self.__asid2csid[asid];
                                     return __successContinuable();
@@ -402,14 +417,17 @@ module.exports = {
                                      before regenerating the icon */
                         else if (step['op'] == 'CHATTR')
                             actions.push(
-                                function () {
+                                async function () {
                                     let asid = step['id'];
                                     let csid = self.__asid_to_csid(asid);
 
                                     if (hitchhiker && 'cschanges' in hitchhiker) {
                                         let cschanges = hitchhiker['cschanges'];
 
-                                        let chglg = _mmmk.update(csid, cschanges)['changelog'];
+                                        let chglg2 = _mmmk.update(csid, cschanges)['changelog'];
+                                        let chglg = await __mmmkReq(["update", csid, cschanges])['changelog'];
+                                        compare_changelogs(chglg2, chglg)
+
                                         cschangelogs.push(chglg,
                                             ('$segments' in cschanges ?
                                                 self.__positionLinkDecorators(csid) :
@@ -427,14 +445,18 @@ module.exports = {
                             optimize future operations */
                         else if (step['op'] == 'LOADMM')
                             actions.push(
-                                function () {
+                                async function () {
                                     manageHitchhiker(step['name']);
 
                                     let asmm = step['name'];
                                     let csmm = hitchhiker['name'];
                                     let data = hitchhiker['csmm'];
 
-                                    let chglg = _mmmk.loadMetamodel(csmm, data)['changelog'];
+                                    let chglg2 = _mmmk.loadMetamodel(csmm, data)['changelog'];
+                                    let d = await __mmmkReq(["loadMetamodel", csmm, data]);
+                                    let chglg = d['changelog'];
+                                    compare_changelogs(chglg, chglg2)
+
                                     cschangelogs.push(chglg,
                                         {
                                             'op': 'LOADASMM',
@@ -449,11 +471,14 @@ module.exports = {
                               it to remain consistent */
                         else if (step['op'] == 'DUMPMM')
                             actions.push(
-                                function () {
+                                async function () {
                                     let asmm = step['name'];
                                     let csmm = self.__asmm2csmm[asmm];
 
-                                    let chglg = _mmmk.unloadMetamodel(csmm)['changelog']
+                                    let chglg2 = _mmmk.unloadMetamodel(csmm)['changelog']
+                                    let chglg = await __mmmkReq(["unloadMetamodel", csmm])['changelog'];
+                                    compare_changelogs(chglg, chglg2)
+
                                     cschangelogs.push(chglg);
                                     delete self.__asmm2csmm[asmm];
                                     return __successContinuable();
@@ -467,17 +492,24 @@ module.exports = {
                             be-inserted csm */
                         else if (step['op'] == 'RESETM')
                             actions.push(
-                                function () {
+                                async function () {
+                                    let _csm3 = _mmmk.read();
+                                    let _csm4 = await __mmmkReq(["read"]);
+                                    compare_changelogs(_csm3, _csm4)
+
                                     manageHitchhiker(
                                         step['old_name'],
-                                        {'csm': _mmmk.read()});
+                                        {'csm': _csm4});
                                     manageHitchhiker(step['new_name']);
 
                                     let csm = hitchhiker['csm'];
                                     let _csm = eval('(' + csm + ')');
                                     if (step['insert']) {
                                         let asoffset = parseInt(step['insert']);
-                                        let csoffset = _mmmk.next_id;
+                                        let csoffset2 = _mmmk.next_id;
+                                        let csoffset = await __mmmkReq(["getNextID"]);
+                                        compare_changelogs(csoffset2, csoffset)
+
                                         let incUri =
                                             function (oldUri, offset) {
                                                 let matches = oldUri.match(/(.+\/)(.+)(\.instance)/);
@@ -511,19 +543,28 @@ module.exports = {
                                     //this loading should be done elsewhere in the model loading chain
                                     for (let i in _csm.metamodels) {
                                         let mm = _csm.metamodels[i];
+                                        let mms2 = _mmmk.readMetamodels()
+                                        let mms = await __mmmkReq(["readMetamodels"]);
+                                        compare_changelogs(mms2, mms)
 
-                                        if (!(_mmmk.model.metamodels.includes(mm))) {
+                                        if (!(mms.includes(mm))) {
                                             logger.error("Last-minute loading for CS metamodel: " + mm);
 
                                             let csmm = _fs.readFile('./users/' + mm, 'utf8');
                                             _mmmk.loadMetamodel(mm, csmm);
+                                            await __mmmkReq(["loadMetamodel", mm, csmm]);
                                         }
                                     }
 
-                                    let res = _mmmk.loadModel(
+                                    let res2 = _mmmk.loadModel(
                                         step['new_name'],
                                         csm,
                                         step['insert']);
+                                    let res = await __mmmkReq(["loadModel",
+                                        step['new_name'],
+                                        csm,
+                                        step['insert']]);
+                                    compare_changelogs(res2, res)
 
                                     if (res["$err"] == undefined) {
                                         cschangelogs.push(res['changelog']);
@@ -668,9 +709,11 @@ module.exports = {
                                 });
 
                                 _do.chain(actions)(
-                                    function (respData) {
+                                    async function (respData) {
                                         let state = respData['data'];
                                         _mmmk.clone(state['_mmmk']);
+                                        await __mmmkReq(["clone"], state['_mmmk']);
+
                                         self.__clone(state['_wlib']);
                                         let __ids2uris = state['__ids2uris'];
                                         set__ids2uris(__ids2uris);
@@ -741,8 +784,11 @@ module.exports = {
                  support the drawing and transformation of vobjects... this is
                  captured by buildVobjGeomAttrVal(), which we use in step 1f */
     '__positionLinkDecorators':
-        function (id) {
-            let link = _utils.jsonp(_mmmk.read(id));
+        async function (id) {
+            let link2 = _utils.jsonp(_mmmk.read(id));
+            let link = _utils.jsonp(await __mmmkReq(["read", id]));
+            compare_changelogs(link2, link)
+
             let vobjs = link['$contents']['value'].nodes;
             let segments = _utils.values(link['$segments']['value']);
             let path = segments[0] + segments[1].substring(segments[1].indexOf('L'));
@@ -774,7 +820,9 @@ module.exports = {
                 changes['$contents/value/nodes/' + vid + '/orientation'] =
                     _utils.buildVobjGeomAttrVal(
                         vobjs[vid]['orientation']['value'], pp.O);
-                let chglg = _mmmk.update(id, changes)['changelog'];
+                let chglg2 = _mmmk.update(id, changes)['changelog'];
+                let chglg = await __mmmkReq(["update", id, changes])['changelog'];
+                compare_changelogs(chglg2, chglg)
                 changelogs.push(chglg);
             }
 
@@ -819,10 +867,16 @@ module.exports = {
         function (id, newCsmm) {
             let changelogs = [];
             let self = this;
-            return function (callback, errback) {
+            return async function (callback, errback) {
                 if (newCsmm != undefined) {
-                    let node = _utils.jsonp(_mmmk.read(id));
-                    let asuri = _mmmk.read(id, '$asuri');
+                    let node2 = _utils.jsonp(_mmmk.read(id));
+                    let node = _utils.jsonp(await __mmmkReq(["read", id]));
+                    compare_changelogs(node2, node)
+
+                    let asuri2 = _mmmk.read(id, '$asuri');
+                    let asuri = await __mmmkReq(["read", id, '$asuri']);
+                    compare_changelogs(asuri2, asuri)
+
                     let asid = __uri_to_id(asuri);
 
                     let dict1 = {
@@ -831,17 +885,25 @@ module.exports = {
                         'orientation': node['orientation']['value'],
                         'scale': node['scale']['value']
                     };
-                    let s = _mmmk.read(id, '$segments');
+                    let s2 = _mmmk.read(id, '$segments');
+                    let s = await __mmmkReq(["read", id, '$segments']);
+                    compare_changelogs(s2, s)
+
                     let dict2 = {};
                     if (s['$err'] == undefined)
                         dict2 = {'$segments': s}
                     let attrs = _utils.mergeDicts([dict1, dict2]);
 
-                    let cres = _mmmk.create(
-                        newCsmm + '/' + node['$type'].match(/.*\/(.*)/)[1],
-                        attrs);
+                    let fulltype = newCsmm + '/' + node['$type'].match(/.*\/(.*)/)[1];
+                    let cres2 = _mmmk.create(fulltype, attrs);
+                    let cres = await __mmmkReq(["create", fulltype, attrs]);
+                    compare_changelogs(cres2, cres)
+
                     let csid = cres['id'];
-                    let dres = _mmmk['delete'](id);
+                    let dres2 = _mmmk['delete'](id);
+                    let dres = await __mmmkReq(["delete", id]);
+                    compare_changelogs(dres2, dres)
+
                     self.__asid2csid[asid] = id = csid;
                     changelogs.push(
                         cres['changelog'],
@@ -849,8 +911,12 @@ module.exports = {
                 }
 
                 let csuri = __id_to_uri(id);
-                let asuri = self.__csuri_to_asuri(csuri);
-                let icon = _utils.jsonp(_mmmk.read(id));
+                let asuri = await self.__csuri_to_asuri(csuri);
+
+                let icon2 = _utils.jsonp(_mmmk.read(id));
+                let icon = _utils.jsonp(await __mmmkReq(["read", id]));
+                compare_changelogs(icon2, icon)
+
                 let vobjects = icon['$contents']['value'];
                 let mappers = {};
 
@@ -868,7 +934,7 @@ module.exports = {
                             '/GET/' + asuri + '.mappings?wid=' + self.__aswid,
                             mappers)];
                     let successf =
-                        function (attrVals) {
+                        async function (attrVals) {
                             if ('$err' in attrVals)
                                 callback(
                                     [{
@@ -879,7 +945,11 @@ module.exports = {
                                 let changes = {};
                                 for (let fullattr in attrVals)
                                     changes[fullattr] = attrVals[fullattr];
-                                let result = _mmmk.update(id, changes);
+
+                                let result2 = _mmmk.update(id, changes);
+                                let result = await __mmmkReq(["update", id, changes]);
+                                compare_changelogs(result2, result)
+
                                 if ('$err' in result)
                                     callback(
                                         [{
@@ -946,9 +1016,15 @@ module.exports = {
     '__transformIcons':
         function (tgtCsmm, newCsmm) {
             let self = this;
-            return function (callback, errback) {
-                let m = _utils.jsonp(_mmmk.read());
-                let newCsmmData = _utils.jsonp(_mmmk.readMetamodels(newCsmm));
+            return async function (callback, errback) {
+                let m2 = _utils.jsonp(_mmmk.read());
+                let m = _utils.jsonp(await __mmmkReq(["read"]));
+                compare_changelogs(m2, m)
+
+                let newCsmmData2 = _utils.jsonp(_mmmk.readMetamodels(newCsmm));
+                let newCsmmData = _utils.jsonp(await __mmmkReq(["readMetamodels", newCsmm]));
+                compare_changelogs(newCsmmData2, newCsmmData)
+
                 let tgtIds = [];
                 let newIds = {};
                 let changelogs = [];
@@ -971,11 +1047,14 @@ module.exports = {
                             function () {
                                 return self.__regenIcon(id, newCsmm);
                             },
-                            function (changelog) {
+                            async function (changelog) {
                                 let newId = changelog[0]['id'];
                                 newIds[id] = newId;
 
-                                let chglg = _mmmk.read(newId, '$segments');
+                                let chglg2 = _mmmk.read(newId, '$segments');
+                                let chglg = await __mmmkReq(["read", newId, '$segments']);
+                                compare_changelogs(chglg2, chglg);
+
                                 changelogs.push(
                                     changelog.concat(
                                         '$err' in chglg ? [] : self.__positionLinkDecorators(newId)));
@@ -984,12 +1063,18 @@ module.exports = {
                     });
 
                 _do.chain(actions)(
-                    function () {
-                        let m = _utils.jsonp(_mmmk.read());
+                    async function () {
+                        let m2 = _utils.jsonp(_mmmk.read());
+                        let m = _utils.jsonp(await __mmmkReq(["read"]));
+                        compare_changelogs(m2, m);
+
                         for (let id in m.nodes) {
                             let matches = m.nodes[id]['$type'].match(/Link$/);
                             if (matches) {
-                                let s = _mmmk.read(id, '$segments');
+                                let s2 = _mmmk.read(id, '$segments');
+                                let s = await __mmmkReq(["read", id, '$segments']);
+                                compare_changelogs(s2, s);
+
                                 let changed = false;
                                 for (let edgeId in s) {
                                     let ends = edgeId.match(/(.*\.instance)--(.*\.instance)/);
@@ -1009,9 +1094,13 @@ module.exports = {
                                         delete s[edgeId];
                                     }
                                 }
-                                if (changed)
-                                    changelogs.push(
-                                        _mmmk.update(id, {'$segments': s})['changelog']);
+                                if (changed) {
+                                    let m2 = _mmmk.update(id, {'$segments': s})['changelog']
+                                    let m = await __mmmkReq(["update", id, {'$segments': s}])['changelog'];
+                                    compare_changelogs(m2, m);
+
+                                    changelogs.push(m);
+                                }
                             }
                         }
 
@@ -1057,12 +1146,16 @@ module.exports = {
         1. bundle info about _mmmk and _wlib
         2. return to querier */
     'GET /internal.state':
-        function (resp) {
+        async function (resp) {
+            let clone2 = _mmmk.clone();
+            let clone = await __mmmkReq(["clone"]);
+            compare_changelogs(clone2, clone);
+
             __postMessage(
                 {
                     'statusCode': 200,
                     'data': {
-                        '_mmmk': _mmmk.clone(),
+                        '_mmmk': clone,
                         '_wlib': this.__clone(),
                         '__ids2uris': _utils.clone(get__ids2uris()),
                         '__nextSequenceNumber': get__nextSequenceNumber()
@@ -1092,34 +1185,20 @@ module.exports = {
             if (this.__aswid > -1)
                 return __postForbiddenErrorMsg(resp, 'already subscribed to an asworker');
 
-            if (reqData != undefined) {
-                if (reqData['aswid'] == undefined ||
-                    reqData['cswid'] == undefined)
-                    return __postInternalErrorMsg(resp, 'missing AS and/or CS wid');
+            if (reqData == undefined) {
+                return __postForbiddenErrorMsg(resp, 'asworker is not present!');
+            }
 
-                logger.info("/csworker" + __wid + " attaching to /asworker" + reqData['aswid'] + " and cloning /csworker" + reqData['cswid']);
-                let actions = [this.__aswSubscribe(reqData['aswid'], reqData['cswid'])];
+            if (reqData['aswid'] == undefined && reqData['cswid'] == undefined)
+                return __postInternalErrorMsg(resp, 'missing AS and/or CS wid');
 
-                _do.chain(actions)(
-                    function () {
-                        GET__current_state(resp);
-                    },
-                    function (err) {
-                        __postInternalErrorMsg(resp, err);
-                    }
-                );
-            } else {
-                logger.http("/csworker" + __wid + " creating /asworker", {'at': '/csworker' + __wid});
+            if (reqData['cswid'] == undefined) {
+                let aswid = reqData['aswid'];
+
+                logger.http("/csworker" + __wid + " subscribing to /asworker" + aswid, {'at': '/csworker' + __wid});
 
                 let self = this;
-                let actions = [
-                    __httpReq("POST", "/asworker"),
-                    function (aswid) {
-                        logger.http(
-                            "/csworker" + __wid + " subscribing to /asworker" + aswid, {'at': '/csworker' + __wid});
-                        return self.__aswSubscribe(aswid);
-                    },
-                ];
+                let actions = [this.__aswSubscribe(aswid)];
 
                 _do.chain(actions)(
                     function () {
@@ -1129,6 +1208,18 @@ module.exports = {
                                 'data': self.__aswid,
                                 'respIndex': resp
                             });
+                    },
+                    function (err) {
+                        __postInternalErrorMsg(resp, err);
+                    }
+                );
+            } else {
+                logger.info("/csworker" + __wid + " attaching to /asworker" + reqData['aswid'] + " and cloning /csworker" + reqData['cswid']);
+                let actions = [this.__aswSubscribe(reqData['aswid'], reqData['cswid'])];
+
+                _do.chain(actions)(
+                    function () {
+                        GET__current_state(resp);
                     },
                     function (err) {
                         __postInternalErrorMsg(resp, err);
@@ -1188,10 +1279,12 @@ module.exports = {
                 let self = this;
                 let actions =
                     [_fs.readFile('./users' + reqData['csmm'], 'utf8'),
-                        function (csmmData) {
+                        async function (csmmData) {
                             sn = __sequenceNumber();
                             self.__checkpointUserOperation(sn);
-                            lres = _mmmk.loadMetamodel(csmm, csmmData);
+                            lres = await __mmmkReq(["loadMetamodel", csmm, csmmData]);
+                            compare_changelogs(_mmmk.loadMetamodel(csmm, csmmData), lres);
+
                             return __successContinuable();
                         },
                         function () {
@@ -1201,10 +1294,13 @@ module.exports = {
                         }];
 
                 _do.chain(actions)(
-                    function (changelog) {
+                    async function (changelog) {
                         __postMessage({'statusCode': 202, 'respIndex': resp});
 
-                        let ures = _mmmk.unloadMetamodel(self.__asmm2csmm[asmm]);
+                        let ures2 = _mmmk.unloadMetamodel(self.__asmm2csmm[asmm]);
+                        let ures = await __mmmkReq(["unloadMetamodel", self.__asmm2csmm[asmm]]);
+                        compare_changelogs(ures2, ures);
+
                         let changelogs = [lres['changelog'], changelog, ures['changelog']];
                         self.__asmm2csmm[asmm] = csmm;
 
@@ -1393,7 +1489,7 @@ module.exports = {
            b) ask asworker to create an instance of appropriate AS type
         3. launch chain... return success code or error */
     'POST *.type':
-        function (resp, uri, reqData/*pos|clone,[segments,src,dest]*/) {
+        async function (resp, uri, reqData/*pos|clone,[segments,src,dest]*/) {
             let matches =
                 uri.match(/((.*)\..*Icons)(\.pattern){0,1}\/((.*)Icon)\.type/) ||
                 uri.match(/((.*)\..*Icons)(\.pattern){0,1}\/((.*)Link)\.type/);
@@ -1405,96 +1501,94 @@ module.exports = {
             let asuri = matches[2] + (matches[3] || '') + '/' + matches[5] + '.type';
             let csmm = matches[1] + (matches[3] || '');
             let cstype = matches[4];
-            let types = _utils.jsonp(_mmmk.readMetamodels(csmm))['types'];
+
+            let types2 = _utils.jsonp(_mmmk.readMetamodels(csmm))['types'];
+            let types = _utils.jsonp(await __mmmkReq(["readMetamodels", csmm]))['types'];
+            compare_changelogs(types2, types);
 
             if (!(cstype in types)) {
                 return __postBadReqErrorMsg(
                     resp, 'no concrete syntax definition found for ' + cstype);
             }
 
-            let parser =
-                    types[cstype].filter(
-                        function (attr) {
-                            return attr['name'] == 'parser';
-                        })[0]['default'],
-                self = this,
-                actions =
-                    [__successContinuable(),
-                        function () {
-                            if (reqData == undefined)
-                                return __errorContinuable('missing creation parameters');
+            let parser = types[cstype].filter(
+                function (attr) {
+                    return attr['name'] == 'parser';
+                })[0]['default'];
+            let self = this;
+            let posting_params = async function () {
 
-                            let hitchhiker = {},
-                                reqParams = {},
-                                segments = reqData['segments'],
-                                src = reqData['src'],
-                                dest = reqData['dest'],
-                                pos = reqData['pos'];
+                if (reqData == undefined)
+                    return __errorContinuable('missing creation parameters');
 
-                            if (src != undefined &&
-                                dest != undefined) {
+                let hitchhiker = {},
+                    reqParams = {},
+                    segments = reqData['segments'],
+                    src = reqData['src'],
+                    dest = reqData['dest'],
+                    pos = reqData['pos'];
 
-                                let src_asuri = self.__csuri_to_asuri(src);
-                                if (src_asuri['$err'])
-                                    return __errorContinuable(src_asuri['$err']);
+                if (src != undefined && dest != undefined) {
 
-                                let dest_asuri = self.__csuri_to_asuri(dest);
-                                if (dest_asuri['$err'])
-                                    return __errorContinuable(dest_asuri['$err']);
+                    let src_asuri = await self.__csuri_to_asuri(src);
+                    if (src_asuri['$err'])
+                        return __errorContinuable(src_asuri['$err']);
 
-                                if (segments == undefined) {
-                                    segments = self.__defaultSegments(src, dest);
-                                }
+                    let dest_asuri = await self.__csuri_to_asuri(dest);
+                    if (dest_asuri['$err'])
+                        return __errorContinuable(dest_asuri['$err']);
 
-                                if (pos == undefined) {
-                                    pos = self.__nodesCenter([src_asuri, dest_asuri]);
-                                }
+                    if (segments == undefined) {
+                        segments = await self.__defaultSegments(src, dest);
+                    }
 
-                                hitchhiker = {
-                                    'segments': segments,
-                                    'src': src,
-                                    'dest': dest
-                                };
-                                reqParams = {
-                                    'src': src_asuri,
-                                    'dest': dest_asuri
-                                };
+                    if (pos == undefined) {
+                        pos = await self.__nodesCenter([src_asuri, dest_asuri]);
+                    }
 
-
-                            }
-
-                            if (pos == undefined)
-                                return __errorContinuable('missing position');
-
-                            hitchhiker['pos'] = pos;
-                            reqParams['attrs'] =
-                                self.__runParser(
-                                    parser,
-                                    {
-                                        'position': pos,
-                                        'orientation': 0,
-                                        'scale': [1, 1]
-                                    },
-                                    {});
-
-                            return __successContinuable(
-                                _utils.mergeDicts(
-                                    [{'hitchhiker': hitchhiker}, reqParams]));
-                        },
-                        function (asreqData) {
-                            return __wHttpReq(
-                                'POST',
-                                asuri + '?wid=' + self.__aswid,
-                                asreqData);
-                        }];
-
-            _do.chain(actions)(
-                function (res) {
-                    __postMessage({'statusCode': 202, 'respIndex': resp, 'reason': res});
-                },
-                function (err) {
-                    __postInternalErrorMsg(resp, err);
+                    hitchhiker = {
+                        'segments': segments,
+                        'src': src,
+                        'dest': dest
+                    };
+                    reqParams = {
+                        'src': src_asuri,
+                        'dest': dest_asuri
+                    };
                 }
+
+                if (pos == undefined)
+                    return __errorContinuable('missing position');
+
+                hitchhiker['pos'] = pos;
+                reqParams['attrs'] =
+                    self.__runParser(
+                        parser,
+                        {
+                            'position': pos,
+                            'orientation': 0,
+                            'scale': [1, 1]
+                        },
+                        {});
+
+                return _utils.mergeDicts(
+                        [{'hitchhiker': hitchhiker}, reqParams]);
+            };
+
+            let posting_command = function (asreqData) {
+                return __wHttpReq(
+                    'POST',
+                    asuri + '?wid=' + self.__aswid,
+                    asreqData);
+
+            };
+
+            let make_response = function(res){
+                __postMessage({'statusCode': 202, 'respIndex': resp, 'reason': res})
+            }
+
+            posting_params().then(
+                res => posting_command(res)(make_response)
             );
 
         },
@@ -1524,14 +1618,18 @@ module.exports = {
                     }];
 
             _do.chain(actions)(
-                function (respData) {
+                async function (respData) {
                     let data;
-                    if (reqData && 'full' in reqData)
+                    if (reqData && 'full' in reqData) {
+                        let cs2 = _mmmk.read(__uri_to_id(uri));
+                        let cs = await __mmmkReq(["read", __uri_to_id(uri)]);
+                        compare_changelogs(cs2, cs);
+
                         data = {
-                            'cs': _mmmk.read(__uri_to_id(uri)),
+                            'cs': cs,
                             'as': respData['data']
                         };
-                    else
+                    } else
                         data = respData['data'];
 
                     __postMessage(
@@ -1657,9 +1755,12 @@ module.exports = {
         3. if there are no AS impacts, perform requested CS update and post
             changelog */
     'PUT *.cs':
-        function (resp, uri, reqData) {
+        async function (resp, uri, reqData) {
             let id = __uri_to_id(uri);
-            let icon = _utils.jsonp(_mmmk.read(id));
+            let icon2 = _utils.jsonp(_mmmk.read(id));
+            let icon = _utils.jsonp(await __mmmkReq(["read", id]));
+            compare_changelogs(icon2, icon);
+
             let updd = this.__runParser(
                 icon['parser']['value'],
                 reqData['changes'],
@@ -1679,13 +1780,20 @@ module.exports = {
             else {
                 let sn = __sequenceNumber();
                 this.__checkpointUserOperation(sn);
+
+                let updates2 = _mmmk.update(id, reqData['changes'])['changelog']
+                let res = await __mmmkReq(["update", id, reqData['changes']]);
+
+                let updates = res['changelog']
+                compare_changelogs(updates2, updates);
+
+                let chnglg = updates.concat('$segments' in reqData['changes'] ?
+                    this.__positionLinkDecorators(id) :
+                    [])
                 __postMessage(
                     {
                         'statusCode': 200,
-                        'changelog':
-                            _mmmk.update(id, reqData['changes'])['changelog'].concat('$segments' in reqData['changes'] ?
-                                this.__positionLinkDecorators(id) :
-                                []),
+                        'changelog': chnglg,
                         'sequence#': sn,
                         'respIndex': resp
                     });
@@ -1709,7 +1817,7 @@ module.exports = {
         4. if there are no AS impacts, perform the requested VisualObject update
               and post changelog */
     'PUT *.vobject':
-        function (resp, uri, reqData) {
+        async function (resp, uri, reqData) {
             let matches = uri.match(/.*\/(.*)\.instance\/(.*)\.vobject/);
             if (!matches)
                 return __postBadReqErrorMsg(
@@ -1720,7 +1828,10 @@ module.exports = {
             let vid = matches[2];
             let vobjAttr = '$contents/value/nodes/' + vid;
 
-            let res = _mmmk.read(id, '$contents');
+            let res2 = _mmmk.read(id, '$contents');
+            let res = await __mmmkReq(["read", id, '$contents']);
+            compare_changelogs(res2, res);
+
             if (res['$err'])
                 return __postBadReqErrorMsg(resp, res['$err']);
 
@@ -1749,10 +1860,14 @@ module.exports = {
             else {
                 let sn = __sequenceNumber();
                 this.__checkpointUserOperation(sn);
+                let chnglg2 = _mmmk.update(id, _reqData)['changelog']
+                let chnglg = await __mmmkReq(["update", id, _reqData])['changelog'];
+                compare_changelogs(chnglg2, chnglg);
+
                 __postMessage(
                     {
                         'statusCode': 200,
-                        'changelog': _mmmk.update(id, _reqData)['changelog'],
+                        'changelog': chnglg,
                         'sequence#': sn,
                         'respIndex': resp
                     });
@@ -1890,10 +2005,14 @@ module.exports = {
                             asmm = _utils.jsonp(data);
                             return __successContinuable();
                         },
-                        function (result) {
+                        async function (result) {
+                            let csm2 = _mmmk.read();
+                            let csm = await __mmmkReq(["read"]);
+                            compare_changelogs(csm2, csm);
+
                             return __wHttpReq('PUT',
                                 uri + '?wid=' + aswid,
-                                ({'csm': _mmmk.read(), 'asmm': asmm}))
+                                ({'csm': csm, 'asmm': asmm}))
                         }]
                 } else {
                     actions = [__wHttpReq('PUT',
@@ -1934,14 +2053,17 @@ module.exports = {
             let actions = [__wHttpReq('GET', '/current.model?wid=' + this.__aswid)];
 
             _do.chain(actions)(
-                function (asdata) {
+                async function (asdata) {
                     let sn = asdata['sequence#'];
                     if (self.__nextASWSequenceNumber - 1 > sn)
                         self['PUT *.model'](resp, uri);
                     else if (self.__nextASWSequenceNumber - 1 < sn)
                         setTimeout(self['PUT *.model'], 200, resp, uri);
                     else {
-                        let res = _mmmk.read();
+                        let res2 = _mmmk.read();
+                        let res = await __mmmkReq(["read"]);
+                        compare_changelogs(res2, res);
+
                         if (res['$err'])
                             __postInternalErrorMsg(resp, res['$err']);
                         else {
@@ -2059,7 +2181,7 @@ module.exports = {
 
         },
     '__undoredo':
-        function (resp, uri, sn, func) {
+        async function (resp, uri, sn, func) {
             if (!sn.match(get__wtype())) {
                 let hitchhiker = {};
                 let reqData = {'hitchhiker': hitchhiker};
@@ -2097,14 +2219,18 @@ module.exports = {
                         __postInternalErrorMsg(resp, err);
                     }
                 );
-            } else
+            } else {
+                let chnglg2 = _mmmk[func](sn)['changelog']
+                let chnglg = await __mmmkReq([""+func, sn])['changelog'];
+                compare_changelogs(chnglg2, chnglg);
                 __postMessage(
                     {
                         'statusCode': 200,
-                        'changelog': _mmmk[func](sn)['changelog'],
+                        'changelog': chnglg,
                         'sequence#': __sequenceNumber(),
                         'respIndex': resp
                     });
+            }
         },
 
 
@@ -2137,14 +2263,22 @@ module.exports = {
         structure... this wrapper enables its lazy and transparent population as
           read queries are made */
     '__asid_to_csid':
-        function (asid) {
+        async function (asid) {
             if (this.__asid2csid[asid] != undefined)
                 return this.__asid2csid[asid];
 
-            let csm = _utils.jsonp(_mmmk.read());
-            for (let csid in csm.nodes)
-                if (__uri_to_id(_mmmk.read(csid, '$asuri')) == asid)
+            let csm2 = _utils.jsonp(_mmmk.read());
+            let csm = _utils.jsonp(await __mmmkReq(["read"]));
+            compare_changelogs(csm2, csm);
+
+            for (let csid in csm.nodes) {
+                let asuri2 = _mmmk.read(csid, '$asuri')
+                let asuri = await __mmmkReq(["read", csid, '$asuri']);
+                compare_changelogs(asuri2, asuri);
+
+                if (__uri_to_id(asuri) == asid)
                     return (this.__asid2csid[asid] = csid);
+            }
         },
 
 
@@ -2174,6 +2308,8 @@ module.exports = {
     '__checkpointUserOperation':
         function (sn) {
             _mmmk.setUserCheckpoint(sn);
+            __mmmkReq(["setUserCheckpoint"]);
+
             if (this.__handledSeqNums['i'] != undefined) {
                 this.__handledSeqNums['#s'].splice(this.__handledSeqNums['i'] + 1);
                 this.__handledSeqNums['i'] = undefined;
@@ -2213,11 +2349,14 @@ module.exports = {
     /* return the AS instance uri associated to the CS instance described by the
         given uri */
     '__csuri_to_asuri':
-        function (uri) {
+        async function (uri) {
             let csid = __uri_to_id(uri);
             if (csid['$err'])
                 return csid;
-            let asuri = _mmmk.read(csid, '$asuri');
+            let asuri2 = _mmmk.read(csid, '$asuri');
+            let asuri = await __mmmkReq(["read", csid, '$asuri']);
+            compare_changelogs(asuri2, asuri);
+
             if (asuri['$err'])
                 return asuri;
             return asuri;
@@ -2226,9 +2365,16 @@ module.exports = {
 
     /* compute 'default' segments between the given icons (specified via uri) */
     '__defaultSegments':
-        function (src, dest) {
-            let pos1 = _mmmk.read(__uri_to_id(src), 'position');
-            let pos2 = _mmmk.read(__uri_to_id(dest), 'position');
+        async function (src, dest) {
+            let pos1_ = _mmmk.read(__uri_to_id(src), 'position');
+            let pos2_ = _mmmk.read(__uri_to_id(dest), 'position');
+
+            let pos1 = await __mmmkReq(["read", __uri_to_id(src), 'position']);
+            let pos2 = await __mmmkReq(["read", __uri_to_id(dest), 'position']);
+
+            compare_changelogs(pos1_, pos1);
+            compare_changelogs(pos2_, pos2);
+
             let middle = [pos2[0] - (pos2[0] - pos1[0]) / 2.0,
                 pos2[1] - (pos2[1] - pos1[1]) / 2.0];
             return ['M' + pos1 + 'L' + middle, 'M' + middle + 'L' + pos2];
@@ -2237,18 +2383,24 @@ module.exports = {
 
     /* compute the x,y center of the icons given by the specified AS uris */
     '__nodesCenter':
-        function (asuris) {
+        async function (asuris) {
             let sumx = 0;
             let sumy = 0;
             let self = this;
-            asuris.forEach(
-                function (asuri) {
-                    let asid = __uri_to_id(asuri);
-                    let csid = self.__asid_to_csid(asid);
-                    let pos = _mmmk.read(csid, 'position');
-                    sumx += parseFloat(pos[0]);
-                    sumy += parseFloat(pos[1]);
-                });
+
+            await Promise.all(
+                asuris.map(
+                    async function (asuri) {
+                        let asid = __uri_to_id(asuri);
+                        let csid = await self.__asid_to_csid(asid);
+                        let pos2 = _mmmk.read(csid, 'position');
+                        let pos = await __mmmkReq(["read", csid, 'position']);
+
+                        compare_changelogs(pos2, pos);
+                        sumx += parseFloat(pos[0]);
+                        sumy += parseFloat(pos[1]);
+                    })
+            );
             return [sumx / asuris.length, sumy / asuris.length];
         },
 

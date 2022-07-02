@@ -39,8 +39,7 @@ module.exports = {
 	2. launch chain... return success code or error */
 	'__mtwid':undefined,
 	'mtwRequest' :
-		function(resp,method,uri,reqData)
-		{
+		async function (resp, method, uri, reqData) {
 			let self = this;
 			let actions =
 				[__successContinuable(),
@@ -52,6 +51,20 @@ module.exports = {
 							reqData,
 							8125);
 					}];
+
+			let mms1 = _mmmk.readMetamodels();
+			let mms = await __mmmkReq(["readMetamodels"])
+
+			compare_objects(mms1, mms)
+			if (mms['$err'])
+				return __errorContinuable(mms['$err']);
+
+			let m = await __mmmkReq(["read"])
+			let m1 = _mmmk.read();
+			compare_objects(m1, m)
+
+			if (m['$err'])
+				return __errorContinuable(m['$err']);
 
 			if( this.__mtwid == undefined )
 			{
@@ -107,21 +120,7 @@ module.exports = {
 										 'defaultDCL':prefs['default-mt-dcl']['value']},
   										8125);
 	  					},
-  						async function () {
-							let mms1 = _mmmk.readMetamodels();
-							let mms = await __mmmkReq(["readMetamodels"])
-
-							compare_objects(mms1, mms)
-							if (mms['$err'])
-								return __errorContinuable(mms['$err']);
-
-							let m1 = await __mmmkReq(["read"])
-							let m = _mmmk.read();
-							compare_objects(m1, m)
-
-							if (m['$err'])
-								return __errorContinuable(m['$err']);
-
+  						function () {
 							return __httpReq(
 								'PUT',
 								'/current.model?wid=' + self.__mtwid,
@@ -254,7 +253,7 @@ module.exports = {
 			__postMessage(
 				{
 					'statusCode': 200,
-					'changelog': res1['changelog'],
+					'changelog': res2['changelog'],
 					'sequence#': __sequenceNumber(),
 					'respIndex': resp
 				});
@@ -264,8 +263,8 @@ module.exports = {
 	/* load a model */
 	'PUT /current.model' :
 		async function (resp, uri, reqData/*m,name,insert,hitchhiker*/) {
-			let res = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
-			let res2 = await __mmmkReq(["loadModel", reqData['name'], reqData['m'], reqData['insert']]);
+			let res2 = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
+			let res = await __mmmkReq(["loadModel", reqData['name'], reqData['m'], reqData['insert']]);
 			compare_changelogs(res, res2)
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
@@ -299,23 +298,24 @@ module.exports = {
 			let matches = uri.match(/(.*)\.type/);
 			let fulltype = matches[1];
 			let res;
+			let res2;
 			if (reqData == undefined || reqData['src'] == undefined) {
-				res = _mmmk.create(fulltype, reqData['attrs']);
-				let res2 = await __mmmkReq(["create", fulltype, reqData['attrs']])
-				compare_changelogs(res, res2)
+				res2 = _mmmk.create(fulltype, reqData['attrs']);
+				res = await __mmmkReq(["create", fulltype, reqData['attrs']])
+
 			} else {
-				res = _mmmk.connect(
+				res2 = _mmmk.connect(
 				 	__uri_to_id(reqData['src']),
 				 	__uri_to_id(reqData['dest']),
 				 	fulltype,
 				 	reqData['attrs']);
-				let res2 = await __mmmkReq(["connect",
+				res = await __mmmkReq(["connect",
 					__uri_to_id(reqData['src']),
 					__uri_to_id(reqData['dest']),
 					fulltype,
 					reqData['attrs']]);
-				compare_changelogs(res, res2)
 			}
+			compare_changelogs(res2, res)
 
 			if ('$err' in res)
 				__postInternalErrorMsg(resp, res['$err']);
@@ -437,9 +437,10 @@ module.exports = {
 			let m1 = _utils.jsonp(_mmmk.read());
 			let m = await __mmmkReq(["read"]);
 
-			compare_objects(m1, m)
-
 			let model = _utils.jsonp(m);
+
+			compare_objects(m1, model)
+
 			if (uri.match(/(.*)\..*Icons\.metamodel/)) {
 				let mm = await __mmmkReq(["readMetamodels"])
 				let metamodels = _utils.jsonp(mm);
