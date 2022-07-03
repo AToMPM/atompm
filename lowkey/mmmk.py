@@ -125,6 +125,7 @@ class PyMMMK(Client):
         args = self.unpackArgs(args)
         logging.info("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
         
+        logging.info("{}: I'm now going to call dispatch with remote = True".format(self.__name))
         self.dispatch(op, args, remote = True)
         
     def unpackArgs(self, args):
