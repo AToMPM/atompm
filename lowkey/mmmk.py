@@ -63,12 +63,15 @@ class PyMMMK(Client):
             except:
                 return  # Interrupted
             if message == b"finished_snapshot":
-                logging.debug("{}: Received snapshot".format(self.__name))
+                logging.info("{}: Received snapshot".format(self.__name))
                 break  # Done
     
     # The behavior that will be executed in the polling loop
     def subscriberAction(self):
-        #logging.debug("{}: Printing received message.".format(self.__name))
+        if not self.__listen:
+            return
+        
+        logging.info("{}: Received message from lowkey.".format(self.__name))
         receviedMessage = self._subscriber.recv()
         senderId, senderType, senderName, op, args = self.getMessage(receviedMessage)
         
@@ -76,8 +79,11 @@ class PyMMMK(Client):
             #logging.debug("{}: Throwing message {} ### {}".format(self.__name, op, args))
             pass
         else:
-            logging.debug("{}: Processing message {} ### {}".format(self.__name, op, args))
+            logging.info("{}: Processing message {} ### {}".format(self.__name, op, args))
             self.processMessage(op, args)
+            
+    def listen(self, listen = True):
+        self.__listen = listen
 
     '''
     Message production
@@ -106,7 +112,7 @@ class PyMMMK(Client):
     def throwawayMessage(self, senderId, senderType, senderName):
         #logging.debug("{}: Checking if message is throwaway. SenderID: {}. My ID: {}. SenderType: {}. My type:{}. SenderName: {}. My name:{}.".format(self.__name, senderId, self._id, senderType, self.__type, senderName, self.__name))
         sameType = senderType == self.__type
-        #logging.debug("{}: Comparing {} to {}. Same? {}.".format(self.__name, senderType, self.__type, sameType))
+        logging.info("{}: Comparing {} to {}. Same? {}.".format(self.__name, senderType, self.__type, sameType))
         sameName = senderName == self.__name
         #logging.debug("{}: Comparing {} to {}. Same? {}.".format(self.__name, senderName, self.__name, sameName))
         #logging.debug("{}: Same type? {}. Same name? {}.".format(self.__name, sameType, sameName))
@@ -115,9 +121,9 @@ class PyMMMK(Client):
         return throwaway
 
     def processMessage(self, op, args):
-        logging.debug("{}: ProcessingMessage...........................".format(self.__name))
+        logging.info("{}: ProcessingMessage...........................".format(self.__name))
         args = self.unpackArgs(args)
-        logging.debug("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
+        logging.info("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
         
         self.dispatch(op, args, remote = True)
         
@@ -152,16 +158,20 @@ class PyMMMK(Client):
     This is the single point of entry from lowkey's point of view.
     '''
     def dispatch(self, op, args, remote = False):
-        logging.debug('PyMMMK.dispatch')
-        logging.debug("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
+        logging.info('PyMMMK.dispatch')
+        logging.info("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
         method_to_call = getattr(self, op)
-        logging.debug('PyMMMK -- calling self.{}'.format(op))
+        logging.info('PyMMMK -- calling self.{}'.format(op))
+        logging.info('{}: PyMMMK -- calling self.{}, args:{}, remote:{}'.format(self.__name, op, args, remote))
+        
         res = method_to_call(*args)
         
-        logging.debug(args)
+        logging.info(args)
         
         if self.messageToBeForwarded(op) and not remote:
-            logging.debug("Sending message to lowkey")
+            #If the message is the type that others need to now about (e.g., create) AND this message doesn't come from someone else.
+            #If the message comes from someone else, its distribution has been taken care of already.
+            logging.info("Sending message to lowkey")
             message = self.createMessage(f"senderType:{self.__type} ### senderName:{self.__name} ### op:{op} ### args:{args}")
             self._publisher.send(message)
         
@@ -170,9 +180,9 @@ class PyMMMK(Client):
         
         if remote:
             x = req.post('http://localhost:8124/atompm/csworker')
-            logging.debug(x.text)
+            logging.info(x.text)
         
-        logging.debug('Classes in the model: {}.'.format(len(self.model.nodes)))
+        logging.info('{}: Classes in the model: {}.'.format(self.__name, len(self.model.nodes)))
         
         return res
         
@@ -567,6 +577,7 @@ class PyMMMK(Client):
 
     def create(self, fullType, attrs):
         logging.debug('PyMMMK.create()')
+        logging.debug('{}: PyMMMK.create() -- fullType: {}, attrs: {}.'.format(self.__name, fullType, attrs))
         """
         0. create a step-checkpoint
         1. wrap _create in crudOp
