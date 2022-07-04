@@ -336,8 +336,10 @@ function handle_http_message(url, req, resp){
     }
 
     /* check for worker id and it's validity */
-    if (wids == undefined)
+    if (wids == undefined) {
         _utils.respond(resp, 400, 'missing worker id');
+        return;
+    }
 
     for (let wid of wids) {
         if (workers[wid] == undefined)

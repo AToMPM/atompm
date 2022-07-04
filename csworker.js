@@ -313,11 +313,11 @@ module.exports = {
                               incur */
                         if (step['op'] == 'MKEDGE' || step['op'] == 'RMEDGE')
                             actions.push(
-                                function () {
+                                async function () {
                                     let asid1 = step['id1'];
                                     let asid2 = step['id2'];
-                                    let csid1 = self.__asid_to_csid(asid1);
-                                    let csid2 = self.__asid_to_csid(asid2);
+                                    let csid1 = await self.__asid_to_csid(asid1);
+                                    let csid2 = await self.__asid_to_csid(asid2);
 
                                     cschangelogs.push(
                                         [{'op': step['op'], 'id1': csid1, 'id2': csid2}]);
@@ -368,13 +368,13 @@ module.exports = {
                                         let s = {},
                                             src =
                                                 hitchhiker['src'] ||
-                                                self.__asuri_to_csuri(hitchhiker['asSrc']),
+                                                await self.__asuri_to_csuri(hitchhiker['asSrc']),
                                             dest =
                                                 hitchhiker['dest'] ||
-                                                self.__asuri_to_csuri(hitchhiker['asDest']),
+                                                await self.__asuri_to_csuri(hitchhiker['asDest']),
                                             segments =
                                                 hitchhiker['segments'] ||
-                                                self.__defaultSegments(src, dest);
+                                                await self.__defaultSegments(src, dest);
                                         s[src + '--' + __id_to_uri(csid)] = segments[0];
                                         s[__id_to_uri(csid) + '--' + dest] = segments[1];
 
@@ -399,7 +399,7 @@ module.exports = {
                             actions.push(
                                 async function () {
                                     let asid = step['id'];
-                                    let csid = self.__asid_to_csid(asid);
+                                    let csid = await self.__asid_to_csid(asid);
 
                                     let chglg2 = _mmmk.delete(csid)['changelog']
                                     let chglg = await __mmmkReq(["delete", csid])['changelog'];
@@ -419,7 +419,7 @@ module.exports = {
                             actions.push(
                                 async function () {
                                     let asid = step['id'];
-                                    let csid = self.__asid_to_csid(asid);
+                                    let csid = await self.__asid_to_csid(asid);
 
                                     if (hitchhiker && 'cschanges' in hitchhiker) {
                                         let cschanges = hitchhiker['cschanges'];
@@ -1607,8 +1607,8 @@ module.exports = {
             let self = this;
             let actions =
                 [__successContinuable(),
-                    function () {
-                        let asuri = self.__csuri_to_asuri(uri);
+                    async function () {
+                        let asuri = await self.__csuri_to_asuri(uri);
                         if (asuri['$err'])
                             return __errorContinuable(asuri['$err']);
                         return __successContinuable(asuri);
@@ -1661,8 +1661,8 @@ module.exports = {
             let self = this;
             let actions =
                 [__successContinuable(),
-                    function () {
-                        let asuri = self.__csuri_to_asuri(uri);
+                    async function () {
+                        let asuri = await self.__csuri_to_asuri(uri);
                         if (asuri['$err'])
                             return __errorContinuable(asuri['$err']);
                         return __successContinuable(asuri);
@@ -1720,9 +1720,9 @@ module.exports = {
                     c) csworker handles delete A->B 	(error, A->B already deleted)
                     ... */
     'DELETE *.instance':
-        function (resp, uri) {
+        async function (resp, uri) {
             let self = this;
-            let asuri = this.__csuri_to_asuri(uri);
+            let asuri = await this.__csuri_to_asuri(uri);
             let actions = [__wHttpReq('DELETE', asuri + '?wid=' + self.__aswid)];
 
             if (asuri['$err'])
@@ -2295,11 +2295,12 @@ module.exports = {
     /* return the CS instance uri associated to the AS instance described by the
         given uri */
     '__asuri_to_csuri':
-        function (uri) {
+        async function (uri) {
             let asid = __uri_to_id(uri)
             if (asid['$err'])
                 return asid;
-            return __id_to_uri(this.__asid_to_csid(asid));
+            let csid = await this.__asid_to_csid(asid)
+            return __id_to_uri(csid);
         },
 
 

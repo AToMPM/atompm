@@ -718,7 +718,7 @@ class PyMMMK(Client):
                 return {"$err": 'tried to set attribute ' + str(attr) + ' to "null"'}
 
             res = self.read(args["id"], attr)
-            if type(res) is not bool and '$err' in res:
+            if type(res) is dict and '$err' in res:
                 return res
 
             self.__chattr__(args["id"], attr, args["data"][attr])
@@ -1081,13 +1081,14 @@ class PyMMMK(Client):
                 self.model.nodes[ident][attr]['value'] = v
 
         _old_val = get_attr()
-        _new_val = json.dumps(new_val)
+        _new_val = new_val
+
         if _old_val == _new_val:
             return
         set_attr(new_val)
         self.__log({
             'op': 'CHATTR',
-            'id': int(ident),
+            'id': ident,
             'attr': attr,
             'new_val': new_val,
             'old_val': _old_val,

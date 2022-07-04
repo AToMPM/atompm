@@ -53,7 +53,7 @@ exports.chain = function chain(actions) {
             if (typeof res == 'function' && res.constructor.name == 'AsyncFunction'){
               res(loop);
             }else{
-              await loop(res);
+              res(loop,errback);
             }
           } catch (e) {
             console.log("Error: " + e);
