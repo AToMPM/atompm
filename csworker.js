@@ -278,12 +278,14 @@ module.exports = {
             /* special handling of undo/redo changelogs (see NOTES above) */
             if (hitchhiker && 'undo' in hitchhiker) {
                 let chglg2 = _mmmk.undo(hitchhiker['undo'])['changelog'];
-                let chglg = await __mmmkReq(["undo", hitchhiker['undo']])['changelog'];
+                let res = await __mmmkReq(["undo", hitchhiker['undo']]);
+                let chglg = res['changelog'];
                 compare_changelogs(chglg, chglg2);
                 cschangelogs.push(chglg);
             } else if (hitchhiker && 'redo' in hitchhiker) {
                 let chglg2 = _mmmk.undo(hitchhiker['redo'])['changelog'];
-                let chglg = await __mmmkReq(["redo", hitchhiker['redo']])['changelog'];
+                let res = await __mmmkReq(["redo", hitchhiker['redo']]);
+                let chglg = res['changelog'];
                 compare_changelogs(chglg, chglg2);
                 cschangelogs.push(chglg);
             }
@@ -383,7 +385,7 @@ module.exports = {
                                         let chglg = res['changelog'];
 
                                         compare_changelogs(chglg, chglg2)
-                                        cschangelogs.push(chglg, self.__positionLinkDecorators(csid));
+                                        cschangelogs.push(chglg, await self.__positionLinkDecorators(csid));
                                     }
 
                                    return self.__regenIcon(csid);
@@ -402,7 +404,8 @@ module.exports = {
                                     let csid = await self.__asid_to_csid(asid);
 
                                     let chglg2 = _mmmk.delete(csid)['changelog']
-                                    let chglg = await __mmmkReq(["delete", csid])['changelog'];
+                                    let res = await __mmmkReq(["delete", csid]);
+                                    let chglg = res['changelog'];
                                     compare_changelogs(chglg, chglg2)
 
                                     cschangelogs.push(chglg);
@@ -425,13 +428,15 @@ module.exports = {
                                         let cschanges = hitchhiker['cschanges'];
 
                                         let chglg2 = _mmmk.update(csid, cschanges)['changelog'];
-                                        let chglg = await __mmmkReq(["update", csid, cschanges])['changelog'];
+                                        let res = await __mmmkReq(["update", csid, cschanges]);
+                                        let chglg = res['changelog'];
                                         compare_changelogs(chglg2, chglg)
 
-                                        cschangelogs.push(chglg,
-                                            ('$segments' in cschanges ?
-                                                self.__positionLinkDecorators(csid) :
-                                                []));
+                                        cschangelogs.push(chglg);
+
+                                        if ('$segments' in cschanges) {
+                                            cschangelogs.push(await self.__positionLinkDecorators(csid));
+                                        }
                                     }
                                     return self.__regenIcon(csid);
                                 },
@@ -476,7 +481,8 @@ module.exports = {
                                     let csmm = self.__asmm2csmm[asmm];
 
                                     let chglg2 = _mmmk.unloadMetamodel(csmm)['changelog']
-                                    let chglg = await __mmmkReq(["unloadMetamodel", csmm])['changelog'];
+                                    let res = await __mmmkReq(["unloadMetamodel", csmm]);
+                                    let chglg = res['changelog'];
                                     compare_changelogs(chglg, chglg2)
 
                                     cschangelogs.push(chglg);
@@ -821,7 +827,9 @@ module.exports = {
                     _utils.buildVobjGeomAttrVal(
                         vobjs[vid]['orientation']['value'], pp.O);
                 let chglg2 = _mmmk.update(id, changes)['changelog'];
-                let chglg = await __mmmkReq(["update", id, changes])['changelog'];
+                let res = await __mmmkReq(["update", id, changes]);
+                let chglg = res['changelog'];
+
                 compare_changelogs(chglg2, chglg)
                 changelogs.push(chglg);
             }
@@ -1057,7 +1065,7 @@ module.exports = {
 
                                 changelogs.push(
                                     changelog.concat(
-                                        '$err' in chglg ? [] : self.__positionLinkDecorators(newId)));
+                                        '$err' in chglg ? [] : await self.__positionLinkDecorators(newId)));
                                 return __successContinuable();
                             });
                     });
@@ -1096,7 +1104,8 @@ module.exports = {
                                 }
                                 if (changed) {
                                     let m2 = _mmmk.update(id, {'$segments': s})['changelog']
-                                    let m = await __mmmkReq(["update", id, {'$segments': s}])['changelog'];
+                                    let res = await __mmmkReq(["update", id, {'$segments': s}]);
+                                    let m = res['changelog'];
                                     compare_changelogs(m2, m);
 
                                     changelogs.push(m);
@@ -1788,7 +1797,7 @@ module.exports = {
                 compare_changelogs(updates2, updates);
 
                 let chnglg = updates.concat('$segments' in reqData['changes'] ?
-                    this.__positionLinkDecorators(id) :
+                    await this.__positionLinkDecorators(id) :
                     [])
                 __postMessage(
                     {
@@ -1861,7 +1870,8 @@ module.exports = {
                 let sn = __sequenceNumber();
                 this.__checkpointUserOperation(sn);
                 let chnglg2 = _mmmk.update(id, _reqData)['changelog']
-                let chnglg = await __mmmkReq(["update", id, _reqData])['changelog'];
+                let res = await __mmmkReq(["update", id, _reqData]);
+                let chnglg = res['changelog'];
                 compare_changelogs(chnglg2, chnglg);
 
                 __postMessage(
@@ -2221,7 +2231,8 @@ module.exports = {
                 );
             } else {
                 let chnglg2 = _mmmk[func](sn)['changelog']
-                let chnglg = await __mmmkReq([""+func, sn])['changelog'];
+                let res = await __mmmkReq([""+func, sn]);
+                let chnglg = res['changelog'];
                 compare_changelogs(chnglg2, chnglg);
                 __postMessage(
                     {
