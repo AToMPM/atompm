@@ -259,7 +259,15 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
                 return None
 
             logging.debug(_code)
-            co = compile(_code, '<string>', 'eval')
+
+            # TODO: Fix this
+            if "getAttr('arrow" in _code:
+                opacity = 0
+                if "getAttr('arrowTail" in _code and 'arrow-black-large' in _code: opacity = 1
+                return {'style' : {"stroke": "#000000",
+                 "fill": "#000000",
+                 "opacity": opacity,
+                 "stroke-width": 1} }
 
             # create a mapping for the code to access these functions
             designer_funcs = {
@@ -272,8 +280,18 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
                  'setAttr': setAttr,
             }
 
-            return eval(co, designer_funcs)
+            if "\n" in _code:
+                # this is multi-line, need to assign 'val' in code
+                _locals = {'val': None}
+                co = compile(_code, '<string>', 'exec')
+                exec(co, designer_funcs, _locals)
+                return _locals['val']
+            else:
+                # this is single line, can return last value in code
+                co = compile(_code, '<string>', 'eval')
+                return eval(co, designer_funcs)
         except Exception as err:
+            logging.debug(err)
             if "invalid syntax" in str(err):
                 # ignore Javascript code for now
                 return {}

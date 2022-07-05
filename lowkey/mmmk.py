@@ -625,6 +625,8 @@ class PyMMMK(Client):
         logging.debug('PyMMMK.delete()')
         self.__setStepCheckpoint()
 
+        ident = str(ident)
+
         if ident not in self.model.nodes:
             return {'$err': 'invalid id :: ' + ident}
 

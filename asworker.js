@@ -550,6 +550,8 @@ module.exports = {
 					id);
 				let res = await __mmmkReq(["runDesignerAccessorCode", reqData[fullvid], 'mapper evaluation (' + uri + ')', id]);
 
+				if (res == null) res = undefined //handle that the py mmmk returns null instead
+
 				if (_utils.jsons(res2) != _utils.jsons(res)){
 					console.log("Results are different in ASWORKER POST *.mappings")
 					console.log("From JS: ")
