@@ -254,12 +254,25 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
         try:
             logging.debug('libeventhandler.eval()')
             _code = convert_js_to_python(_code)
-            
+
             if not _code:
                 return None
 
             logging.debug(_code)
-            return eval(_code)
+            co = compile(_code, '<string>', 'eval')
+
+            # create a mapping for the code to access these functions
+            designer_funcs = {
+                 'getAttr': getAttr,
+                 'getAttrNames': getAttrNames,
+                 'hasAttr': hasAttr,
+                 'getAllNodes': getAllNodes,
+                 'getNeighbors': getNeighbors,
+                 'print': print,
+                 'setAttr': setAttr,
+            }
+
+            return eval(co, designer_funcs)
         except Exception as err:
             if "invalid syntax" in str(err):
                 # ignore Javascript code for now

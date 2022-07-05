@@ -611,6 +611,9 @@ class PyMMMK(Client):
             self.__rmedge__(i - num_removed)
             num_removed += 1
 
+        # remove the connector node itself
+        self.__rmnode__(args["id"])
+
     def delete(self, ident):
         """
         0. create a step-checkpoint
@@ -811,7 +814,6 @@ class PyMMMK(Client):
         :return:
         """
         logging.debug('PyMMMK.__changelog()')
-        logging.debug(self.model.nodes)
         
         if self.undoredoJournal:
             ret = copy.deepcopy(self.undoredoJournal)
