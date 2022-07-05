@@ -15,6 +15,7 @@ import json
 
 from model import Model
 from libeventhandler import __runEventHandlers as runEventHandlers
+from libeventhandler import runDesignerAccessorCode
 
 from lowkey.network.Client import Client
 
@@ -753,6 +754,16 @@ class PyMMMK(Client):
         if err: return err
         return {'changelog': self.__changelog()}
 
+
+    def runDesignerAccessorCode(self, code, desc, ident):
+        """
+        Forwards this request to the libeventhandler.
+        :param code:
+        :param desc:
+        :param ident:
+        :return:
+        """
+        return runDesignerAccessorCode(self, code, desc, ident)
 
     # /************************* JOURNALING + UNDO/REDO **************************/
 

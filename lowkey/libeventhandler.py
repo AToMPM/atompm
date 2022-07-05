@@ -10,6 +10,7 @@ __license__ = "GPL-3.0"
 import copy
 import logging
 import os
+import re
 import sys
 
 
@@ -113,21 +114,25 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
         """
         getAttr(_attr[,_id])
         return the requested attr of the specified node... to ensure
-          getAttr can't be used to edit the model, JSON parse+stringify
+          getAttr can't be used to edit the model, a deepcopy
           is used to return a *copy* of the attribute when its value has
         an object type (i.e., hash or array)
         """
         if not _id:
             _id = ident
 
-        if _id not in _mmmk.model.nodes[_id]:
-            raise 'invalid getAttr() id :: ' + _id
+        _id = str(_id)
+
+        if _id not in _mmmk.model.nodes:
+            raise KeyError('invalid getAttr() id :: ' + _id)
         elif _attr not in _mmmk.model.nodes[_id]:
-            raise 'invalid getAttr() attribute :: ' + _attr
+            raise AttributeError('invalid getAttr() attribute :: ' + _attr)
 
         if _attr[0] == '$':
             return _mmmk.model.nodes[_id][_attr]
-        elif type(_mmmk.model.nodes[_id][_attr]['value']) == dict:
+
+        value_type = type(_mmmk.model.nodes[_id][_attr]['value'])
+        if value_type == dict or value_type == list:
             return copy.deepcopy(_mmmk.model.nodes[_id][_attr]['value'])
         else:
             return _mmmk.model.nodes[_id][_attr]['value']
@@ -224,6 +229,19 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
 
         _mmmk.__chattr__(_id, _attr, _val)
 
+    def convert_js_to_python(_code):
+        """
+        This function handles the conversion of the Javascript action code
+        to Python. In the future, the JS action code should be rewritten.
+        :param _code:
+        :return:
+        """
+        block_comment = re.compile(r"/\*.*?\*/", re.DOTALL)
+        line_comment = re.compile(r"\w*//.*")
+        _code = re.sub(block_comment, "", _code)
+        _code = re.sub(line_comment, "", _code)
+        return _code
+
     def safe_eval(_code):
         """
          /* evaluate provided code without the said code having access to
@@ -235,9 +253,17 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
         """
         try:
             logging.debug('libeventhandler.eval()')
+            _code = convert_js_to_python(_code)
+            
+            if not _code:
+                return None
+
             logging.debug(_code)
             return eval(_code)
         except Exception as err:
+            if "invalid syntax" in str(err):
+                # ignore Javascript code for now
+                return {}
             if 'IgnoredConstraint' in str(err):
                 return True
             return {'$err': str(err)}
@@ -246,7 +272,9 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
 
     res = safe_eval(code)
 
-    if res and '$err' in res['$err']:
+    logging.debug("Result: " + str(res))
+
+    if res is not None and type(res) is dict and '$err' in res:
         return {'$err': event_type + ' (' + desc + ') crashed on :: ' + res['$err']}
 
     # /* completed accessor */

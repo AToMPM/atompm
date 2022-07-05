@@ -538,16 +538,26 @@ module.exports = {
 			however, due to the possibly large amount of reqData it requires, we're
 			forced to make it a POST */
 	'POST *.mappings' :
-		function (resp, uri, reqData/*{...,fullvid:mapper,...}*/) {
+		async function (resp, uri, reqData/*{...,fullvid:mapper,...}*/) {
 			let id = __uri_to_id(uri);
 			let attrVals = {};
 
 			for (let fullvid in reqData) {
-				let res = _libeventhandler.runDesignerAccessorCode(
+				let res2 = _libeventhandler.runDesignerAccessorCode(
 					_mmmk,
 					reqData[fullvid],
 					'mapper evaluation (' + uri + ')',
 					id);
+				let res = await __mmmkReq(["runDesignerAccessorCode", reqData[fullvid], 'mapper evaluation (' + uri + ')', id]);
+
+				if (_utils.jsons(res2) != _utils.jsons(res)){
+					console.log("Results are different in ASWORKER POST *.mappings")
+					console.log("From JS: ")
+					console.log(res2)
+					console.log("From Python: ")
+					console.log(res)
+				}
+
 				if (res == undefined)
 					continue;
 
