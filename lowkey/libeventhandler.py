@@ -240,7 +240,10 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
         line_comment = re.compile(r"\w*//.*")
         _code = re.sub(block_comment, "", _code)
         _code = re.sub(line_comment, "", _code)
-        return _code
+
+        # TODO: Make this more robust
+        _code = _code.replace("textContent", "'textContent'")
+        return _code.strip()
 
     def safe_eval(_code):
         """
