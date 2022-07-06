@@ -244,6 +244,8 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
         _code = re.sub(block_comment, "", _code)
         _code = re.sub(line_comment, "", _code)
 
+        _code = _code.strip()
+
         add_slashes = re.compile(r"= *\n", flags=re.MULTILINE)
         _code = re.sub(add_slashes, "= \\\n", _code)
 
