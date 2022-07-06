@@ -236,14 +236,33 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
         :param _code:
         :return:
         """
+
+        _code = _code.strip()
+
         block_comment = re.compile(r"/\*.*?\*/", re.DOTALL)
         line_comment = re.compile(r"\w*//.*")
         _code = re.sub(block_comment, "", _code)
         _code = re.sub(line_comment, "", _code)
 
+        add_slashes = re.compile(r"= *\n", flags=re.MULTILINE)
+        _code = re.sub(add_slashes, "= \\\n", _code)
+
         # TODO: Make this more robust
-        _code = _code.replace("textContent", "'textContent'")
-        return _code.strip()
+        add_quotes = re.compile(r"\{\s*textContent\s*:")
+        _code = re.sub(add_quotes, "{'textContent':", _code)
+
+        remove_var = re.compile(r"^var ", flags=re.MULTILINE) # MULTILINE is for matching start of line
+        _code = re.sub(remove_var, "", _code)
+
+        rewrite_conditional = re.compile(r"\((.*)\?(.*):(.*)\)", flags=re.MULTILINE | re.X)
+        _code = re.sub(rewrite_conditional, r"(\g<2> if (\g<1>) else \g<3>)", _code)
+
+        if "\n" in _code:
+            # add '_val = ' to lines with '({' at beginning
+            add_val = re.compile(r"^\s*\(\{", flags=re.MULTILINE)
+            _code = re.sub(add_val, "_val = ({", _code)
+
+        return _code
 
     def safe_eval(_code):
         """
@@ -263,15 +282,6 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
 
             logging.debug(_code)
 
-            # TODO: Fix this
-            if "getAttr('arrow" in _code:
-                opacity = 0
-                if "getAttr('arrowTail" in _code and 'arrow-black-large' in _code: opacity = 1
-                return {'style' : {"stroke": "#000000",
-                 "fill": "#000000",
-                 "opacity": opacity,
-                 "stroke-width": 1} }
-
             # create a mapping for the code to access these functions
             designer_funcs = {
                  'getAttr': getAttr,
@@ -285,10 +295,10 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
 
             if "\n" in _code:
                 # this is multi-line, need to assign 'val' in code
-                _locals = {'val': None}
+                _locals = {'_val': None}
                 co = compile(_code, '<string>', 'exec')
                 exec(co, designer_funcs, _locals)
-                return _locals['val']
+                return _locals['_val']
             else:
                 # this is single line, can return last value in code
                 co = compile(_code, '<string>', 'eval')
