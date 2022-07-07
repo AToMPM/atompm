@@ -295,14 +295,13 @@ let __ids2uris = {};
 
 
 /* try to construct a uri from an instance id */
-function __id_to_uri(id)
-{
+async function __id_to_uri(id) {
 	if (id == undefined)
 		return undefined;
 	else if (id in __ids2uris)
 		return __ids2uris[id];
 
-	let res = _mmmk.read(id);
+	let res = await __mmmkReq(["read", id]);
 	if (res['$err'])
 		return res;
 
@@ -327,29 +326,25 @@ function __uri_to_id(uri)
  
  	NOTE:: when RESETM steps are encountered, we additionaly flush all currently
   			 remembered id-to-uri mappings */
-function __urizeChangelog(chlog)
-{
-	for (let step of chlog)
-		{	
-			if( step['op'] == 'RESETM' )
-			{
-				__ids2uris = {};
-				let newModel = _utils.jsonp(step['new_model']);
-				for( let id in newModel.nodes )
-				{
-					newModel.nodes[__id_to_uri(id)] = newModel.nodes[id];
-					delete newModel.nodes[id];
-				}	
-				step['new_model'] = _utils.jsons(newModel);
+async function __urizeChangelog(chlog) {
+	for (let step of chlog) {
+		if (step['op'] == 'RESETM') {
+			__ids2uris = {};
+			let newModel = _utils.jsonp(step['new_model']);
+			for (let id in newModel.nodes) {
+				let uri = await __id_to_uri(id);
+				newModel.nodes[uri] = newModel.nodes[id];
+				delete newModel.nodes[id];
 			}
-			else {
-				let ids = ['id', 'id1', 'id2'];
-				for (let x of ids) {
-					if (x in step)
-						step[x] = __id_to_uri(step[x]);
-				}
+			step['new_model'] = _utils.jsons(newModel);
+		} else {
+			let ids = ['id', 'id1', 'id2'];
+			for (let x of ids) {
+				if (x in step)
+					step[x] = await __id_to_uri(step[x]);
 			}
 		}
+	}
 }
 
 
@@ -383,20 +378,23 @@ function __postInternalErrorMsg(respIndex,reason)
 }
 
 /* wrapper for all messages */
-function __postMessage(msg) 
-{
+async function __postMessage(msg) {
 	//make sure that reason is a string
-	if (typeof msg.reason == 'object'){
+	if (typeof msg.reason == 'object') {
 		msg.reason = _utils.jsons(msg.reason);
 	}
 
-	if( 'respIndex' in msg )
+	if ('respIndex' in msg)
 		__onRequestResponse(msg.respIndex);
 
-	if( __wtype == '/csworker' && 'changelog' in msg )
-		__urizeChangelog(msg['changelog']);
+	if (__wtype == '/csworker' && 'changelog' in msg)
+		await __urizeChangelog(msg['changelog']);
 
-	logger.http("process _ RI" + msg.respIndex + "<br/>changelog: " + JSON.stringify(_utils.collapse_changelog(msg['changelog'])),{'from':__wtype+__wid, 'to': "session_mngr", 'type': "-x"});
+	logger.http("process _ RI" + msg.respIndex + "<br/>changelog: " + JSON.stringify(_utils.collapse_changelog(msg['changelog'])), {
+		'from': __wtype + __wid,
+		'to': "session_mngr",
+		'type': "-x"
+	});
 
 	process.send(msg);
 }
@@ -739,7 +737,7 @@ async function GET__current_model(resp) {
 	if (res['$err'])
 		__postInternalErrorMsg(resp, res['$err']);
 	else
-		__postMessage(
+		await __postMessage(
 			{
 				'statusCode': 200,
 				'data': res,
@@ -771,7 +769,7 @@ async function GET__current_state(resp) {
 
 	let name1 = _mmmk.readName();
 	let name = await __mmmkReq(['readName']);
-	__postMessage(
+	await __postMessage(
 		{
 			'statusCode': 200,
 			'data': {

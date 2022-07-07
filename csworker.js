@@ -377,8 +377,9 @@ module.exports = {
                                             segments =
                                                 hitchhiker['segments'] ||
                                                 await self.__defaultSegments(src, dest);
-                                        s[src + '--' + __id_to_uri(csid)] = segments[0];
-                                        s[__id_to_uri(csid) + '--' + dest] = segments[1];
+                                        let uri = await __id_to_uri(csid);
+                                        s[src + '--' + uri] = segments[0];
+                                        s[uri + '--' + dest] = segments[1];
 
                                         let chglg2 = _mmmk.update(csid, {'$segments': s})['changelog'];
                                         let res = await __mmmkReq(["update", csid, {'$segments': s}]);
@@ -918,7 +919,7 @@ module.exports = {
                         dres['changelog']);
                 }
 
-                let csuri = __id_to_uri(id);
+                let csuri = await __id_to_uri(id);
                 let asuri = await self.__csuri_to_asuri(csuri);
 
                 let icon2 = _utils.jsonp(_mmmk.read(id));
@@ -1090,11 +1091,11 @@ module.exports = {
                                     let id2 = __uri_to_id(ends[2]);
 
                                     if (id1 in newIds) {
-                                        ends[1] = __id_to_uri(newIds[id1]);
+                                        ends[1] = await __id_to_uri(newIds[id1]);
                                         changed = true;
                                     }
                                     if (id2 in newIds) {
-                                        ends[2] = __id_to_uri(newIds[id2]);
+                                        ends[2] = await __id_to_uri(newIds[id2]);
                                         changed = true;
                                     }
                                     if (changed) {
@@ -1160,7 +1161,7 @@ module.exports = {
             let clone = await __mmmkReq(["clone"]);
             compare_changelogs(clone2, clone);
 
-            __postMessage(
+            await __postMessage(
                 {
                     'statusCode': 200,
                     'data': {
@@ -1304,7 +1305,7 @@ module.exports = {
 
                 _do.chain(actions)(
                     async function (changelog) {
-                        __postMessage({'statusCode': 202, 'respIndex': resp});
+                        await __postMessage({'statusCode': 202, 'respIndex': resp});
 
                         let ures2 = _mmmk.unloadMetamodel(self.__asmm2csmm[asmm]);
                         let ures = await __mmmkReq(["unloadMetamodel", self.__asmm2csmm[asmm]]);
@@ -1313,7 +1314,7 @@ module.exports = {
                         let changelogs = [lres['changelog'], changelog, ures['changelog']];
                         self.__asmm2csmm[asmm] = csmm;
 
-                        __postMessage(
+                        await __postMessage(
                             {
                                 'statusCode': 200,
                                 'changelog': _utils.flatten(changelogs),
@@ -1641,7 +1642,7 @@ module.exports = {
                     } else
                         data = respData['data'];
 
-                    __postMessage(
+                    await __postMessage(
                         {
                             'statusCode': 200,
                             'data': data,
@@ -1735,7 +1736,7 @@ module.exports = {
             let actions = [__wHttpReq('DELETE', asuri + '?wid=' + self.__aswid)];
 
             if (asuri['$err'])
-                __postMessage({'statusCode': 200, 'respIndex': resp});
+                await __postMessage({'statusCode': 200, 'respIndex': resp});
             else {
                 _do.chain(actions)(
                     function () {
@@ -1799,7 +1800,7 @@ module.exports = {
                 let chnglg = updates.concat('$segments' in reqData['changes'] ?
                     await this.__positionLinkDecorators(id) :
                     [])
-                __postMessage(
+                await __postMessage(
                     {
                         'statusCode': 200,
                         'changelog': chnglg,
@@ -1874,7 +1875,7 @@ module.exports = {
                 let chnglg = res['changelog'];
                 compare_changelogs(chnglg2, chnglg);
 
-                __postMessage(
+                await __postMessage(
                     {
                         'statusCode': 200,
                         'changelog': chnglg,
@@ -2234,7 +2235,7 @@ module.exports = {
                 let res = await __mmmkReq([""+func, sn]);
                 let chnglg = res['changelog'];
                 compare_changelogs(chnglg2, chnglg);
-                __postMessage(
+                await __postMessage(
                     {
                         'statusCode': 200,
                         'changelog': chnglg,

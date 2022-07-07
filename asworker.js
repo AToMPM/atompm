@@ -223,7 +223,7 @@ module.exports = {
 
 						compare_changelogs(res1, res2)
 
-						__postMessage(
+						await __postMessage(
 							{
 								'statusCode': 200,
 								'changelog': res2['changelog'],
@@ -250,7 +250,7 @@ module.exports = {
 			let res1 = _mmmk.unloadMetamodel(mm);
 			let res2 = await __mmmkReq(["unloadMetamodel", mm]);
 			compare_changelogs(res1, res2)
-			__postMessage(
+			await __postMessage(
 				{
 					'statusCode': 200,
 					'changelog': res2['changelog'],
@@ -269,7 +269,7 @@ module.exports = {
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
 			else
-				__postMessage(
+				await __postMessage(
 					{
 						'statusCode': 200,
 						'changelog': res['changelog'],
@@ -320,7 +320,7 @@ module.exports = {
 			if ('$err' in res)
 				__postInternalErrorMsg(resp, res['$err']);
 			else
-				__postMessage(
+				await __postMessage(
 					{
 						'statusCode': 200,
 						'changelog': res['changelog'],
@@ -342,7 +342,7 @@ module.exports = {
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
 			else
-				__postMessage(
+				await __postMessage(
 					{
 						'statusCode': 200,
 						'data': res,
@@ -370,7 +370,7 @@ module.exports = {
 				if (res['changelog'].length == 0 && reqData['hitchhiker']) {
 					changelog = [{'op': 'CHATTR', 'id': id}];
 				}
-				__postMessage(
+				await __postMessage(
 					{
 						'statusCode': 200,
 						'changelog': changelog,
@@ -402,7 +402,7 @@ module.exports = {
 			compare_objects(res1, res)
 
 			if (res['$err']) {
-				__postMessage({'statusCode': 200, 'respIndex': resp});
+				await __postMessage({'statusCode': 200, 'respIndex': resp});
 				return;
 			}
 			res1 = _mmmk.delete(id);
@@ -414,7 +414,7 @@ module.exports = {
 				return;
 			}
 
-			__postMessage(
+			await __postMessage(
 				{
 					'statusCode': 200,
 					'changelog': res['changelog'],
@@ -495,7 +495,7 @@ module.exports = {
 			let res = await __mmmkReq(["undo", reqData['undoUntil']]);
 
 			compare_changelogs(res1, res);
-			__postMessage(
+			await __postMessage(
 				{
 					'statusCode': 200,
 					'changelog': res['changelog'],
@@ -516,7 +516,7 @@ module.exports = {
 
 			compare_changelogs(res1, res);
 
-			__postMessage(
+			await __postMessage(
 				{
 					'statusCode': 200,
 					'changelog': res['changelog'],
@@ -578,7 +578,7 @@ module.exports = {
 						attrVals[fullvid + attr] = res[attr];
 			}
 
-			__postMessage(
+			await __postMessage(
 				{
 					'statusCode': 200,
 					'data': attrVals,
