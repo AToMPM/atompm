@@ -329,8 +329,7 @@ function __uri_to_id(uri)
   			 remembered id-to-uri mappings */
 function __urizeChangelog(chlog)
 {
-	chlog.forEach(
-		function(step)
+	for (let step of chlog)
 		{	
 			if( step['op'] == 'RESETM' )
 			{
@@ -343,14 +342,14 @@ function __urizeChangelog(chlog)
 				}	
 				step['new_model'] = _utils.jsons(newModel);
 			}
-			else
-				['id','id1','id2'].forEach(
-					function(x)
-					{
-						if( x in step )
-							step[x] = __id_to_uri(step[x]);
-					});
-		});
+			else {
+				let ids = ['id', 'id1', 'id2'];
+				for (let x of ids) {
+					if (x in step)
+						step[x] = __id_to_uri(step[x]);
+				}
+			}
+		}
 }
 
 
@@ -733,9 +732,10 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 /*	returns the current model to the querier
 	1. ask _mmmk for a copy of the current model
 	2. return said copy to the querier */
-function GET__current_model(resp)
-{
-	let res = _mmmk.read();
+async function GET__current_model(resp) {
+	let res1 = _mmmk.read();
+	let res = await __mmmkReq(['read']);
+
 	if (res['$err'])
 		__postInternalErrorMsg(resp, res['$err']);
 	else
@@ -753,25 +753,31 @@ function GET__current_model(resp)
   	to the querier
 	1. ask _mmmk for a copy of its model, loaded metamodels and name
 	2. return said copies to the querier */
-function GET__current_state(resp)
-{
-	let mms = _mmmk.readMetamodels();
+async function GET__current_state(resp) {
+	let mms1 = _mmmk.readMetamodels();
+	let mms = await __mmmkReq(['readMetamodels']);
+
 	if (mms['$err']) {
 		__postInternalErrorMsg(resp, mms['$err']);
 		return;
 	}
-	let m = _mmmk.read();
+	let m1 = _mmmk.read();
+	let m = await __mmmkReq(['read']);
+
 	if (m['$err']) {
 		__postInternalErrorMsg(resp, m['$err']);
 		return;
 	}
+
+	let name1 = _mmmk.readName();
+	let name = await __mmmkReq(['readName']);
 	__postMessage(
 		{
 			'statusCode': 200,
 			'data': {
 				'mms': mms,
 				'm': m,
-				'name': _mmmk.readName(),
+				'name': name,
 				'asn': _wlib['__nextASWSequenceNumber'],
 				'asw': _wlib['__aswid']
 			},

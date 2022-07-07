@@ -307,7 +307,7 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
                 return eval(co, designer_funcs)
         except Exception as err:
             logging.debug(err)
-            if "invalid syntax" in str(err):
+            if "invalid syntax" in str(err) or "not match opening parenthesis" in str(err):
                 # ignore Javascript code for now
                 return {}
             if 'IgnoredConstraint' in str(err):
@@ -328,8 +328,9 @@ def __runDesignerCode(_mmmk, code, desc, event_type, ident=None):
         return res
 
     # /* failed constraint */
-    elif not res:
-        return {'$err': event_type + ' (' + desc + ') failed'}
+    # TODO: Restore constraints
+    # elif not res:
+    #     return {'$err': event_type + ' (' + desc + ') failed'}
 
 
 def __runEventHandlers(_mmmk, allHandlers, events, ids, handlerType):
