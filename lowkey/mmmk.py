@@ -19,6 +19,8 @@ from libeventhandler import runDesignerAccessorCode
 
 from MMMKModel import Model
 
+from MMMKModel import Model
+
 from lowkey.network.Client import Client
 
 __author__ = "Istvan David, Benley James Oakes"
