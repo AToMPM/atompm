@@ -1,7 +1,7 @@
 #  This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
 #  Copyright 2011 by the AToMPM team and licensed under the LGPL
 #  See COPYING.lesser and README.md in the root of this project for full details
-
+import ast
 import copy
 import json
 import os.path
@@ -12,6 +12,8 @@ import os
 import sys
 import threading
 import json
+import urllib
+
 import requests as req
 
 from libeventhandler import __runEventHandlers as runEventHandlers
@@ -90,7 +92,7 @@ class PyMMMK(Client):
     Message production
     '''
     def messageToBeForwarded(self, command):
-        return command in ["create"]
+        return command in ["create", "loadMetamodel"]
     
     def createMessage(self, body):
         return bytes('[{}] {}'.format(self._id, body), self.__encoding)
@@ -123,30 +125,12 @@ class PyMMMK(Client):
 
     def processMessage(self, op, args):
         logging.info("{}: ProcessingMessage...........................".format(self.__name))
-        args = self.unpackArgs(args)
-        logging.info("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
+        args = ast.literal_eval(args)
+        #logging.info("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
         
         logging.info("{}: I'm now going to call dispatch with remote = True".format(self.__name))
         self.dispatch(op, args, remote = True)
-        
-    def unpackArgs(self, args):
-        args = args.replace('[', '').replace(']', '')
-        args = args.split(',')
-        
-        arglist = []
-        for a in args:
-            #logging.debug("{}: Cleaning up arg: {}.".format(self.__name, a))
-            a = a.replace("'", '')
-            a = a.strip()
-            #logging.debug("{}: Cleaned up arg: {}.".format(self.__name, a))
-            if a=="None":
-                arglist.append(None)
-            else:
-                arglist.append(a)
-        
-        #logging.debug("{}: Unpacked args: {}. type: {}.".format(self.__name, arglist))
-        
-        return arglist
+
     
     '''
     Timeout action
@@ -181,7 +165,14 @@ class PyMMMK(Client):
             json.dump(self.model.to_dict(), outfile)
         
         if remote:
-            x = req.post('http://localhost:8124/atompm/csworker')
+            # send the changelog to the session manager
+            # to inform listening workers/clients
+            encoded_changelog = urllib.parse.quote(str(res))
+            _wid = re.findall(r'\d+', self.__name)[0]
+            _url = 'http://localhost:8124/atompm/' + 'changelogPush' + '?wid=' + str(_wid) + '&changelog=' + encoded_changelog
+            print("Sending HTTP message")
+            print(_url)
+            x = req.post(_url)
             logging.info(x.text)
         
         logging.info('{}: Classes in the model: {}.'.format(self.__name, len(self.model.nodes)))

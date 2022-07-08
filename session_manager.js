@@ -48,6 +48,15 @@ function __send(socket, statusCode, reason, data, headers)
             'data':data});
 }
 
+async function inform_mmmk_manager(msg) {
+    let __sock_mmmk = new _zmq.Request();
+    __sock_mmmk.connect("tcp://127.0.0.1:5555");
+    msg = JSON.stringify(msg);
+    console.log("Sending to MMMK: " + msg);
+    await __sock_mmmk.send(msg);
+    return await __sock_mmmk.receive();
+}
+
 function init_session_manager(httpserver){
     socket_server = new _sio.Server(httpserver);
 
@@ -106,60 +115,30 @@ function init_session_manager(httpserver){
                         let isScreenshare = existingcwid != undefined && existingawid == undefined;
                         let isModelshare = existingcwid != undefined && existingawid != undefined;
 
-                        let cwid = undefined;
-                        let awid = undefined;
+                        // always create a new csworker and asworker
+                        let cwid = __createNewWorker('/csworker');
+                        let awid = __createNewWorker('/asworker');
 
-                        // normal case, not sharing
-                        if (!isScreenshare && !isModelshare){
-                            // create a new csworker and asworker
-                            cwid = __createNewWorker('/csworker');
-                            awid = __createNewWorker('/asworker');
+                        // set up client-csworker comms
+                        __registerListener(cwid, socket.id);
+                        clientIDs2csids[cid] = [cwid];
 
-                            // set up client-csworker comms
-                            __registerListener(cwid, socket.id);
-                            clientIDs2csids[cid] = [cwid];
+                        // set up the csworker listening to the asworker
+                        let params = {'aswid': awid};
+                        workers[cwid].send(
+                            {
+                                'method': 'PUT',
+                                'uri': '/aswSubscription',
+                                'reqData': params
+                            });
 
-                            // set up the csworker listening to the asworker
-                            let params = {'aswid': awid};
-                            workers[cwid].send(
-                                {
-                                    'method': 'PUT',
-                                    'uri': '/aswSubscription',
-                                    'reqData': params
-                                });
-                        }else if (isScreenshare){
-                            // no workers created
-
-                            // set up client-csworker comms
-                            __registerListener(existingcwid, socket.id);
-                            clientIDs2csids[cid] = [existingcwid];
-
-                            cwid = existingcwid;
-
-                        } else if (isModelshare){
-                            // create a new csworker
-                            cwid = __createNewWorker('/csworker');
-
-                            // set up client-csworker comms
-                            __registerListener(cwid, socket.id);
-                            clientIDs2csids[cid] = [cwid];
-
-                            /* TODO: Has to be done by the client in init.js
-                               to avoid a race condition with the client
-                               asking for csworker state too early
-                            */
-                            // set up the csworker listening to the asworker
-                            // clones the existing csworker
-                            // let params = {'aswid': existingawid, 'cswid': existingcwid};
-                            // workers[cwid].send(
-                            //     {
-                            //         'method': 'PUT',
-                            //         'uri': '/aswSubscription',
-                            //         'reqData': params
-                            //     });
-
-                            awid = existingawid;
-                        }
+                        // if (isScreenshare) {
+                        //     let msg = {'newcwid': cwid, 'newawid': awid, 'existingcwid': cwid};
+                        //     let res = inform_mmmk_manager(["-1", "startScreenshare", msg]);
+                        // } else if (isModelshare){
+                        //     let msg = {'newcwid': cwid, 'newawid': awid, 'existingcwid': existingcwid, 'existingawid':existingawid};
+                        //     let res = inform_mmmk_manager(["-1", "startModelshare", msg]);
+                        // }
 
                         logger.http("socket _ 'resp wid'" + ''+cwid + ' awid '+awid,{'from':"session_mngr",'to': 'client', 'type':"-)"});
 
@@ -273,15 +252,6 @@ function __createNewWorker(workerType){
     let msg = {'workerType':workerType, 'workerId':wid};
     logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': workerType + wid, 'type':"-)"});
 
-    async function inform_mmmk_manager(msg) {
-        let __sock_mmmk = new _zmq.Request();
-        __sock_mmmk.connect("tcp://127.0.0.1:5555");
-        msg = JSON.stringify(msg);
-        console.log("Sending to MMMK: " + msg);
-        await __sock_mmmk.send(msg);
-        return await __sock_mmmk.receive();
-    }
-
     let res = inform_mmmk_manager(["-1", "create_worker", msg]);
 
     worker.send(msg);
@@ -319,6 +289,12 @@ function handle_http_message(url, req, resp){
             '',
             ''+wid);
         return;
+    } else if (req.method == 'POST' && url.pathname.includes("changelogPush")){
+        let chnglg = url['query']['changelog']
+        let wid = url['query']['wid']
+
+        let msg = {'changelog': chnglg};
+        send_to_all(wid, msg);
     }
 
     let wids = undefined;
