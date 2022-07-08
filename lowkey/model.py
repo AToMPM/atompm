@@ -2,7 +2,7 @@
 #  Copyright 2011 by the AToMPM team and licensed under the LGPL
 #  See COPYING.lesser and README.md in the root of this project for full details
 
-__author__ = "Bentley James Oakes, Istvan David"
+__author__ = "Istvan David"
 __copyright__ = "Copyright 2022, GEODES"
 __credits__ = "Eugene Syriani"
 __license__ = "GPL-3.0"

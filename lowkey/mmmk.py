@@ -12,14 +12,16 @@ import os
 import sys
 import threading
 import json
+import requests as req
 
-from model import Model
 from libeventhandler import __runEventHandlers as runEventHandlers
 from libeventhandler import runDesignerAccessorCode
 
+from MMMKModel import Model
+
 from lowkey.network.Client import Client
 
-__author__ = "Benley James Oakes, Istvan David"
+__author__ = "Istvan David, Benley James Oakes"
 __copyright__ = "Copyright 2022, GEODES"
 __credits__ = "Eugene Syriani"
 __license__ = "GPL-3.0"
@@ -47,7 +49,7 @@ class PyMMMK(Client):
     def run(self):
         connection_thread = threading.Thread(target=self.subscribe, args=())
         connection_thread.daemon = True
-        logging.debug("Starting connection thread")
+        #logging.debug("{}: Starting connection thread".format(self.__name))
         connection_thread.start()
     
     # Join a server and receive the updates
@@ -56,54 +58,95 @@ class PyMMMK(Client):
         while True:
             try:
                 receviedMessage = self._snapshot.recv()
-                logging.debug("Received message from server {}".format(receviedMessage))
+                #logging.debug("{}: Received message from server.".format(self.__name))
                 _, message = self.getMessage(receviedMessage)
                 self.processMessage(message)
             except:
                 return  # Interrupted
             if message == b"finished_snapshot":
-                logging.debug("Received snapshot")
+                logging.info("{}: Received snapshot".format(self.__name))
                 break  # Done
     
     # The behavior that will be executed in the polling loop
     def subscriberAction(self):
+        if not self.__listen:
+            return
+        
+        logging.info("{}: Received message from lowkey.".format(self.__name))
         receviedMessage = self._subscriber.recv()
-        logging.debug("{} -- Received message via subscribe: {}".format(self.__name, receviedMessage))
-    
-    # Editor thread for interacting with the local user
-    def editorThread(self):
-        print("Reading user input")
-        while True:
-            userInput = str(input())
-            if not userInput:
-                continue
+        senderId, senderType, senderName, op, args = self.getMessage(receviedMessage)
+        
+        if self.throwawayMessage(senderId, senderType, senderName):
+            #logging.debug("{}: Throwing message {} ### {}".format(self.__name, op, args))
+            pass
+        else:
+            logging.info("{}: Processing message {} ### {}".format(self.__name, op, args))
+            self.processMessage(op, args)
             
-            tokens = self._parser.tokenize(userInput)
-            commandKeyWord = tokens[0].upper()
-            if self._parser.isLocalCommand(commandKeyWord):
-                commandObject = self._parser.processLocalMessage(commandKeyWord)
-                commandObject.execute(self._session)
-            elif self._parser.isGlobalCommand(commandKeyWord):
-                collabAPICommand = self._parser.translateIntoCollabAPICommand(userInput)
-                # process locally
-                self._session.processMessage(collabAPICommand)
-                # produce remote message and publish
-                body = collabAPICommand
-                message = self.createMessage(body)
-                self._publisher.send(message)
-            else:
-                print("Invalid command")
-                continue
-    
+    def listen(self, listen = True):
+        self.__listen = listen
+
     '''
     Message production
     '''
     def messageToBeForwarded(self, command):
-        return command in ["READ", "OBJECTS"]
+        return command in ["create"]
     
     def createMessage(self, body):
         return bytes('[{}] {}'.format(self._id, body), self.__encoding)
+        
+    '''
+    Message processing
+    '''
 
+    def getMessage(self, rawMessage):
+        #return rawMessage.decode(self.__encoding).split('###', 2)
+        senderId, message = rawMessage.decode(self.__encoding).split(' ', 1)
+        senderId = senderId.replace('[', '').replace(']', '')
+        senderType, senderName, op, args = message.split('###')
+        senderType = senderType.split(':', 1)[1].strip()
+        senderName = senderName.split(':', 1)[1].strip()
+        op = op.split(':', 1)[1].strip()
+        args = args.split(':', 1)[1].strip()
+        return senderId, senderType, senderName, op, args
+        
+    def throwawayMessage(self, senderId, senderType, senderName):
+        #logging.debug("{}: Checking if message is throwaway. SenderID: {}. My ID: {}. SenderType: {}. My type:{}. SenderName: {}. My name:{}.".format(self.__name, senderId, self._id, senderType, self.__type, senderName, self.__name))
+        sameType = senderType == self.__type
+        logging.info("{}: Comparing {} to {}. Same? {}.".format(self.__name, senderType, self.__type, sameType))
+        sameName = senderName == self.__name
+        #logging.debug("{}: Comparing {} to {}. Same? {}.".format(self.__name, senderName, self.__name, sameName))
+        #logging.debug("{}: Same type? {}. Same name? {}.".format(self.__name, sameType, sameName))
+        throwaway = (not sameType) or sameName
+        #logging.debug("{}: Throwaway? {}.".format(self.__name, throwaway))
+        return throwaway
+
+    def processMessage(self, op, args):
+        logging.info("{}: ProcessingMessage...........................".format(self.__name))
+        args = self.unpackArgs(args)
+        logging.info("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
+        
+        logging.info("{}: I'm now going to call dispatch with remote = True".format(self.__name))
+        self.dispatch(op, args, remote = True)
+        
+    def unpackArgs(self, args):
+        args = args.replace('[', '').replace(']', '')
+        args = args.split(',')
+        
+        arglist = []
+        for a in args:
+            #logging.debug("{}: Cleaning up arg: {}.".format(self.__name, a))
+            a = a.replace("'", '')
+            a = a.strip()
+            #logging.debug("{}: Cleaned up arg: {}.".format(self.__name, a))
+            if a=="None":
+                arglist.append(None)
+            else:
+                arglist.append(a)
+        
+        #logging.debug("{}: Unpacked args: {}. type: {}.".format(self.__name, arglist))
+        
+        return arglist
     
     '''
     Timeout action
@@ -116,19 +159,33 @@ class PyMMMK(Client):
     '''
     This is the single point of entry from lowkey's point of view.
     '''
-    def dispatch(self, op, args):
-        logging.debug('PyMMMK.dispatch')
+    def dispatch(self, op, args, remote = False):
+        logging.info('PyMMMK.dispatch')
+        logging.info("{}: args: {}. type: {}.".format(self.__name, args, type(args)))
         method_to_call = getattr(self, op)
-        logging.debug('PyMMMK -- calling self.{}'.format(op))
+        logging.info('PyMMMK -- calling self.{}'.format(op))
+        logging.info('{}: PyMMMK -- calling self.{}, args:{}, remote:{}'.format(self.__name, op, args, remote))
+        
         res = method_to_call(*args)
         
-        logging.debug("Sending message to lowkey")
-        message = self.createMessage(f"hello from {self.__name}")
-        self._publisher.send(message)
+        logging.info(args)
+        
+        if self.messageToBeForwarded(op) and not remote:
+            #If the message is the type that others need to now about (e.g., create) AND this message doesn't come from someone else.
+            #If the message comes from someone else, its distribution has been taken care of already.
+            logging.info("Sending message to lowkey")
+            message = self.createMessage(f"senderType:{self.__type} ### senderName:{self.__name} ### op:{op} ### args:{args}")
+            self._publisher.send(message)
         
         with open("model.json", "w") as outfile:
             json.dump(self.model.to_dict(), outfile)
-
+        
+        if remote:
+            x = req.post('http://localhost:8124/atompm/csworker')
+            logging.info(x.text)
+        
+        logging.info('{}: Classes in the model: {}.'.format(self.__name, len(self.model.nodes)))
+        
         return res
         
     '''
@@ -136,6 +193,12 @@ class PyMMMK(Client):
     '''
     def setName(self, workerName):
         self.__name = workerName
+        
+    def setType(self, workerType):
+        self.__type = workerType
+        
+    def setManager(self, manager):
+        self.__manager = manager
 
     '''
     This is needed for the CSWorker
@@ -516,6 +579,7 @@ class PyMMMK(Client):
 
     def create(self, fullType, attrs):
         logging.debug('PyMMMK.create()')
+        logging.debug('{}: PyMMMK.create() -- fullType: {}, attrs: {}.'.format(self.__name, fullType, attrs))
         """
         0. create a step-checkpoint
         1. wrap _create in crudOp
@@ -808,7 +872,6 @@ class PyMMMK(Client):
         """
          /* case 1: 'this.undoredoJournal is defined (possibly empty)'
         returns the operations performed by the last undo()/redo()
-
         case 2: 'this.undoredoJournal = undefined'
         returns a copy of the portion of the journal that describes the changes
           made by the last user-operation... note that user-operations always call
@@ -836,13 +899,10 @@ class PyMMMK(Client):
         the journal is anything but the end of the journal, clear everything after
         the index (this effectively erases the command "future-history" when
         editing an "undone" model)
-
         case 2: 'log="UNDOREDO"'
         logs an internal cud operation into this.undoredoJournal
-
         case 3: 'log="DONTLOG"'
         do nothing
-
             legal logging commands:
                 MKNODE	id,node
                 RMNODE	id,node
@@ -950,7 +1010,6 @@ class PyMMMK(Client):
         """
         /*	create a step-checkpoint : add an entry in the log used as a delimiter to
         know where to stop when undoing/redoing (i.e., on client undo/redo)
-
         1. create new step-checkpoint or re-use a 'zombie' step-checkpoint (zombie
               step-checkpoints (SC) are SCs associated to failed or effectless user
             operations... they are recognizable as SCs with no following log
@@ -981,7 +1040,6 @@ class PyMMMK(Client):
     def __undo(self, step, log):
         """
         /* undo a single step
-
           1. identify the nature of the logged operation
          2. invert its effects (these may be ignored (log = 'DONTLOG') or logged in
               this.undoredoJournal (log = 'UNDOREDO') */

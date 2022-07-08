@@ -33,10 +33,10 @@ class PyMMMKManager:
     def run(self):
         main_thread = threading.Thread(target=self.main, args=())
         main_thread.daemon = True
-        logging.debug("Starting main thread")
+        logging.info("Starting main thread")
         main_thread.start()
         
-        logging.debug("Starting mmmk thread")
+        logging.info("Starting mmmk thread")
         self.editorThread()
 
     def main(self):
@@ -71,20 +71,34 @@ class PyMMMKManager:
             #print("RES: " + str(res))
 
             #  Send reply back to client
-            self.socket.send(json.dumps(res).encode("utf-8"))
+            self.sendChangelog(res)
 
+    def sendChangelog(self, result):
+        self.socket.send(json.dumps(result).encode("utf-8"))
+            
     def create_worker(self, msg):
         pymmmk = PyMMMK()
         worker_type, wid = msg.values()
         worker_name = worker_type + str(wid)
         pymmmk.setName(worker_name)
+        pymmmk.setType(worker_type)
+        pymmmk.setManager(self)
 
         print("Created pymmmk for worker: " + worker_name)
         self.mmmks[worker_name] = pymmmk
         
-        logging.debug('pymmmk joining to lowkey')
-        pymmmk.join()
-        logging.debug('pymmmk joined to lowkey')
+        if worker_type == "/asworker":
+            logging.info('PyMMMK {} joining to lowkey'.format(worker_name))
+            pymmmk.join()
+            logging.info('PyMMMK {} joined to lowkey'.format(worker_name))
+            pymmmk.listen(True)
+            logging.info("PyMMMK {} will listen to lowkey".format(worker_name))
+        else:
+            logging.info("PyMMMK {} won't join to lowkey".format(worker_name))
+            pymmmk.listen(False)
+            logging.info("PyMMMK {} won't listen to lowkey".format(worker_name))
+            
+        pymmmk.run()
 
         return "ACK"
     

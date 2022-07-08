@@ -11,7 +11,7 @@ __credits__ = "Eugene Syriani"
 __license__ = "GPL-3.0"
 
 
-class MMMKModelTests(unittest.TestCase):
+class MMMKModelLWWTests(unittest.TestCase):
     
     model = None
     
