@@ -250,24 +250,25 @@ module.exports = {
             logger.debug('worker#' + __wid + ' << (' + aswSequenceNumber + ') ' + _utils.jsons(log_chs));
 
 
-            if (_utils.sn2int(aswSequenceNumber) >
-                _utils.sn2int(this.__nextASWSequenceNumber)) {
-                this.__pendingChangelogs.push(
-                    {
-                        'changelog': changelog,
-                        'sequence#': aswSequenceNumber,
-                        'hitchhiker': hitchhiker
-                    });
-                let self = this;
-                this.__pendingChangelogs.sort(
-                    function (a, b) {
-                        return self.__sn2int(a['sequence#']) -
-                            self.__sn2int(b['sequence#']);
-                    });
-                return;
-            } else if (_utils.sn2int(aswSequenceNumber) <
-                _utils.sn2int(this.__nextASWSequenceNumber))
-                throw 'invalid changelog sequence#';
+            // TODO: For now, ignore the sequence number
+            // if (_utils.sn2int(aswSequenceNumber) >
+            //     _utils.sn2int(this.__nextASWSequenceNumber)) {
+            //     this.__pendingChangelogs.push(
+            //         {
+            //             'changelog': changelog,
+            //             'sequence#': aswSequenceNumber,
+            //             'hitchhiker': hitchhiker
+            //         });
+            //     let self = this;
+            //     this.__pendingChangelogs.sort(
+            //         function (a, b) {
+            //             return self.__sn2int(a['sequence#']) -
+            //                 self.__sn2int(b['sequence#']);
+            //         });
+            //     return;
+            // } else if (_utils.sn2int(aswSequenceNumber) <
+            //     _utils.sn2int(this.__nextASWSequenceNumber))
+            //     throw 'invalid changelog sequence#';
 
 
             let cschangelogs = [];

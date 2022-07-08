@@ -48,32 +48,33 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 {
 	console.debug(' ++ ('+seqNum+') ',changelog);
 
-	var isCSWChangelog 	 = seqNum.match(/csworker/);
-		 nextSeqNum 	 	 = 
-			 (isCSWChangelog ? __nextCSWSequenceNumber : __nextASWSequenceNumber),
-		 pendingChangelogs = 
+	let isCSWChangelog 	 = seqNum.match(/csworker/);
+	let nextSeqNum 	 	 =
+			 (isCSWChangelog ? __nextCSWSequenceNumber : __nextASWSequenceNumber);
+	let pendingChangelogs =
 			 (isCSWChangelog ? __pendingCSWChangelogs : __pendingASWChangelogs);
 
-	if( utils.sn2int(seqNum) > utils.sn2int(nextSeqNum) )
-	{
-		pendingChangelogs.push(
-				{'changelog':changelog,
-				 'sequence#':seqNum,
-				 'hitchhiker':hitchhiker});
-		pendingChangelogs.sort(
-			function(a,b)
-			{
-				return utils.sn2int(a['sequence#']) - utils.sn2int(b['sequence#']);
-			});
-		return;
-	}
-	else if( utils.sn2int(seqNum) < utils.sn2int(nextSeqNum) )
-	{
-		WindowManagement.openDialog(
-				__FATAL_ERROR, 
-				'invalid changelog sequence# :: '+utils.sn2int(seqNum));
-		return;
-	}
+	// TODO: For now, ignore the sequence numbering
+	// if( utils.sn2int(seqNum) > utils.sn2int(nextSeqNum) )
+	// {
+	// 	pendingChangelogs.push(
+	// 			{'changelog':changelog,
+	// 			 'sequence#':seqNum,
+	// 			 'hitchhiker':hitchhiker});
+	// 	pendingChangelogs.sort(
+	// 		function(a,b)
+	// 		{
+	// 			return utils.sn2int(a['sequence#']) - utils.sn2int(b['sequence#']);
+	// 		});
+	// 	return;
+	// }
+	// else if( utils.sn2int(seqNum) < utils.sn2int(nextSeqNum) )
+	// {
+	// 	WindowManagement.openDialog(
+	// 			__FATAL_ERROR,
+	// 			'invalid changelog sequence# :: '+utils.sn2int(seqNum));
+	// 	return;
+	// }
 
 	// BUG: changes to element values are not being sent as changelog steps
 	// so for now, mark any change as making the model unsaved

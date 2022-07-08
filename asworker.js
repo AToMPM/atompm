@@ -318,7 +318,8 @@ module.exports = {
 					__uri_to_id(reqData['src']),
 					__uri_to_id(reqData['dest']),
 					fulltype,
-					reqData['attrs']]);
+					reqData['attrs'],
+					reqData['hitchhiker'], seq_num]);
 			}
 			compare_changelogs(res2, res)
 
@@ -365,9 +366,12 @@ module.exports = {
 	'PUT *.instance' :
 		async function (resp, uri, reqData/*changes[,hitchhiker]*/) {
 			let id = __uri_to_id(uri);
+			let seq_num = __sequenceNumber();
+
 			let res1 = _mmmk.update(id, reqData['changes']);
-			let res = await __mmmkReq(["update", id, reqData['changes']]);
+			let res = await __mmmkReq(["update", id, reqData['changes'], reqData['hitchhiker'], seq_num]);
 			compare_changelogs(res1, res)
+
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
 			else {
@@ -379,7 +383,7 @@ module.exports = {
 					{
 						'statusCode': 200,
 						'changelog': changelog,
-						'sequence#': __sequenceNumber(),
+						'sequence#': seq_num,
 						'hitchhiker': reqData['hitchhiker'],
 						'respIndex': resp
 					});

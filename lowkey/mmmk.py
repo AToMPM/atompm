@@ -92,7 +92,7 @@ class PyMMMK(Client):
     Message production
     '''
     def messageToBeForwarded(self, command):
-        return command in ["create", "loadMetamodel"]
+        return command in ["connect", "create", "loadMetamodel", "update"]
     
     def createMessage(self, body):
         return bytes('[{}] {}'.format(self._id, body), self.__encoding)
@@ -157,7 +157,7 @@ class PyMMMK(Client):
         if self.messageToBeForwarded(op) and not remote:
             #If the message is the type that others need to now about (e.g., create) AND this message doesn't come from someone else.
             #If the message comes from someone else, its distribution has been taken care of already.
-            logging.info("Sending message to lowkey")
+            logging.info("Sending message to lowkey from " + str(self.__name) + " of op: " + op)
             message = self.createMessage(f"senderType:{self.__type} ### senderName:{self.__name} ### op:{op} ### args:{args}")
             self._publisher.send(message)
         
@@ -415,7 +415,7 @@ class PyMMMK(Client):
         self.__mkedge__(args["id1"], args["id2"])
 
 
-    def connect(self, id1, id2, connectorType, attrs):
+    def connect(self, id1, id2, connectorType, attrs, hitchhiker=None, seq_num=None):
         """
         # connect:
         # 0. create a step-checkpoint
@@ -513,10 +513,13 @@ class PyMMMK(Client):
             if err:
                 return err
             else:
-                return {
+                msg = {
                     'id': connectorId,
                     'changelog': self.__changelog()
                 }
+                if seq_num: msg['sequence#'] = seq_num
+                if hitchhiker: msg['hitchhiker'] = hitchhiker
+                return msg
         else:
             err = self.__crudOp(
                 metamodel,
@@ -534,10 +537,13 @@ class PyMMMK(Client):
             else:
                 old_id = self.next_id
                 self.next_id += 1
-                return {
+                msg = {
                     'id': old_id,
                     'changelog': self.__changelog()
                 }
+                if seq_num: msg['sequence#'] = seq_num
+                if hitchhiker: msg['hitchhiker'] = hitchhiker
+                return msg
 
     def _create(self, args):
         """
@@ -795,7 +801,7 @@ class PyMMMK(Client):
 
             self.__chattr__(args["id"], attr, args["data"][attr])
 
-    def update(self, ident, data):
+    def update(self, ident, data, hitchhiker=None, seq_num=None):
         logging.debug('PyMMMK.update(' + str(ident) + ')')
         """
         0. create a step-checkpoint
@@ -823,7 +829,11 @@ class PyMMMK(Client):
             }
         )
         if err: return err
-        return {'changelog': self.__changelog()}
+
+        msg = {'changelog': self.__changelog()}
+        if seq_num: msg['sequence#'] = seq_num
+        if hitchhiker: msg['hitchhiker'] = hitchhiker
+        return msg
 
 
     def runDesignerAccessorCode(self, code, desc, ident):
