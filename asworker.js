@@ -218,8 +218,10 @@ module.exports = {
 			_do.chain(actions)(
 					async function (asmmData) {
 						let mm = reqData['mm'].match(/.+?(\/.*)\.metamodel/)[1];
+
+						let seq_num = __sequenceNumber()
 						let res1 = _mmmk.loadMetamodel(mm, asmmData);
-						let res2 = await __mmmkReq(["loadMetamodel", mm, asmmData]);
+						let res2 = await __mmmkReq(["loadMetamodel", mm, asmmData, reqData['hitchhiker'], seq_num]);
 
 						compare_changelogs(res1, res2)
 
@@ -227,7 +229,7 @@ module.exports = {
 							{
 								'statusCode': 200,
 								'changelog': res2['changelog'],
-								'sequence#': __sequenceNumber(),
+								'sequence#': seq_num,
 								'hitchhiker': reqData['hitchhiker'],
 								'respIndex': resp
 							});
@@ -299,9 +301,12 @@ module.exports = {
 			let fulltype = matches[1];
 			let res;
 			let res2;
+
+			let seq_num = __sequenceNumber();
+
 			if (reqData == undefined || reqData['src'] == undefined) {
 				res2 = _mmmk.create(fulltype, reqData['attrs']);
-				res = await __mmmkReq(["create", fulltype, reqData['attrs']])
+				res = await __mmmkReq(["create", fulltype, reqData['attrs'], reqData['hitchhiker'], seq_num])
 
 			} else {
 				res2 = _mmmk.connect(
@@ -325,7 +330,7 @@ module.exports = {
 						'statusCode': 200,
 						'changelog': res['changelog'],
 						'data': res['id'],
-						'sequence#': __sequenceNumber(),
+						'sequence#': seq_num,
 						'hitchhiker': reqData['hitchhiker'],
 						'respIndex': resp
 					});

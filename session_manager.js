@@ -290,11 +290,26 @@ function handle_http_message(url, req, resp){
             ''+wid);
         return;
     } else if (req.method == 'POST' && url.pathname.includes("changelogPush")){
-        let chnglg = url['query']['changelog']
-        let wid = url['query']['wid']
 
-        let msg = {'changelog': chnglg};
-        send_to_all(wid, msg);
+        let reqData = '';
+        req.addListener("data", function (chunk) {
+            reqData += chunk;
+        });
+        req.addListener("end",
+            function () {
+                let chnglg = _utils.jsonp(reqData)
+                let wid = url['query']['wid']
+
+                chnglg = _utils.jsonp(chnglg)
+
+                _utils.respond(
+                    resp,
+                    201,
+                    '',
+                    ''+wid);
+
+                send_to_all(wid, chnglg);
+            });
     }
 
     let wids = undefined;

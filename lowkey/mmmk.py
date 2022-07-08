@@ -167,12 +167,12 @@ class PyMMMK(Client):
         if remote:
             # send the changelog to the session manager
             # to inform listening workers/clients
-            encoded_changelog = urllib.parse.quote(str(res))
+            encoded_changelog = json.dumps(res)
             _wid = re.findall(r'\d+', self.__name)[0]
-            _url = 'http://localhost:8124/atompm/' + 'changelogPush' + '?wid=' + str(_wid) + '&changelog=' + encoded_changelog
-            print("Sending HTTP message")
-            print(_url)
-            x = req.post(_url)
+            _url = 'http://localhost:8124/atompm/' + 'changelogPush' + '?wid=' + str(_wid)
+            print("Sending HTTP message to wid: " + str(_wid))
+            #print(_url)
+            x = req.post(_url, json=encoded_changelog)
             logging.info(x.text)
         
         logging.info('{}: Classes in the model: {}.'.format(self.__name, len(self.model.nodes)))
@@ -257,13 +257,15 @@ class PyMMMK(Client):
         return {'changelog': self.__changelog()}
 
 
-    def loadMetamodel(self, name, mm):
+    def loadMetamodel(self, name, mm, hitchhiker=None, seq_num=None):
         """
         # load a metamodel
         #
         # 0. create a step - checkpoint
         # 1. load metamodel into this.model.metamodels and this.metamodels
         # (via__loadmm__)
+        :param hitchhiker:
+        :param seq_num:
         :param name:
         :param mm:
         :return:
@@ -272,7 +274,12 @@ class PyMMMK(Client):
         self.__setStepCheckpoint()
 
         self.__loadmm__(name, mm)
-        return {'changelog': self.__changelog()}
+
+        msg = {'changelog': self.__changelog()}
+        if seq_num: msg['sequence#'] = seq_num
+        if hitchhiker: msg['hitchhiker'] = hitchhiker
+
+        return msg
 
 
     def unloadMetamodel(self, name):
@@ -568,7 +575,7 @@ class PyMMMK(Client):
             self.__mkedge__(args["id1"], str(self.next_id))
             self.__mkedge__(str(self.next_id), args["id2"])
 
-    def create(self, fullType, attrs):
+    def create(self, fullType, attrs, hitchhiker=None, seq_num=None):
         logging.debug('PyMMMK.create()')
         logging.debug('{}: PyMMMK.create() -- fullType: {}, attrs: {}.'.format(self.__name, fullType, attrs))
         """
@@ -595,6 +602,10 @@ class PyMMMK(Client):
             return err
         ret = {'id': self.next_id,
                'changelog': self.__changelog()}
+        if hitchhiker:
+            ret['hitchhiker'] = hitchhiker
+        if seq_num:
+            ret['sequence#'] = seq_num
         self.next_id += 1
         return ret
 
