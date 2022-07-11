@@ -51,7 +51,7 @@ function __initClient()
 		});
 
     let socket = io(
-        window.location.hostname + ':8124', {
+        {
             // 'port':8124,
             'reconnect': false,
             'timeout': 200000
