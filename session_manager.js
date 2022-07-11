@@ -58,7 +58,18 @@ async function inform_mmmk_manager(msg) {
 }
 
 function init_session_manager(httpserver){
-    socket_server = new _sio.Server(httpserver);
+
+    function allow_request(req, callback){
+        callback(null, true);
+    }
+    socket_server = new _sio.Server(httpserver,
+        {
+            "allowRequest": allow_request,
+            "cors": {
+                origin: "*",
+            }
+        }
+        );
 
     socket_server.sockets.on('connection',
         function(socket)
