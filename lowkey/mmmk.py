@@ -92,7 +92,12 @@ class PyMMMK(Client):
     Message production
     '''
     def messageToBeForwarded(self, command):
-        return command in ["connect", "create", "loadMetamodel", "update"]
+        return command in ["connect",
+                           "create", "delete",
+                           "loadModel",
+                           "loadMetamodel", "unloadMetamodel",
+                           "undo", "redo",
+                           "update"]
     
     def createMessage(self, body):
         return bytes('[{}] {}'.format(self._id, body), self.__encoding)
@@ -230,7 +235,7 @@ class PyMMMK(Client):
             })
 
 
-    def loadModel(self, name, model, insert):
+    def loadModel(self, name, model, insert, hitchhiker=None, seq_num=None):
         """
         # load a model into this.model
         #
@@ -243,6 +248,8 @@ class PyMMMK(Client):
         :param name:
         :param model:
         :param insert:
+        :param hitchhiker:
+        :param seq_num:
         :return:
         """
         logging.debug('PyMMMK.loadModel()')
@@ -254,7 +261,11 @@ class PyMMMK(Client):
                 return {'$err': 'metamodel not loaded :: ' + mm}
 
         self.__resetm__(name, model, insert)
-        return {'changelog': self.__changelog()}
+        msg = {'changelog': self.__changelog()}
+        if seq_num: msg['sequence#'] = seq_num
+        if hitchhiker: msg['hitchhiker'] = hitchhiker
+
+        return msg
 
 
     def loadMetamodel(self, name, mm, hitchhiker=None, seq_num=None):
@@ -338,7 +349,7 @@ class PyMMMK(Client):
         :return:
         """
         logging.debug('PyMMMK.__crudOp()')
-        if not self.metamodels[metamodel]:
+        if metamodel not in self.metamodels:
             return {'$err': 'metamodel not loaded :: ' + metamodel}
 
         if 'create' in events:

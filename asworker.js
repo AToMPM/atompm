@@ -265,9 +265,11 @@ module.exports = {
 	/* load a model */
 	'PUT /current.model' :
 		async function (resp, uri, reqData/*m,name,insert,hitchhiker*/) {
-			let res2 = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
-			let res = await __mmmkReq(["loadModel", reqData['name'], reqData['m'], reqData['insert']]);
-			compare_changelogs(res, res2)
+
+			let seq_num = __sequenceNumber();
+			//let res2 = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
+			let res = await __mmmkReq(["loadModel", reqData['name'], reqData['m'], reqData['insert'], reqData['hitchhiker'], seq_num]);
+			//compare_changelogs(res, res2)
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
 			else
@@ -275,7 +277,7 @@ module.exports = {
 					{
 						'statusCode': 200,
 						'changelog': res['changelog'],
-						'sequence#': __sequenceNumber(),
+						'sequence#': seq_num,
 						'hitchhiker': reqData['hitchhiker'],
 						'respIndex': resp
 					});
@@ -300,20 +302,20 @@ module.exports = {
 			let matches = uri.match(/(.*)\.type/);
 			let fulltype = matches[1];
 			let res;
-			let res2;
+			// let res2;
 
 			let seq_num = __sequenceNumber();
 
 			if (reqData == undefined || reqData['src'] == undefined) {
-				res2 = _mmmk.create(fulltype, reqData['attrs']);
+				// res2 = _mmmk.create(fulltype, reqData['attrs']);
 				res = await __mmmkReq(["create", fulltype, reqData['attrs'], reqData['hitchhiker'], seq_num])
 
 			} else {
-				res2 = _mmmk.connect(
-				 	__uri_to_id(reqData['src']),
-				 	__uri_to_id(reqData['dest']),
-				 	fulltype,
-				 	reqData['attrs']);
+				// res2 = _mmmk.connect(
+				//  	__uri_to_id(reqData['src']),
+				//  	__uri_to_id(reqData['dest']),
+				//  	fulltype,
+				//  	reqData['attrs']);
 				res = await __mmmkReq(["connect",
 					__uri_to_id(reqData['src']),
 					__uri_to_id(reqData['dest']),
@@ -321,7 +323,7 @@ module.exports = {
 					reqData['attrs'],
 					reqData['hitchhiker'], seq_num]);
 			}
-			compare_changelogs(res2, res)
+			// compare_changelogs(res2, res)
 
 			if ('$err' in res)
 				__postInternalErrorMsg(resp, res['$err']);
@@ -368,9 +370,9 @@ module.exports = {
 			let id = __uri_to_id(uri);
 			let seq_num = __sequenceNumber();
 
-			let res1 = _mmmk.update(id, reqData['changes']);
+			//let res1 = _mmmk.update(id, reqData['changes']);
 			let res = await __mmmkReq(["update", id, reqData['changes'], reqData['hitchhiker'], seq_num]);
-			compare_changelogs(res1, res)
+			//compare_changelogs(res1, res)
 
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
@@ -406,17 +408,17 @@ module.exports = {
 		async function (resp, uri) {
 			let id = __uri_to_id(uri);
 
-			let res1 = _mmmk.read(id)
+			//let res1 = _mmmk.read(id)
 			let res = await __mmmkReq(["read", id])
-			compare_objects(res1, res)
+			//compare_objects(res1, res)
 
 			if (res['$err']) {
 				await __postMessage({'statusCode': 200, 'respIndex': resp});
 				return;
 			}
-			res1 = _mmmk.delete(id);
+			//res1 = _mmmk.delete(id);
 			res = await __mmmkReq(["delete", id])
-			compare_changelogs(res1, res)
+			//compare_changelogs(res1, res)
 
 			if (res['$err']) {
 				__postInternalErrorMsg(resp, res['$err']);

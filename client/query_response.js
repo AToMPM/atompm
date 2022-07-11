@@ -48,13 +48,15 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 {
 	console.debug(' ++ ('+seqNum+') ',changelog);
 
-	let isCSWChangelog 	 = seqNum.match(/csworker/);
-	let nextSeqNum 	 	 =
-			 (isCSWChangelog ? __nextCSWSequenceNumber : __nextASWSequenceNumber);
-	let pendingChangelogs =
-			 (isCSWChangelog ? __pendingCSWChangelogs : __pendingASWChangelogs);
-
 	// TODO: For now, ignore the sequence numbering
+
+	// let isCSWChangelog 	 = seqNum.match(/csworker/);
+	// let nextSeqNum 	 	 =
+	// 		 (isCSWChangelog ? __nextCSWSequenceNumber : __nextASWSequenceNumber);
+	// let pendingChangelogs =
+	// 		 (isCSWChangelog ? __pendingCSWChangelogs : __pendingASWChangelogs);
+
+
 	// if( utils.sn2int(seqNum) > utils.sn2int(nextSeqNum) )
 	// {
 	// 	pendingChangelogs.push(
@@ -417,20 +419,20 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 		});
 
 
-	if( isCSWChangelog )
-		nextSeqNum = __nextCSWSequenceNumber = 
-			utils.incrementSequenceNumber(nextSeqNum);
-	else
-		nextSeqNum = __nextASWSequenceNumber = 
-			utils.incrementSequenceNumber(nextSeqNum);
-
-	if( pendingChangelogs.length > 0 &&
-		 nextSeqNum == pendingChangelogs[0]['sequence#'] )
-	{
-		var pc = pendingChangelogs.shift();
-		__handleChangelog(
-				pc['changelog'],
-				pc['sequence#'],
-				pc['hitchhiker']);
-	}
+	// if( isCSWChangelog )
+	// 	nextSeqNum = __nextCSWSequenceNumber =
+	// 		utils.incrementSequenceNumber(nextSeqNum);
+	// else
+	// 	nextSeqNum = __nextASWSequenceNumber =
+	// 		utils.incrementSequenceNumber(nextSeqNum);
+	//
+	// if( pendingChangelogs.length > 0 &&
+	// 	 nextSeqNum == pendingChangelogs[0]['sequence#'] )
+	// {
+	// 	var pc = pendingChangelogs.shift();
+	// 	__handleChangelog(
+	// 			pc['changelog'],
+	// 			pc['sequence#'],
+	// 			pc['hitchhiker']);
+	// }
 }
