@@ -178,7 +178,7 @@ WindowManagement = function(){
 				null);
 		}
 
-		let url = "/collab" + "?cid=" + __clientID + "&user=" + __user + "&address=" + window.location.href;
+		let url = "/collabReq" + "?cid=" + __clientID + "&user=" + __user + "&address=" + window.location.href;
 		HttpUtils.httpReq("GET", url, null, create_collab);
 	};
 	
