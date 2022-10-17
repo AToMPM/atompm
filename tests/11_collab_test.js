@@ -52,10 +52,11 @@ module.exports = {
             await user_utils.create_user(client, username, user_pass);
         }
 
+        client.pause(500);
         await client.windowHandles(function (result) {
             tab_a = result.value[0];
         })
-        client.pause(500);
+        client.pause(1500);
         client.verify.ok(true, 'Tab A\'s Handle: \'' + tab_a + "'");
 
         //==========================================================
@@ -68,6 +69,8 @@ module.exports = {
         model_building_utils.load_toolbar(client, [filename]);
 
         client.pause(500);
+
+        let name_field = "#tr_name > td:nth-child(2) > textarea";
 
         //==========================================================
         client.verify.ok(true, 'Step 2b: Client A creates instance');
@@ -89,7 +92,7 @@ module.exports = {
 
         let class_name = "ClassA";
         let attrs = {};
-        let name_field = "#tr_name > td:nth-child(2) > textarea";
+
         attrs[name_field] = class_name;
         model_building_utils.set_attribs(client, 0, attrs);
 
@@ -100,23 +103,26 @@ module.exports = {
 
         //==========================================================
         client.verify.ok(true, 'Step 3a: Client B joins through screen sharing');
+        let collab_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f collab";
+        client.waitForElementPresent('css selector', collab_button, 1000, "Checking for collab button...");
+        client.click(collab_button);
 
-        let screen_share_selector = "#a_screenshare";
+        let screen_share_selector = "#screenShareLink > a";
+        client.getAttribute(screen_share_selector, "href", function (result) {
 
-        await client.getAttribute(screen_share_selector, "href", async function (result) {
-
-            let screen_share_url = decodeHtml(result.value);
+            let screen_share_url = result.value;
 
             const regex = /http.*/g;
             screen_share_url = screen_share_url.match(regex).toString();
             client.verify.ok(true, "Navigating to: " + screen_share_url);
 
-            await client.openNewWindow('window').pause(500)
+            client.openNewWindow('window').pause(500)
                 .url(screen_share_url);
 
-            await client.windowHandles(function (result) {
+            client.windowHandles(function (result) {
                 tab_b = result.value[1];
             });
+            client.pause(500);
             client.verify.ok(true, 'Tab B\'s Handle: \'' + tab_b + "'");
         });
 
@@ -130,8 +136,8 @@ module.exports = {
 
         client.pause(500);
 
-        let model_share_selector = "#a_modelshare";
-        await client.getAttribute(model_share_selector, "href", async function (result) {
+        let model_share_selector = "#modelShareLink > a";
+        client.getAttribute(model_share_selector, "href", function (result) {
 
             let model_share_url = decodeHtml(result.value);
 
@@ -139,13 +145,13 @@ module.exports = {
             model_share_url = model_share_url.match(regex).toString();
             client.verify.ok(true, "Navigating to: " + model_share_url);
 
-            await client.openNewWindow('window').pause(500)
+            client.openNewWindow('window').pause(500)
                 .url(model_share_url);
 
-            await client.windowHandles(function (result) {
+            client.windowHandles(function (result) {
                     tab_c = result.value[2];
                 })
-
+            client.pause(500);
             client.verify.ok(true, 'Tab C\'s Handle: \'' + tab_c + "'");
         });
 
@@ -156,6 +162,10 @@ module.exports = {
         client.verify.ok(true, 'Step 4a: Client A changes name of instance (with B and C listening)');
 
         await client.switchToWindow(tab_a.toString())
+        client.pause(500);
+
+        client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
+            .click("#dialog_btn");
         client.pause(500);
 
         attrs = {};

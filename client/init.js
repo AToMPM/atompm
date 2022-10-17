@@ -118,7 +118,7 @@ function __initClient()
 						if (prefs['autoloaded-model']['value'] != '')
 							_loadModel(prefs['autoloaded-model']['value']);
 
-						Collaboration.enableCollaborationLinks();
+						// Collaboration.enableCollaborationLinks();
 						__launchAutosave();
 					});
 			}
@@ -140,7 +140,7 @@ function __initClient()
 						_getUserPreferences(
 							function (prefs) {
 								__prefs = prefs;
-								Collaboration.enableCollaborationLinks();
+								// Collaboration.enableCollaborationLinks();
 								__launchAutosave();
 							});
 					});
@@ -159,7 +159,7 @@ function __initClient()
 						_getUserPreferences(
 							function (prefs) {
 								__prefs = prefs;
-								Collaboration.enableCollaborationLinks();
+								// Collaboration.enableCollaborationLinks();
 								__launchAutosave();
 							});
 					});

@@ -295,7 +295,7 @@ function handle_http_message(url, req, resp){
         return;
     }
     // build and return urls for screenshare and modelshare
-    else if (url.pathname.includes('/collab')) {
+    else if (url.pathname.includes('/collabReq')) {
         
         if (url['query'] == undefined || url['query']['cid'] == undefined){
             _utils.respond(resp, 400, 'missing client ID for collab');
