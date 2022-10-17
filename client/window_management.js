@@ -130,7 +130,18 @@ WindowManagement = function(){
 
 			if (!failed) {
 				let screenShareURL = "<a href= '" + data['screenShare'] + "' target='_blank'>" + data['screenShare'] + "</a>";
-				elements.push(GUIUtils.getTextSpan(screenShareURL));
+				let screenShareLink = GUIUtils.getTextSpan(screenShareURL);
+				screenShareLink.attr("id", "screenShareLink");
+				elements.push(screenShareLink);
+
+				let screenShareCopyBtn = $('<button class="okbutton">');
+				screenShareCopyBtn.attr("id", "dialog_btn");
+				screenShareCopyBtn.attr("title", "copy to clipboard");
+				screenShareCopyBtn.html('copy');
+				screenShareCopyBtn.click( function (ev) {
+					navigator.clipboard.writeText(data['screenShare']);
+				});
+				elements.push(screenShareCopyBtn);
 			}
 
 			let screenShareText = "All collaborating users share the same concrete and abstract syntax.\nIf one user moves an entity or changes to another concrete syntax representation, the change will be replicated for all collaborators.\n\n"
@@ -141,7 +152,18 @@ WindowManagement = function(){
 
 			if (!failed) {
 				let modelShareURL = "<a href= '" + data['modelShare'] + "' target='_blank'>" + data['modelShare'] + "</a>";
-				elements.push(GUIUtils.getTextSpan(modelShareURL));
+				let modelShareLink = GUIUtils.getTextSpan(modelShareURL);
+				modelShareLink.attr("id", "modelShareLink");
+				elements.push(modelShareLink);
+
+				let modelShareCopyBtn = $('<button class="okbutton">');
+				modelShareCopyBtn.attr("id", "dialog_btn");
+				modelShareCopyBtn.attr("title", "copy to clipboard");
+				modelShareCopyBtn.html('copy');
+				modelShareCopyBtn.click( function (ev) {
+					navigator.clipboard.writeText(data['modelShare']);
+				});
+				elements.push(modelShareCopyBtn);
 			}
 
 			let modelShareText = "Only abstract syntax is shared. This means that all collaborators can have distinct concrete syntax representations and distinct layouts (provided layout and abstract syntax are not intricately related), and are only affected by others’ abstract syntax changes (e.g., modifying abstract attribute values).\n\n"
