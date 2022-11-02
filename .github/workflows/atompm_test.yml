@@ -30,7 +30,7 @@ jobs:
     - name: npm install
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: 18.x
         
     - name: setup chromedriver
       uses: nanasess/setup-chromedriver@master
