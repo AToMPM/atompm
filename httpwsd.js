@@ -4,7 +4,8 @@
 */
 
 /*********************************** IMPORTS **********************************/
-const _cp = require('child_process'),
+const process = require('node:process');
+const _cp = require('node:child_process'),
 	_fs = require('fs'),
 	_http = require('http'),
 	_url = require('url'),
@@ -13,6 +14,11 @@ const _cp = require('child_process'),
 	logger = require('./logger'),
 	_utils = require('./utils');
 const session_manager = require("./session_manager");
+
+// Command line flag: Start python model transformation server process as a child process of this (node) process.
+const runWithPythonChildProcess = process.argv.slice(2).includes("--with-python"); // opt-in
+
+const port = 8124;
 
 
 /** Wrapper function to log HTTP messages from the server **/
@@ -603,10 +609,38 @@ let httpserver = _http.createServer(
 
 session_manager.init_session_manager(httpserver);
 
-let port = 8124;
-httpserver.listen(port);
+function startServer() {
+  httpserver.listen(port);
+  logger.info(`Server listening on: http://localhost:${port}/atompm`);
+  logger.info("```mermaid");
+  logger.info("sequenceDiagram");
 
-logger.info("AToMPM listening on port: " + port);
-logger.info("```mermaid");
-logger.info("sequenceDiagram");
+  function gracefulShutdown() {
+    logger.info("Gracefully shutting down...");
+    httpserver.close();
+  }
+  process.once('SIGINT', () => {
+    // The Python process belongs to the same process group, and will also receive a SIGINT.
+    // This is not necessary, because we send a SIGTERM to the Python process anyway, but it won't cause us trouble.
+
+    // The next SIGINT will cause a forced exit:
+    process.once('SIGINT', () => {
+      process.exit(1);
+    });
+    logger.info("");
+    logger.info("Received SIGINT. Send another SIGINT to force shutdown.");
+    gracefulShutdown();
+  });
+  process.once('SIGTERM', gracefulShutdown);
+}
+
+if (runWithPythonChildProcess) {
+  const {startPythonChildProcess} = require("./pythonrunner");
+  const {endPythonChildProcess} = startPythonChildProcess(startServer);
+  httpserver.on('close', endPythonChildProcess);
+}
+else {
+  // Run without Python as a child process
+  startServer();
+}
 

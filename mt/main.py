@@ -12,9 +12,9 @@ from httpd import HTTPServerThread
 def main() :
 	logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 
-	print("Starting Model Transformation Server... ")
 	httpd = HTTPServerThread()
 	httpd.start()
+	print("Started Model Transformation Server")
 
 if __name__ == "__main__" :
 	main()
