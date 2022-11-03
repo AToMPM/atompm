@@ -16,7 +16,7 @@ const _cp = require('node:child_process'),
 const session_manager = require("./session_manager");
 
 // Command line flag:
-const runWithPythonChildProcess = !(process.argv.slice(2).includes("--without-child")); // default is true
+const runWithPythonChildProcess = process.argv.slice(2).includes("--with-python"); // opt-in
 
 const port = 8124;
 
@@ -641,6 +641,9 @@ if (runWithPythonChildProcess) {
     logger.info("Model Transformation Server exited "
       + ((code===null) ? ("by signal " + signal) : ("with code " + code.toString())));
   });
+  httpserver.on('close', () => {
+    pythonProcess.kill('SIGTERM'); // cleanly exit Python process AFTER http server has shut down.
+  });
   const coloredStream = (readableStream, writableStream, colorCode) => {
     readableStream.on('data', chunk => {
       writableStream.write("\x1b["+colorCode+"m"); // set color
@@ -664,15 +667,11 @@ if (runWithPythonChildProcess) {
         // No need to keep accumulating pythonProcess' stdout:
         pythonProcess.stdout.removeListener('data', pythonStartedListener);
 
-        httpserver.on('close', () => {
-          pythonProcess.kill('SIGTERM'); // cleanly exit Python process AFTER http server has shut down.
-        });
-
         startServer();
       }
     }
   }
-  const waitUntilExpectedString = pythonProcess.stdout.on('data', pythonStartedListener);
+  pythonProcess.stdout.on('data', pythonStartedListener);
 
   // In case of a forced exit (e.g. uncaught exception), the Python process may still be running, so we force-kill it:
   process.on('exit', code => {
