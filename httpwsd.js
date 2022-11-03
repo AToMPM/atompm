@@ -15,7 +15,7 @@ const _cp = require('node:child_process'),
 	_utils = require('./utils');
 const session_manager = require("./session_manager");
 
-// Command line flag:
+// Command line flag: Start python model transformation server process as a child process of this (node) process.
 const runWithPythonChildProcess = process.argv.slice(2).includes("--with-python"); // opt-in
 
 const port = 8124;
@@ -634,49 +634,10 @@ function startServer() {
   process.once('SIGTERM', gracefulShutdown);
 }
 
-// Run Python transformation engine as a child process:
 if (runWithPythonChildProcess) {
-  const pythonProcess = _cp.spawn('python', ['mt/main.py']);
-  pythonProcess.on('exit', (code, signal) => {
-    logger.info("Model Transformation Server exited "
-      + ((code===null) ? ("by signal " + signal) : ("with code " + code.toString())));
-  });
-  httpserver.on('close', () => {
-    pythonProcess.kill('SIGTERM'); // cleanly exit Python process AFTER http server has shut down.
-  });
-  const coloredStream = (readableStream, writableStream, colorCode) => {
-    readableStream.on('data', chunk => {
-      writableStream.write("\x1b["+colorCode+"m"); // set color
-      writableStream.write(chunk);
-      writableStream.write("\x1b[0m"); // reset color
-    });
-  };
-  // output of Python process is interleaved with output of this process:
-  coloredStream(pythonProcess.stdout, process.stdout, "33"); // yellow
-  coloredStream(pythonProcess.stderr, process.stderr, "91"); // red
-
-  // Only start the HTTP server after the Transformation Server has started.
-  // When the Python process has written the following string to stdout, we know the transformation server has started:
-  const expectedString = Buffer.from("Started Model Transformation Server\n");
-  let accumulatedOutput = Buffer.alloc(0);
-  function pythonStartedListener(chunk) {
-    accumulatedOutput = Buffer.concat([accumulatedOutput, chunk]);
-
-    if (accumulatedOutput.length >= expectedString.length) {
-      if (accumulatedOutput.subarray(0, expectedString.length).equals(expectedString)) {
-        // No need to keep accumulating pythonProcess' stdout:
-        pythonProcess.stdout.removeListener('data', pythonStartedListener);
-
-        startServer();
-      }
-    }
-  }
-  pythonProcess.stdout.on('data', pythonStartedListener);
-
-  // In case of a forced exit (e.g. uncaught exception), the Python process may still be running, so we force-kill it:
-  process.on('exit', code => {
-    pythonProcess.kill('SIGKILL');
-  });
+  const {startPythonChildProcess} = require("./pythonrunner");
+  const {endPythonChildProcess} = startPythonChildProcess(startServer);
+  httpserver.on('close', endPythonChildProcess);
 }
 else {
   // Run without Python as a child process
