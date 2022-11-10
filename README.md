@@ -27,20 +27,21 @@ Usage instructions for connecting to this Docker container are in the `packaging
 To install AToMPM, follow these steps:
 1. Download and install the latest Python
     * Python 2 is unsupported. Please use Python 3.
-    * Use a package manager on Linux or visit http://python.org/download/
-1. Download and install `python-igraph`
+    * Use a package manager on Linux or visit [http://python.org/download/](http://python.org/download/)
+2. Download and install `python-igraph`
     * Use the pip package manager (comes with Python)
         * `pip3 install python-igraph`
     * For Windows, you may need to install the compiled igraph core
-        * `http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph`
-1. Download and install the `six` and `python-socketio` libraries
+        * [http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph](http://www.lfd.uci.edu/~gohlke/pythonlibs/#python-igraph)
+3. Download and install the required libraries
     * Use the pip package manager (comes with Python)
-        * `pip3 install six requests python-socketio python-socketio[client] websocket-client`
-1. Download and install `node.js`
-    * Required version: >= 8.0
+        * `pip3 install six requests python-socketio "python-socketio[client]" websocket-client`
+4. Download and install `node.js`
+    * Required version: >= 18.0
     * Use a package manager on Linux or visit [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
-1. Download and extract the source files for the newest AToMPM release from [https://github.com/AToMPM/atompm/releases](https://github.com/AToMPM/atompm/releases)
-1. In that unzipped AToMPM folder, run the command `npm install`
+5. Download and extract the source files for the newest AToMPM release from [https://github.com/AToMPM/atompm/releases](https://github.com/AToMPM/atompm/releases)
+6. Ensure your terminal is in the root AToMPM folder (containing `httpwsd.js`)
+7. Run the command `npm install`
     * If you do not need to run tests on AToMPM, you can run `npm install --production`
 
 ## Usage
@@ -54,7 +55,7 @@ To run AToMPM on Windows, double-click on the `run.bat` script inside of the mai
 
 ### Mac or Linux
 1. Execute `node httpwsd.js` in one terminal
-2. Execute `python mt\main.py` in another terminal
+2. Execute `python mt/main.py` in another terminal
 3. Open a browser (Firefox or Chrome) and navigate to [http://localhost:8124/atompm](http://localhost:8124/atompm)
 
 * The above steps are automated by the `run_AToMPM_local.sh` script
@@ -62,21 +63,9 @@ To run AToMPM on Windows, double-click on the `run.bat` script inside of the mai
 ## Bug Reporting/Feedback
 Please create an issue for your bug or feedback here: [https://github.com/AToMPM/atompm/issues](https://github.com/AToMPM/atompm/issues). Pull requests are also welcome.
 
-## Developing AToMPM
+## Developing and Testing AToMPM
 
-### Setting Up Development Environment
-
-Any Javascript IDE/editor can be used to develop AToMPM. Current options include:
-* [https://code.visualstudio.com/](https://code.visualstudio.com/) Free and open-source.
-* [https://atom.io/](https://atom.io/) Free and open-source
-* [https://www.jetbrains.com/webstorm/](https://www.jetbrains.com/webstorm/) Proprietary and non-free. Can obtain student license for free: [https://www.jetbrains.com/community/education/#students](https://www.jetbrains.com/community/education/#students)
-
-Follow the tool's documentation for setting up a new project and importing AToMPM's files.
-
-Currently, there is no style guide for AToMPM code. In the future, the [Prettier](https://prettier.io/) tool will most likely be used.
-
-### Testing
-To run tests on AToMPM, run `npm test`. Ensure that your resolution of your screen is set quite high, as elements cannot be placed by the script off-screen.
+See DEVELOPING.md in this directory.
 
 ## LICENSING
 The AToMPM project is licensed under the LGPL as stated in COPYING.lesser.
