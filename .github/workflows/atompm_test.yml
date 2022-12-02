@@ -53,6 +53,10 @@ jobs:
       run: |
         pip3 install six wheel websocket-client python-socketio[client] python-socketio
         pip3 install --user python-igraph
+
+    - name: test mt server startup
+      run: |
+        python mt/main.py --exit_early
     
 #    - name: run tests
 #      run: |
