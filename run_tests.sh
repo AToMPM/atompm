@@ -15,10 +15,10 @@ else
 logname=""
 fi
 
-
+mkdir -p -- "logs"
 #run server
 echo "Starting server..."
-node httpwsd.js > "./logs/${logname}node.log" 2> "./logs/${logname}node_error.log" &
+node httpwsd.js 1> "./logs/${logname}node.log" 2> "./logs/${logname}node_error.log" &
 serverpid=$!
 sleep 3
 
@@ -31,7 +31,7 @@ fi
 
 #run mt script
 echo "Starting model transformation script..."
-python3 mt/main.py > "./logs/${logname}python.log" 2> "./logs/${logname}python_error.log" &
+python3 mt/main.py 1> "./logs/${logname}python.log" 2> "./logs/${logname}python_error.log" &
 mtpid=$!
 sleep 3
 
