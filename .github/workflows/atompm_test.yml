@@ -118,6 +118,6 @@ jobs:
       with:
         path: |
           ./logs/
-          ./tests_output/
+          !./logs/*chromedriver.log
           ./screenshots/
         if-no-files-found: ignore
