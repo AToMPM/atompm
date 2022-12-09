@@ -3,9 +3,22 @@
 #exit on errors
 set -e
 
+if [ "$#" -ge 1 ] 
+then
+    if [ "$#" -ge 2 ] 
+    then
+        logname="${2:8:-3}_"
+    else
+        logname="${1:8:-3}_"
+    fi
+else
+logname=""
+fi
+
+mkdir -p -- "logs"
 #run server
 echo "Starting server..."
-node httpwsd.js &
+node httpwsd.js > "./logs/${logname}node.log" 2>&1 &
 serverpid=$!
 sleep 3
 
@@ -18,7 +31,7 @@ fi
 
 #run mt script
 echo "Starting model transformation script..."
-python3 mt/main.py &
+python3 mt/main.py > "./logs/${logname}python.log" 2>&1 &
 mtpid=$!
 sleep 3
 
@@ -43,11 +56,14 @@ fi
 
 
 echo "Starting tests..."
-if [ "$#" -ge 1 ]
+#if we have test arguments process arguments else run full suit of tests as default
+if [ "$#" -ge 1 ] 
 then
-    if [ "$1" == "headless" ]
+    #if first argument is headless run tests headless else run the specified test because we have at least one argument
+    if [ "$1" == "headless" ] 
     then
-        if [ -z "$2" ]
+        #if we dont have a second argument run all tests headless else run the test specified in second argument headless
+        if [ -z "$2" ] 
         then
             ./node_modules/nightwatch/bin/nightwatch -e run_headless
         else

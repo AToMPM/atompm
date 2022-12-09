@@ -116,5 +116,8 @@ jobs:
     - uses: actions/upload-artifact@v3
       if: failure()
       with:
-        path: ./screenshots/
+        path: |
+          ./logs/
+          !./logs/*chromedriver.log
+          ./screenshots/
         if-no-files-found: ignore
