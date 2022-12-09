@@ -13,7 +13,7 @@ from httpd import HTTPServerThread
 	init and launch http server + set logging level for mt/*
 '''
 def main(args) :
-	logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+	logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
 
 	print("Starting model transformation server... ")
 	print("Python version: " + str(python_version()))

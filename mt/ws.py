@@ -35,7 +35,7 @@ class WebSocket :
 	def _start_ws(self):
 
 		try:
-			self.socketIO = socketio.Client(logger=False, engineio_logger=False)
+			self.socketIO = socketio.Client(logger=True, engineio_logger=False)
 
 			self.socketIO.on('connect', self._onopen)
 			self.socketIO.on('message', self._onmessage)
