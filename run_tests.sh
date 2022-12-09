@@ -36,8 +36,8 @@ mtpid=$!
 sleep 3
 
 #check if model transformer is dead
-if ! kill -0 "$mtpid"; then
-    wait $mtpid
+if ! kill -0 "${mtpid}"; then
+    wait ${mtpid}
     mt_status=$?
     exit $mt_status
 fi
