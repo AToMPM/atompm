@@ -20,10 +20,13 @@ def main(args) :
 
 	httpd = HTTPServerThread()
 
+	print("M23")
+
 	if args.exit_early:
 	    print("Exiting early due to flag...")
 	else:
 	    httpd.start()
+	print("M29")
 
 if __name__ == "__main__" :
     parser = argparse.ArgumentParser(description='Run the model transformation server.')

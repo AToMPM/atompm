@@ -3,6 +3,7 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 import sys
+import logging
 if sys.version_info[0] < 3:
 	import threading, urlparse
 	from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
@@ -26,15 +27,19 @@ mtw2lock		 = {}		#maps workers to locks
 class HTTPRequestHandler(BaseHTTPRequestHandler) :
 
 	def do_GET(self) :
+		logging.debug('HTTPRequest get')
 		self._onrequest()
 
 	def do_POST(self) :
+		logging.debug('HTTPRequest post')
 		self._onrequest()
 
 	def do_PUT(self) :
+		logging.debug('HTTPRequest put')
 		self._onrequest()
 
 	def do_DELETE(self) :
+		logging.debug('HTTPRequest delete')
 		self._onrequest()
 
 
@@ -115,6 +120,8 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		2. send headers
 		3. send data|reason '''
 	def _respond(self,statusCode,reason='',data='',headers='') :
+		logging.debug('HTTPRequest response')
+
 		self.send_response(statusCode)
 
 		if headers == '' :
@@ -159,16 +166,20 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 	init thread that runs http server '''
 class HTTPServerThread(threading.Thread) :
 	def __init__(self) :
+		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
+		logging.debug('HTTPServerThread init')
 		threading.Thread.__init__(self)
 
 
 	def run(self):
+		logging.debug('HTTPServerThread start')
 		self.httpd = MultiThreadedHTTPServer(('127.0.0.1', 8125), HTTPRequestHandler)
 		self.httpd.serve_forever()
 		self.httpd.socket.close()
 
 
 	def stop(self) :
+		logging.debug('HTTPServerThread stop')
 		self.httpd.shutdown()
 		for wid in mtw2lock :
 			mtw2lock[wid].acquire()
