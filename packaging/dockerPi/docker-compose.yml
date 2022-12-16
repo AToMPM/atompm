@@ -1,0 +1,9 @@
+services:
+  app:
+    image: atompm:logger
+    ports: 
+      - 8124:8124
+    working_dir: /opt/atompm
+    volumes:
+      - /files/tests_output/:/opt/atompm/tests_output/:rw
+      - /files/logs/:/opt/atompm/logs/:rw
