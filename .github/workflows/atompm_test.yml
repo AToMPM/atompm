@@ -25,10 +25,10 @@ jobs:
         sudo DEBIAN_FRONTEND=noninteractive apt-get install -y chromium-browser python3-setuptools
         sudo apt install python3-pip
     
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
     - name: npm install
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: 18.x
         
