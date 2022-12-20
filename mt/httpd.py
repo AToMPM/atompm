@@ -106,6 +106,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 			2. add msg to it
 			3. release lock and notify worker that a new msg is available '''
 	def _postMessage(self,wid,msg) :
+		logging.debug('HTTPRequest postMessage')
 		mtw2lock[wid].acquire()
 		mtw2msgQueue[wid].append(msg)
 		mtw2lock[wid].notify()
@@ -151,6 +152,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 	'''
 		used by worker threads to populate self._response with their results '''
 	def setResponse(self,msg) :
+		logging.debug('HTTPRequest set response')
 		self._response['statusCode'] = msg['statusCode']
 
 		for x in ('reason','data','headers') :

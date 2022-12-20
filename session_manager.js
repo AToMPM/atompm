@@ -40,6 +40,8 @@ let socket_server = null;
 /** Syntactic sugar to build and send a socket.io message **/
 function __send(socket, statusCode, reason, data, headers)
 {
+    logger.http("socketio <br/>" + statusCode +"<br/>" + reason + " to : "+socket.id,{'at':"session_mngr"});
+
     socket.emit('message',
         {'statusCode':statusCode,
             'reason':reason,
@@ -93,6 +95,7 @@ function init_session_manager(httpserver){
                         let cid = url['query']['cid'];
 
                         if (cid == undefined) {
+                            logger.http("socketio <br/> 400 : invalid client id"+ url['query']['cid'] ,{'from':"session_mngr", 'to':'client'});
                             __send(socket, 400, 'invalid client id :: ' + url['query']['cid']);
                             return;
                         }

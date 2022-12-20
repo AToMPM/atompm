@@ -10,7 +10,7 @@
  * Future work could be to import Winston directly
  */
 
-let curr_log_level = 2;
+let curr_log_level = 3;
 
 const LOG_LEVELS = {
     ERROR: 0,
@@ -32,6 +32,10 @@ function return_level_names() {
 
 function set_level(new_level) {
     curr_log_level = new_level
+}
+
+function get_level() {
+    return curr_log_level;
 }
 
 function log(log_level, msg) {
@@ -135,6 +139,7 @@ module.exports = {
     LOG_LEVELS,
     return_level_names,
     set_level,
+    get_level,
     log,
     error,
     warn,

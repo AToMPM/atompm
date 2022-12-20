@@ -148,7 +148,7 @@ function __httpReq(method,url,data,port)
 
 	return function(callback,errback)
 			 {
-				 let options = {'port': port, 'path': url, 'method': method, 'agent': keepaliveAgent}; // agent proposed by yentl to improve performance
+				 let options = {'port': port, 'host': '127.0.0.1', 'path': url, 'method': method, 'agent': keepaliveAgent}; // agent proposed by yentl to improve performance
 				 if( data !== undefined )
 				 {
 					 data = _utils.jsons(data);
