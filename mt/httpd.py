@@ -168,7 +168,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 	init thread that runs http server '''
 class HTTPServerThread(threading.Thread) :
 	def __init__(self) :
-		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
+		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 		logging.debug('HTTPServerThread init')
 		threading.Thread.__init__(self)
 

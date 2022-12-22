@@ -46,7 +46,7 @@ class mtworkerThread(threading.Thread) :
 		sets up instance vars + stores references to _msgQueue and _lock in 
 		argument data structures '''
 	def __init__(self,mtw2msgQueue,mtw2lock) :
-		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
+		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 		logging.debug('mtworker init')
 		threading.Thread.__init__(self)
 		self.wid 				  = str(mtworkerThread.nextID)

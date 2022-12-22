@@ -20,7 +20,7 @@ import socketio
 class WebSocket :
 
 	def __init__(self, _aswid, chlogh=None) :
-		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
+		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 		logging.debug('WebSocket init')
 		assert chlogh is None or 'onchangelog' in dir(chlogh)
 		self._opened 	 = False
@@ -36,7 +36,7 @@ class WebSocket :
 	def _start_ws(self):
 		logging.debug('WebSocket start')
 		try:
-			self.socketIO = socketio.Client(logger=True, engineio_logger=True)
+			self.socketIO = socketio.Client(logger=False, engineio_logger=False)
 
 			self.socketIO.on('connect', self._onopen)
 			self.socketIO.on('message', self._onmessage)

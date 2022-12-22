@@ -10,23 +10,21 @@ from httpd import HTTPServerThread
 
 
 '''
-	init and launch http server + set logging level for mt/*
+    init and launch http server + set logging level for mt/*
 '''
 def main(args) :
-	logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.DEBUG)
+    logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
 
-	print("Starting model transformation server... ")
-	print("Python version: " + str(python_version()))
+    print("Starting model transformation server... ")
+    print("Python version: " + str(python_version()))
 
-	httpd = HTTPServerThread()
+    httpd = HTTPServerThread()
 
-	print("M23")
+    if args.exit_early:
+        print("Exiting early due to flag...")
+        return
 
-	if args.exit_early:
-	    print("Exiting early due to flag...")
-	else:
-	    httpd.start()
-	print("M29")
+    httpd.start()
 
 if __name__ == "__main__" :
     parser = argparse.ArgumentParser(description='Run the model transformation server.')
