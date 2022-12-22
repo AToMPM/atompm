@@ -18,7 +18,7 @@ fi
 mkdir -p -- "logs"
 #run server
 echo "Starting server..."
-node httpwsd.js > "./logs/${logname}node.log" 2>&1 &
+node httpwsd.js --log=HTTP > "./logs/${logname}node.log" 2>&1 &
 serverpid=$!
 sleep 3
 
@@ -26,6 +26,7 @@ sleep 3
 if ! kill -0 "$serverpid"; then
     wait $serverpid
     server_status=$?
+    echo "model transformation server failed to start" >> "./logs/${logname}node.log"
     exit $server_status
 fi
 
@@ -35,10 +36,13 @@ python3 mt/main.py > "./logs/${logname}python.log" 2>&1 &
 mtpid=$!
 sleep 3
 
+ps
+
 #check if model transformer is dead
-if ! kill -0 "$mtpid"; then
-    wait $mtpid
+if ! kill -0 "${mtpid}"; then
+    wait ${mtpid}
     mt_status=$?
+    echo "model transformation server failed to start" >> "./logs/${logname}python.log"
     exit $mt_status
 fi
 

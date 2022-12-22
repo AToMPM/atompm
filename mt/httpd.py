@@ -3,6 +3,7 @@ Copyright 2011 by the AToMPM team and licensed under the LGPL
 See COPYING.lesser and README.md in the root of this project for full details'''
 
 import sys
+import logging
 if sys.version_info[0] < 3:
 	import threading, urlparse
 	from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
@@ -26,15 +27,19 @@ mtw2lock		 = {}		#maps workers to locks
 class HTTPRequestHandler(BaseHTTPRequestHandler) :
 
 	def do_GET(self) :
+		logging.debug('HTTPRequest get')
 		self._onrequest()
 
 	def do_POST(self) :
+		logging.debug('HTTPRequest post')
 		self._onrequest()
 
 	def do_PUT(self) :
+		logging.debug('HTTPRequest put')
 		self._onrequest()
 
 	def do_DELETE(self) :
+		logging.debug('HTTPRequest delete')
 		self._onrequest()
 
 
@@ -101,6 +106,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 			2. add msg to it
 			3. release lock and notify worker that a new msg is available '''
 	def _postMessage(self,wid,msg) :
+		logging.debug('HTTPRequest postMessage')
 		mtw2lock[wid].acquire()
 		mtw2msgQueue[wid].append(msg)
 		mtw2lock[wid].notify()
@@ -115,6 +121,8 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 		2. send headers
 		3. send data|reason '''
 	def _respond(self,statusCode,reason='',data='',headers='') :
+		logging.debug('HTTPRequest response')
+
 		self.send_response(statusCode)
 
 		if headers == '' :
@@ -144,6 +152,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 	'''
 		used by worker threads to populate self._response with their results '''
 	def setResponse(self,msg) :
+		logging.debug('HTTPRequest set response')
 		self._response['statusCode'] = msg['statusCode']
 
 		for x in ('reason','data','headers') :
@@ -159,16 +168,20 @@ class HTTPRequestHandler(BaseHTTPRequestHandler) :
 	init thread that runs http server '''
 class HTTPServerThread(threading.Thread) :
 	def __init__(self) :
+		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+		logging.debug('HTTPServerThread init')
 		threading.Thread.__init__(self)
 
 
 	def run(self):
+		logging.debug('HTTPServerThread start')
 		self.httpd = MultiThreadedHTTPServer(('127.0.0.1', 8125), HTTPRequestHandler)
 		self.httpd.serve_forever()
 		self.httpd.socket.close()
 
 
 	def stop(self) :
+		logging.debug('HTTPServerThread stop')
 		self.httpd.shutdown()
 		for wid in mtw2lock :
 			mtw2lock[wid].acquire()

@@ -46,6 +46,8 @@ class mtworkerThread(threading.Thread) :
 		sets up instance vars + stores references to _msgQueue and _lock in 
 		argument data structures '''
 	def __init__(self,mtw2msgQueue,mtw2lock) :
+		logging.basicConfig(format='%(levelname)s - %(message)s', level=logging.INFO)
+		logging.debug('mtworker init')
 		threading.Thread.__init__(self)
 		self.wid 				  = str(mtworkerThread.nextID)
 		mtworkerThread.nextID  += 1
@@ -81,6 +83,7 @@ class mtworkerThread(threading.Thread) :
 				 synchronous access to self._msgQueue... 2nd, to ensure the worker
 				 thread sleeps while self._msgQueue is empty '''
 	def run(self):
+		logging.debug('WebSocket run')
 		while not self._stopped :
 			self._lock.acquire()
 
@@ -102,6 +105,7 @@ class mtworkerThread(threading.Thread) :
 		TBI:: the use of '127.0.0.1' implies that the atompm server is running on
 	  			the same machine as the transformation engine... '''
 	def _aswHttpReq(self,method,uri,data) :
+		logging.debug('WebSocket aswHttpReq')
 		return utils.httpReq(
 			method,
 			'127.0.0.1:8124',
@@ -113,6 +117,7 @@ class mtworkerThread(threading.Thread) :
 	'''
 		handle an incoming message from the server '''
 	def _onmessage(self,msg):
+		logging.debug('WebSocket onmessage')
 		if msg == 'DIE' :
 			return self.stop()
 
@@ -270,6 +275,7 @@ class mtworkerThread(threading.Thread) :
 	'''
 		cause the loop in run() to be interrupted '''
 	def stop(self):
+		logging.debug('WebSocket stop')
 		self._stopped = True
 		self._lock.acquire()
 		self._lock.notify()
