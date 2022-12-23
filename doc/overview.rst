@@ -285,6 +285,8 @@ Collaboration
 
 AToMPM supports two modes of real-time distributed collaboration, namely, *screenshare* and *modelshare*. In the former, all collaborating developers share the same concrete and abstract syntax. This implies that if one developer moves an entity or cycles to another concrete syntax representation, the change will be replicated for all collaborators. In contrast, in the latter mode, only abstract syntax is shared. This means that all collaborators can have distinct concrete syntax representations and distinct layouts (provided layout and abstract syntax are not intricately related), and are only affected by others' abstract syntax changes (e.g., modifying abstract attribute values).
 
+The Collaboration button is found in the main menu toolbar. Click it to open the collaboration menu.
+
 .. _userprefs:
 
 Tweaking Default Settings
