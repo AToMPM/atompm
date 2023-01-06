@@ -5,12 +5,14 @@ on:
     paths-ignore:
       - 'doc/**'
       - '**.md'
+      - '.readthedocs.yaml'
       - '**/make_docker.yml'
       - '**/package_portable.yml'
   pull_request:
     paths-ignore:
       - 'doc/**'
       - '**.md'
+      - '.readthedocs.yaml'
       - '**/make_docker.yml'
       - '**/package_portable.yml'
 
