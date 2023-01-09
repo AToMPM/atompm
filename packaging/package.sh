@@ -144,7 +144,7 @@ fi
 
 add_atompm
 add_batch_scripts
-add_manual
+#add_manual
 
 #rm ./atompm-portable.zip
 

@@ -1,0 +1,38 @@
+name: PackagePortable02
+
+on:
+  push:
+#    paths-ignore:
+#      - 'doc/**'
+#      - '**.md'
+    tags:
+      - "v*.*.*"
+
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          path: 'atompm-portable\atompm'
+        
+      - name: run package script
+        run: |
+          copy .\atompm-portable\atompm\packaging\packaging.bat .
+          .\packaging.bat
+        
+      - name: Archive atompm-portable file
+        uses: actions/upload-artifact@v3
+        with:
+          name: atompm-portable
+          path: .\atompm-portable
+          
+#      - name: create release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: ./packaging/atompm-portable/atompm-portable.zip
+          
+          
+          
+        
