@@ -18,7 +18,11 @@ const session_manager = require("./session_manager");
 /** Wrapper function to log HTTP messages from the server **/
 function __respond(response, statusCode, reason, data, headers)
 {
-	logger.http("http _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
+	// skip common 200 response
+	if (statusCode != 200){
+		logger.http("http _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
+	}
+
 	_utils.respond(response, statusCode, reason, data, headers);
 }
 
@@ -48,12 +52,17 @@ let httpserver = _http.createServer(
 			if (url['query'] != undefined && url['query']['swid'] == undefined) {
 				let pieces = url.path.split("?");
 				let s = pieces[0];
-				if (pieces.length > 0) s += '<br/>' + pieces[1];
-				logger.http("http <br/>" + req.method + "<br/>" + s, {
-					'from': "client",
-					'to': "server",
-					'type': "-)"
-				});
+
+				// skip common GET requests
+				if (!(s.includes(".js") || s.includes(".png") || s.includes(".css"))){
+					if (pieces.length > 1) s += '<br/>' + pieces[1];
+
+					logger.http("http <br/>" + req.method + "<br/>" + s, {
+						'from': "client",
+						'to': "server",
+						'type': "-)"
+					});
+				}
 			}
 			/* serve client */
 			if( req.method == 'GET' && url.pathname == '/atompm' )
