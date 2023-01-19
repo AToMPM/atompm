@@ -416,12 +416,15 @@ function handle_http_message(url, req, resp){
 
 
 function send_to_all(wid, msg){
-    let _msg = {'changelog':msg['changelog'],
+    let _msg = {
+        'changelog':msg['changelog'],
         'sequence#':msg['sequence#'],
-        'hitchhiker':msg['hitchhiker']};
+        'hitchhiker':msg['hitchhiker'],
+        'cid':msg['cid']
+    };
 
     // simplify the msg for logging
-    let log_data = {'changelog':_utils.collapse_changelog(msg["changelog"]), 'hitchhiker':_utils.collapse_hitchhiker(msg['hitchhiker'])};
+    let log_data = {'cid':msg['cid'],'changelog':_utils.collapse_changelog(msg["changelog"]), 'hitchhiker':_utils.collapse_hitchhiker(msg['hitchhiker'])};
 
     workerIds2socketIds[wid].forEach(
         function(sid)
