@@ -243,7 +243,7 @@ module.exports = {
     '__pendingChangelogs': [],
     '__hitchhikerJournal': {},
     '__applyASWChanges':
-        function (changelog, aswSequenceNumber, hitchhiker) {
+        function (changelog, aswSequenceNumber, hitchhiker, cid) {
             let log_chs = _utils.collapse_changelog(changelog);
             logger.debug('worker#' + __wid + ' << (' + aswSequenceNumber + ') ' + _utils.jsons(log_chs));
 
@@ -254,7 +254,8 @@ module.exports = {
                     {
                         'changelog': changelog,
                         'sequence#': aswSequenceNumber,
-                        'hitchhiker': hitchhiker
+                        'hitchhiker': hitchhiker,
+                        'cid':cid
                     });
                 let self = this;
                 this.__pendingChangelogs.sort(
@@ -373,7 +374,7 @@ module.exports = {
                                         cschangelogs.push(chglg, self.__positionLinkDecorators(csid));
                                     }
 
-                                    return self.__regenIcon(csid);
+                                    return self.__regenIcon(csid, undefined, cid);
                                 },
                                 function (riChangelog) {
                                     cschangelogs.push(riChangelog);
@@ -414,7 +415,7 @@ module.exports = {
                                                 self.__positionLinkDecorators(csid) :
                                                 []));
                                     }
-                                    return self.__regenIcon(csid);
+                                    return self.__regenIcon(csid, undefined, cid);
                                 },
                                 function (riChangelog) {
                                     cschangelogs.push(riChangelog);
@@ -561,7 +562,8 @@ module.exports = {
                             'statusCode': 200,
                             'changelog': cschangelog,
                             'sequence#': aswSequenceNumber,
-                            'hitchhiker': cshitchhiker
+                            'hitchhiker': cshitchhiker,
+                            'cid':cid
                         });
 
                     self.__nextASWSequenceNumber =
@@ -585,7 +587,9 @@ module.exports = {
                 this.__applyASWChanges(
                     pc['changelog'],
                     pc['sequence#'],
-                    pc['hitchhiker']);
+                    pc['hitchhiker'],
+                    pc['cid']
+                );
             }
         },
 
@@ -616,7 +620,7 @@ module.exports = {
                  will receive *all* messages broadcasted by the websocket server
                  in session_manager.js... these are detected and discarded */
     '__aswSubscribe':
-        function (aswid, cswid) {
+        function (aswid, cswid, cid) {
             let self = this;
             return function (callback, errback) {
                 let io = _siocl('http://localhost:8124');
@@ -659,7 +663,7 @@ module.exports = {
                             self.__aswid = aswid;
                             if (cswid !== undefined) {
                                 let actions =
-                                    [__wHttpReq('GET', self.__build_url('/internal.state', self.__aswid, cid),)];
+                                    [__wHttpReq('GET', self.__build_url('/internal.state', cswid, cid),)];
                                 logger.http("http _ GET internal.state", {
                                     'from': "/csworker" + __wid,
                                     'to': "/csworker" + cswid,
@@ -709,7 +713,9 @@ module.exports = {
                             self.__applyASWChanges(
                                 msg.data.changelog,
                                 msg.data['sequence#'],
-                                msg.data.hitchhiker);
+                                msg.data.hitchhiker,
+                                msg.data['cid']
+                            );
 
                         }
                     });
@@ -815,7 +821,7 @@ module.exports = {
               chain if some number of tries have failed, and instead setting coded
               attribute values to '<out-of-date>' */
     '__regenIcon':
-        function (id, newCsmm) {
+        function (id, newCsmm, cid) {
             let changelogs = [];
             let self = this;
             return function (callback, _errback) {
@@ -864,7 +870,7 @@ module.exports = {
                     let actions =
                         [__wHttpReq(
                             'POST',
-                            self.__build_url('/GET/' + asuri + '.mappings', self.__aswid),
+                            self.__build_url('/GET/' + asuri + '.mappings', self.__aswid, cid),
                             mappers)];
                     let successf =
                         function (attrVals) {
@@ -943,7 +949,7 @@ module.exports = {
                 b) 'return' flattened changelogs
             on failure, 'return' error */
     '__transformIcons':
-        function (tgtCsmm, newCsmm) {
+        function (tgtCsmm, newCsmm, cid) {
             let self = this;
             return function (callback, errback) {
                 let m = _utils.jsonp(_mmmk.read());
@@ -968,7 +974,7 @@ module.exports = {
                     function (id) {
                         actions.push(
                             function () {
-                                return self.__regenIcon(id, newCsmm);
+                                return self.__regenIcon(id, newCsmm, cid);
                             },
                             function (changelog) {
                                 let newId = changelog[0]['id'];
@@ -1104,7 +1110,7 @@ module.exports = {
                 logger.http("/csworker" + __wid + " subscribing to /asworker" + aswid, {'at': '/csworker' + __wid});
 
                 let self = this;
-                let actions = [this.__aswSubscribe(aswid)];
+                let actions = [this.__aswSubscribe(aswid, cid)];
 
                 _do.chain(actions)(
                     function () {
@@ -1121,7 +1127,7 @@ module.exports = {
                 );
             } else {
                 logger.info("/csworker" + __wid + " attaching to /asworker" + reqData['aswid'] + " and cloning /csworker" + reqData['cswid']);
-                let actions = [this.__aswSubscribe(reqData['aswid'], reqData['cswid'])];
+                let actions = [this.__aswSubscribe(reqData['aswid'], reqData['cswid'], cid)];
 
                 _do.chain(actions)(
                     function () {
@@ -1194,7 +1200,9 @@ module.exports = {
                         function () {
                             return self.__transformIcons(
                                 self.__asmm2csmm[asmm],
-                                csmm);
+                                csmm,
+                                cid
+                            );
                         }];
 
                 _do.chain(actions)(
