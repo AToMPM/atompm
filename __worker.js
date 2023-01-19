@@ -156,7 +156,6 @@ function __httpReq(method,url,data,port)
 					 'Access-Control-Allow-Origin': '*'};
 				 }
 				 logger.http("http _ request " + "<br/>" + method + " " + url,{'from':__wtype+__wid, 'to':'server'});
-				 logger.http("Message below from client is wrong.<br/>This worker sent an HTTP message.", {'at': __wtype+__wid});
 
 				 let request =
 					 _http.request(options, 
@@ -534,7 +533,7 @@ process.on('message',
 		let reqData   = msg['reqData'];
 		let respIndex = msg['respIndex'];
 
-		logger.http("process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri  + "<br/>" + (method === 'GET' ? uriData : reqData),
+		logger.http("process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri,
 			{'from':"session_mngr", 'to': log_id, 'type': "-->>"});
 
 

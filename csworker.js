@@ -187,7 +187,6 @@ const {
     get__nextSequenceNumber,
     set__nextSequenceNumber,
     get__wtype,
-    __httpReq,
     __id_to_uri,
     __wHttpReq,
     __postInternalErrorMsg, __postMessage,
@@ -660,7 +659,7 @@ module.exports = {
                             self.__aswid = aswid;
                             if (cswid !== undefined) {
                                 let actions =
-                                    [__wHttpReq('GET', '/internal.state?wid=' + cswid)];
+                                    [__wHttpReq('GET', self.__build_url('/internal.state', self.__aswid),)];
                                 logger.http("http _ GET internal.state", {
                                     'from': "/csworker" + __wid,
                                     'to': "/csworker" + cswid,
@@ -819,7 +818,7 @@ module.exports = {
         function (id, newCsmm) {
             let changelogs = [];
             let self = this;
-            return function (callback, errback) {
+            return function (callback, _errback) {
                 if (newCsmm != undefined) {
                     let node = _utils.jsonp(_mmmk.read(id));
                     let asuri = _mmmk.read(id, '$asuri');
@@ -865,7 +864,7 @@ module.exports = {
                     let actions =
                         [__wHttpReq(
                             'POST',
-                            '/GET/' + asuri + '.mappings?wid=' + self.__aswid,
+                            self.__build_url('/GET/' + asuri + '.mappings', self.__aswid),
                             mappers)];
                     let successf =
                         function (attrVals) {
@@ -911,7 +910,7 @@ module.exports = {
 
 
     '__solveLayoutContraints':
-        function (changelog) {
+        function (_changelog) {
             // TBC actually implement this function
             //	use ids in changelog to determine what changed
             //	add 2 lines below to mmmk.__create() if necessary
@@ -1038,7 +1037,7 @@ module.exports = {
     2. launch chain... return success code or error */
     'mtwRequest':
         function (resp, method, uri, reqData) {
-            let actions = [__wHttpReq(method, uri + '?wid=' + this.__aswid, reqData)];
+            let actions = [__wHttpReq(method, this.__build_url(uri, this.__aswid), reqData)];
 
             _do.chain(actions)(
                 function () {
@@ -1230,7 +1229,7 @@ module.exports = {
                         function (csmmData) {
                             return __wHttpReq(
                                 'PUT',
-                                uri + '?wid=' + self.__aswid,
+                                self.__build_url(uri, self.__aswid),
                                 {
                                     'mm': reqData['asmm'],
                                     'hitchhiker': {'csmm': csmmData, 'name': csmm}
@@ -1265,7 +1264,7 @@ module.exports = {
                 return __postBadReqErrorMsg(resp, 'bad uri for Icons mm :: ' + uri);
 
             let asuri = matches[1] + (matches[2] || '') + '.metamodel';
-            let actions = [__wHttpReq('DELETE', asuri + '?wid=' + this.__aswid)];
+            let actions = [__wHttpReq('DELETE', this.__build_url(asuri, this.__aswid))];
 
             _do.chain(actions)(
                 function () {
@@ -1338,7 +1337,7 @@ module.exports = {
                         let csmData = _utils.jsons(m['csm']);
                         return __wHttpReq(
                             'PUT',
-                            uri + '?wid=' + self.__aswid,
+                            self.__build_url(uri, self.__aswid),
                             {
                                 'm': asmData,
                                 'name': reqData['m'] + (new Date().getTime()),
@@ -1482,7 +1481,7 @@ module.exports = {
                         function (asreqData) {
                             return __wHttpReq(
                                 'POST',
-                                asuri + '?wid=' + self.__aswid,
+                                self.__build_url(asuri, self.__aswid),
                                 asreqData);
                         }];
 
@@ -1518,7 +1517,7 @@ module.exports = {
                         return __successContinuable(asuri);
                     },
                     function (asuri) {
-                        return __wHttpReq('GET', asuri + '?wid=' + self.__aswid);
+                        return __wHttpReq('GET', self.__build_url(asuri, self.__aswid));
                     }];
 
             _do.chain(actions)(
@@ -1570,12 +1569,12 @@ module.exports = {
                     function (asuri) {
                         return __wHttpReq(
                             'PUT',
-                            asuri + '?wid=' + self.__aswid,
+                            self.__build_url(asuri, self.__aswid),
                             reqData);
                     }];
 
             _do.chain(actions)(
-                function (asnode) {
+                function (_asnode) {
                     __postMessage(
                         {
                             'statusCode': 202,
@@ -1623,7 +1622,7 @@ module.exports = {
         function (resp, uri) {
             let self = this;
             let asuri = this.__csuri_to_asuri(uri);
-            let actions = [__wHttpReq('DELETE', asuri + '?wid=' + self.__aswid)];
+            let actions = [__wHttpReq('DELETE', self.__build_url(asuri, this.__aswid))];
 
             if (asuri['$err'])
                 __postMessage({'statusCode': 200, 'respIndex': resp});
@@ -1881,6 +1880,7 @@ module.exports = {
                 let asmm = undefined;
                 let aswid = this.__aswid;
                 let actions;
+                let self = this;
                 if (asmmPath) {
                     actions = [
                         _fs.readFile(asmmPath, 'utf8'),
@@ -1888,14 +1888,14 @@ module.exports = {
                             asmm = _utils.jsonp(data);
                             return __successContinuable();
                         },
-                        function (result) {
+                        function (_result) {
                             return __wHttpReq('PUT',
-                                uri + '?wid=' + aswid,
+                                self.__build_url(uri, aswid),
                                 ({'csm': _mmmk.read(), 'asmm': asmm}))
                         }]
                 } else {
                     actions = [__wHttpReq('PUT',
-                        uri + '?wid=' + aswid,
+                        self.__build_url(uri, aswid),
                         undefined)];
                 }
                 _do.chain(actions)(
@@ -1929,7 +1929,7 @@ module.exports = {
     'PUT *.model':
         function (resp, uri) {
             let self = this;
-            let actions = [__wHttpReq('GET', '/current.model?wid=' + this.__aswid)];
+            let actions = [__wHttpReq('GET', self.__build_url('/current.model', this.__aswid),)];
 
             _do.chain(actions)(
                 function (asdata) {
@@ -1993,7 +1993,7 @@ module.exports = {
     2. launch chain... return success code or error */
     'GET /validatem':
         function (resp, uri) {
-            let actions = [__wHttpReq('GET', uri + '?wid=' + this.__aswid)];
+            let actions = [__wHttpReq('GET', this.__build_url(uri, this.__aswid),)];
 
             _do.chain(actions)(
                 function () {
@@ -2063,7 +2063,7 @@ module.exports = {
                 let reqData = {'hitchhiker': hitchhiker};
                 let actions = [__wHttpReq(
                     'POST',
-                    uri + '?wid=' + this.__aswid,
+                    this.__build_url(uri, this.__aswid),
                     reqData)];
 
                 let matches = sn.match(/^bchkpt@([0-9]+)/);
@@ -2116,8 +2116,7 @@ module.exports = {
     2. launch chain... return success code or error */
     'POST /batchCheckpoint':
         function (resp, uri, reqData) {
-            let actions = [
-                __wHttpReq('POST', uri + '?wid=' + this.__aswid, reqData)];
+            let actions = [__wHttpReq('POST', this.__build_url(uri, this.__aswid), reqData)];
             _do.chain(actions)(
                 function () {
                     __postMessage({'statusCode': 202, 'respIndex': resp});
@@ -2166,6 +2165,11 @@ module.exports = {
             return __id_to_uri(this.__asid_to_csid(asid));
         },
 
+    /* helper to build an HTTP URL to send to the HTTP server */
+    '__build_url':
+        function(uri, aswid) {
+            return uri + '?wid=' + aswid + '&swid='+__wid;
+        },
 
     /* add a checkpointing marker in mmmk and log the said marker as a
         non-undo/redo operation (remove any undone operations from log first) */

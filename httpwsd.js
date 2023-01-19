@@ -41,11 +41,20 @@ if (argv["log"]){
 let httpserver = _http.createServer(
 		function(req, resp) 
 		{
-			var url = _url.parse(req.url,true);
+			let url = _url.parse(req.url,true);
 			url.pathname = decodeURI(url.pathname);
 
-			logger.http("http <br/>" + req.method + "<br/>" + url.path ,{'from':"client",'to':"server",'type':"-)"});
-
+			// don't log http messages from a sending worker
+			if (url['query'] != undefined && url['query']['swid'] == undefined) {
+				let pieces = url.path.split("?");
+				let s = pieces[0];
+				if (pieces.length > 0) s += '<br/>' + pieces[1];
+				logger.http("http <br/>" + req.method + "<br/>" + s, {
+					'from': "client",
+					'to': "server",
+					'type': "-)"
+				});
+			}
 			/* serve client */
 			if( req.method == 'GET' && url.pathname == '/atompm' )
 				_fs.readFile('./client/atompm.html', 'utf8',
