@@ -346,17 +346,22 @@ function handle_http_message(url, req, resp){
         return;
     }
 
+    if (url['query'] == undefined){
+        _utils.respond(resp, 400, 'invalid query: ' + url);
+        return;
+    }
+
     let wids = undefined;
 
     // first, try to get the wid(s) from the client id
     // this is developed so that clients can talk to multiple cs workers if needed
-    if (url['query'] != undefined && url['query']['cid'] != undefined){
+    if (url['query']['cid'] != undefined && url['query']['swid'] == undefined ){
         wids = clientIDs2csids[url['query']['cid']];
     }
 
     // if the mapping wasn't possible, check if the message contains the wid
     // this is normal in the case for a HTTP message from a CSWorker
-    if (wids == undefined && url['query'] != undefined && url['query']['wid'] != undefined){
+    if (wids == undefined && url['query']['wid'] != undefined){
         wids = [parseInt(url['query']['wid'])];
     }
 
@@ -390,7 +395,8 @@ function handle_http_message(url, req, resp){
                                 undefined :
                                 eval('(' + reqData + ')')),
                             'uriData': url['query'],
-                            'respIndex': responses.push(resp) - 1
+                            'respIndex': responses.push(resp) - 1,
+                            'cid': url['query']['cid'],
                         });
                 }
             });
@@ -401,7 +407,8 @@ function handle_http_message(url, req, resp){
                     'method': req.method,
                     'uri': url.pathname,
                     'uriData': url['query'],
-                    'respIndex': responses.push(resp) - 1
+                    'respIndex': responses.push(resp) - 1,
+                    'cid': url['query']['cid'],
                 });
         }
     }

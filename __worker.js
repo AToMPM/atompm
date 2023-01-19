@@ -155,7 +155,9 @@ function __httpReq(method,url,data,port)
 					 options['headers'] = {'Content-Length':unescape(encodeURIComponent(data)).length,
 					 'Access-Control-Allow-Origin': '*'};
 				 }
-				 logger.http("http _ request " + "<br/>" + method + " " + url,{'from':__wtype+__wid, 'to':'server'});
+				 let uri_s = url.split("?");
+				 let uri = uri_s.length == 1? uri_s[0] : uri_s[0] + '<br/>' + uri_s[1];
+				 logger.http("http _ request " + "<br/>" + method + " " + uri,{'from':__wtype+__wid, 'to':'server'});
 
 				 let request =
 					 _http.request(options, 
@@ -435,11 +437,13 @@ function __runQueuedRequests()
 			uri = head['uri'],
 			method = head['method'],
 			reqData = head['reqData'],
-			respIndex = head['respIndex'];
+			respIndex = head['respIndex'],
+			cid = head['cid']
+		;
 
 		if (__canProceed(method, uri, respIndex, true)) {
 			__reqQueue.shift();
-			__handleClientRequest(uri, method, reqData, respIndex);
+			__handleClientRequest(uri, method, reqData, respIndex, cid);
 			__runQueuedRequests();
 		}
 	}
@@ -447,13 +451,16 @@ function __runQueuedRequests()
 
 
 /* push given request onto request queue for future handling */
-function __queueRequest(uri,method,reqData,respIndex)
+function __queueRequest(uri,method,reqData,respIndex,cid)
 {
 	__reqQueue.push(
-			{'uri':uri,
-			 'method':method,
-			 'reqData':reqData,
-			 'respIndex':respIndex});
+		{
+			'uri': uri,
+			'method': method,
+			'reqData': reqData,
+			'respIndex': respIndex,
+			'cid': cid
+		});
 }
 
 
@@ -532,8 +539,9 @@ process.on('message',
 		let uriData	  = msg['uriData'];
 		let reqData   = msg['reqData'];
 		let respIndex = msg['respIndex'];
+		let cid       = msg['cid'];
 
-		logger.http("process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri,
+		logger.http("process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri + "<br/>" + cid,
 			{'from':"session_mngr", 'to': log_id, 'type': "-->>"});
 
 
@@ -545,10 +553,12 @@ process.on('message',
 		}
 		else if( ! __canProceed(method,uri,respIndex) )
 			return __queueRequest(
-							uri,
-							method,
-							(method === 'GET' ? uriData : reqData),
-							respIndex);
+				uri,
+				method,
+				(method === 'GET' ? uriData : reqData),
+				respIndex,
+				cid
+			);
 
 		/* handle client requests 
 			POST 		<>  create 
@@ -556,15 +566,17 @@ process.on('message',
 			PUT		<>  update
 			DELETE	<>  delete */
 		__handleClientRequest(
-				uri,
-				method,
-				(method == 'GET' ? uriData : reqData),
-				respIndex);	
+			uri,
+			method,
+			(method == 'GET' ? uriData : reqData),
+			respIndex,
+			cid
+		);
 	});
 
 
 /* handle a request described by the given parameters */
-function __handleClientRequest(uri,method,reqData,respIndex)
+function __handleClientRequest(uri,method,reqData,respIndex,cid)
 {
 	/********************** SHARED AS-CS WORKER BEHAVIOR ***********************/
 	if( method == 'GET' && uri.match(/^\/current.model$/) )
@@ -595,7 +607,7 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 		let func = method+' *'+uri.match(/.*(\..*)$/)[1];
 		if( _wlib[func] == undefined )
 			return __postUnsupportedErrorMsg(respIndex);
-		_wlib[func](respIndex,uri,reqData);
+		_wlib[func](respIndex,uri,reqData,cid);
 	}
 
 	else if( (method == 'GET' 	&& uri.match(/^\/internal.state$/)) 		||
@@ -611,11 +623,11 @@ function __handleClientRequest(uri,method,reqData,respIndex)
 		let func = method+' '+uri;
 		if( _wlib[func] == undefined )
 			return __postUnsupportedErrorMsg(respIndex);
-		_wlib[func](respIndex,uri,reqData);
+		_wlib[func](respIndex,uri,reqData,cid);
 	}
 
 	else if( uri.match(/^\/__mt\/.*$/) )
-		_wlib.mtwRequest(respIndex,method,uri,reqData);
+		_wlib.mtwRequest(respIndex,method,uri,reqData,cid);
 
 	/* plugin request */
 	else if( uri.match(/^\/plugins\/.*$/) )
