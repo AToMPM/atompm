@@ -632,9 +632,8 @@ module.exports = {
                             'to': "/asworker" + aswid,
                             'type': "-->>"
                         });
-                        logger.http("Sending changeListener to session_mngr for /asworker" + aswid + ".<br/>Below message comes from this worker", {'at': "/csworker" + __wid})
-                        io.emit('message',
-                            {'method': 'POST', 'url': '/changeListener?wid=' + aswid});
+                        let msg = {'method': 'POST', 'url': '/changeListener?wid=' + aswid + '&id=/csworker'+__wid};
+                        io.emit('message', msg);
                     });
                 io.on('disconnect',
                     function () {
@@ -651,11 +650,6 @@ module.exports = {
 
                         /* on POST /changeListener response */
                         if (msg.statusCode !== undefined) {
-                            logger.http("socketio _ 'POST /changeListener resp' <br/> " + log_statusCode, {
-                                'from': "session_mngr",
-                                'to': "/csworker" + __wid,
-                                'type': "-->>"
-                            });
 
                             if (!_utils.isHttpSuccessCode(msg.statusCode))
                                 return errback(msg.statusCode + ':' + msg.reason);

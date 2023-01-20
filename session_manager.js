@@ -12,6 +12,7 @@ const _url = require("url");
 const _cp = require("child_process");
 const _path = require("path");
 const _uuid = require("uuid");
+const {jsons} = require("./utils");
 
 /* an array of WebWorkers
 	... each has its own mmmk instance */
@@ -24,6 +25,11 @@ let responses = [];
 /* a map of client IDs to their worker wids */
 let clientIDs2csids = {};
 let clientIDs2asids = {};
+
+/* a map of socket IDs to the client/worker IDs who are listening
+   this is to aid debugging
+ */
+let socketIds2Ids = {};
 
 /* a map of worker ids to socket.io socket session ids
 	... each socket is registered to exactly one worker
@@ -41,7 +47,15 @@ let socket_server = null;
 /** Syntactic sugar to build and send a socket.io message **/
 function __send(socket, statusCode, reason, data, headers)
 {
-    logger.http("socketio <br/>" + statusCode +"<br/>" + reason + " to : "+socket.id,{'at':"session_mngr"});
+    let s = "socketio <br/>" + statusCode;
+    if (reason != undefined) s += " " + reason;
+
+    let id = socketIds2Ids[socket.id];
+    let to = "client";
+    if (id != undefined && id.includes("worker")) to = id;
+    s += "<br/>" + " to : "+id;
+    if (data != undefined && data['changelog'] == undefined) s += "<br/>" + jsons(data);
+    logger.http( s,{'from':"session_mngr", "to": to});
 
     socket.emit('message',
         {'statusCode':statusCode,
@@ -87,7 +101,12 @@ function init_session_manager(httpserver){
                 {
                     let url = _url.parse(msg.url,true);
 
-                    logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,{'from':'client','to':"session_mngr"});
+                    let loc = {'at':"session_mngr"};
+                    if (url['query'] != undefined && url['query']['id'] != undefined && url['query']['id'].includes("worker")){
+                        loc = {'from':url['query']['id'],'to':"session_mngr"};
+                    }
+
+                    logger.http("socketio _ 'message' <br/>" + msg.method + " " + JSON.stringify(url['query']) + "<br/>" + url.pathname,loc);
 
                     /* the client asks to create a new session or join a session */
                     /* the session manager then has a map from client ID to the worker ID */
@@ -119,7 +138,7 @@ function init_session_manager(httpserver){
                             awid = __createNewWorker('/asworker');
 
                             // set up client-csworker comms
-                            __registerListener(cwid, socket.id);
+                            __registerListener(cwid, socket.id, cid);
                             clientIDs2csids[cid] = [cwid];
                             clientIDs2asids[cid] = awid;
 
@@ -135,7 +154,7 @@ function init_session_manager(httpserver){
                             // no workers created
 
                             // set up client-csworker comms
-                            __registerListener(existingcwid, socket.id);
+                            __registerListener(existingcwid, socket.id, cid);
                             clientIDs2csids[cid] = [existingcwid];
                             clientIDs2asids[cid] = existingawid;
 
@@ -146,7 +165,7 @@ function init_session_manager(httpserver){
                             cwid = __createNewWorker('/csworker');
 
                             // set up client-csworker comms
-                            __registerListener(cwid, socket.id);
+                            __registerListener(cwid, socket.id, cid);
                             clientIDs2csids[cid] = [cwid];
                             clientIDs2asids[cid] = existingawid;
 
@@ -166,8 +185,6 @@ function init_session_manager(httpserver){
 
                             awid = existingawid;
                         }
-
-                        logger.http("socket _ 'resp wid'" + ''+cwid + ' awid '+awid,{'from':"session_mngr",'to': 'client', 'type':"-)"});
 
                         /* respond worker id (used to identify associated workers) */
                         __send(socket, 201, undefined, {'wid': cwid, 'awid': awid});
@@ -189,7 +206,10 @@ function init_session_manager(httpserver){
                     /* register socket for requested worker */
                     else if( msg.method === 'POST' && url.pathname.match(/changeListener$/) )
                     {
-                        if (__registerListener(wid, socket.id)){
+                        let id = undefined;
+                        if (url['query'] != undefined && url['query']['id'] != undefined) id = url['query']['id'];
+
+                        if (__registerListener(wid, socket.id, id)){
                             __send(socket,201);
                         }else{
                             __send(socket,403,'already registered to worker');
@@ -224,8 +244,11 @@ function init_session_manager(httpserver){
         });
 }
 
-function __registerListener(wid, socketID){
-    logger.http("Socket " + socketID + " now listening to worker " + wid, {'at': 'session_mngr'});
+function __registerListener(wid, socketID, id){
+    logger.http("Socket for " + id + " now listening to worker " + wid, {'at': 'session_mngr'});
+
+    socketIds2Ids[socketID] = id;
+
     if (workerIds2socketIds[wid] == undefined){
         workerIds2socketIds[wid] = [];
     }
@@ -278,7 +301,6 @@ function __createNewWorker(workerType){
     logger.http("process _ 'init'+ <br/>" + JSON.stringify(msg),{'from':"session_mngr",'to': workerType + wid, 'type':"-)"});
     worker.send(msg);
 
-    logger.http("http _ 'resp on worker creation: wid:'"+ wid, {'at':"session_mngr"});
     return wid
 }
 
@@ -424,12 +446,16 @@ function send_to_all(wid, msg){
     };
 
     // simplify the msg for logging
-    let log_data = {'cid':msg['cid'],'changelog':_utils.collapse_changelog(msg["changelog"]), 'hitchhiker':_utils.collapse_hitchhiker(msg['hitchhiker'])};
+    let log_data = {'cid':msg['cid'], 'hitchhiker':_utils.collapse_hitchhiker(msg['hitchhiker'])};
+    let s = "socketio sending chglg <br/>" + JSON.stringify(log_data) + "<br/>";
+    for (let ch of _utils.collapse_changelog(msg["changelog"])){
+        s += jsons(ch) + "<br/>";
+    }
+    logger.http(s,{'at': workerIds2workerType[wid] + wid});
 
     workerIds2socketIds[wid].forEach(
         function(sid)
         {
-            logger.http("socketio _ 'sending chglg'+ <br/>" + JSON.stringify(log_data) ,{'at': workerIds2workerType[wid] + wid});
             __send(
                 socket_server.sockets.sockets.get(sid),
                 undefined,

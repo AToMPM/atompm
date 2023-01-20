@@ -44,7 +44,7 @@ class WebSocket :
 			self.socketIO.connect('http://127.0.0.1:8124')
 			self.socketIO.sleep(1)
 
-			data = {'method': 'POST', 'url': '/changeListener?wid='+self._aswid}
+			data = {'method': 'POST', 'url': '/changeListener?wid='+self._aswid + '&id=mt'}
 			self.socketIO.emit('message', data)
 
 			self.socketIO.wait()

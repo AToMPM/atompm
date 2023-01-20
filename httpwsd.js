@@ -57,7 +57,7 @@ let httpserver = _http.createServer(
 				if (!(s.includes(".js") || s.includes(".png") || s.includes(".css"))){
 					if (pieces.length > 1) s += '<br/>' + pieces[1];
 
-					logger.http("http <br/>" + req.method + "<br/>" + s, {
+					logger.http("http " + req.method + "<br/>" + s, {
 						'from': "client",
 						'to': "server",
 						'type': "-)"

@@ -320,7 +320,11 @@ function __postMessage(msg)
 	if( __wtype == '/csworker' && 'changelog' in msg )
 		__urizeChangelog(msg['changelog']);
 
-	logger.http("process _ RI" + msg.respIndex + "<br/>changelog: " + JSON.stringify(_utils.collapse_changelog(msg['changelog'])),{'from':__wtype+__wid, 'to': "session_mngr", 'type': "-x"});
+	let s = "process _ RI" + msg.respIndex + "<br/>changelog: ";
+	for (let ch of _utils.collapse_changelog(msg['changelog'])){
+		s += JSON.stringify(ch) + "<br/>"
+	}
+	logger.http(s,{'from':__wtype+__wid, 'to': "session_mngr", 'type': "-x"});
 
 	process.send(msg);
 }
@@ -494,8 +498,8 @@ process.on('message',
 			__wtype = msg['workerType'];
 			__wid   = msg['workerId'];
 
-			log_id = msg['workerType'] + msg['workerId'];
-			logger.http("process _ worker creation", {'at': log_id});
+			//log_id = msg['workerType'] + msg['workerId'];
+			//logger.http("process _ worker creation", {'at': log_id});
 
 			if (__wtype === "/asworker") {
 				_wlib = require("./asworker");
@@ -541,8 +545,9 @@ process.on('message',
 		let respIndex = msg['respIndex'];
 		let cid       = msg['cid'];
 
-		logger.http("process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri + "<br/>" + cid,
-			{'from':"session_mngr", 'to': log_id, 'type': "-->>"});
+		let s = "process _ message RI" + msg.respIndex + "<br/>" + method + " " + uri;
+		if (cid != undefined) s+= "<br/>" + cid;
+		logger.http(s, {'from':"session_mngr", 'to': log_id, 'type': "-->>"});
 
 
 		/* concurrent access control */
