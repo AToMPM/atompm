@@ -18,7 +18,11 @@ const session_manager = require("./session_manager");
 /** Wrapper function to log HTTP messages from the server **/
 function __respond(response, statusCode, reason, data, headers)
 {
-	logger.http("http _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
+	// skip common 200 response
+	if (statusCode != 200){
+		logger.http("http _ 'respond' <br/>" + statusCode,{'from':"server",'to':"client"});
+	}
+
 	_utils.respond(response, statusCode, reason, data, headers);
 }
 
@@ -41,11 +45,25 @@ if (argv["log"]){
 let httpserver = _http.createServer(
 		function(req, resp) 
 		{
-			var url = _url.parse(req.url,true);
+			let url = _url.parse(req.url,true);
 			url.pathname = decodeURI(url.pathname);
 
-			logger.http("http <br/>" + req.method + "<br/>" + url.path ,{'from':"client",'to':"server",'type':"-)"});
+			// don't log http messages from a sending worker
+			if (url['query'] != undefined && url['query']['swid'] == undefined) {
+				let pieces = url.path.split("?");
+				let s = pieces[0];
 
+				// skip common GET requests
+				if (!(s.includes(".js") || s.includes(".png") || s.includes(".css"))){
+					if (pieces.length > 1) s += '<br/>' + pieces[1];
+
+					logger.http("http " + req.method + "<br/>" + s, {
+						'from': "client",
+						'to': "server",
+						'type': "-)"
+					});
+				}
+			}
 			/* serve client */
 			if( req.method == 'GET' && url.pathname == '/atompm' )
 				_fs.readFile('./client/atompm.html', 'utf8',

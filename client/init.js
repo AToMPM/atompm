@@ -94,7 +94,9 @@ function __initClient()
 				__handleChangelog(
 					msg['data']['changelog'],
 					msg['data']['sequence#'],
-					msg['data']['hitchhiker']);
+					msg['data']['hitchhiker'],
+					msg['data']['cid']
+				);
 				return;
 			}
 

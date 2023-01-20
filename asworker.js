@@ -36,7 +36,7 @@ module.exports = {
 	2. launch chain... return success code or error */
 	'__mtwid':undefined,
 	'mtwRequest' :
-		function(resp,method,uri,reqData)
+		function(resp,method,uri,reqData,_cid)
 		{
 			let self = this;
 			let actions =
@@ -169,7 +169,7 @@ module.exports = {
 			return success code and 'hitchhiker' (see notes at top of csworker.js
 		  	for more about 'hitchhikers')... on error, return error */ 
 	'PUT /current.metamodels' :
-		function(resp,uri,reqData/*mm,hitchhiker*/)
+		function(resp,uri,reqData/*mm,hitchhiker*/,cid)
 		{
 			let actions = [__successContinuable()];
 
@@ -217,7 +217,8 @@ module.exports = {
 	  						 'changelog':res['changelog'],
 							 'sequence#':__sequenceNumber(),
 							 'hitchhiker':reqData['hitchhiker'],
-							 'respIndex':resp});
+							 'respIndex':resp,
+							 'cid':cid});
 					},
 					function (err) {
 
@@ -232,7 +233,7 @@ module.exports = {
 
 	/* unload a metamodel (deletes all entities from that metamodel) */
 	'DELETE *.metamodel' :
-		function(resp,uri)
+		function(resp,uri,cid)
 		{
 			let mm  = uri.match(/(.*)\.metamodel/)[1];
 			let res = _mmmk.unloadMetamodel(mm);
@@ -240,13 +241,14 @@ module.exports = {
 					{'statusCode':200, 
 					 'changelog':res['changelog'],
 					 'sequence#':__sequenceNumber(),
-					 'respIndex':resp});
+					 'respIndex':resp,
+					 'cid':cid});
 		},
 
 
 	/* load a model */
 	'PUT /current.model' :
-		function (resp, uri, reqData/*m,name,insert,hitchhiker*/) {
+		function (resp, uri, reqData/*m,name,insert,hitchhiker*/,cid) {
 			let res = _mmmk.loadModel(reqData['name'], reqData['m'], reqData['insert']);
 			if (res['$err'])
 				__postInternalErrorMsg(resp, res['$err']);
@@ -257,7 +259,8 @@ module.exports = {
 						'changelog': res['changelog'],
 						'sequence#': __sequenceNumber(),
 						'hitchhiker': reqData['hitchhiker'],
-						'respIndex': resp
+						'respIndex': resp,
+						'cid':cid
 					});
 		},
 
@@ -276,7 +279,7 @@ module.exports = {
 				 would be possible to create nodes via copy-paste that would 
 				 otherwise be blocked by post-edit constraints */
 	'POST *.type' :
-		function(resp,uri,reqData/*[src,dest],hitchhiker,attrs*/)
+		function(resp,uri,reqData/*[src,dest],hitchhiker,attrs*/,cid)
 		{
 			let matches 	= uri.match(/(.*)\.type/);
 			let fulltype 	= matches[1];
@@ -300,13 +303,14 @@ module.exports = {
 					 'data':res['id'],					 
 					 'sequence#':__sequenceNumber(),
 					 'hitchhiker':reqData['hitchhiker'],
-					 'respIndex':resp});
+					 'respIndex':resp,
+					 'cid':cid});
 		},
 
 
 	/* return an instance */
 	'GET *.instance' :
-		function(resp,uri)
+		function(resp,uri,cid)
 		{
 			let id = __uri_to_id(uri);
 			let res = _mmmk.read(id)
@@ -317,7 +321,8 @@ module.exports = {
 					{'statusCode':200, 
 					 'data':res, 
 					 'sequence#':__sequenceNumber(0),
-					 'respIndex':resp});
+					 'respIndex':resp,
+					 'cid':cid});
 		},
 
 
@@ -327,7 +332,7 @@ module.exports = {
 				 bundled, we return a dummy changelog that ensures the said to-do-
 				 cschanges get handled by csworker.__applyASWChanges().CHATTR */
 	'PUT *.instance' :
-		function (resp, uri, reqData/*changes[,hitchhiker]*/) {
+		function (resp, uri, reqData/*changes[,hitchhiker]*/,cid) {
 			let id = __uri_to_id(uri);
 			let res = _mmmk.update(id, reqData['changes']);
 			if (res['$err'])
@@ -343,7 +348,8 @@ module.exports = {
 						'changelog': changelog,
 						'sequence#': __sequenceNumber(),
 						'hitchhiker': reqData['hitchhiker'],
-						'respIndex': resp
+						'respIndex': resp,
+						'cid':cid
 					});
 			}
 		},
@@ -361,7 +367,7 @@ module.exports = {
 				 NOTE for csworker.DELETE *.instance with the difference that in 
 				 this context, the client is the mtworker) */
 	'DELETE *.instance' :
-		function (resp, uri) {
+		function (resp, uri, cid) {
 			let id = __uri_to_id(uri);
 			let res = _mmmk.read(id)
 			if (res['$err']) {
@@ -379,7 +385,8 @@ module.exports = {
 					'statusCode': 200,
 					'changelog': res['changelog'],
 					'sequence#': __sequenceNumber(),
-					'respIndex': resp
+					'respIndex': resp,
+					'cid':cid
 				});
 		},
 
@@ -391,7 +398,7 @@ module.exports = {
 			a) write specified mm to disk 
 		2. launch chain... return success or error code */ 
 	'PUT *.metamodel' :
-		function(resp,uri,reqData/*[csm]*/)
+		function(resp,uri,reqData/*[csm]*/,cid)
 		{
 			let res;
 			let model = _utils.jsonp(_mmmk.read());
@@ -414,7 +421,8 @@ module.exports = {
 					__postMessage(
 						{
 							'statusCode': 200,
-							'respIndex': resp
+							'respIndex': resp,
+							'cid':cid
 						});
 				},
 				function (err) {
@@ -443,14 +451,16 @@ module.exports = {
 			OR
 		undo until the specified user-checkpoint */
 	'POST /undo' :
-		function(resp,uri,reqData/*[undoUntil],hitchhiker*/)
+		function(resp,uri,reqData/*[undoUntil],hitchhiker*/,cid)
 		{
 			__postMessage(
 				{'statusCode':200,
 				 'changelog':_mmmk.undo(reqData['undoUntil'])['changelog'],
 				 'sequence#':__sequenceNumber(),
 				 'hitchhiker':reqData['hitchhiker'],
-				 'respIndex':resp});
+				 'respIndex':resp,
+				 'cid':cid
+				});
 		},
 	
 
@@ -458,14 +468,16 @@ module.exports = {
 			OR
 		redo until the specified user-checkpoint  */
 	'POST /redo' :
-		function(resp,uri,reqData/*[redoUntil],hitchhiker*/)
+		function(resp,uri,reqData/*[redoUntil],hitchhiker*/,cid)
 		{
 			__postMessage(
 				{'statusCode':200,
 				 'changelog':_mmmk.redo(reqData['redoUntil'])['changelog'],
 				 'sequence#':__sequenceNumber(),
 				 'hitchhiker':reqData['hitchhiker'],
-				 'respIndex':resp});
+				 'respIndex':resp,
+				 'cid':cid
+				});
 		},
 
 
@@ -480,7 +492,7 @@ module.exports = {
 			however, due to the possibly large amount of reqData it requires, we're
 			forced to make it a POST */
 	'POST *.mappings' :
-		function (resp, uri, reqData/*{...,fullvid:mapper,...}*/) {
+		function (resp, uri, reqData/*{...,fullvid:mapper,...}*/,cid) {
 			let id = __uri_to_id(uri);
 			let attrVals = {};
 
@@ -512,7 +524,8 @@ module.exports = {
 				{
 					'statusCode': 200,
 					'data': attrVals,
-					'respIndex': resp
+					'respIndex': resp,
+					'cid':cid
 				});
 		},
 
@@ -522,25 +535,29 @@ module.exports = {
 		about the state of a running transformation... eventually, it could also 
 		be used to implement inter-collaborator chatting */
 	'PUT /GET/console' :
-		function(resp,uri,reqData/*text*/)
+		function(resp,uri,reqData/*text*/,cid)
 		{
 			__postMessage(
 					{'statusCode':200,
 					 'changelog':[{'op':'SYSOUT','text':reqData['text']}],
 					 'sequence#':__sequenceNumber(),
-					 'respIndex':resp});
+					 'respIndex':resp,
+					 'cid':cid
+					});
 		},
 
 
 	/* place an easily identifiable user-checkpoint in the journal */
 	'POST /batchCheckpoint' :
-		function(resp,uri,reqData)
+		function(resp,uri,reqData,cid)
 		{
 			_mmmk.setUserCheckpoint(reqData['name']);
 			__postMessage(
 					{'statusCode':200,
 					 'changelog':[{'op':'MKBTCCHKPT','name':reqData['name']}],
 					 'sequence#':__sequenceNumber(),
-					 'respIndex':resp});
+					 'respIndex':resp,
+					 'cid':cid
+					});
 		}	
 };

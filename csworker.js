@@ -187,7 +187,6 @@ const {
     get__nextSequenceNumber,
     set__nextSequenceNumber,
     get__wtype,
-    __httpReq,
     __id_to_uri,
     __wHttpReq,
     __postInternalErrorMsg, __postMessage,
@@ -244,7 +243,7 @@ module.exports = {
     '__pendingChangelogs': [],
     '__hitchhikerJournal': {},
     '__applyASWChanges':
-        function (changelog, aswSequenceNumber, hitchhiker) {
+        function (changelog, aswSequenceNumber, hitchhiker, cid) {
             let log_chs = _utils.collapse_changelog(changelog);
             logger.debug('worker#' + __wid + ' << (' + aswSequenceNumber + ') ' + _utils.jsons(log_chs));
 
@@ -255,7 +254,8 @@ module.exports = {
                     {
                         'changelog': changelog,
                         'sequence#': aswSequenceNumber,
-                        'hitchhiker': hitchhiker
+                        'hitchhiker': hitchhiker,
+                        'cid':cid
                     });
                 let self = this;
                 this.__pendingChangelogs.sort(
@@ -374,7 +374,7 @@ module.exports = {
                                         cschangelogs.push(chglg, self.__positionLinkDecorators(csid));
                                     }
 
-                                    return self.__regenIcon(csid);
+                                    return self.__regenIcon(csid, undefined, cid);
                                 },
                                 function (riChangelog) {
                                     cschangelogs.push(riChangelog);
@@ -415,7 +415,7 @@ module.exports = {
                                                 self.__positionLinkDecorators(csid) :
                                                 []));
                                     }
-                                    return self.__regenIcon(csid);
+                                    return self.__regenIcon(csid, undefined, cid);
                                 },
                                 function (riChangelog) {
                                     cschangelogs.push(riChangelog);
@@ -562,7 +562,8 @@ module.exports = {
                             'statusCode': 200,
                             'changelog': cschangelog,
                             'sequence#': aswSequenceNumber,
-                            'hitchhiker': cshitchhiker
+                            'hitchhiker': cshitchhiker,
+                            'cid':cid
                         });
 
                     self.__nextASWSequenceNumber =
@@ -586,7 +587,9 @@ module.exports = {
                 this.__applyASWChanges(
                     pc['changelog'],
                     pc['sequence#'],
-                    pc['hitchhiker']);
+                    pc['hitchhiker'],
+                    pc['cid']
+                );
             }
         },
 
@@ -617,7 +620,7 @@ module.exports = {
                  will receive *all* messages broadcasted by the websocket server
                  in session_manager.js... these are detected and discarded */
     '__aswSubscribe':
-        function (aswid, cswid) {
+        function (aswid, cswid, cid) {
             let self = this;
             return function (callback, errback) {
                 let io = _siocl('http://localhost:8124');
@@ -629,9 +632,8 @@ module.exports = {
                             'to': "/asworker" + aswid,
                             'type': "-->>"
                         });
-                        logger.http("Sending changeListener to session_mngr for /asworker" + aswid + ".<br/>Below message comes from this worker", {'at': "/csworker" + __wid})
-                        io.emit('message',
-                            {'method': 'POST', 'url': '/changeListener?wid=' + aswid});
+                        let msg = {'method': 'POST', 'url': '/changeListener?wid=' + aswid + '&id=/csworker'+__wid};
+                        io.emit('message', msg);
                     });
                 io.on('disconnect',
                     function () {
@@ -648,11 +650,6 @@ module.exports = {
 
                         /* on POST /changeListener response */
                         if (msg.statusCode !== undefined) {
-                            logger.http("socketio _ 'POST /changeListener resp' <br/> " + log_statusCode, {
-                                'from': "session_mngr",
-                                'to': "/csworker" + __wid,
-                                'type': "-->>"
-                            });
 
                             if (!_utils.isHttpSuccessCode(msg.statusCode))
                                 return errback(msg.statusCode + ':' + msg.reason);
@@ -660,7 +657,7 @@ module.exports = {
                             self.__aswid = aswid;
                             if (cswid !== undefined) {
                                 let actions =
-                                    [__wHttpReq('GET', '/internal.state?wid=' + cswid)];
+                                    [__wHttpReq('GET', self.__build_url('/internal.state', cswid, cid),)];
                                 logger.http("http _ GET internal.state", {
                                     'from': "/csworker" + __wid,
                                     'to': "/csworker" + cswid,
@@ -710,7 +707,9 @@ module.exports = {
                             self.__applyASWChanges(
                                 msg.data.changelog,
                                 msg.data['sequence#'],
-                                msg.data.hitchhiker);
+                                msg.data.hitchhiker,
+                                msg.data['cid']
+                            );
 
                         }
                     });
@@ -816,10 +815,10 @@ module.exports = {
               chain if some number of tries have failed, and instead setting coded
               attribute values to '<out-of-date>' */
     '__regenIcon':
-        function (id, newCsmm) {
+        function (id, newCsmm, cid) {
             let changelogs = [];
             let self = this;
-            return function (callback, errback) {
+            return function (callback, _errback) {
                 if (newCsmm != undefined) {
                     let node = _utils.jsonp(_mmmk.read(id));
                     let asuri = _mmmk.read(id, '$asuri');
@@ -865,7 +864,7 @@ module.exports = {
                     let actions =
                         [__wHttpReq(
                             'POST',
-                            '/GET/' + asuri + '.mappings?wid=' + self.__aswid,
+                            self.__build_url('/GET/' + asuri + '.mappings', self.__aswid, cid),
                             mappers)];
                     let successf =
                         function (attrVals) {
@@ -911,7 +910,7 @@ module.exports = {
 
 
     '__solveLayoutContraints':
-        function (changelog) {
+        function (_changelog) {
             // TBC actually implement this function
             //	use ids in changelog to determine what changed
             //	add 2 lines below to mmmk.__create() if necessary
@@ -944,7 +943,7 @@ module.exports = {
                 b) 'return' flattened changelogs
             on failure, 'return' error */
     '__transformIcons':
-        function (tgtCsmm, newCsmm) {
+        function (tgtCsmm, newCsmm, cid) {
             let self = this;
             return function (callback, errback) {
                 let m = _utils.jsonp(_mmmk.read());
@@ -969,7 +968,7 @@ module.exports = {
                     function (id) {
                         actions.push(
                             function () {
-                                return self.__regenIcon(id, newCsmm);
+                                return self.__regenIcon(id, newCsmm, cid);
                             },
                             function (changelog) {
                                 let newId = changelog[0]['id'];
@@ -1037,8 +1036,8 @@ module.exports = {
         a) ask asworker to forward request to its mtworker
     2. launch chain... return success code or error */
     'mtwRequest':
-        function (resp, method, uri, reqData) {
-            let actions = [__wHttpReq(method, uri + '?wid=' + this.__aswid, reqData)];
+        function (resp, method, uri, reqData, cid) {
+            let actions = [__wHttpReq(method, this.__build_url(uri, this.__aswid, cid), reqData)];
 
             _do.chain(actions)(
                 function () {
@@ -1088,7 +1087,7 @@ module.exports = {
                 ii) subscribe to it
             b) launch chain... return success code or error */
     'PUT /aswSubscription':
-        function (resp, uri, reqData/*wid*/) {
+        function (resp, uri, reqData/*wid*/, cid) {
             if (this.__aswid > -1)
                 return __postForbiddenErrorMsg(resp, 'already subscribed to an asworker');
 
@@ -1105,7 +1104,7 @@ module.exports = {
                 logger.http("/csworker" + __wid + " subscribing to /asworker" + aswid, {'at': '/csworker' + __wid});
 
                 let self = this;
-                let actions = [this.__aswSubscribe(aswid)];
+                let actions = [this.__aswSubscribe(aswid, cid)];
 
                 _do.chain(actions)(
                     function () {
@@ -1122,7 +1121,7 @@ module.exports = {
                 );
             } else {
                 logger.info("/csworker" + __wid + " attaching to /asworker" + reqData['aswid'] + " and cloning /csworker" + reqData['cswid']);
-                let actions = [this.__aswSubscribe(reqData['aswid'], reqData['cswid'])];
+                let actions = [this.__aswSubscribe(reqData['aswid'], reqData['cswid'], cid)];
 
                 _do.chain(actions)(
                     function () {
@@ -1164,7 +1163,7 @@ module.exports = {
                        data as 'hitchhiker'
             b) launch chain... return success code or error */
     'PUT /current.metamodels':
-        function (resp, uri, reqData/*[asmm,]csmm*/) {
+        function (resp, uri, reqData/*[asmm,]csmm*/, cid) {
             if (reqData == undefined)
                 return __postBadReqErrorMsg(resp, 'missing request data');
             else if (reqData['csmm'] == undefined)
@@ -1195,7 +1194,9 @@ module.exports = {
                         function () {
                             return self.__transformIcons(
                                 self.__asmm2csmm[asmm],
-                                csmm);
+                                csmm,
+                                cid
+                            );
                         }];
 
                 _do.chain(actions)(
@@ -1230,7 +1231,7 @@ module.exports = {
                         function (csmmData) {
                             return __wHttpReq(
                                 'PUT',
-                                uri + '?wid=' + self.__aswid,
+                                self.__build_url(uri, self.__aswid, cid),
                                 {
                                     'mm': reqData['asmm'],
                                     'hitchhiker': {'csmm': csmmData, 'name': csmm}
@@ -1259,13 +1260,13 @@ module.exports = {
             a) ask asworker to unload corresponding AS mm
         3. launch chain... on success, unload specified metamodel */
     'DELETE *.metamodel':
-        function (resp, uri) {
+        function (resp, uri, cid) {
             let matches = uri.match(/(.*)\..*Icons(\.pattern){0,1}\.metamodel/);
             if (!matches)
                 return __postBadReqErrorMsg(resp, 'bad uri for Icons mm :: ' + uri);
 
             let asuri = matches[1] + (matches[2] || '') + '.metamodel';
-            let actions = [__wHttpReq('DELETE', asuri + '?wid=' + this.__aswid)];
+            let actions = [__wHttpReq('DELETE', this.__build_url(asuri, this.__aswid, cid))];
 
             _do.chain(actions)(
                 function () {
@@ -1294,7 +1295,7 @@ module.exports = {
                 'hitchhiker'
         4. launch chain... return success code or error */
     'PUT /current.model':
-        function (resp, uri, reqData/*m[,insert]*/) {
+        function (resp, uri, reqData/*m[,insert]*/, cid) {
             if (reqData == undefined)
                 return __postBadReqErrorMsg(resp, 'missing model');
 
@@ -1338,7 +1339,7 @@ module.exports = {
                         let csmData = _utils.jsons(m['csm']);
                         return __wHttpReq(
                             'PUT',
-                            uri + '?wid=' + self.__aswid,
+                            self.__build_url(uri, self.__aswid, cid),
                             {
                                 'm': asmData,
                                 'name': reqData['m'] + (new Date().getTime()),
@@ -1391,7 +1392,7 @@ module.exports = {
            b) ask asworker to create an instance of appropriate AS type
         3. launch chain... return success code or error */
     'POST *.type':
-        function (resp, uri, reqData/*pos|clone,[segments,src,dest]*/) {
+        function (resp, uri, reqData/*pos|clone,[segments,src,dest]*/, cid) {
             let matches =
                 uri.match(/((.*)\..*Icons)(\.pattern){0,1}\/((.*)Icon)\.type/) ||
                 uri.match(/((.*)\..*Icons)(\.pattern){0,1}\/((.*)Link)\.type/);
@@ -1482,7 +1483,7 @@ module.exports = {
                         function (asreqData) {
                             return __wHttpReq(
                                 'POST',
-                                asuri + '?wid=' + self.__aswid,
+                                self.__build_url(asuri, self.__aswid, cid),
                                 asreqData);
                         }];
 
@@ -1507,7 +1508,7 @@ module.exports = {
         ... on success, 'return' instance possibly bundling CS instance
         ... on error, 'return' error */
     'GET *.instance':
-        function (resp, uri, reqData/*[full]*/) {
+        function (resp, uri, reqData/*[full]*/, cid) {
             let self = this;
             let actions =
                 [__successContinuable(),
@@ -1518,7 +1519,7 @@ module.exports = {
                         return __successContinuable(asuri);
                     },
                     function (asuri) {
-                        return __wHttpReq('GET', asuri + '?wid=' + self.__aswid);
+                        return __wHttpReq('GET', self.__build_url(asuri, self.__aswid, cid));
                     }];
 
             _do.chain(actions)(
@@ -1557,7 +1558,7 @@ module.exports = {
             b) ask asworker to update it
         2. launch chain... return success code or error */
     'PUT *.instance':
-        function (resp, uri, reqData) {
+        function (resp, uri, reqData, cid) {
             let self = this;
             let actions =
                 [__successContinuable(),
@@ -1570,12 +1571,12 @@ module.exports = {
                     function (asuri) {
                         return __wHttpReq(
                             'PUT',
-                            asuri + '?wid=' + self.__aswid,
+                            self.__build_url(asuri, self.__aswid, cid),
                             reqData);
                     }];
 
             _do.chain(actions)(
-                function (asnode) {
+                function (_asnode) {
                     __postMessage(
                         {
                             'statusCode': 202,
@@ -1590,7 +1591,7 @@ module.exports = {
 
 
     'POST *.instance.click':
-        function (resp, uri, reqData) {
+        function (resp, uri, reqData, cid) {
             /* TBA
                 REST requests vs. code run on ASw
                 + checkout bak/ for _mmmk.handleVisualObjectClick */
@@ -1620,10 +1621,10 @@ module.exports = {
                     c) csworker handles delete A->B 	(error, A->B already deleted)
                     ... */
     'DELETE *.instance':
-        function (resp, uri) {
+        function (resp, uri, cid) {
             let self = this;
             let asuri = this.__csuri_to_asuri(uri);
-            let actions = [__wHttpReq('DELETE', asuri + '?wid=' + self.__aswid)];
+            let actions = [__wHttpReq('DELETE', self.__build_url(asuri, this.__aswid, cid))];
 
             if (asuri['$err'])
                 __postMessage({'statusCode': 200, 'respIndex': resp});
@@ -1655,7 +1656,7 @@ module.exports = {
         3. if there are no AS impacts, perform requested CS update and post
             changelog */
     'PUT *.cs':
-        function (resp, uri, reqData) {
+        function (resp, uri, reqData, cid) {
             let id = __uri_to_id(uri);
             let icon = _utils.jsonp(_mmmk.read(id));
             let updd = this.__runParser(
@@ -1707,7 +1708,7 @@ module.exports = {
         4. if there are no AS impacts, perform the requested VisualObject update
               and post changelog */
     'PUT *.vobject':
-        function (resp, uri, reqData) {
+        function (resp, uri, reqData, cid) {
             let matches = uri.match(/.*\/(.*)\.instance\/(.*)\.vobject/);
             if (!matches)
                 return __postBadReqErrorMsg(
@@ -1795,7 +1796,7 @@ module.exports = {
             a) ask asworker to generate metamodel and write it to disk
         2. launch chain... return success code or error */
     'PUT *.metamodel':
-        function (resp, uri) {
+        function (resp, uri, cid) {
             let matches = uri.match(/\.pattern\.metamodel/);
             if (matches) {
                 let matches = uri.match(/\/GET(((.*\/).*).pattern.metamodel)/);
@@ -1881,6 +1882,7 @@ module.exports = {
                 let asmm = undefined;
                 let aswid = this.__aswid;
                 let actions;
+                let self = this;
                 if (asmmPath) {
                     actions = [
                         _fs.readFile(asmmPath, 'utf8'),
@@ -1888,14 +1890,14 @@ module.exports = {
                             asmm = _utils.jsonp(data);
                             return __successContinuable();
                         },
-                        function (result) {
+                        function (_result) {
                             return __wHttpReq('PUT',
-                                uri + '?wid=' + aswid,
+                                self.__build_url(uri, aswid, cid),
                                 ({'csm': _mmmk.read(), 'asmm': asmm}))
                         }]
                 } else {
                     actions = [__wHttpReq('PUT',
-                        uri + '?wid=' + aswid,
+                        self.__build_url(uri, aswid, cid),
                         undefined)];
                 }
                 _do.chain(actions)(
@@ -1927,9 +1929,9 @@ module.exports = {
                              a) write bundled AS and CS models to disk
                     v.   launch chain... return success or error code */
     'PUT *.model':
-        function (resp, uri) {
+        function (resp, uri, cid) {
             let self = this;
-            let actions = [__wHttpReq('GET', '/current.model?wid=' + this.__aswid)];
+            let actions = [__wHttpReq('GET', self.__build_url('/current.model', this.__aswid, cid),)];
 
             _do.chain(actions)(
                 function (asdata) {
@@ -1992,8 +1994,8 @@ module.exports = {
         a) ask asworker to validate its model
     2. launch chain... return success code or error */
     'GET /validatem':
-        function (resp, uri) {
-            let actions = [__wHttpReq('GET', uri + '?wid=' + this.__aswid)];
+        function (resp, uri, _reqData, cid) {
+            let actions = [__wHttpReq('GET', this.__build_url(uri, this.__aswid, cid),)];
 
             _do.chain(actions)(
                 function () {
@@ -2027,13 +2029,14 @@ module.exports = {
                   where they should undo/redo
             ii.  forward request to asworker and return success code or error */
     'POST /undo':
-        function (resp, uri, reqData/*[undoUntil]*/) {
+        function (resp, uri, reqData/*[undoUntil]*/, cid) {
             if (this.__handledSeqNums['i'] == undefined)
                 this.__handledSeqNums['i'] = this.__handledSeqNums['#s'].length - 1;
             if (this.__handledSeqNums['#s'][this.__handledSeqNums['i']])
                 this.__undoredo(
                     resp,
                     uri,
+                    cid,
                     (reqData != undefined && 'undoUntil' in reqData ?
                         reqData['undoUntil'] :
                         this.__handledSeqNums['#s'][this.__handledSeqNums['i']--]),
@@ -2043,13 +2046,14 @@ module.exports = {
 
         },
     'POST /redo':
-        function (resp, uri) {
+        function (resp, uri, cid) {
             if (this.__handledSeqNums['i'] == undefined)
                 this.__handledSeqNums['i'] = this.__handledSeqNums['#s'].length - 1;
             if (this.__handledSeqNums['#s'][this.__handledSeqNums['i'] + 1])
                 this.__undoredo(
                     resp,
                     uri,
+                    cid,
                     this.__handledSeqNums['#s'][++this.__handledSeqNums['i']],
                     'redo');
             else
@@ -2057,13 +2061,13 @@ module.exports = {
 
         },
     '__undoredo':
-        function (resp, uri, sn, func) {
+        function (resp, uri, cid, sn, func) {
             if (!sn.match(get__wtype())) {
                 let hitchhiker = {};
                 let reqData = {'hitchhiker': hitchhiker};
                 let actions = [__wHttpReq(
                     'POST',
-                    uri + '?wid=' + this.__aswid,
+                    this.__build_url(uri, this.__aswid, cid),
                     reqData)];
 
                 let matches = sn.match(/^bchkpt@([0-9]+)/);
@@ -2115,9 +2119,8 @@ module.exports = {
         a) forward request to asworker
     2. launch chain... return success code or error */
     'POST /batchCheckpoint':
-        function (resp, uri, reqData) {
-            let actions = [
-                __wHttpReq('POST', uri + '?wid=' + this.__aswid, reqData)];
+        function (resp, uri, reqData, cid) {
+            let actions = [__wHttpReq('POST', this.__build_url(uri, this.__aswid, cid), reqData)];
             _do.chain(actions)(
                 function () {
                     __postMessage({'statusCode': 202, 'respIndex': resp});
@@ -2166,6 +2169,15 @@ module.exports = {
             return __id_to_uri(this.__asid_to_csid(asid));
         },
 
+    /* helper to build an HTTP URL to send to the HTTP server */
+    '__build_url':
+        function(uri, aswid, cid) {
+            let url = uri + '?wid=' + aswid + '&swid='+__wid;
+            if (cid != undefined){
+                url += '&cid=' + cid;
+            }
+            return url;
+        },
 
     /* add a checkpointing marker in mmmk and log the said marker as a
         non-undo/redo operation (remove any undone operations from log first) */

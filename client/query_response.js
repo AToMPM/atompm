@@ -44,22 +44,22 @@ function __forceNextCSWSequenceNumber(sn)
 		asworker and csworker sequence numbers
 	1. iterate through and handle the changelog's steps 
 	2. apply next pending changelog, if any and if applicable */
-function __handleChangelog(changelog,seqNum,hitchhiker)
+function __handleChangelog(changelog,seqNum,hitchhiker,cid)
 {
-	console.debug(' ++ ('+seqNum+') ',changelog);
+	console.debug(' ++ ('+seqNum+', ' + cid + ')', changelog);
 
-	var isCSWChangelog 	 = seqNum.match(/csworker/);
-		 nextSeqNum 	 	 = 
-			 (isCSWChangelog ? __nextCSWSequenceNumber : __nextASWSequenceNumber),
-		 pendingChangelogs = 
-			 (isCSWChangelog ? __pendingCSWChangelogs : __pendingASWChangelogs);
+	let isCSWChangelog = seqNum.match(/csworker/);
+	let nextSeqNum = (isCSWChangelog ? __nextCSWSequenceNumber : __nextASWSequenceNumber);
+	let pendingChangelogs = (isCSWChangelog ? __pendingCSWChangelogs : __pendingASWChangelogs);
 
 	if( utils.sn2int(seqNum) > utils.sn2int(nextSeqNum) )
 	{
 		pendingChangelogs.push(
 				{'changelog':changelog,
 				 'sequence#':seqNum,
-				 'hitchhiker':hitchhiker});
+				 'hitchhiker':hitchhiker,
+				 'cid':cid
+				});
 		pendingChangelogs.sort(
 			function(a,b)
 			{
@@ -430,6 +430,8 @@ function __handleChangelog(changelog,seqNum,hitchhiker)
 		__handleChangelog(
 				pc['changelog'],
 				pc['sequence#'],
-				pc['hitchhiker']);
+				pc['hitchhiker'],
+				pc['cid']
+			);
 	}
 }
