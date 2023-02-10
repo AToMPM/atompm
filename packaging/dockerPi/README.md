@@ -23,6 +23,9 @@ docker load < atompmvm.tar.gz
 
 ## Running the Container with Docker Compose
 
+1. The first time you want to run the container you need to update the docker-compose.yml
+   1. replace the <id> in the `user: <id>:<id>` entry with the user id that will run the container
+      1. you can get the user id by runing `id -u` in a console
 1. In the folder with the docker-compose.yml file
    1. `docker compose up -d`
 1. Open your browser and navigate to `http://localhost:8124/`
