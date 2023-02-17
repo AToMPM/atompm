@@ -6,7 +6,7 @@
 #   i. In AToMPM - client/constants.js
 #   ii. In documentation - doc/conf.py
 #   iii. In Node - package.json
-#2. Create a new tag like v0.8.0
+#2. Create a new tag like v0.8.0 `git tag v0.8.0`
 #3. Push these changes to GitHub
 #4. Create a new release on GitHub
 #5. The packaging action (on GitHub) should have made an atompm-portable.zip file. Attach this to the release.
