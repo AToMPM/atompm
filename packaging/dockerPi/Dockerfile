@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:rolling
 
 RUN apt-get update -y
 RUN apt-get upgrade -y
@@ -42,3 +42,4 @@ EXPOSE 8124
 
 CMD ["bash", "run_AToMPM_local.sh"]
 #CMD ["bash"]
+
