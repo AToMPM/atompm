@@ -55,7 +55,7 @@ To run AToMPM on Windows, double-click on the `run.bat` script inside of the mai
 
 ### Mac or Linux
 1. Execute `node httpwsd.js` in one terminal
-2. Execute `python mt/main.py` in another terminal
+2. Execute `python3 mt/main.py` in another terminal
 3. Open a browser (Firefox or Chrome) and navigate to [http://localhost:8124/atompm](http://localhost:8124/atompm)
 
 * The above steps are automated by the `run_AToMPM_local.sh` script
