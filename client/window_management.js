@@ -123,7 +123,9 @@ WindowManagement = function(){
 			}
 
 			let collabText = "These options let you collaborate with another user on the same model.\n" +
-				"<b>Usage:</b> Copy-and-paste the links below to your collaborators.\n";
+				"<b>Usage:</b> Copy-and-paste the links below to your collaborators.\n" +
+			"<b>Note:</b> If the links contain 'localhost', you will have to edit the links before sending them.\n" +
+				"See the <a href=\"https://atompm.readthedocs.io/en/latest/collaboration.html\" target='_blank'>AToMPM documentation</a> for more information\n";
 			elements.push(GUIUtils.getTextSpan(collabText));
 
 			elements.push(GUIUtils.getTextSpan("<b>Screen Share:</b>"));
@@ -166,7 +168,7 @@ WindowManagement = function(){
 				elements.push(modelShareCopyBtn);
 			}
 
-			let modelShareText = "Only abstract syntax is shared. This means that all collaborators can have distinct concrete syntax representations and distinct layouts (provided layout and abstract syntax are not intricately related), and are only affected by others’ abstract syntax changes (e.g., modifying abstract attribute values).\n\n"
+			let modelShareText = "Only the abstract syntax is shared. This means that all collaborators can have distinct concrete syntax representations and distinct layouts (provided layout and abstract syntax are not intricately related), and are only affected by others’ abstract syntax changes (e.g., modifying abstract attribute values).\n\n"
 			elements.push(GUIUtils.getTextSpan(modelShareText));
 
 
