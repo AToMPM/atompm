@@ -124,7 +124,8 @@ WindowManagement = function(){
 
 			let collabText = "These options let you collaborate with another user on the same model.\n" +
 				"<b>Usage:</b> Copy-and-paste the links below to your collaborators.\n" +
-			"<b>Note:</b> If the links contain 'localhost', you will have to edit the links before sending them. See the <a href=\"https://atompm.readthedocs.io/en/latest/collaboration.html\" target='_blank'>AToMPM documentation</a> for more information\n";
+			"<b>Note:</b> If the links contain 'localhost', you will have to edit the links before sending them.\n" +
+				"See the <a href=\"https://atompm.readthedocs.io/en/latest/collaboration.html\" target='_blank'>AToMPM documentation</a> for more information\n";
 			elements.push(GUIUtils.getTextSpan(collabText));
 
 			elements.push(GUIUtils.getTextSpan("<b>Screen Share:</b>"));
