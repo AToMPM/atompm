@@ -31,6 +31,7 @@ Contents
     Using a Modelling Language <using_language>
     Modelling a Model Transformation <modelling_transformation>
     Executing a Model Transformation <executing_transformation>
+    Collaboration <collaboration>
     Workflows <workflows>
     Creating Buttons and Plugins <creating_buttons_and_plugins>
     Toolbar/Plugin Documentation <toolbars_and_plugins>
