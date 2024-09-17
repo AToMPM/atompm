@@ -1,4 +1,4 @@
-/* This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
+/* hello This file is part of AToMPM - A Tool for Multi-Paradigm Modelling
 *  Copyright 2011 by the AToMPM team and licensed under the LGPL
 *  See COPYING.lesser and README.md in the root of this project for full details
 */
