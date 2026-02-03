@@ -1,6 +1,7 @@
 name: ATOMPM_CI
 
 on:
+  workflow_dispatch:
   push:
     paths-ignore:
       - 'doc/**'
