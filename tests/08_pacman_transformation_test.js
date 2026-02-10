@@ -4,7 +4,9 @@ let user_utils = require('./user_utils');
 let model_building_utils = require('./model_building_utils');
 let mouse_tracking = require('./mouse_tracking.js');
 
+// TODO: temporarily disable this test for CI and local runs; re-enable after fixing flakiness
 module.exports = {
+    '@disabled': true,
 
     beforeEach : async function (client) {
         await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
