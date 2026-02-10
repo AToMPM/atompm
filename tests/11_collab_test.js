@@ -221,4 +221,4 @@ module.exports = {
         client.end();
     },
 
-// End of file
+};

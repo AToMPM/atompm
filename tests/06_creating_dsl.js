@@ -626,6 +626,6 @@ module.exports = {
     },
 
 
-// End of file
+};
 
 
