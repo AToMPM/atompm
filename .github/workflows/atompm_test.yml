@@ -19,9 +19,6 @@ on:
 
 jobs:
   test:
-    strategy:
-      matrix:
-        version: [22]
     runs-on: ubuntu-latest
     
     steps:
@@ -36,7 +33,7 @@ jobs:
     - name: npm install
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.version }}
+        node-version: 22
         
     - name: setup chromedriver
       uses: nanasess/setup-chromedriver@master
