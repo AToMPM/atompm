@@ -1,7 +1,7 @@
 
 
 function track_mouse(client) {
-    client.execute(function() {
+    client.execute(function () {
         // https://gist.github.com/primaryobjects/70087610d9aef0f4bddbe2101dda7649
 
         // Create mouse following image.
@@ -25,7 +25,7 @@ function track_mouse(client) {
         document.body.appendChild(seleniumFollowerImg);
 
         // Track mouse movements and re-position the mouse follower.
-        $(document).mousemove(function(e) {
+        $(document).mousemove(function (e) {
             $("#selenium_mouse_follower").css({ left: e.pageX, top: e.pageY });
         })
 

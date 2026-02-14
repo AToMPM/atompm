@@ -34,11 +34,11 @@ function callback(client, load_function, files_to_skip) {
 module.exports = {
     '@disabled': true,
 
-    beforeEach : function (client) {
+    beforeEach: function (client) {
         client.url('http://localhost:8124/atompm').pause(1000);
     },
 
-    'Login' : function (client) {
+    'Login': function (client) {
         user_utils.login(client);
     },
 
@@ -54,11 +54,11 @@ module.exports = {
         // test_utils.getFiles(client, user, '/**/*Icons.pattern.metamodel', test_utils.load_toolbar);
     },
 
-    'Load all models' : function (client) {
+    'Load all models': function (client) {
         // test_utils.getFiles(client, user, '/**/*.model', test_utils.load_model);
     },
 
-    after : function (client) {
+    after: function (client) {
         client.end();
     },
 

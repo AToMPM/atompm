@@ -24,12 +24,12 @@ function decodeHtml(html) {
 module.exports = {
     '@disabled': true,
 
-    beforeEach : async function (client) {
+    beforeEach: async function (client) {
         await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
         mouse_tracking.track_mouse(client);
     },
 
-    'Collaboration test' : async function (client) {
+    'Collaboration test': async function (client) {
 
         // store the window handles to switch between
         let tab_a = null;
@@ -151,8 +151,8 @@ module.exports = {
                 .url(model_share_url);
 
             client.windowHandles(function (result) {
-                    tab_c = result.value[2];
-                })
+                tab_c = result.value[2];
+            })
             client.pause(500);
             client.verify.ok(true, 'Tab C\'s Handle: \'' + tab_c + "'");
         });
@@ -217,7 +217,7 @@ module.exports = {
         client.pause(1000);
     },
 
-    after : function (client) {
+    after: function (client) {
         client.end();
     },
 

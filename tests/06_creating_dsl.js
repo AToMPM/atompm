@@ -123,12 +123,12 @@ let assocs = [
 module.exports = {
     '@disabled': true,
 
-    beforeEach : async function (client) {
+    beforeEach: async function (client) {
         await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
         mouse_tracking.track_mouse(client);
     },
 
-    'Login' : async function (client) {
+    'Login': async function (client) {
         await user_utils.login(client);
     },
 
@@ -579,7 +579,7 @@ module.exports = {
         for (let [key, value] of Object.entries(AAttribs)) {
             let attrib_type = "textarea";
             if (key == "boolean") attrib_type = "input";
-            let new_key = "#tr_" + key + " > td:nth-child(2) > "+attrib_type+":nth-child(1)";
+            let new_key = "#tr_" + key + " > td:nth-child(2) > " + attrib_type + ":nth-child(1)";
             attribs[new_key] = value;
         }
         //TODO: Set other attribs

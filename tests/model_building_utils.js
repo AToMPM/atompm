@@ -1,5 +1,5 @@
 const div_utils = require('./div_utils');
-const {fix_selector} = require("./div_utils");
+const { fix_selector } = require("./div_utils");
 
 function create_class(client, x, y, i, element_type) {
 
@@ -14,11 +14,11 @@ function create_class(client, x, y, i, element_type) {
 
     //const canvas = client.findElement(div_utils.canvas);
     client.perform(function () {
-            const actions = this.actions({async: false});
-            return actions
-                .move({'x': x, 'y': y})
-                .contextClick();
-        });
+        const actions = this.actions({ async: false });
+        return actions
+            .move({ 'x': x, 'y': y })
+            .contextClick();
+    });
 
     //client.waitForElementPresent(class_div, 1000, "Created class: " + class_div);
     client.pause(300);
@@ -42,43 +42,43 @@ function create_assoc(client, start_div, end_div, relation_div, offset, offset2)
 
     this.deselect_all(client);
 
-    if (offset2 == undefined){
+    if (offset2 == undefined) {
         offset2 = offset;
     }
 
     let start, end;
 
     client.findElement(start_div, response => {
-                start = response.value;
-            })
+        start = response.value;
+    })
         .findElement(end_div, response => {
-                end = response.value;
-            })
+            end = response.value;
+        })
         .perform(function () {
-                const actions = this.actions({async: false});
-                return actions
-                    .move({'origin':start, "x":offset[0], "y":offset[1]})
-                    .press(2)
-                    .move({'origin':end, "x":offset2[0], "y":offset2[1]})
-                    .release(2)
-            })
+            const actions = this.actions({ async: false });
+            return actions
+                .move({ 'origin': start, "x": offset[0], "y": offset[1] })
+                .press(2)
+                .move({ 'origin': end, "x": offset2[0], "y": offset2[1] })
+                .release(2)
+        })
 
 
-    // this.move_to_element_ratio(client, start_div, 50 + offset, 50 + offset);
-    // client.mouseButtonDown('right');
-    // this.move_to_element_ratio(client, end_div, 50 + offset, 50 + offset);
-    // client.mouseButtonUp('right').pause(300);
+        // this.move_to_element_ratio(client, start_div, 50 + offset, 50 + offset);
+        // client.mouseButtonDown('right');
+        // this.move_to_element_ratio(client, end_div, 50 + offset, 50 + offset);
+        // client.mouseButtonUp('right').pause(300);
 
         .perform(function () {
-                if (relation_div != undefined && relation_div != "") {
-                    client.waitForElementPresent(relation_div, 2000, "Relation option present: " + relation_div)
-                        .click(relation_div)
-                        .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
-                        .click("#dialog_btn")
-                        .pause(300)
-                        .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
-                }        
-            });
+            if (relation_div != undefined && relation_div != "") {
+                client.waitForElementPresent(relation_div, 2000, "Relation option present: " + relation_div)
+                    .click(relation_div)
+                    .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
+                    .click("#dialog_btn")
+                    .pause(300)
+                    .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
+            }
+        });
     this.deselect_all(client);
     client.pause(300);
 
@@ -90,21 +90,21 @@ function move_element(client, from_div, to_div, from_offset, to_offset) {
 
     let start, end;
     client.findElement(from_div, response => {
-                start = response.value;
-            })
+        start = response.value;
+    })
         .findElement(to_div, response => {
-                end = response.value;
-            })
+            end = response.value;
+        })
 
         .perform(function () {
-            const actions = this.actions({async: false});
+            const actions = this.actions({ async: false });
             return actions
-                .move({"origin": start, "x":from_offset[0], "y":from_offset[1]})
+                .move({ "origin": start, "x": from_offset[0], "y": from_offset[1] })
                 .click(0)
                 .pause(100)
                 .press(0)
                 .pause(100)
-                .move({"origin": end, "x":to_offset[0], "y":to_offset[1]})
+                .move({ "origin": end, "x": to_offset[0], "y": to_offset[1] })
                 .pause(100)
                 .release(0)
 
@@ -117,9 +117,9 @@ function move_element(client, from_div, to_div, from_offset, to_offset) {
 function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
 
     let element_div = element_type;
-    if (element_type == undefined){
+    if (element_type == undefined) {
         element_div = div_utils.get_class_div(num);
-    } else if (!element_type.includes("instance")){
+    } else if (!element_type.includes("instance")) {
         element_div = div_utils.build_div(element_type, num);
     }
 
@@ -136,32 +136,32 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
 
     client.waitForElementPresent(element_div, 2000, "Find element for attrib set: " + element_div)
         .findElement(element_div, response => {
-                ele = response.value;
-            })
+            ele = response.value;
+        })
         .perform(function () {
-                const actions = this.actions({async: false});
-                return actions
-                    .move({'origin': ele, "x":offset[0], "y":offset[1]})
-                    .click()
-                    .pause(300)
-                    .sendKeys(client.Keys.INSERT);
-            })
+            const actions = this.actions({ async: false });
+            return actions
+                .move({ 'origin': ele, "x": offset[0], "y": offset[1] })
+                .click()
+                .pause(300)
+                .sendKeys(client.Keys.INSERT);
+        })
         .waitForElementPresent("#dialog_btn", 2000, "Editing menu opens")
         .perform((function (attrs) {
-                let ele2;
-                for (const [key, value] of Object.entries(attrs)) {
-                    client.findElement(key, response => {
-                                ele2 = response.value;
-                            })
-                        .perform(function (){
-                                if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean")){
-                                    client.moveToElement(ele2,offset[0],offset[1])
-                                        .click(ele2);
-                                }else
-                                    client.updateValue(key, value);                        
-                            })
-                }
-            }).call(this,attrs))
+            let ele2;
+            for (const [key, value] of Object.entries(attrs)) {
+                client.findElement(key, response => {
+                    ele2 = response.value;
+                })
+                    .perform(function () {
+                        if (key.includes("checkbox") || key.includes("choice_") || key.includes("boolean")) {
+                            client.moveToElement(ele2, offset[0], offset[1])
+                                .click(ele2);
+                        } else
+                            client.updateValue(key, value);
+                    })
+            }
+        }).call(this, attrs))
         .click("#dialog_btn")
         .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
 
@@ -183,20 +183,20 @@ function delete_element(client, element) {
 
     let ele;
     client.findElement(element, response => {
-                ele = response.value;
-            })
+        ele = response.value;
+    })
         .perform(function () {
-                const actions = this.actions({async: false});
-                return actions
-                    .move({'origin': ele})
-                    .click()
-            })
+            const actions = this.actions({ async: false });
+            return actions
+                .move({ 'origin': ele })
+                .click()
+        })
         .pause(200)
         .perform(function () {
-                const actions = this.actions({async: false});
-                return actions
-                    .sendKeys(client.Keys.DELETE);
-            })
+            const actions = this.actions({ async: false });
+            return actions
+                .sendKeys(client.Keys.DELETE);
+        })
         .waitForElementNotPresent(element, 2000, "Deleted element");
 
     this.deselect_all(client);
@@ -207,20 +207,20 @@ function hit_control_element(client, element) {
 
     let ele;
     client.findElement(element, response => {
-                ele = response.value;
-            })
+        ele = response.value;
+    })
         .perform(function () {
-                const actions = this.actions({async: false});
-                return actions
-                    .move({'origin': ele})
-                    .click()
-            })
+            const actions = this.actions({ async: false });
+            return actions
+                .move({ 'origin': ele })
+                .click()
+        })
         .pause(200)
         .perform(function () {
-                const actions = this.actions({async: false});
-                return actions
-                    .sendKeys(client.Keys.CONTROL);
-            });
+            const actions = this.actions({ async: false });
+            return actions
+                .sendKeys(client.Keys.CONTROL);
+        });
 
     //client.waitForElementNotPresent(element, 2000, "Deleted element");
 
@@ -233,7 +233,7 @@ function deselect_all(client) {
     // Perform twice to make sure
     client
         .perform(function () {
-            const actions = this.actions({async: false});
+            const actions = this.actions({ async: false });
             return actions
                 .sendKeys(client.Keys.ESCAPE)
                 .pause(200)
@@ -310,24 +310,24 @@ function save_model(client, folder_name, model_name) {
 
     let model_selector = "#" + model_name;
     client.element('css selector', model_selector, function (result) {
-            if (result.status == -1) {
-                client.click(new_file_text)
-                    .clearValue(new_file_text)
-                    .setValue(new_file_text, '\u0008') // Send a backspace
-                    .setValue(new_file_text, model_name);
+        if (result.status == -1) {
+            client.click(new_file_text)
+                .clearValue(new_file_text)
+                .setValue(new_file_text, '\u0008') // Send a backspace
+                .setValue(new_file_text, model_name);
 
-                client.assert.ok(true, "Saving model with name: '" + model_name + "'");
-            } else {
-                client.click(model_selector);
-            }
-
-            client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
-                .pause(200)
-                .click("#dialog_btn")
-                .pause(200)
-                .waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
-
+            client.assert.ok(true, "Saving model with name: '" + model_name + "'");
+        } else {
+            client.click(model_selector);
         }
+
+        client.waitForElementPresent("#dialog_btn", 2000, "Looking for close")
+            .pause(200)
+            .click("#dialog_btn")
+            .pause(200)
+            .waitForElementNotPresent("#dialog_btn", 2000, "Save menu closes");
+
+    }
     );
 }
 
@@ -343,26 +343,26 @@ function rename_model(client, folder_name, old_filename, new_filename) {
     let rename_file_text = "#rename_file";
     let model_selector = "#" + fix_selector(old_filename);
     client.element('css selector', model_selector, function (result) {
-            if (result.status == -1) {
-                client.assert.ok(false, "Could not find file with name: '" + old_filename + "'");
-            } else {
-                client.click(model_selector);
-            }
-
-            client.click(rename_file_text)
-                .pause(500)
-                .setAlertText(new_filename)
-                .acceptAlert();
-
-            client.assert.ok(true, "Renaming model to name: '" + new_filename + "'");
-
-            client.waitForElementPresent("#dialog_cancel_btn", 2000, "Looking for close")
-                .pause(200)
-                .click("#dialog_cancel_btn")
-                .pause(200)
-                .waitForElementNotPresent("#dialog_cancel_btn", 2000, "Load menu closes");
-
+        if (result.status == -1) {
+            client.assert.ok(false, "Could not find file with name: '" + old_filename + "'");
+        } else {
+            client.click(model_selector);
         }
+
+        client.click(rename_file_text)
+            .pause(500)
+            .setAlertText(new_filename)
+            .acceptAlert();
+
+        client.assert.ok(true, "Renaming model to name: '" + new_filename + "'");
+
+        client.waitForElementPresent("#dialog_cancel_btn", 2000, "Looking for close")
+            .pause(200)
+            .click("#dialog_cancel_btn")
+            .pause(200)
+            .waitForElementNotPresent("#dialog_cancel_btn", 2000, "Load menu closes");
+
+    }
     );
 }
 
@@ -406,25 +406,25 @@ function load_multiple_models(client, fnames) {
 function load_toolbar(client, fnames) {
 
     client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded")
-        .perform( function (){
+        .perform(function () {
             for (let name of fnames) {
                 let toolbar_name = name.replace(/\//g, "\\2f ").replace(/\./g, "\\2e ");
                 toolbar_name = "#div_toolbar_" + toolbar_name;
 
                 client.execute(
-                        function (fname) {
-                            _loadToolbar(fname);
-                        }, [name], null
-                    )
-        
-                //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
-        
+                    function (fname) {
+                        _loadToolbar(fname);
+                    }, [name], null
+                )
+
+                    //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
+
                     .element('css selector', '#dialog_btn', function (result) {
                         if (result.status != -1) {
                             //Dialog has popped up, so check the text and click the button
                             client.assert.textContains("#div_dialog_0", "File not found")
                                 .click("#dialog_btn")
-            
+
                                 .verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
                         } else {
                             //Toolbar loaded, so check for it
@@ -465,29 +465,29 @@ function compile_model(client, compile_type, folder_name, model_name) {
     let model_div = "#" + fix_selector(model_name);
     client.element('css selector', model_div, function (result) {
 
-            if (result.status == -1) {
-                //don't create new file with pattern compilation
-                if (button_name == "pattern" || button_name == "transform") {
-                    client.assert.ok(false, "File found: " + model_name);
-                }
-
-                client.click(new_file_text)
-                    .pause(200)
-                    .clearValue(new_file_text)
-                    .pause(200)
-                    .setValue(new_file_text, '\u0008') // Send a backspace
-                    .setValue(new_file_text, '\u0008') // Send a backspace
-                    .setValue(new_file_text, model_name)
-                    .pause(200)
-                    .click("#dialog_btn");
-            } else {
-                client.click(model_div)
-                    .pause(200)
-                    .click("#dialog_btn");
+        if (result.status == -1) {
+            //don't create new file with pattern compilation
+            if (button_name == "pattern" || button_name == "transform") {
+                client.assert.ok(false, "File found: " + model_name);
             }
 
-            client.waitForElementNotPresent("#dialog_btn", 2000, button_name + " menu closes");
+            client.click(new_file_text)
+                .pause(200)
+                .clearValue(new_file_text)
+                .pause(200)
+                .setValue(new_file_text, '\u0008') // Send a backspace
+                .setValue(new_file_text, '\u0008') // Send a backspace
+                .setValue(new_file_text, model_name)
+                .pause(200)
+                .click("#dialog_btn");
+        } else {
+            client.click(model_div)
+                .pause(200)
+                .click("#dialog_btn");
         }
+
+        client.waitForElementNotPresent("#dialog_btn", 2000, button_name + " menu closes");
+    }
     );
 }
 

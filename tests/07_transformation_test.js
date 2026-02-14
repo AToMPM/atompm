@@ -13,12 +13,12 @@ let rule_toolbars = [
 module.exports = {
     '@disabled': true,
 
-    beforeEach : async function (client) {
+    beforeEach: async function (client) {
         await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
         mouse_tracking.track_mouse(client);
     },
 
-    'Login' : async function (client) {
+    'Login': async function (client) {
         await user_utils.login(client);
     },
 
@@ -69,15 +69,15 @@ module.exports = {
             num_elements++;
         }
 
-        let top_offset = [0,-20];
-        let success_offset = [-40,30];
-        let fail_offset = [40,30];
+        let top_offset = [0, -20];
+        let success_offset = [-40, 30];
+        let fail_offset = [40, 30];
         let assocs = [
-            [0, 1, "", [0,0], top_offset],
+            [0, 1, "", [0, 0], top_offset],
             [1, 2, "success", success_offset, top_offset],
             [2, 3, "success", success_offset, [0, 0]],
-            [1, 4, "fail", fail_offset, [-6,6]],
-            [2, 4, "fail", fail_offset, [6,6]],
+            [1, 4, "fail", fail_offset, [-6, 6]],
+            [2, 4, "fail", fail_offset, [6, 6]],
         ];
 
         let i = 0;

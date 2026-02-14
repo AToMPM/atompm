@@ -3,18 +3,18 @@ let model_building_utils = require('./model_building_utils');
 
 let fs = require('fs');
 
-let ecore_dir  = "./exported_to_ecore/";
+let ecore_dir = "./exported_to_ecore/";
 
 // tests the ecore toolbar
 // TODO: temporarily disable this test for CI and local runs; re-enable after fixing flakiness
 module.exports = {
     '@disabled': true,
 
-    beforeEach : function (client) {
+    beforeEach: function (client) {
         client.url('http://localhost:8124/atompm').pause(1000);
     },
 
-    'Login' : function (client) {
+    'Login': function (client) {
         user_utils.login(client);
     },
 
@@ -65,7 +65,7 @@ module.exports = {
 
     },
 
-    after : function (client) {
+    after: function (client) {
         client.end();
     },
 

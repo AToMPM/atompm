@@ -4,16 +4,16 @@ const mouse_tracking = require("./mouse_tracking");
 
 module.exports = {
 
-    beforeEach : async function (client) {
+    beforeEach: async function (client) {
         await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
         mouse_tracking.track_mouse(client);
     },
 
-    'Login' : async function (client) {
+    'Login': async function (client) {
         await user_utils.login(client);
     },
 
-    'Check undo of deletion' : async function (client) {
+    'Check undo of deletion': async function (client) {
         let filename = '/Formalisms/__LanguageSyntax__/SimpleClassDiagram/SimpleClassDiagram.umlIcons.metamodel';
         model_building_utils.load_toolbar(client, [filename]);
 
@@ -44,7 +44,7 @@ module.exports = {
         client.waitForElementNotPresent(class_div, 1000, "Class deleted for second time")
     },
 
-    after : function (client) {
+    after: function (client) {
         client.end();
     },
 
