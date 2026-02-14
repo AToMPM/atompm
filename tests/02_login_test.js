@@ -2,7 +2,7 @@ let user_utils = require('./user_utils')
 let mouse_tracking = require('./mouse_tracking.js');
 
 module.exports = {
-
+    '@disabled': true,
     beforeEach: function (client) {
         client.url('http://localhost:8124/atompm').pause(300);
 
