@@ -16,8 +16,10 @@ function create_class(client, x, y, i, element_type) {
     client.perform(function () {
         const actions = this.actions({ async: false });
         return actions
-            .move({ 'x': x, 'y': y })
-            .contextClick();
+            .move({ 'origin': 'viewport', 'x': x, 'y': y })
+            .press(2)
+            .pause(100)
+            .release(2);
     });
 
     //client.waitForElementPresent(class_div, 1000, "Created class: " + class_div);
