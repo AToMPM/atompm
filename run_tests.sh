@@ -16,11 +16,30 @@ logname=""
 fi
 
 mkdir -p -- "logs"
+# subtle process cleanup
+echo "Cleaning up any lingering AToMPM processes..."
+pkill -f "node httpwsd.js" || true
+pkill -f "python3 mt/main.py" || true
+
 #run server
 echo "Starting server..."
 node httpwsd.js --log=HTTP > "./logs/${logname}node.log" 2>&1 &
 serverpid=$!
-sleep 3
+
+# wait for server to be ready
+echo "Waiting for server to be ready..."
+MAX_RETRIES=30
+RETRY_COUNT=0
+while ! curl -s http://localhost:8124/favicon.png > /dev/null; do
+    RETRY_COUNT=$((RETRY_COUNT+1))
+    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+        echo "Server failed to start after $MAX_RETRIES seconds"
+        kill "$serverpid"
+        exit 1
+    fi
+    sleep 1
+done
+echo "Server is ready."
 
 #check if server is dead
 if ! kill -0 "$serverpid"; then
