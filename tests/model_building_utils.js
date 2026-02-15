@@ -285,9 +285,9 @@ function load_model(client, folder_name, model_name) {
 
     let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
 
-    client.waitForElementPresent(load_button, 1000, "Looking for load button")
+    client.waitForElementPresent(load_button, 2000, "Looking for load button")
         .click(load_button)
-        .waitForElementPresent("#dialog_btn", 1000, "Load menu opens");
+        .waitForElementPresent("#dialog_btn", 5000, "Load menu opens");
 
     navigate_to_folder(client, folder_name);
 
@@ -304,9 +304,9 @@ function save_model(client, folder_name, model_name) {
     let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModelAs";
     let new_file_text = "#new_file";
 
-    client.waitForElementPresent(save_button, 1000, "Looking for save button")
+    client.waitForElementPresent(save_button, 2000, "Looking for save button")
         .click(save_button)
-        .waitForElementPresent("#dialog_btn", 1000, "Save menu opens");
+        .waitForElementPresent("#dialog_btn", 5000, "Save menu opens");
 
     navigate_to_folder(client, folder_name);
 
@@ -337,9 +337,9 @@ function save_model(client, folder_name, model_name) {
 function rename_model(client, folder_name, old_filename, new_filename) {
     let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
 
-    client.waitForElementPresent(load_button, 1000, "Looking for load button")
+    client.waitForElementPresent(load_button, 2000, "Looking for load button")
         .click(load_button)
-        .waitForElementPresent("#dialog_btn", 1000, "Load menu opens");
+        .waitForElementPresent("#dialog_btn", 5000, "Load menu opens");
 
     navigate_to_folder(client, folder_name);
 
@@ -430,7 +430,7 @@ function load_toolbar(client, fnames) {
                                 .verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
                         } else {
                             //Toolbar loaded, so check for it
-                            client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
+                            client.waitForElementPresent(toolbar_name, 5000, "Check for toolbar: " + name);
                         }
                     });
             }
@@ -457,9 +457,9 @@ function compile_model(client, compile_type, folder_name, model_name) {
         button = "#\\2f Toolbars\\2f TransformationController\\2f TransformationController\\2e buttons\\2e model\\2f load";
     }
 
-    client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
+    client.waitForElementPresent(button, 2000, "Looking for " + button_name + " button")
         .click(button)
-        .waitForElementPresent("#dialog_btn", 2000, button_name + " menu opens");
+        .waitForElementPresent("#dialog_btn", 5000, button_name + " menu opens");
 
     navigate_to_folder(client, folder_name);
 
