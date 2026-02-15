@@ -264,8 +264,9 @@ function navigate_to_folder(client, folder_name) {
             // folder not created, so create it
             if (!result.value || result.value.length === 0) {
                 client.click(new_folder_selector)
-                    .pause(500)
+                    .pause(1000)
                     .setAlertText(f)
+                    .pause(500)
                     .acceptAlert()
                     .pause(500);
             }
@@ -352,8 +353,9 @@ function rename_model(client, folder_name, old_filename, new_filename) {
         }
 
         client.click(rename_file_text)
-            .pause(500)
+            .pause(1000)
             .setAlertText(new_filename)
+            .pause(500)
             .acceptAlert();
 
         client.assert.ok(true, "Renaming model to name: '" + new_filename + "'");
