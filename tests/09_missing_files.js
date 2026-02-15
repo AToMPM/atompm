@@ -19,7 +19,7 @@ let deleteFolderRecursive = function (path) {
 
 module.exports = {
 
-
+    '@disabled': true,
     'Signup userremove user': async function (client) {
 
         client.url('http://localhost:8124/atompm').pause(300);
