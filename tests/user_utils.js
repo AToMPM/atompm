@@ -8,14 +8,12 @@ async function user_exists(client, username, password) {
     await client.execute(
         function (username, password) {
             UserManagement.validateCredentials(username, password);
-        }, [username, password], null
-    );
+        }, [username, password]);
 
     let user_exists = false;
-    client.getText('div[id=div_login_error]', function (result) {
+    await client.getText('div[id=div_login_error]', function (result) {
         user_exists = !result.value.includes('login failed');
     });
-    client.pause(1000);
     return user_exists;
 }
 
@@ -23,8 +21,7 @@ async function create_user(client, username, password) {
     await client.execute(
         function (username, password) {
             UserManagement.signup(username, password);
-        }, [username, password], null
-    );
+        }, [username, password]);
 }
 
 async function login(client, username, pass) {

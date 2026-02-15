@@ -308,9 +308,9 @@ function save_model(client, folder_name, model_name) {
     navigate_to_folder(client, folder_name);
 
 
-    let model_selector = "#" + model_name;
-    client.element('css selector', model_selector, function (result) {
-        if (result.status == -1) {
+    let model_selector = "#" + fix_selector(model_name);
+    client.elements('css selector', model_selector, function (result) {
+        if (!result.value || result.value.length === 0) {
             client.click(new_file_text)
                 .clearValue(new_file_text)
                 .setValue(new_file_text, '\u0008') // Send a backspace
@@ -342,8 +342,8 @@ function rename_model(client, folder_name, old_filename, new_filename) {
 
     let rename_file_text = "#rename_file";
     let model_selector = "#" + fix_selector(old_filename);
-    client.element('css selector', model_selector, function (result) {
-        if (result.status == -1) {
+    client.elements('css selector', model_selector, function (result) {
+        if (!result.value || result.value.length === 0) {
             client.assert.ok(false, "Could not find file with name: '" + old_filename + "'");
         } else {
             client.click(model_selector);
@@ -377,13 +377,12 @@ function load_multiple_models(client, fnames) {
         client.execute(
             function (fname) {
                 _loadModel(fname);
-            }, [name], null
-        );
+            }, [name]);
 
         client.pause(1000);
 
-        client.element('css selector', '#dialog_btn', function (result) {
-            if (result.status != -1) {
+        client.elements('css selector', '#dialog_btn', function (result) {
+            if (result.value && result.value.length > 0) {
                 //Dialog has popped up, so check the text and click the button
                 client.assert.textContains("#div_dialog_0", "File not found");
                 client.click("#dialog_btn");
@@ -414,13 +413,12 @@ function load_toolbar(client, fnames) {
                 client.execute(
                     function (fname) {
                         _loadToolbar(fname);
-                    }, [name], null
-                )
+                    }, [name])
 
                     //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
 
-                    .element('css selector', '#dialog_btn', function (result) {
-                        if (result.status != -1) {
+                    .elements('css selector', '#dialog_btn', function (result) {
+                        if (result.value && result.value.length > 0) {
                             //Dialog has popped up, so check the text and click the button
                             client.assert.textContains("#div_dialog_0", "File not found")
                                 .click("#dialog_btn")
@@ -501,14 +499,13 @@ function scroll_geometry_element(client, element, scrollAmount, scrollTimes) {
         for (let i = 0; i < scrollTimes; i++) {
             element.get(0).onwheel(scrollAmount);
         }
-    }, [element, scrollAmount, scrollTimes], null);
+    }, [element, scrollAmount, scrollTimes]);
 
     client.pause(300);
 }
 
 
 module.exports = {
-    '@disabled': true,
     create_class,
     create_classes,
     create_assoc,
