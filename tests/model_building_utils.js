@@ -256,11 +256,11 @@ function navigate_to_folder(client, folder_name) {
     let folder_path = folder_name.split("/");
 
     for (let f of folder_path) {
-        let folder_name_div = "#" + f;
+        let folder_name_div = "#" + div_utils.fix_selector(f);
 
-        client.element('css selector', folder_name_div, function (result) {
+        client.elements('css selector', folder_name_div, function (result) {
             // folder not created, so create it
-            if (result.status == -1) {
+            if (!result.value || result.value.length === 0) {
                 client.click(new_folder_selector)
                     .pause(500)
                     .setAlertText(f)
