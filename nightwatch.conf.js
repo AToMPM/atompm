@@ -5,6 +5,11 @@
 
 module.exports = {
     src_folders: ['tests'],
+    exclude: [
+        'tests/globals.js',
+        'tests/*_utils.js',
+        'tests/mouse_tracking.js'
+    ],
     page_objects_path: [],
     custom_commands_path: [],
     custom_assertions_path: [],
