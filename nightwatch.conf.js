@@ -8,7 +8,7 @@ module.exports = {
     page_objects_path: [],
     custom_commands_path: [],
     custom_assertions_path: [],
-    globals_path: '',
+    globals_path: 'tests/globals.js',
 
     webdriver: {
         start_process: true,

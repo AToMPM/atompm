@@ -3,20 +3,36 @@
 #exit on errors
 set -e
 
-if [ "$#" -ge 1 ] 
-then
-    if [ "$#" -ge 2 ] 
-    then
-        logname="${2:8:-3}_"
-    else
-        logname="${1:8:-3}_"
-    fi
+# Parse arguments
+HEADLESS=false
+TEST_FILE=""
+
+for arg in "$@"; do
+    case "$arg" in
+        --headless) HEADLESS=true ;;
+        *) TEST_FILE="$arg" ;;
+    esac
+done
+
+# Derive log prefix from test filename
+if [ -n "$TEST_FILE" ]; then
+    logname="$(basename "$TEST_FILE" .js)_"
 else
-logname=""
+    logname=""
+fi
+
+# Enable verbose if the last run failed or if running in CI
+VERBOSE_FLAG=""
+FAIL_MARKER=".last_test_failed"
+if [ -f "$FAIL_MARKER" ] || [ "$CI" = "true" ]; then
+    VERBOSE_FLAG="--verbose"
+    if [ -f "$FAIL_MARKER" ]; then
+        echo "Previous run failed — enabling verbose output."
+    fi
 fi
 
 mkdir -p -- "logs"
-# subtle process cleanup
+# Process cleanup
 echo "Cleaning up any past AToMPM processes..."
 pkill -f "node httpwsd.js" || true
 pkill -f "python3 mt/main.py" || true
@@ -65,47 +81,34 @@ if ! kill -0 "${mtpid}"; then
     exit $mt_status
 fi
 
-#echo "Starting Selenium server."
-#java -jar "./node_modules/selenium-server/lib/runner/selenium-server-standalone-3.141.59.jar" &
-#seleniumpid=$!
-#sleep 3
-
-#check if selenium server is dead
-#if ! kill -0 "$seleniumpid"; then
-#    wait seleniumpid
-#    se_status=$?
- #   exit $se_status
-#fi
-
-
+# Build nightwatch command
 echo "Starting tests..."
-#if we have test arguments process arguments else run full suit of tests as default
-if [ "$#" -ge 1 ] 
-then
-    #if first argument is headless run tests headless else run the specified test because we have at least one argument
-    if [ "$1" == "headless" ] 
-    then
-        #if we dont have a second argument run all tests headless else run the test specified in second argument headless
-        if [ -z "$2" ] 
-        then
-            ./node_modules/nightwatch/bin/nightwatch -e run_headless
-        else
-            ./node_modules/nightwatch/bin/nightwatch -e run_headless $2
-        fi
-    else
-        ./node_modules/nightwatch/bin/nightwatch $1
-    fi
-else
-    ./node_modules/nightwatch/bin/nightwatch
+NW_CMD="./node_modules/nightwatch/bin/nightwatch"
+
+if [ "$HEADLESS" = true ]; then
+    NW_CMD="$NW_CMD -e run_headless"
 fi
 
+if [ -n "$VERBOSE_FLAG" ]; then
+    NW_CMD="$NW_CMD $VERBOSE_FLAG"
+fi
 
-echo "Stopping server and mt script..."
-kill "$serverpid"
-kill "$mtpid"
-#kill "$seleniumpid"
+if [ -n "$TEST_FILE" ]; then
+    NW_CMD="$NW_CMD $TEST_FILE"
+fi
 
-
-
-echo "Finished!"
-
+# Run tests and track result
+rm -f "$FAIL_MARKER"
+if $NW_CMD; then
+    echo "Stopping server and mt script..."
+    kill "$serverpid"
+    kill "$mtpid"
+    echo "Finished!"
+else
+    TEST_EXIT=$?
+    touch "$FAIL_MARKER"
+    echo "Stopping server and mt script..."
+    kill "$serverpid" 2>/dev/null || true
+    kill "$mtpid" 2>/dev/null || true
+    exit $TEST_EXIT
+fi
