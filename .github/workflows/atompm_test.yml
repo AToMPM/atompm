@@ -42,11 +42,9 @@ jobs:
         python-version: '3.x'
         cache: 'pip'
 
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y chromium-browser xvfb
-    
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@latest
+
     - name: Setup chromedriver
       uses: nanasess/setup-chromedriver@master
   

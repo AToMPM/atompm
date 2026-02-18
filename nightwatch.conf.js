@@ -30,7 +30,12 @@ module.exports = {
             },
             desiredCapabilities: {
                 browserName: 'chrome',
+                chromeOptions: {
+                    binary: process.env.CHROME_PATH || undefined,
+                    args: ['disable-gpu', 'remote-debugging-port=9222']
+                },
                 'goog:chromeOptions': {
+                    binary: process.env.CHROME_PATH || undefined,
                     args: ['disable-gpu', 'remote-debugging-port=9222']
                 }
             }
