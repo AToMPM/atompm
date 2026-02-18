@@ -20,6 +20,8 @@ module.exports = {
     test_settings: {
         default: {
             disable_error_log: false,
+            detailed_output: true,
+            output_timestamp: true,
             launch_url: 'http://localhost:8124/atompm',
             screenshots: {
                 enabled: true,

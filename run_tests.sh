@@ -17,7 +17,7 @@ fi
 
 mkdir -p -- "logs"
 # subtle process cleanup
-echo "Cleaning up any lingering AToMPM processes..."
+echo "Cleaning up any past AToMPM processes..."
 pkill -f "node httpwsd.js" || true
 pkill -f "python3 mt/main.py" || true
 

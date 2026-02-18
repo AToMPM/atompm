@@ -22,8 +22,7 @@ function create_class(client, x, y, i, element_type) {
             .release(2);
     });
 
-    //client.waitForElementPresent(class_div, 1000, "Created class: " + class_div);
-    client.pause(300);
+    client.waitForElementPresent(class_div, 5000, "Created class: " + class_div);
 
     return class_div;
 
@@ -374,8 +373,6 @@ function load_multiple_models(client, fnames) {
 
     client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
 
-    client.pause(500);
-
     for (const name of fnames) {
 
         client.execute(
@@ -383,7 +380,7 @@ function load_multiple_models(client, fnames) {
                 _loadModel(fname);
             }, [name]);
 
-        client.pause(1000);
+        client.pause(2000);
 
         client.elements('css selector', '#dialog_btn', function (result) {
             if (result.value && result.value.length > 0) {

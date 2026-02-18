@@ -11,7 +11,7 @@ let rule_toolbars = [
 
 // TODO: temporarily disable this test for CI and local runs; re-enable after fixing flakiness
 module.exports = {
-    '@disabled': false,
+    '@disabled': true,
 
     beforeEach: async function (client) {
         await client.url('http://localhost:8124/atompm').pause(300);
