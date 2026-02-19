@@ -23,7 +23,7 @@ fi
 
 # Enable verbose if the last run failed or if VERBOSE env var is set
 VERBOSE_FLAG=""
-FAIL_MARKER=".last_test_failed"
+FAIL_MARKER="tests/.last_test_failed"
 if [ -f "$FAIL_MARKER" ] || [ "$VERBOSE" = "true" ]; then
     VERBOSE_FLAG="--verbose"
     if [ -f "$FAIL_MARKER" ]; then
