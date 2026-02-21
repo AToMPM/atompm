@@ -285,6 +285,7 @@ function load_model(client, folder_name, model_name) {
     let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
 
     client.waitForElementPresent(load_button, 2000, "Looking for load button")
+        .pause(1000)
         .click(load_button)
         .waitForElementPresent("#dialog_btn", 5000, "Load menu opens");
 
@@ -304,6 +305,7 @@ function save_model(client, folder_name, model_name) {
     let new_file_text = "#new_file";
 
     client.waitForElementPresent(save_button, 2000, "Looking for save button")
+        .pause(1000)
         .click(save_button)
         .waitForElementPresent("#dialog_btn", 5000, "Save menu opens");
 
@@ -337,6 +339,7 @@ function rename_model(client, folder_name, old_filename, new_filename) {
     let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
 
     client.waitForElementPresent(load_button, 2000, "Looking for load button")
+        .pause(1000)
         .click(load_button)
         .waitForElementPresent("#dialog_btn", 5000, "Load menu opens");
 
@@ -455,6 +458,7 @@ function compile_model(client, compile_type, folder_name, model_name) {
     }
 
     client.waitForElementPresent(button, 2000, "Looking for " + button_name + " button")
+        .pause(1000)
         .click(button)
         .waitForElementPresent("#dialog_btn", 5000, button_name + " menu opens");
 
