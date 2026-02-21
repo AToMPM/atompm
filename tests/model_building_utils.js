@@ -304,10 +304,11 @@ function save_model(client, folder_name, model_name) {
     let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModelAs";
     let new_file_text = "#new_file";
 
-    client.waitForElementPresent(save_button, 2000, "Looking for save button")
-        .pause(1000)
+    client.waitForElementPresent(save_button, 5000, "Looking for save button")
+        .waitForElementVisible(save_button, 5000, "Save button visible and clickable")
+        .pause(300)
         .click(save_button)
-        .waitForElementPresent("#dialog_btn", 5000, "Save menu opens");
+        .waitForElementPresent("#dialog_btn", 10000, "Save menu opens");
 
     navigate_to_folder(client, folder_name);
 
