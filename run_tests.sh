@@ -23,15 +23,16 @@ fi
 
 # Enable verbose if the last run failed or if VERBOSE env var is set
 VERBOSE_FLAG=""
-FAIL_MARKER="tests/.last_test_failed"
-if [ -f "$FAIL_MARKER" ] || [ "$VERBOSE" = "true" ]; then
-    VERBOSE_FLAG="--verbose"
-    if [ -f "$FAIL_MARKER" ]; then
-        echo "Previous run failed — enabling verbose output."
-    fi
-fi
+# FAIL_MARKER="tests/.last_test_failed"
+# if [ -f "$FAIL_MARKER" ] || [ "$VERBOSE" = "true" ]; then
+#     VERBOSE_FLAG="--verbose"
+#     if [ -f "$FAIL_MARKER" ]; then
+#         echo "Previous run failed — enabling verbose output."
+#     fi
+# fi
 
 mkdir -p -- "logs"
+mkdir -p -- "screenshots"
 # Process cleanup
 echo "Cleaning up any past AToMPM processes..."
 pkill -f "node httpwsd.js" || true

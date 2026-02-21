@@ -466,10 +466,11 @@ function compile_model(client, compile_type, folder_name, model_name) {
     navigate_to_folder(client, folder_name);
 
     let new_file_text = "#new_file";
+    // Same as save_model: after navigate_to_folder the visible list uses filename as id (fix_selector for dots only)
     let model_div = "#" + fix_selector(model_name);
-    client.element('css selector', model_div, function (result) {
 
-        if (result.status == -1) {
+    client.elements('css selector', model_div, function (result) {
+        if (!result.value || result.value.length === 0) {
             //don't create new file with pattern compilation
             if (button_name == "pattern" || button_name == "transform") {
                 client.assert.ok(false, "File found: " + model_name);
