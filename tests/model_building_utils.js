@@ -243,11 +243,17 @@ function deselect_all(client) {
     client.pause(300);
 }
 
+function waitForFileBrowserReady(client) {
+    client.waitForElementPresent('#div_fileb-contents[data-loading="false"]', 5000, "File browser content finished loading");
+}
+
 function navigate_to_folder(client, folder_name) {
 
     let root_button = "#navbar_\\2f";
     client.waitForElementPresent(root_button, 2000, "Find root button")
         .click(root_button);
+
+    waitForFileBrowserReady(client);
 
     if (folder_name === "~") {
         return;
@@ -272,6 +278,7 @@ function navigate_to_folder(client, folder_name) {
 
             client.waitForElementPresent(folder_name_div, 2000, "Find folder: " + folder_name_div)
                 .click(folder_name_div);
+            waitForFileBrowserReady(client);
         });
 
     }
