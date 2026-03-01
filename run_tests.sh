@@ -2,6 +2,7 @@
 
 #exit on errors
 set -e
+set -o pipefail
 
 # Parse arguments
 HEADLESS=false
@@ -100,7 +101,7 @@ fi
 
 # Run tests and track result
 rm -f "$FAIL_MARKER"
-if $NW_CMD; then
+if $NW_CMD 2>&1 | tee "./logs/${logname}nightwatch.log"; then
     echo "Stopping server and mt script..."
     kill "$serverpid"
     kill "$mtpid"

@@ -19,7 +19,8 @@ module.exports = {
         start_process: true,
         server_path: require('chromedriver').path,
         port: 4444,
-        cli_args: []
+        cli_args: [],
+        log_path: 'logs'
     },
 
     test_settings: {
