@@ -5,9 +5,9 @@ let mouse_tracking = require('./mouse_tracking.js');
 let folder_name = "Formalisms/__LanguageSyntax__/SimpleClassDiagram";
 
 module.exports = {
-    '@disabled': true,
+    '@disabled': false,
     beforeEach: async function (client) {
-        await client.url('http://localhost:8124/atompm').pause(300).maximizeWindow();
+        await client.url('http://localhost:8124/atompm').pause(300);
         mouse_tracking.track_mouse(client);
     },
 

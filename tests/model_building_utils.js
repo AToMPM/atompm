@@ -16,12 +16,13 @@ function create_class(client, x, y, i, element_type) {
     client.perform(function () {
         const actions = this.actions({ async: false });
         return actions
-            .move({ 'x': x, 'y': y })
-            .contextClick();
+            .move({ 'origin': 'viewport', 'x': x, 'y': y })
+            .press(2)
+            .pause(100)
+            .release(2);
     });
 
-    //client.waitForElementPresent(class_div, 1000, "Created class: " + class_div);
-    client.pause(300);
+    client.waitForElementPresent(class_div, 5000, "Created class: " + class_div);
 
     return class_div;
 
@@ -256,14 +257,15 @@ function navigate_to_folder(client, folder_name) {
     let folder_path = folder_name.split("/");
 
     for (let f of folder_path) {
-        let folder_name_div = "#" + f;
+        let folder_name_div = "#" + div_utils.fix_selector(f);
 
-        client.element('css selector', folder_name_div, function (result) {
+        client.elements('css selector', folder_name_div, function (result) {
             // folder not created, so create it
-            if (result.status == -1) {
+            if (!result.value || result.value.length === 0) {
                 client.click(new_folder_selector)
-                    .pause(500)
+                    .pause(1000)
                     .setAlertText(f)
+                    .pause(500)
                     .acceptAlert()
                     .pause(500);
             }
@@ -282,9 +284,10 @@ function load_model(client, folder_name, model_name) {
 
     let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
 
-    client.waitForElementPresent(load_button, 1000, "Looking for load button")
+    client.waitForElementPresent(load_button, 2000, "Looking for load button")
+        .pause(1000)
         .click(load_button)
-        .waitForElementPresent("#dialog_btn", 1000, "Load menu opens");
+        .waitForElementPresent("#dialog_btn", 5000, "Load menu opens");
 
     navigate_to_folder(client, folder_name);
 
@@ -301,16 +304,18 @@ function save_model(client, folder_name, model_name) {
     let save_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f saveModelAs";
     let new_file_text = "#new_file";
 
-    client.waitForElementPresent(save_button, 1000, "Looking for save button")
+    client.waitForElementPresent(save_button, 5000, "Looking for save button")
+        .waitForElementVisible(save_button, 5000, "Save button visible and clickable")
+        .pause(300)
         .click(save_button)
-        .waitForElementPresent("#dialog_btn", 1000, "Save menu opens");
+        .waitForElementPresent("#dialog_btn", 10000, "Save menu opens");
 
     navigate_to_folder(client, folder_name);
 
 
-    let model_selector = "#" + model_name;
-    client.element('css selector', model_selector, function (result) {
-        if (result.status == -1) {
+    let model_selector = "#" + fix_selector(model_name);
+    client.elements('css selector', model_selector, function (result) {
+        if (!result.value || result.value.length === 0) {
             client.click(new_file_text)
                 .clearValue(new_file_text)
                 .setValue(new_file_text, '\u0008') // Send a backspace
@@ -334,24 +339,26 @@ function save_model(client, folder_name, model_name) {
 function rename_model(client, folder_name, old_filename, new_filename) {
     let load_button = "#\\2f Toolbars\\2f MainMenu\\2f MainMenu\\2e buttons\\2e model\\2f loadModel";
 
-    client.waitForElementPresent(load_button, 1000, "Looking for load button")
+    client.waitForElementPresent(load_button, 2000, "Looking for load button")
+        .pause(1000)
         .click(load_button)
-        .waitForElementPresent("#dialog_btn", 1000, "Load menu opens");
+        .waitForElementPresent("#dialog_btn", 5000, "Load menu opens");
 
     navigate_to_folder(client, folder_name);
 
     let rename_file_text = "#rename_file";
     let model_selector = "#" + fix_selector(old_filename);
-    client.element('css selector', model_selector, function (result) {
-        if (result.status == -1) {
+    client.elements('css selector', model_selector, function (result) {
+        if (!result.value || result.value.length === 0) {
             client.assert.ok(false, "Could not find file with name: '" + old_filename + "'");
         } else {
             client.click(model_selector);
         }
 
         client.click(rename_file_text)
-            .pause(500)
+            .pause(1000)
             .setAlertText(new_filename)
+            .pause(500)
             .acceptAlert();
 
         client.assert.ok(true, "Renaming model to name: '" + new_filename + "'");
@@ -370,20 +377,17 @@ function load_multiple_models(client, fnames) {
 
     client.waitForElementPresent(div_utils.canvas, 2000, "Canvas loaded");
 
-    client.pause(500);
-
     for (const name of fnames) {
 
         client.execute(
             function (fname) {
                 _loadModel(fname);
-            }, [name], null
-        );
+            }, [name]);
 
-        client.pause(1000);
+        client.pause(2000);
 
-        client.element('css selector', '#dialog_btn', function (result) {
-            if (result.status != -1) {
+        client.elements('css selector', '#dialog_btn', function (result) {
+            if (result.value && result.value.length > 0) {
                 //Dialog has popped up, so check the text and click the button
                 client.assert.textContains("#div_dialog_0", "File not found");
                 client.click("#dialog_btn");
@@ -414,13 +418,12 @@ function load_toolbar(client, fnames) {
                 client.execute(
                     function (fname) {
                         _loadToolbar(fname);
-                    }, [name], null
-                )
+                    }, [name])
 
                     //client.verify.ok(true, "Checking for Toolbar: " + toolbar_name);
 
-                    .element('css selector', '#dialog_btn', function (result) {
-                        if (result.status != -1) {
+                    .elements('css selector', '#dialog_btn', function (result) {
+                        if (result.value && result.value.length > 0) {
                             //Dialog has popped up, so check the text and click the button
                             client.assert.textContains("#div_dialog_0", "File not found")
                                 .click("#dialog_btn")
@@ -428,7 +431,7 @@ function load_toolbar(client, fnames) {
                                 .verify.ok(true, "Toolbar: " + toolbar_name + " failed to load!"); //don't stop testing
                         } else {
                             //Toolbar loaded, so check for it
-                            client.waitForElementPresent(toolbar_name, 2000, "Check for toolbar: " + name);
+                            client.waitForElementPresent(toolbar_name, 5000, "Check for toolbar: " + name);
                         }
                     });
             }
@@ -455,17 +458,19 @@ function compile_model(client, compile_type, folder_name, model_name) {
         button = "#\\2f Toolbars\\2f TransformationController\\2f TransformationController\\2e buttons\\2e model\\2f load";
     }
 
-    client.waitForElementPresent(button, 1000, "Looking for " + button_name + " button")
+    client.waitForElementPresent(button, 2000, "Looking for " + button_name + " button")
+        .pause(1000)
         .click(button)
-        .waitForElementPresent("#dialog_btn", 2000, button_name + " menu opens");
+        .waitForElementPresent("#dialog_btn", 5000, button_name + " menu opens");
 
     navigate_to_folder(client, folder_name);
 
     let new_file_text = "#new_file";
+    // Same as save_model: after navigate_to_folder the visible list uses filename as id (fix_selector for dots only)
     let model_div = "#" + fix_selector(model_name);
-    client.element('css selector', model_div, function (result) {
 
-        if (result.status == -1) {
+    client.elements('css selector', model_div, function (result) {
+        if (!result.value || result.value.length === 0) {
             //don't create new file with pattern compilation
             if (button_name == "pattern" || button_name == "transform") {
                 client.assert.ok(false, "File found: " + model_name);
@@ -501,14 +506,13 @@ function scroll_geometry_element(client, element, scrollAmount, scrollTimes) {
         for (let i = 0; i < scrollTimes; i++) {
             element.get(0).onwheel(scrollAmount);
         }
-    }, [element, scrollAmount, scrollTimes], null);
+    }, [element, scrollAmount, scrollTimes]);
 
     client.pause(300);
 }
 
 
 module.exports = {
-    '@disabled': true,
     create_class,
     create_classes,
     create_assoc,

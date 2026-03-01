@@ -24,11 +24,10 @@ function get_assoc_div(num) {
 }
 
 function fix_selector(name) {
-    return name.replace(".", "\\.");
+    return name.replace(/\./g, "\\.");
 }
 
 module.exports = {
-    '@disabled': true,
     canvas,
     get_element_div,
     get_assoc_div,

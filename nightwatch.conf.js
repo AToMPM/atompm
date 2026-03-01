@@ -4,52 +4,67 @@
 */
 
 module.exports = {
-    "src_folders": ["tests"],
-    // skip_testcases_on_fail: true,
-    screenshots: {
-        enabled: true,
-        path: "./screenshots",
-        on_failure: true,
-        on_error: true
-    },
+    src_folders: ['tests'],
+    exclude: [
+        'tests/globals.js',
+        'tests/*_utils.js',
+        'tests/mouse_tracking.js'
+    ],
+    page_objects_path: [],
+    custom_commands_path: [],
+    custom_assertions_path: [],
+    globals_path: 'tests/globals.js',
+
     webdriver: {
         start_process: true,
-        port: 4444,
         server_path: require('chromedriver').path,
-        cli_args: [
-            // very verbose logs
-            // '-vv'
-        ]
+        port: 4444,
+        cli_args: [],
+        log_path: 'logs'
     },
 
     test_settings: {
         default: {
+            disable_error_log: false,
+            detailed_output: true,
+            output_timestamp: true,
             launch_url: 'http://localhost:8124/atompm',
+            screenshots: {
+                enabled: true,
+                path: 'screenshots',
+                on_failure: true,
+                on_error: true
+            },
             desiredCapabilities: {
                 browserName: 'chrome',
+                chromeOptions: {
+                    binary: process.env.CHROME_PATH || undefined,
+                    args: ['disable-gpu', 'remote-debugging-port=9222']
+                },
                 'goog:chromeOptions': {
-                    'args':[
-                        'disable-gpu','remote-debugging-port=9222'
-                    ]
+                    binary: process.env.CHROME_PATH || undefined,
+                    args: ['disable-gpu', 'remote-debugging-port=9222']
                 }
             }
         },
+
         run_headless: {
-            launch_url: 'http://localhost:8124/atompm',
+            extends: 'default',
             desiredCapabilities: {
                 browserName: 'chrome',
                 'goog:chromeOptions': {
-                    'args':[
+                    args: [
                         'headless',
-                        // 'window-size=2880,1800',
                         'window-size=1920,1080',
-                        // "no-sandbox",
-                        'disable-gpu','remote-debugging-port=9222'
+                        'disable-gpu',
+                        'remote-debugging-port=9222',
+                        'no-sandbox',
+                        'disable-dev-shm-usage'
                     ]
                 }
             }
         }
-    },
+    }
 };
 
 
