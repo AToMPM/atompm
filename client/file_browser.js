@@ -1,4 +1,4 @@
-class FileBrowser{
+class FileBrowser {
 
     static buildFileBrowser(extensions, manualInput, title, startDir, callback) {
         HttpUtils.httpReq(
@@ -7,7 +7,7 @@ class FileBrowser{
             undefined,
             function (statusCode, resp) {
 
-                if (statusCode == 404){
+                if (statusCode == 404) {
                     let err_msg = "Error! Cannot load file list!";
                     WindowManagement.openDialog(_ERROR, err_msg);
                     return;
@@ -18,7 +18,7 @@ class FileBrowser{
                     __filterFilenamesByExtension(
                         resp.split('\n'),
                         extensions || ['.*'])
-                    ).sort(),
+                ).sort(),
                     folder_buttons = $('<div>'),
                     new_folder_b = $('<button>'),
                     rename_folder_b = $('<button>'),
@@ -302,13 +302,14 @@ class FileBrowser{
                     div = $("<div>");
 
                     div.attr("class", 'fileb_pane')
-                        .attr("id", 'div_fileb-contents');
+                        .attr("id", 'div_fileb-contents')
+                        .attr("data-loading", "true");
 
 
                     //fnames might be a function that returns the files in
                     //the folder
                     let file_list = fnames;
-                    if (!(Array.isArray(fnames))){
+                    if (!(Array.isArray(fnames))) {
                         file_list = await fnames(folder);
                     }
 
@@ -409,6 +410,7 @@ class FileBrowser{
 
                     clearSelection();
                     currfolder = folder;
+                    div.attr("data-loading", "false");
                 };
 
         fileb.css("maxWidth", '100%');
