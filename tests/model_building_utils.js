@@ -314,8 +314,11 @@ function save_model(client, folder_name, model_name) {
     client.waitForElementPresent(save_button, 5000, "Looking for save button")
         .waitForElementVisible(save_button, 5000, "Save button visible and clickable")
         .pause(300)
+        .perform(function() { console.log('[TEST ' + new Date().toISOString() + '] clicking save button'); })
         .click(save_button)
-        .waitForElementPresent("#dialog_btn", 20000, "Save menu opens");
+        .perform(function() { console.log('[TEST ' + new Date().toISOString() + '] waiting for save dialog'); })
+        .waitForElementPresent("#dialog_btn", 20000, "Save menu opens")
+        .perform(function() { console.log('[TEST ' + new Date().toISOString() + '] save dialog appeared'); });
 
     navigate_to_folder(client, folder_name);
 
@@ -386,12 +389,14 @@ function load_multiple_models(client, fnames) {
 
     for (const name of fnames) {
 
+        client.perform(function() { console.log('[TEST ' + new Date().toISOString() + '] loading model: ' + name); });
         client.execute(
             function (fname) {
                 _loadModel(fname);
             }, [name]);
 
         client.pause(2000);
+        client.perform(function() { console.log('[TEST ' + new Date().toISOString() + '] done waiting for model: ' + name); });
 
         client.elements('css selector', '#dialog_btn', function (result) {
             if (result.value && result.value.length > 0) {

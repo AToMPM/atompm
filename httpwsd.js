@@ -62,6 +62,8 @@ let httpserver = _http.createServer(
 						'to': "server",
 						'type': "-)"
 					});
+
+					console.log('[' + new Date().toISOString() + '] ' + req.method + ' ' + s);
 				}
 			}
 			/* serve client */
@@ -602,13 +604,21 @@ let httpserver = _http.createServer(
 						url.pathname.match(/^\/.+\/filelist$/) )
 			{
 				var matches = url.pathname.match(/^\/(.+)\/filelist$/);
+				const _t0 = Date.now();
+				console.log('[' + new Date().toISOString() + '] /filelist start: ' + url.pathname);
 				_fspp.findfiles('./users/'+matches[1], 
 						function(err, stdout, stderr)
 						{
-							if( err )
+							const _ms = Date.now() - _t0;
+							if( err ) {
+								console.log('[' + new Date().toISOString() + '] /filelist error (' + _ms + 'ms): ' + err);
 								__respond(resp,404,String(err));
-							else
+							} else {
+								const _n = stdout ? stdout.split('
+').length : 0;
+								console.log('[' + new Date().toISOString() + '] /filelist done (' + _ms + 'ms, ' + _n + ' entries)');
 								__respond(resp,200,'',stdout);
+							}
 						});
 			}
 
