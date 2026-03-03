@@ -58,55 +58,46 @@ exports.findfiles =
 		//guard against injection
 		dir = dir.split(';')[0];
 
-		switch(_os.type())
-		{
-			case 'Windows_NT' :
-				_cp.exec('dir /s /b "'+dir+'"',
-					function(err, stdout, stderr)
-					{
-						if( err )
-							callback(err,stdout,stderr);
-						else
-						{
-							let windir = (dir.charAt(0)=='.' ? dir.substring(1) : dir).
-								replace(/\//g,'\\'),
-								paths  = stdout.split('\r\n').map(
-									function(path)
-									{
-										let newpath = dir+path.substring(
-											path.indexOf(windir)+windir.length).
-										replace(/\\/g,'/');
-										try {
-											if (_fs.lstatSync(path).isDirectory()) {
-												newpath = newpath + '/';
-											}
-										} catch (e) {
-											//console.log("Error!");
-											//console.log(e);
-										}
-										return newpath;
-									});
-							paths.pop();
-							callback(err,paths.join('\n'),stderr);
-						}
-					});
-				break;
+		const results = [];
 
-			case 'Linux'  :
-			case 'Darwin' :
-				_cp.exec('find "'+dir+'" \\( -type d -printf "%p/\\n" \\) -o -print',
-					function(err, stdout, stderr)
-					{
-						if( err )
-							callback(err,stdout,stderr);
-						else
-							callback(err,stdout.slice(0,-1),stderr);
-					});
-				break;
+		function walkDir(currentDir, done) {
+			results.push(currentDir + '/');
+			_fs.readdir(currentDir, {withFileTypes: true}, function(err, entries) {
+				if (err) {
+					done(err);
+					return;
+				}
 
-			default:
-				throw 'unsupported OS :: '+_os.type();
+				if (entries.length === 0) {
+					done(null);
+					return;
+				}
+
+				let remaining = entries.length;
+				let errored = false;
+
+				entries.forEach(function(entry) {
+					const fullPath = currentDir + '/' + entry.name;
+					if (entry.isDirectory()) {
+						walkDir(fullPath, function(walkErr) {
+							if (errored) return;
+							if (walkErr) { errored = true; done(walkErr); return; }
+							if (--remaining === 0) done(null);
+						});
+					} else {
+						results.push(fullPath);
+						if (--remaining === 0 && !errored) done(null);
+					}
+				});
+			});
 		}
+
+		walkDir(dir, function(err) {
+			if (err)
+				callback(err,'','');
+			else
+				callback(undefined,results.join('\n'),'');
+		});
 	};
 
 
