@@ -22,7 +22,7 @@ function create_class(client, x, y, i, element_type) {
             .release(2);
     });
 
-    client.waitForElementPresent(class_div, 5000, "Created class: " + class_div);
+    client.waitForElementPresent(class_div, 10000, "Created class: " + class_div);
 
     return class_div;
 

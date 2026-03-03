@@ -119,9 +119,8 @@ let assocs = [
 ];
 
 
-// TODO: temporarily disable this test for CI and local runs; re-enable after fixing flakiness
 module.exports = {
-    '@disabled': true,
+    '@disabled': false,
 
     beforeEach: async function (client) {
         await client.url('http://localhost:8124/atompm').pause(300);
@@ -594,7 +593,8 @@ module.exports = {
 
         client.waitForElementPresent(verify_btn, 2000, "Find verify button")
             .click(verify_btn)
-            .waitForElementNotPresent(dialog_btn, 500, "No constraint violation");
+            .waitForElementNotPresent(dialog_btn, 500, "No constraint violation")
+            .pause(2000);
 
         let new_x = start_x + 3 * x_diff;
         let class_btn = class_icon + "ClassCIcon";
@@ -602,6 +602,7 @@ module.exports = {
         client.click(class_btn).pause(100);
 
         model_building_utils.create_class(client, new_x, start_y, num_elements, CClass_type);
+        num_elements++;
         model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
 
         client.click(verify_btn)
