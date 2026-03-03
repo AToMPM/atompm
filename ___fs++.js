@@ -94,20 +94,13 @@ exports.findfiles =
 
 			case 'Linux'  :
 			case 'Darwin' :
-				_cp.exec('find "'+dir+'"',
+				_cp.exec('find "'+dir+'" \\( -type d -printf "%p/\\n" \\) -o -print',
 					function(err, stdout, stderr)
 					{
 						if( err )
 							callback(err,stdout,stderr);
-						else {
-							let paths = stdout.slice(0,-1),
-								newpaths = paths.split('\n').map(function(path) {
-									if (_fs.lstatSync(path).isDirectory()) {
-										return path + "/";
-									} else return path;
-								});
-							callback(err,newpaths.join('\n'),stderr);
-						}
+						else
+							callback(err,stdout.slice(0,-1),stderr);
 					});
 				break;
 

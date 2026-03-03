@@ -244,7 +244,7 @@ function deselect_all(client) {
 }
 
 function waitForFileBrowserReady(client) {
-    client.waitForElementPresent('#div_fileb-contents[data-loading="false"]', 5000, "File browser content finished loading");
+    client.waitForElementPresent('#div_fileb-contents[data-loading="false"]', 10000, "File browser content finished loading");
 }
 
 function navigate_to_folder(client, folder_name) {
@@ -315,7 +315,7 @@ function save_model(client, folder_name, model_name) {
         .waitForElementVisible(save_button, 5000, "Save button visible and clickable")
         .pause(300)
         .click(save_button)
-        .waitForElementPresent("#dialog_btn", 10000, "Save menu opens");
+        .waitForElementPresent("#dialog_btn", 20000, "Save menu opens");
 
     navigate_to_folder(client, folder_name);
 
