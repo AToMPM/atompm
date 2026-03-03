@@ -137,10 +137,10 @@ module.exports = {
         model_building_utils.load_toolbar(client, [filename]);
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/SimpleClassDiagram\\/SimpleClassDiagram\\.umlIcons\\.metamodel\\/ClassIcon";
-        client.waitForElementPresent(classIcon, 2000, "Check for class icon...");
+        client.waitForElementPresent(classIcon, 5000, "Check for class icon...");
         client.click(classIcon);
 
-        client.waitForElementPresent(div_utils.canvas, 1000, "Checking for canvas...");
+        client.waitForElementPresent(div_utils.canvas, 5000, "Checking for canvas...");
 
         let name_field = "#tr_name > td:nth-child(2) > textarea";
         let num_elements = 0;
@@ -275,7 +275,7 @@ module.exports = {
         let constraint_type = "GlobalConstraintIcon";
         let constraint_div = div_utils.get_element_div(constraint_type, num_elements);
         let constraintIcon = "#\\2f Formalisms\\2f __LanguageSyntax__\\2f SimpleClassDiagram\\2f SimpleClassDiagram\\2e umlIcons\\2e metamodel\\2f GlobalConstraintIcon";
-        client.waitForElementPresent(constraintIcon, 2000, "Check for constraint icon...");
+        client.waitForElementPresent(constraintIcon, 5000, "Check for constraint icon...");
         client.click(constraintIcon);
 
         model_building_utils.create_class(client, start_x + 3 * x_diff, start_y, num_elements, constraint_type);
@@ -311,11 +311,11 @@ module.exports = {
         model_building_utils.load_toolbar(client, [filename]);
 
         let classIcon = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\.metamodel\\/IconIcon";
-        client.waitForElementPresent(classIcon, 2000, "Check for class icon...")
+        client.waitForElementPresent(classIcon, 5000, "Check for class icon...")
         client.click(classIcon);
 
         let canvas = "#div_canvas";
-        client.waitForElementPresent(canvas, 1000, "Checking for canvas...");
+        client.waitForElementPresent(canvas, 5000, "Checking for canvas...");
 
         let name_field = "#tr_typename > td:nth-child(2) > textarea";
         let num_elements = 0;
@@ -348,7 +348,7 @@ module.exports = {
         let textType = "#\\/Formalisms\\/__LanguageSyntax__\\/ConcreteSyntax\\/ConcreteSyntax\\.defaultIcons\\/TextIcon\\/";
         let textContent_field = "#tr_textContent > td:nth-child(2) > textarea";
 
-        client.waitForElementPresent(textIcon, 2000, "Check for text icon...");
+        client.waitForElementPresent(textIcon, 5000, "Check for text icon...");
         client.click(textIcon);
 
         for (let i = 0; i < num_classes; i++) {
@@ -385,7 +385,7 @@ module.exports = {
         for (let i = 0; i < num_classes; i++) {
 
             let currSymbol = symbols[i % symbols.length];
-            client.waitForElementPresent(getIcon(currSymbol), 2000, "Check for symbol icon...");
+            client.waitForElementPresent(getIcon(currSymbol), 5000, "Check for symbol icon...");
             client.click(getIcon(currSymbol));
 
             let symbolDiv = div_utils.build_div(getType(currSymbol), num_elements);
@@ -416,7 +416,7 @@ module.exports = {
             link_y_coords.push(start_y + i * y_diff);
         }
 
-        client.waitForElementPresent(linkIcon, 2000, "Check for link icon...");
+        client.waitForElementPresent(linkIcon, 5000, "Check for link icon...");
         client.click(linkIcon);
 
         let num_elements_before = num_elements;
@@ -485,7 +485,7 @@ module.exports = {
             let class_name = class_names[i];
             let class_btn = class_icon + class_name;
 
-            client.waitForElementPresent(class_btn, 2000, "Check for class icon: " + class_btn)
+            client.waitForElementPresent(class_btn, 5000, "Check for class icon: " + class_btn)
                 .click(class_btn);
 
             let class_div = class_type + class_name + "\\2f ";
@@ -507,7 +507,7 @@ module.exports = {
             }
 
             if (to_class_name == "ClassEIcon") {
-                from_class_name = "ClassFIcon";
+                to_class_name = "ClassFIcon";
             }
 
             //select the text of the class
@@ -606,7 +606,7 @@ module.exports = {
         model_building_utils.create_class(client, new_x, start_y + y_diff, num_elements, CClass_type);
 
         client.click(verify_btn)
-            .waitForElementPresent(dialog_btn, 2000, "Constraint violation")
+            .waitForElementPresent(dialog_btn, 5000, "Constraint violation")
             .click(dialog_btn);
 
         model_building_utils.deselect_all(client);

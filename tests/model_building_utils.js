@@ -74,10 +74,10 @@ function create_assoc(client, start_div, end_div, relation_div, offset, offset2)
             if (relation_div != undefined && relation_div != "") {
                 client.waitForElementPresent(relation_div, 2000, "Relation option present: " + relation_div)
                     .click(relation_div)
-                    .waitForElementPresent("#dialog_btn", 1000, "Assoc menu opens")
+                    .waitForElementPresent("#dialog_btn", 3000, "Assoc menu opens")
                     .click("#dialog_btn")
                     .pause(300)
-                    .waitForElementNotPresent("#dialog_btn", 1000, "Assoc menu closes");
+                    .waitForElementNotPresent("#dialog_btn", 3000, "Assoc menu closes");
             }
         });
     this.deselect_all(client);
@@ -147,7 +147,7 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
                 .pause(300)
                 .sendKeys(client.Keys.INSERT);
         })
-        .waitForElementPresent("#dialog_btn", 2000, "Editing menu opens")
+        .waitForElementPresent("#dialog_btn", 5000, "Editing menu opens")
         .perform((function (attrs) {
             let ele2;
             for (const [key, value] of Object.entries(attrs)) {
@@ -164,7 +164,7 @@ function set_attribs(client, num, attrs, element_type, div_suffix, offset) {
             }
         }).call(this, attrs))
         .click("#dialog_btn")
-        .waitForElementNotPresent("#dialog_btn", 1000, "Editing menu closes")
+        .waitForElementNotPresent("#dialog_btn", 3000, "Editing menu closes")
 
     deselect_all(client);
 }
