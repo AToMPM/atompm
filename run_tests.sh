@@ -73,7 +73,7 @@ python3 mt/main.py > "./logs/${logname}python.log" 2>&1 &
 mtpid=$!
 sleep 3
 
-ps
+#ps
 
 #check if model transformer is dead
 if ! kill -0 "${mtpid}"; then
